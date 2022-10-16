@@ -6,7 +6,7 @@ fn parseOptions(alloc: mem.Allocator) json.ParseOptions {
     };
 }
 
-const @"GetBannerResult" = union(enum) {
+pub const @"GetBannerResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"AnnouncementBannerConfiguration",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -32,17 +32,17 @@ pub fn @"getBanner"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AnnouncementBannerConfiguration"
         const result = try json.parse(@"AnnouncementBannerConfiguration", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetBannerResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetBannerResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetBannerResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -53,7 +53,7 @@ pub fn @"getBanner"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateMultipleCustomFieldValuesResult" = union(enum) {
+pub const @"UpdateMultipleCustomFieldValuesResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -104,7 +104,7 @@ pub fn @"updateMultipleCustomFieldValues"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCustomFieldConfigurationResult" = union(enum) {
+pub const @"GetCustomFieldConfigurationResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanContextualConfiguration",
     /// Returned if the request is invalid.
@@ -144,7 +144,7 @@ pub fn @"getCustomFieldConfiguration"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextualConfiguration"
         const result = try json.parse(@"PageBeanContextualConfiguration", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCustomFieldConfigurationResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -171,7 +171,7 @@ pub fn @"getCustomFieldConfiguration"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateCustomFieldValueResult" = union(enum) {
+pub const @"UpdateCustomFieldValueResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -225,7 +225,7 @@ pub fn @"updateCustomFieldValue"(
     return error.UnknownStatusCode;
 }
 
-const @"GetApplicationPropertyResult" = union(enum) {
+pub const @"GetApplicationPropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -272,7 +272,7 @@ pub fn @"getApplicationProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAdvancedSettingsResult" = union(enum) {
+pub const @"GetAdvancedSettingsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -316,7 +316,7 @@ pub fn @"getAdvancedSettings"(
     return error.UnknownStatusCode;
 }
 
-const @"SetApplicationPropertyResult" = union(enum) {
+pub const @"SetApplicationPropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ApplicationProperty",
     /// Returned if the data type of the `value` does not match the application property's data type. For example, a string is provided instead of an integer.
@@ -348,7 +348,7 @@ pub fn @"setApplicationProperty"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationProperty"
         const result = try json.parse(@"ApplicationProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SetApplicationPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -375,7 +375,7 @@ pub fn @"setApplicationProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllApplicationRolesResult" = union(enum) {
+pub const @"GetAllApplicationRolesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -419,7 +419,7 @@ pub fn @"getAllApplicationRoles"(
     return error.UnknownStatusCode;
 }
 
-const @"GetApplicationRoleResult" = union(enum) {
+pub const @"GetApplicationRoleResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ApplicationRole",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -449,7 +449,7 @@ pub fn @"getApplicationRole"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationRole"
         const result = try json.parse(@"ApplicationRole", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetApplicationRoleResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -472,7 +472,7 @@ pub fn @"getApplicationRole"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAttachmentContentResult" = union(enum) {
+pub const @"GetAttachmentContentResult" = union(enum) {
     /// Returned if the request is successful when `redirect` is set to `false`.
     _200: void,
     /// Returned if the request is successful when a `Range` header is provided and `redirect` is set to `false`.
@@ -552,7 +552,7 @@ pub fn @"getAttachmentContent"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAttachmentMetaResult" = union(enum) {
+pub const @"GetAttachmentMetaResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"AttachmentSettings",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -576,7 +576,7 @@ pub fn @"getAttachmentMeta"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentSettings"
         const result = try json.parse(@"AttachmentSettings", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAttachmentMetaResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -591,7 +591,7 @@ pub fn @"getAttachmentMeta"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAttachmentThumbnailResult" = union(enum) {
+pub const @"GetAttachmentThumbnailResult" = union(enum) {
     /// Returned if the request is successful when `redirect` is set to `false`.
     _200: void,
     /// Returned if the request is successful. See the `Location` header for the download URL.
@@ -663,7 +663,7 @@ pub fn @"getAttachmentThumbnail"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAttachmentResult" = union(enum) {
+pub const @"GetAttachmentResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"AttachmentMetadata",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -696,7 +696,7 @@ pub fn @"getAttachment"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentMetadata"
         const result = try json.parse(@"AttachmentMetadata", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAttachmentResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -719,7 +719,7 @@ pub fn @"getAttachment"(
     return error.UnknownStatusCode;
 }
 
-const @"ExpandAttachmentForHumansResult" = union(enum) {
+pub const @"ExpandAttachmentForHumansResult" = union(enum) {
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
     _200: @"AttachmentArchiveMetadataReadable",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -755,7 +755,7 @@ pub fn @"expandAttachmentForHumans"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveMetadataReadable"
         const result = try json.parse(@"AttachmentArchiveMetadataReadable", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"ExpandAttachmentForHumansResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -782,7 +782,7 @@ pub fn @"expandAttachmentForHumans"(
     return error.UnknownStatusCode;
 }
 
-const @"ExpandAttachmentForMachinesResult" = union(enum) {
+pub const @"ExpandAttachmentForMachinesResult" = union(enum) {
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
     _200: @"AttachmentArchiveImpl",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -818,7 +818,7 @@ pub fn @"expandAttachmentForMachines"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveImpl"
         const result = try json.parse(@"AttachmentArchiveImpl", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"ExpandAttachmentForMachinesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -845,7 +845,7 @@ pub fn @"expandAttachmentForMachines"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAuditRecordsResult" = union(enum) {
+pub const @"GetAuditRecordsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"AuditRecords",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -879,7 +879,7 @@ pub fn @"getAuditRecords"(
     // to; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AuditRecords"
         const result = try json.parse(@"AuditRecords", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAuditRecordsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -898,7 +898,7 @@ pub fn @"getAuditRecords"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllSystemAvatarsResult" = union(enum) {
+pub const @"GetAllSystemAvatarsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"SystemAvatars",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -927,7 +927,7 @@ pub fn @"getAllSystemAvatars"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SystemAvatars"
         const result = try json.parse(@"SystemAvatars", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllSystemAvatarsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -946,7 +946,7 @@ pub fn @"getAllSystemAvatars"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCommentsByIdsResult" = union(enum) {
+pub const @"GetCommentsByIdsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanComment",
     /// Returned if the request contains more than 1000 IDs or is empty.
@@ -971,7 +971,7 @@ pub fn @"getCommentsByIds"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComment"
         const result = try json.parse(@"PageBeanComment", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCommentsByIdsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -986,7 +986,7 @@ pub fn @"getCommentsByIds"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCommentPropertyKeysResult" = union(enum) {
+pub const @"GetCommentPropertyKeysResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PropertyKeys",
     /// Returned if the comment ID is invalid.
@@ -1019,7 +1019,7 @@ pub fn @"getCommentPropertyKeys"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCommentPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1046,7 +1046,7 @@ pub fn @"getCommentPropertyKeys"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCommentPropertyResult" = union(enum) {
+pub const @"GetCommentPropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"EntityProperty",
     /// Returned if the request is invalid.
@@ -1081,7 +1081,7 @@ pub fn @"getCommentProperty"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCommentPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1108,7 +1108,7 @@ pub fn @"getCommentProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"CreateComponentResult" = union(enum) {
+pub const @"CreateComponentResult" = union(enum) {
     /// Returned if the request is successful.
     _201: @"ProjectComponent",
     /// Returned if:
@@ -1144,7 +1144,7 @@ pub fn @"createComponent"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"ProjectComponent"
         const result = try json.parse(@"ProjectComponent", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateComponentResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1171,7 +1171,7 @@ pub fn @"createComponent"(
     return error.UnknownStatusCode;
 }
 
-const @"GetComponentResult" = union(enum) {
+pub const @"GetComponentResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectComponent",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1199,7 +1199,7 @@ pub fn @"getComponent"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectComponent"
         const result = try json.parse(@"ProjectComponent", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetComponentResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1218,7 +1218,7 @@ pub fn @"getComponent"(
     return error.UnknownStatusCode;
 }
 
-const @"GetComponentRelatedIssuesResult" = union(enum) {
+pub const @"GetComponentRelatedIssuesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ComponentIssuesCount",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1247,7 +1247,7 @@ pub fn @"getComponentRelatedIssues"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ComponentIssuesCount"
         const result = try json.parse(@"ComponentIssuesCount", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetComponentRelatedIssuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1266,7 +1266,7 @@ pub fn @"getComponentRelatedIssues"(
     return error.UnknownStatusCode;
 }
 
-const @"GetConfigurationResult" = union(enum) {
+pub const @"GetConfigurationResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Configuration",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1290,7 +1290,7 @@ pub fn @"getConfiguration"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Configuration"
         const result = try json.parse(@"Configuration", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetConfigurationResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1305,7 +1305,7 @@ pub fn @"getConfiguration"(
     return error.UnknownStatusCode;
 }
 
-const @"GetSelectedTimeTrackingImplementationResult" = union(enum) {
+pub const @"GetSelectedTimeTrackingImplementationResult" = union(enum) {
     /// Returned if the request is successful and time tracking is enabled.
     _200: @"TimeTrackingProvider",
     /// Returned if the request is successful but time tracking is disabled.
@@ -1333,7 +1333,7 @@ pub fn @"getSelectedTimeTrackingImplementation"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingProvider"
         const result = try json.parse(@"TimeTrackingProvider", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetSelectedTimeTrackingImplementationResult"{ ._200 = result };
     }
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
@@ -1356,7 +1356,7 @@ pub fn @"getSelectedTimeTrackingImplementation"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAvailableTimeTrackingImplementationsResult" = union(enum) {
+pub const @"GetAvailableTimeTrackingImplementationsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1400,7 +1400,7 @@ pub fn @"getAvailableTimeTrackingImplementations"(
     return error.UnknownStatusCode;
 }
 
-const @"GetSharedTimeTrackingConfigurationResult" = union(enum) {
+pub const @"GetSharedTimeTrackingConfigurationResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"TimeTrackingConfiguration",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1426,7 +1426,7 @@ pub fn @"getSharedTimeTrackingConfiguration"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingConfiguration"
         const result = try json.parse(@"TimeTrackingConfiguration", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetSharedTimeTrackingConfigurationResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1445,7 +1445,7 @@ pub fn @"getSharedTimeTrackingConfiguration"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCustomFieldOptionResult" = union(enum) {
+pub const @"GetCustomFieldOptionResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"CustomFieldOption",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1476,7 +1476,7 @@ pub fn @"getCustomFieldOption"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"CustomFieldOption"
         const result = try json.parse(@"CustomFieldOption", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCustomFieldOptionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1495,7 +1495,7 @@ pub fn @"getCustomFieldOption"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllDashboardsResult" = union(enum) {
+pub const @"GetAllDashboardsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageOfDashboards",
     /// Returned if the request is invalid.
@@ -1524,17 +1524,17 @@ pub fn @"getAllDashboards"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfDashboards"
         const result = try json.parse(@"PageOfDashboards", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllDashboardsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllDashboardsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllDashboardsResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1545,7 +1545,7 @@ pub fn @"getAllDashboards"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllAvailableDashboardGadgetsResult" = union(enum) {
+pub const @"GetAllAvailableDashboardGadgetsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"AvailableDashboardGadgetsResponse",
     /// 400 response
@@ -1571,17 +1571,17 @@ pub fn @"getAllAvailableDashboardGadgets"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AvailableDashboardGadgetsResponse"
         const result = try json.parse(@"AvailableDashboardGadgetsResponse", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllAvailableDashboardGadgetsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllAvailableDashboardGadgetsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllAvailableDashboardGadgetsResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1592,7 +1592,7 @@ pub fn @"getAllAvailableDashboardGadgets"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDashboardsPaginatedResult" = union(enum) {
+pub const @"GetDashboardsPaginatedResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanDashboard",
     /// Returned if:
@@ -1634,17 +1634,17 @@ pub fn @"getDashboardsPaginated"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanDashboard"
         const result = try json.parse(@"PageBeanDashboard", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDashboardsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDashboardsPaginatedResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDashboardsPaginatedResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1655,7 +1655,7 @@ pub fn @"getDashboardsPaginated"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllGadgetsResult" = union(enum) {
+pub const @"GetAllGadgetsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"DashboardGadgetResponse",
     /// Returned if the authentication credentials are incorrect.
@@ -1687,7 +1687,7 @@ pub fn @"getAllGadgets"(
     // gadgetId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DashboardGadgetResponse"
         const result = try json.parse(@"DashboardGadgetResponse", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllGadgetsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1696,7 +1696,7 @@ pub fn @"getAllGadgets"(
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllGadgetsResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1707,7 +1707,7 @@ pub fn @"getAllGadgets"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateGadgetResult" = union(enum) {
+pub const @"UpdateGadgetResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -1744,7 +1744,7 @@ pub fn @"updateGadget"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"UpdateGadgetResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1753,7 +1753,7 @@ pub fn @"updateGadget"(
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"UpdateGadgetResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1764,7 +1764,7 @@ pub fn @"updateGadget"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDashboardItemPropertyKeysResult" = union(enum) {
+pub const @"GetDashboardItemPropertyKeysResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PropertyKeys",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1796,7 +1796,7 @@ pub fn @"getDashboardItemPropertyKeys"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDashboardItemPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1815,7 +1815,7 @@ pub fn @"getDashboardItemPropertyKeys"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDashboardItemPropertyResult" = union(enum) {
+pub const @"GetDashboardItemPropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"EntityProperty",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1849,7 +1849,7 @@ pub fn @"getDashboardItemProperty"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDashboardItemPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1868,7 +1868,7 @@ pub fn @"getDashboardItemProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDashboardResult" = union(enum) {
+pub const @"GetDashboardResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Dashboard",
     /// 400 response
@@ -1898,17 +1898,17 @@ pub fn @"getDashboard"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
         const result = try json.parse(@"Dashboard", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDashboardResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDashboardResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDashboardResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -1923,7 +1923,7 @@ pub fn @"getDashboard"(
     return error.UnknownStatusCode;
 }
 
-const @"CopyDashboardResult" = union(enum) {
+pub const @"CopyDashboardResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Dashboard",
     /// Returned if the request is not valid.
@@ -1954,22 +1954,22 @@ pub fn @"copyDashboard"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
         const result = try json.parse(@"Dashboard", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CopyDashboardResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CopyDashboardResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CopyDashboardResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CopyDashboardResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1980,7 +1980,7 @@ pub fn @"copyDashboard"(
     return error.UnknownStatusCode;
 }
 
-const @"GetEventsResult" = union(enum) {
+pub const @"GetEventsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2024,7 +2024,7 @@ pub fn @"getEvents"(
     return error.UnknownStatusCode;
 }
 
-const @"AnalyseExpressionResult" = union(enum) {
+pub const @"AnalyseExpressionResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"JiraExpressionsAnalysis",
     /// 400 response
@@ -2053,12 +2053,12 @@ pub fn @"analyseExpression"(
     // check; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionsAnalysis"
         const result = try json.parse(@"JiraExpressionsAnalysis", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AnalyseExpressionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AnalyseExpressionResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2067,7 +2067,7 @@ pub fn @"analyseExpression"(
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AnalyseExpressionResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2078,7 +2078,7 @@ pub fn @"analyseExpression"(
     return error.UnknownStatusCode;
 }
 
-const @"EvaluateJiraExpressionResult" = union(enum) {
+pub const @"EvaluateJiraExpressionResult" = union(enum) {
     /// Returned if the evaluation results in a value. The result is a JSON primitive value, list, or object.
     _200: @"JiraExpressionResult",
     /// Returned if:
@@ -2113,12 +2113,12 @@ pub fn @"evaluateJiraExpression"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionResult"
         const result = try json.parse(@"JiraExpressionResult", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"EvaluateJiraExpressionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"EvaluateJiraExpressionResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2127,7 +2127,7 @@ pub fn @"evaluateJiraExpression"(
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"EvaluateJiraExpressionResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2138,7 +2138,7 @@ pub fn @"evaluateJiraExpression"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFieldsResult" = union(enum) {
+pub const @"GetFieldsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2176,7 +2176,7 @@ pub fn @"getFields"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFieldsPaginatedResult" = union(enum) {
+pub const @"GetFieldsPaginatedResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanField",
     /// Returned if the request is invalid.
@@ -2211,12 +2211,12 @@ pub fn @"getFieldsPaginated"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
         const result = try json.parse(@"PageBeanField", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFieldsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFieldsPaginatedResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2225,7 +2225,7 @@ pub fn @"getFieldsPaginated"(
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFieldsPaginatedResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2236,7 +2236,7 @@ pub fn @"getFieldsPaginated"(
     return error.UnknownStatusCode;
 }
 
-const @"GetTrashedFieldsPaginatedResult" = union(enum) {
+pub const @"GetTrashedFieldsPaginatedResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanField",
     /// Returned if the request is invalid.
@@ -2269,12 +2269,12 @@ pub fn @"getTrashedFieldsPaginated"(
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
         const result = try json.parse(@"PageBeanField", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetTrashedFieldsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetTrashedFieldsPaginatedResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2283,7 +2283,7 @@ pub fn @"getTrashedFieldsPaginated"(
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetTrashedFieldsPaginatedResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2294,7 +2294,7 @@ pub fn @"getTrashedFieldsPaginated"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateCustomFieldResult" = union(enum) {
+pub const @"UpdateCustomFieldResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2352,7 +2352,7 @@ pub fn @"updateCustomField"(
     return error.UnknownStatusCode;
 }
 
-const @"GetContextsForFieldResult" = union(enum) {
+pub const @"GetContextsForFieldResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanCustomFieldContext",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2388,7 +2388,7 @@ pub fn @"getContextsForField"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContext"
         const result = try json.parse(@"PageBeanCustomFieldContext", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetContextsForFieldResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2411,7 +2411,7 @@ pub fn @"getContextsForField"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDefaultValuesResult" = union(enum) {
+pub const @"GetDefaultValuesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanCustomFieldContextDefaultValue",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2445,7 +2445,7 @@ pub fn @"getDefaultValues"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextDefaultValue"
         const result = try json.parse(@"PageBeanCustomFieldContextDefaultValue", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDefaultValuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2468,7 +2468,7 @@ pub fn @"getDefaultValues"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypeMappingsForContextsResult" = union(enum) {
+pub const @"GetIssueTypeMappingsForContextsResult" = union(enum) {
     /// Returned if operation is successful.
     _200: @"PageBeanIssueTypeToContextMapping",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2500,7 +2500,7 @@ pub fn @"getIssueTypeMappingsForContexts"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeToContextMapping"
         const result = try json.parse(@"PageBeanIssueTypeToContextMapping", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueTypeMappingsForContextsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2519,7 +2519,7 @@ pub fn @"getIssueTypeMappingsForContexts"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCustomFieldContextsForProjectsAndIssueTypesResult" = union(enum) {
+pub const @"GetCustomFieldContextsForProjectsAndIssueTypesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanContextForProjectAndIssueType",
     /// Returned if the request is not valid.
@@ -2554,7 +2554,7 @@ pub fn @"getCustomFieldContextsForProjectsAndIssueTypes"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextForProjectAndIssueType"
         const result = try json.parse(@"PageBeanContextForProjectAndIssueType", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2581,7 +2581,7 @@ pub fn @"getCustomFieldContextsForProjectsAndIssueTypes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectContextMappingResult" = union(enum) {
+pub const @"GetProjectContextMappingResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanCustomFieldContextProjectMapping",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2615,7 +2615,7 @@ pub fn @"getProjectContextMapping"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextProjectMapping"
         const result = try json.parse(@"PageBeanCustomFieldContextProjectMapping", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectContextMappingResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2638,7 +2638,7 @@ pub fn @"getProjectContextMapping"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateCustomFieldContextResult" = union(enum) {
+pub const @"UpdateCustomFieldContextResult" = union(enum) {
     /// Returned if the context is updated.
     _204: void,
     /// Returned if the request is not valid.
@@ -2699,7 +2699,7 @@ pub fn @"updateCustomFieldContext"(
     return error.UnknownStatusCode;
 }
 
-const @"AddIssueTypesToContextResult" = union(enum) {
+pub const @"AddIssueTypesToContextResult" = union(enum) {
     /// Returned if operation is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2767,7 +2767,7 @@ pub fn @"addIssueTypesToContext"(
     return error.UnknownStatusCode;
 }
 
-const @"RemoveIssueTypesFromContextResult" = union(enum) {
+pub const @"RemoveIssueTypesFromContextResult" = union(enum) {
     /// Returned if operation is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2829,7 +2829,7 @@ pub fn @"removeIssueTypesFromContext"(
     return error.UnknownStatusCode;
 }
 
-const @"GetOptionsForContextResult" = union(enum) {
+pub const @"GetOptionsForContextResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanCustomFieldContextOption",
     /// Returned if the request is not valid.
@@ -2869,7 +2869,7 @@ pub fn @"getOptionsForContext"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextOption"
         const result = try json.parse(@"PageBeanCustomFieldContextOption", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetOptionsForContextResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2896,7 +2896,7 @@ pub fn @"getOptionsForContext"(
     return error.UnknownStatusCode;
 }
 
-const @"ReorderCustomFieldOptionsResult" = union(enum) {
+pub const @"ReorderCustomFieldOptionsResult" = union(enum) {
     /// Returned if options are reordered.
     _204: void,
     /// Returned if the request is not valid.
@@ -2958,7 +2958,7 @@ pub fn @"reorderCustomFieldOptions"(
     return error.UnknownStatusCode;
 }
 
-const @"DeleteCustomFieldOptionResult" = union(enum) {
+pub const @"DeleteCustomFieldOptionResult" = union(enum) {
     /// Returned if the option is deleted.
     _204: void,
     /// Returned if the request is not valid.
@@ -3022,7 +3022,7 @@ pub fn @"deleteCustomFieldOption"(
     return error.UnknownStatusCode;
 }
 
-const @"AssignProjectsToCustomFieldContextResult" = union(enum) {
+pub const @"AssignProjectsToCustomFieldContextResult" = union(enum) {
     /// Returned if operation is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -3084,7 +3084,7 @@ pub fn @"assignProjectsToCustomFieldContext"(
     return error.UnknownStatusCode;
 }
 
-const @"RemoveCustomFieldContextFromProjectsResult" = union(enum) {
+pub const @"RemoveCustomFieldContextFromProjectsResult" = union(enum) {
     /// Returned if the custom field context is removed from the projects.
     _204: void,
     /// Returned if the request is not valid.
@@ -3146,7 +3146,7 @@ pub fn @"removeCustomFieldContextFromProjects"(
     return error.UnknownStatusCode;
 }
 
-const @"GetContextsForFieldDeprecatedResult" = union(enum) {
+pub const @"GetContextsForFieldDeprecatedResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanContext",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3177,7 +3177,7 @@ pub fn @"getContextsForFieldDeprecated"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContext"
         const result = try json.parse(@"PageBeanContext", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetContextsForFieldDeprecatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3196,7 +3196,7 @@ pub fn @"getContextsForFieldDeprecated"(
     return error.UnknownStatusCode;
 }
 
-const @"GetScreensForFieldResult" = union(enum) {
+pub const @"GetScreensForFieldResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanScreenWithTab",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3228,7 +3228,7 @@ pub fn @"getScreensForField"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenWithTab"
         const result = try json.parse(@"PageBeanScreenWithTab", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetScreensForFieldResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3247,7 +3247,7 @@ pub fn @"getScreensForField"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllIssueFieldOptionsResult" = union(enum) {
+pub const @"GetAllIssueFieldOptionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueFieldOption",
     /// Returned if the field is not found or does not support options.
@@ -3278,7 +3278,7 @@ pub fn @"getAllIssueFieldOptions"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
         const result = try json.parse(@"PageBeanIssueFieldOption", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllIssueFieldOptionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3297,7 +3297,7 @@ pub fn @"getAllIssueFieldOptions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetSelectableIssueFieldOptionsResult" = union(enum) {
+pub const @"GetSelectableIssueFieldOptionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueFieldOption",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3329,7 +3329,7 @@ pub fn @"getSelectableIssueFieldOptions"(
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
         const result = try json.parse(@"PageBeanIssueFieldOption", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetSelectableIssueFieldOptionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3348,7 +3348,7 @@ pub fn @"getSelectableIssueFieldOptions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetVisibleIssueFieldOptionsResult" = union(enum) {
+pub const @"GetVisibleIssueFieldOptionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueFieldOption",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3380,7 +3380,7 @@ pub fn @"getVisibleIssueFieldOptions"(
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
         const result = try json.parse(@"PageBeanIssueFieldOption", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetVisibleIssueFieldOptionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3399,7 +3399,7 @@ pub fn @"getVisibleIssueFieldOptions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueFieldOptionResult" = union(enum) {
+pub const @"GetIssueFieldOptionResult" = union(enum) {
     /// Returned if the requested option is returned.
     _200: @"IssueFieldOption",
     /// Returned if the field is not found or does not support options.
@@ -3432,7 +3432,7 @@ pub fn @"getIssueFieldOption"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueFieldOption"
         const result = try json.parse(@"IssueFieldOption", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueFieldOptionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3455,7 +3455,7 @@ pub fn @"getIssueFieldOption"(
     return error.UnknownStatusCode;
 }
 
-const @"ReplaceIssueFieldOptionResult" = union(enum) {
+pub const @"ReplaceIssueFieldOptionResult" = union(enum) {
     /// Returned if the long-running task to deselect the option is started.
     _303: @"TaskProgressBeanRemoveOptionFromIssuesResult",
     /// Returned if the request is not valid.
@@ -3493,7 +3493,7 @@ pub fn @"replaceIssueFieldOption"(
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanRemoveOptionFromIssuesResult"
         const result = try json.parse(@"TaskProgressBeanRemoveOptionFromIssuesResult", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"ReplaceIssueFieldOptionResult"{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3516,7 +3516,7 @@ pub fn @"replaceIssueFieldOption"(
     return error.UnknownStatusCode;
 }
 
-const @"DeleteCustomFieldResult" = union(enum) {
+pub const @"DeleteCustomFieldResult" = union(enum) {
     /// Returned if the request is successful.
     _303: @"TaskProgressBeanObject",
     /// Returned if any of these are true:
@@ -3554,32 +3554,32 @@ pub fn @"deleteCustomField"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
         const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._404 = result };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._409 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3590,7 +3590,7 @@ pub fn @"deleteCustomField"(
     return error.UnknownStatusCode;
 }
 
-const @"RestoreCustomFieldResult" = union(enum) {
+pub const @"RestoreCustomFieldResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -3627,22 +3627,22 @@ pub fn @"restoreCustomField"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RestoreCustomFieldResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RestoreCustomFieldResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RestoreCustomFieldResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RestoreCustomFieldResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3653,7 +3653,7 @@ pub fn @"restoreCustomField"(
     return error.UnknownStatusCode;
 }
 
-const @"TrashCustomFieldResult" = union(enum) {
+pub const @"TrashCustomFieldResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -3690,22 +3690,22 @@ pub fn @"trashCustomField"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"TrashCustomFieldResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"TrashCustomFieldResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"TrashCustomFieldResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"TrashCustomFieldResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3716,7 +3716,7 @@ pub fn @"trashCustomField"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllFieldConfigurationsResult" = union(enum) {
+pub const @"GetAllFieldConfigurationsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanFieldConfigurationDetails",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3747,7 +3747,7 @@ pub fn @"getAllFieldConfigurations"(
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationDetails"
         const result = try json.parse(@"PageBeanFieldConfigurationDetails", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllFieldConfigurationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3766,7 +3766,7 @@ pub fn @"getAllFieldConfigurations"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateFieldConfigurationResult" = union(enum) {
+pub const @"UpdateFieldConfigurationResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -3824,7 +3824,7 @@ pub fn @"updateFieldConfiguration"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFieldConfigurationItemsResult" = union(enum) {
+pub const @"GetFieldConfigurationItemsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanFieldConfigurationItem",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3857,7 +3857,7 @@ pub fn @"getFieldConfigurationItems"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationItem"
         const result = try json.parse(@"PageBeanFieldConfigurationItem", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFieldConfigurationItemsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3880,7 +3880,7 @@ pub fn @"getFieldConfigurationItems"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllFieldConfigurationSchemesResult" = union(enum) {
+pub const @"GetAllFieldConfigurationSchemesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanFieldConfigurationScheme",
     /// Returned if the request is not valid.
@@ -3911,7 +3911,7 @@ pub fn @"getAllFieldConfigurationSchemes"(
     // id; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationScheme"
         const result = try json.parse(@"PageBeanFieldConfigurationScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllFieldConfigurationSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3934,7 +3934,7 @@ pub fn @"getAllFieldConfigurationSchemes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFieldConfigurationSchemeMappingsResult" = union(enum) {
+pub const @"GetFieldConfigurationSchemeMappingsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanFieldConfigurationIssueTypeItem",
     /// Returned if the request is not valid.
@@ -3967,7 +3967,7 @@ pub fn @"getFieldConfigurationSchemeMappings"(
     // fieldConfigurationSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationIssueTypeItem"
         const result = try json.parse(@"PageBeanFieldConfigurationIssueTypeItem", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFieldConfigurationSchemeMappingsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3994,7 +3994,7 @@ pub fn @"getFieldConfigurationSchemeMappings"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFieldConfigurationSchemeProjectMappingResult" = union(enum) {
+pub const @"GetFieldConfigurationSchemeProjectMappingResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanFieldConfigurationSchemeProjects",
     /// Returned if the request is not valid.
@@ -4025,7 +4025,7 @@ pub fn @"getFieldConfigurationSchemeProjectMapping"(
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationSchemeProjects"
         const result = try json.parse(@"PageBeanFieldConfigurationSchemeProjects", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4048,7 +4048,7 @@ pub fn @"getFieldConfigurationSchemeProjectMapping"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateFieldConfigurationSchemeResult" = union(enum) {
+pub const @"UpdateFieldConfigurationSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -4106,7 +4106,7 @@ pub fn @"updateFieldConfigurationScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"SetFieldConfigurationSchemeMappingResult" = union(enum) {
+pub const @"SetFieldConfigurationSchemeMappingResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -4165,7 +4165,7 @@ pub fn @"setFieldConfigurationSchemeMapping"(
     return error.UnknownStatusCode;
 }
 
-const @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult" = union(enum) {
+pub const @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -4202,22 +4202,22 @@ pub fn @"removeIssueTypesFromGlobalFieldConfigurationScheme"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4228,7 +4228,7 @@ pub fn @"removeIssueTypesFromGlobalFieldConfigurationScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFiltersResult" = union(enum) {
+pub const @"GetFiltersResult" = union(enum) {
     /// 200 response
     _200: void,
     _400: void,
@@ -4261,7 +4261,7 @@ pub fn @"getFilters"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDefaultShareScopeResult" = union(enum) {
+pub const @"GetDefaultShareScopeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"DefaultShareScope",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4285,7 +4285,7 @@ pub fn @"getDefaultShareScope"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultShareScope"
         const result = try json.parse(@"DefaultShareScope", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDefaultShareScopeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -4300,7 +4300,7 @@ pub fn @"getDefaultShareScope"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFavouriteFiltersResult" = union(enum) {
+pub const @"GetFavouriteFiltersResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4339,7 +4339,7 @@ pub fn @"getFavouriteFilters"(
     return error.UnknownStatusCode;
 }
 
-const @"GetMyFiltersResult" = union(enum) {
+pub const @"GetMyFiltersResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4379,7 +4379,7 @@ pub fn @"getMyFilters"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFiltersPaginatedResult" = union(enum) {
+pub const @"GetFiltersPaginatedResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanFilterDetails",
     /// Returned if:
@@ -4421,12 +4421,12 @@ pub fn @"getFiltersPaginated"(
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFilterDetails"
         const result = try json.parse(@"PageBeanFilterDetails", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFiltersPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFiltersPaginatedResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -4441,7 +4441,7 @@ pub fn @"getFiltersPaginated"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFilterResult" = union(enum) {
+pub const @"GetFilterResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Filter",
     /// Returned if the filter is not found or the user does not have permission to view it.
@@ -4471,7 +4471,7 @@ pub fn @"getFilter"(
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
         const result = try json.parse(@"Filter", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFilterResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4490,7 +4490,7 @@ pub fn @"getFilter"(
     return error.UnknownStatusCode;
 }
 
-const @"GetColumnsResult" = union(enum) {
+pub const @"GetColumnsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the user does not have permission to view the filter.
@@ -4543,7 +4543,7 @@ pub fn @"getColumns"(
     return error.UnknownStatusCode;
 }
 
-const @"SetFavouriteForFilterResult" = union(enum) {
+pub const @"SetFavouriteForFilterResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Filter",
     /// Returned if:
@@ -4574,7 +4574,7 @@ pub fn @"setFavouriteForFilter"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
         const result = try json.parse(@"Filter", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SetFavouriteForFilterResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4589,7 +4589,7 @@ pub fn @"setFavouriteForFilter"(
     return error.UnknownStatusCode;
 }
 
-const @"ChangeFilterOwnerResult" = union(enum) {
+pub const @"ChangeFilterOwnerResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned when:
@@ -4645,7 +4645,7 @@ pub fn @"changeFilterOwner"(
     return error.UnknownStatusCode;
 }
 
-const @"GetSharePermissionsResult" = union(enum) {
+pub const @"GetSharePermissionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4695,7 +4695,7 @@ pub fn @"getSharePermissions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetSharePermissionResult" = union(enum) {
+pub const @"GetSharePermissionResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"SharePermission",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4730,7 +4730,7 @@ pub fn @"getSharePermission"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SharePermission"
         const result = try json.parse(@"SharePermission", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetSharePermissionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -4749,7 +4749,7 @@ pub fn @"getSharePermission"(
     return error.UnknownStatusCode;
 }
 
-const @"GetGroupResult" = union(enum) {
+pub const @"GetGroupResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Group",
     /// Returned if the group name is not specified.
@@ -4782,7 +4782,7 @@ pub fn @"getGroup"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Group"
         const result = try json.parse(@"Group", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetGroupResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4809,7 +4809,7 @@ pub fn @"getGroup"(
     return error.UnknownStatusCode;
 }
 
-const @"BulkGetGroupsResult" = union(enum) {
+pub const @"BulkGetGroupsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanGroupDetails",
     /// Returned if the request is not valid.
@@ -4841,7 +4841,7 @@ pub fn @"bulkGetGroups"(
     // groupName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanGroupDetails"
         const result = try json.parse(@"PageBeanGroupDetails", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"BulkGetGroupsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4864,7 +4864,7 @@ pub fn @"bulkGetGroups"(
     return error.UnknownStatusCode;
 }
 
-const @"GetUsersFromGroupResult" = union(enum) {
+pub const @"GetUsersFromGroupResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanUserDetails",
     /// Returned if the group name is not specified.
@@ -4899,7 +4899,7 @@ pub fn @"getUsersFromGroup"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserDetails"
         const result = try json.parse(@"PageBeanUserDetails", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetUsersFromGroupResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4926,7 +4926,7 @@ pub fn @"getUsersFromGroup"(
     return error.UnknownStatusCode;
 }
 
-const @"AddUserToGroupResult" = union(enum) {
+pub const @"AddUserToGroupResult" = union(enum) {
     /// Returned if the request is successful.
     _201: @"Group",
     /// Returned if:
@@ -4961,7 +4961,7 @@ pub fn @"addUserToGroup"(
     // groupId; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Group"
         const result = try json.parse(@"Group", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AddUserToGroupResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4988,7 +4988,7 @@ pub fn @"addUserToGroup"(
     return error.UnknownStatusCode;
 }
 
-const @"FindGroupsResult" = union(enum) {
+pub const @"FindGroupsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"FoundGroups",
     _400: void,
@@ -5016,7 +5016,7 @@ pub fn @"findGroups"(
     // userName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundGroups"
         const result = try json.parse(@"FoundGroups", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"FindGroupsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5027,7 +5027,7 @@ pub fn @"findGroups"(
     return error.UnknownStatusCode;
 }
 
-const @"FindUsersAndGroupsResult" = union(enum) {
+pub const @"FindUsersAndGroupsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"FoundUsersAndGroups",
     /// Returned if the query parameter is not provided.
@@ -5066,7 +5066,7 @@ pub fn @"findUsersAndGroups"(
     // excludeConnectAddons; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsersAndGroups"
         const result = try json.parse(@"FoundUsersAndGroups", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"FindUsersAndGroupsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5093,7 +5093,7 @@ pub fn @"findUsersAndGroups"(
     return error.UnknownStatusCode;
 }
 
-const @"GetLicenseResult" = union(enum) {
+pub const @"GetLicenseResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"License",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5117,7 +5117,7 @@ pub fn @"getLicense"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"License"
         const result = try json.parse(@"License", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetLicenseResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5132,7 +5132,7 @@ pub fn @"getLicense"(
     return error.UnknownStatusCode;
 }
 
-const @"CreateIssueResult" = union(enum) {
+pub const @"CreateIssueResult" = union(enum) {
     /// Returned if the request is successful.
     _201: @"CreatedIssue",
     /// Returned if the request:
@@ -5169,22 +5169,22 @@ pub fn @"createIssue"(
     // updateHistory; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssue"
         const result = try json.parse(@"CreatedIssue", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateIssueResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateIssueResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateIssueResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateIssueResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5195,7 +5195,7 @@ pub fn @"createIssue"(
     return error.UnknownStatusCode;
 }
 
-const @"CreateIssuesResult" = union(enum) {
+pub const @"CreateIssuesResult" = union(enum) {
     /// Returned if any of the issue or subtask creation requests were successful. A request may be unsuccessful when it:
     ///
     ///  *  is missing required fields.
@@ -5237,12 +5237,12 @@ pub fn @"createIssues"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssues"
         const result = try json.parse(@"CreatedIssues", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateIssuesResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"CreatedIssues"
         const result = try json.parse(@"CreatedIssues", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateIssuesResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5257,7 +5257,7 @@ pub fn @"createIssues"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCreateIssueMetaResult" = union(enum) {
+pub const @"GetCreateIssueMetaResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueCreateMetadata",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5286,7 +5286,7 @@ pub fn @"getCreateIssueMeta"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueCreateMetadata"
         const result = try json.parse(@"IssueCreateMetadata", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCreateIssueMetaResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5301,7 +5301,7 @@ pub fn @"getCreateIssueMeta"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssuePickerResourceResult" = union(enum) {
+pub const @"GetIssuePickerResourceResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssuePickerSuggestions",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5331,7 +5331,7 @@ pub fn @"getIssuePickerResource"(
     // showSubTaskParent; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssuePickerSuggestions"
         const result = try json.parse(@"IssuePickerSuggestions", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssuePickerResourceResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5346,7 +5346,7 @@ pub fn @"getIssuePickerResource"(
     return error.UnknownStatusCode;
 }
 
-const @"BulkSetIssuesPropertiesListResult" = union(enum) {
+pub const @"BulkSetIssuesPropertiesListResult" = union(enum) {
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid or the user does not have the necessary permission.
@@ -5376,12 +5376,12 @@ pub fn @"bulkSetIssuesPropertiesList"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"BulkSetIssuesPropertiesListResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"BulkSetIssuesPropertiesListResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5392,7 +5392,7 @@ pub fn @"bulkSetIssuesPropertiesList"(
     return error.UnknownStatusCode;
 }
 
-const @"BulkSetIssuePropertiesByIssueResult" = union(enum) {
+pub const @"BulkSetIssuePropertiesByIssueResult" = union(enum) {
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid.
@@ -5424,17 +5424,17 @@ pub fn @"bulkSetIssuePropertiesByIssue"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertiesByIssueResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertiesByIssueResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertiesByIssueResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5445,7 +5445,7 @@ pub fn @"bulkSetIssuePropertiesByIssue"(
     return error.UnknownStatusCode;
 }
 
-const @"BulkSetIssuePropertyResult" = union(enum) {
+pub const @"BulkSetIssuePropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _303: void,
     /// Returned if the request is invalid.
@@ -5477,12 +5477,12 @@ pub fn @"bulkSetIssueProperty"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertyResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertyResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5493,7 +5493,7 @@ pub fn @"bulkSetIssueProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIsWatchingIssueBulkResult" = union(enum) {
+pub const @"GetIsWatchingIssueBulkResult" = union(enum) {
     /// Returned if the request is successful
     _200: @"BulkIssueIsWatching",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5517,7 +5517,7 @@ pub fn @"getIsWatchingIssueBulk"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkIssueIsWatching"
         const result = try json.parse(@"BulkIssueIsWatching", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIsWatchingIssueBulkResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5532,7 +5532,7 @@ pub fn @"getIsWatchingIssueBulk"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueResult" = union(enum) {
+pub const @"GetIssueResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueBean",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5565,7 +5565,7 @@ pub fn @"getIssue"(
     // updateHistory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueBean"
         const result = try json.parse(@"IssueBean", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5584,7 +5584,7 @@ pub fn @"getIssue"(
     return error.UnknownStatusCode;
 }
 
-const @"AssignIssueResult" = union(enum) {
+pub const @"AssignIssueResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if:
@@ -5641,7 +5641,7 @@ pub fn @"assignIssue"(
     return error.UnknownStatusCode;
 }
 
-const @"AddAttachmentResult" = union(enum) {
+pub const @"AddAttachmentResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the user does not have the necessary permission.
@@ -5697,7 +5697,7 @@ pub fn @"addAttachment"(
     return error.UnknownStatusCode;
 }
 
-const @"GetChangeLogsResult" = union(enum) {
+pub const @"GetChangeLogsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanChangelog",
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -5726,7 +5726,7 @@ pub fn @"getChangeLogs"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanChangelog"
         const result = try json.parse(@"PageBeanChangelog", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetChangeLogsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -5741,7 +5741,7 @@ pub fn @"getChangeLogs"(
     return error.UnknownStatusCode;
 }
 
-const @"GetChangeLogsByIdsResult" = union(enum) {
+pub const @"GetChangeLogsByIdsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageOfChangelogs",
     /// Returned if the request is not valid.
@@ -5770,7 +5770,7 @@ pub fn @"getChangeLogsByIds"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfChangelogs"
         const result = try json.parse(@"PageOfChangelogs", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetChangeLogsByIdsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5789,7 +5789,7 @@ pub fn @"getChangeLogsByIds"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCommentsResult" = union(enum) {
+pub const @"GetCommentsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageOfComments",
     /// Returned if `orderBy` is set to a value other than *created*.
@@ -5824,7 +5824,7 @@ pub fn @"getComments"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfComments"
         const result = try json.parse(@"PageOfComments", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCommentsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5847,7 +5847,7 @@ pub fn @"getComments"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCommentResult" = union(enum) {
+pub const @"GetCommentResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Comment",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5879,7 +5879,7 @@ pub fn @"getComment"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Comment"
         const result = try json.parse(@"Comment", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCommentResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5898,7 +5898,7 @@ pub fn @"getComment"(
     return error.UnknownStatusCode;
 }
 
-const @"GetEditIssueMetaResult" = union(enum) {
+pub const @"GetEditIssueMetaResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueUpdateMetadata",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5931,7 +5931,7 @@ pub fn @"getEditIssueMeta"(
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueUpdateMetadata"
         const result = try json.parse(@"IssueUpdateMetadata", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetEditIssueMetaResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5954,7 +5954,7 @@ pub fn @"getEditIssueMeta"(
     return error.UnknownStatusCode;
 }
 
-const @"NotifyResult" = union(enum) {
+pub const @"NotifyResult" = union(enum) {
     /// Returned if the email is queued for sending.
     _204: void,
     /// Returned if:
@@ -6014,7 +6014,7 @@ pub fn @"notify"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssuePropertyKeysResult" = union(enum) {
+pub const @"GetIssuePropertyKeysResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PropertyKeys",
     /// Returned if the issue is not found or the user does not have permissions to view the issue.
@@ -6041,7 +6041,7 @@ pub fn @"getIssuePropertyKeys"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssuePropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -6056,7 +6056,7 @@ pub fn @"getIssuePropertyKeys"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssuePropertyResult" = union(enum) {
+pub const @"GetIssuePropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"EntityProperty",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6087,7 +6087,7 @@ pub fn @"getIssueProperty"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssuePropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6106,7 +6106,7 @@ pub fn @"getIssueProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"GetRemoteIssueLinksResult" = union(enum) {
+pub const @"GetRemoteIssueLinksResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"RemoteIssueLink",
     /// Returned if the request is invalid.
@@ -6140,7 +6140,7 @@ pub fn @"getRemoteIssueLinks"(
     // globalId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
         const result = try json.parse(@"RemoteIssueLink", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetRemoteIssueLinksResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6167,7 +6167,7 @@ pub fn @"getRemoteIssueLinks"(
     return error.UnknownStatusCode;
 }
 
-const @"GetRemoteIssueLinkByIdResult" = union(enum) {
+pub const @"GetRemoteIssueLinkByIdResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"RemoteIssueLink",
     /// Returned if the link ID is invalid or the remote issue link does not belong to the issue.
@@ -6202,7 +6202,7 @@ pub fn @"getRemoteIssueLinkById"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
         const result = try json.parse(@"RemoteIssueLink", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetRemoteIssueLinkByIdResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6229,7 +6229,7 @@ pub fn @"getRemoteIssueLinkById"(
     return error.UnknownStatusCode;
 }
 
-const @"GetTransitionsResult" = union(enum) {
+pub const @"GetTransitionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Transitions",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6263,7 +6263,7 @@ pub fn @"getTransitions"(
     // sortByOpsBarAndStatus; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Transitions"
         const result = try json.parse(@"Transitions", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetTransitionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6282,7 +6282,7 @@ pub fn @"getTransitions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetVotesResult" = union(enum) {
+pub const @"GetVotesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Votes",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6315,7 +6315,7 @@ pub fn @"getVotes"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Votes"
         const result = try json.parse(@"Votes", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetVotesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6334,7 +6334,7 @@ pub fn @"getVotes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueWatchersResult" = union(enum) {
+pub const @"GetIssueWatchersResult" = union(enum) {
     /// Returned if the request is successful
     _200: @"Watchers",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6363,7 +6363,7 @@ pub fn @"getIssueWatchers"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Watchers"
         const result = try json.parse(@"Watchers", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueWatchersResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6382,7 +6382,7 @@ pub fn @"getIssueWatchers"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueWorklogResult" = union(enum) {
+pub const @"GetIssueWorklogResult" = union(enum) {
     /// Returned if the request is successful
     _200: @"PageOfWorklogs",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6420,7 +6420,7 @@ pub fn @"getIssueWorklog"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfWorklogs"
         const result = try json.parse(@"PageOfWorklogs", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueWorklogResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6439,7 +6439,7 @@ pub fn @"getIssueWorklog"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorklogResult" = union(enum) {
+pub const @"GetWorklogResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Worklog",
     /// Returned if the authentication credentials are incorrect.
@@ -6477,7 +6477,7 @@ pub fn @"getWorklog"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Worklog"
         const result = try json.parse(@"Worklog", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorklogResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6496,7 +6496,7 @@ pub fn @"getWorklog"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorklogPropertyKeysResult" = union(enum) {
+pub const @"GetWorklogPropertyKeysResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PropertyKeys",
     /// Returned if the worklog ID is invalid.
@@ -6533,7 +6533,7 @@ pub fn @"getWorklogPropertyKeys"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorklogPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6556,7 +6556,7 @@ pub fn @"getWorklogPropertyKeys"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorklogPropertyResult" = union(enum) {
+pub const @"GetWorklogPropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"EntityProperty",
     /// Returned if the worklog ID is invalid.
@@ -6595,7 +6595,7 @@ pub fn @"getWorklogProperty"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorklogPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6618,7 +6618,7 @@ pub fn @"getWorklogProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"LinkIssuesResult" = union(enum) {
+pub const @"LinkIssuesResult" = union(enum) {
     /// Returned if the request is successful.
     _201: void,
     /// Returned if the comment is not created. The response contains an error message indicating why the comment wasn't created. The issue link is also not created.
@@ -6674,7 +6674,7 @@ pub fn @"linkIssues"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueLinkResult" = union(enum) {
+pub const @"GetIssueLinkResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueLink",
     /// Returned if the issue link ID is invalid.
@@ -6708,7 +6708,7 @@ pub fn @"getIssueLink"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLink"
         const result = try json.parse(@"IssueLink", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueLinkResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6731,7 +6731,7 @@ pub fn @"getIssueLink"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueLinkTypesResult" = union(enum) {
+pub const @"GetIssueLinkTypesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueLinkTypes",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6757,7 +6757,7 @@ pub fn @"getIssueLinkTypes"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkTypes"
         const result = try json.parse(@"IssueLinkTypes", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueLinkTypesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6776,7 +6776,7 @@ pub fn @"getIssueLinkTypes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueLinkTypeResult" = union(enum) {
+pub const @"GetIssueLinkTypeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueLinkType",
     /// Returned if the issue link type ID is invalid.
@@ -6810,7 +6810,7 @@ pub fn @"getIssueLinkType"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkType"
         const result = try json.parse(@"IssueLinkType", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueLinkTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6833,7 +6833,7 @@ pub fn @"getIssueLinkType"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueSecuritySchemesResult" = union(enum) {
+pub const @"GetIssueSecuritySchemesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"SecuritySchemes",
     /// Returned if the authentication credentials are incorrect.
@@ -6859,7 +6859,7 @@ pub fn @"getIssueSecuritySchemes"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecuritySchemes"
         const result = try json.parse(@"SecuritySchemes", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueSecuritySchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6878,7 +6878,7 @@ pub fn @"getIssueSecuritySchemes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueSecuritySchemeResult" = union(enum) {
+pub const @"GetIssueSecuritySchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"SecurityScheme",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6906,7 +6906,7 @@ pub fn @"getIssueSecurityScheme"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
         const result = try json.parse(@"SecurityScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueSecuritySchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6925,7 +6925,7 @@ pub fn @"getIssueSecurityScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueSecurityLevelMembersResult" = union(enum) {
+pub const @"GetIssueSecurityLevelMembersResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueSecurityLevelMember",
     /// Returned if the request is not valid.
@@ -6962,7 +6962,7 @@ pub fn @"getIssueSecurityLevelMembers"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueSecurityLevelMember"
         const result = try json.parse(@"PageBeanIssueSecurityLevelMember", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueSecurityLevelMembersResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6989,7 +6989,7 @@ pub fn @"getIssueSecurityLevelMembers"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueAllTypesResult" = union(enum) {
+pub const @"GetIssueAllTypesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7027,7 +7027,7 @@ pub fn @"getIssueAllTypes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypesForProjectResult" = union(enum) {
+pub const @"GetIssueTypesForProjectResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -7082,7 +7082,7 @@ pub fn @"getIssueTypesForProject"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypeResult" = union(enum) {
+pub const @"GetIssueTypeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueTypeDetails",
     /// Returned if the issue type ID is invalid.
@@ -7115,7 +7115,7 @@ pub fn @"getIssueType"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeDetails"
         const result = try json.parse(@"IssueTypeDetails", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7138,7 +7138,7 @@ pub fn @"getIssueType"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAlternativeIssueTypesResult" = union(enum) {
+pub const @"GetAlternativeIssueTypesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7188,7 +7188,7 @@ pub fn @"getAlternativeIssueTypes"(
     return error.UnknownStatusCode;
 }
 
-const @"CreateIssueTypeAvatarResult" = union(enum) {
+pub const @"CreateIssueTypeAvatarResult" = union(enum) {
     /// Returned if the request is successful.
     _201: @"Avatar",
     /// Returned if:
@@ -7230,7 +7230,7 @@ pub fn @"createIssueTypeAvatar"(
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
         const result = try json.parse(@"Avatar", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateIssueTypeAvatarResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7257,7 +7257,7 @@ pub fn @"createIssueTypeAvatar"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypePropertyKeysResult" = union(enum) {
+pub const @"GetIssueTypePropertyKeysResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PropertyKeys",
     /// Returned if the issue type ID is invalid.
@@ -7289,7 +7289,7 @@ pub fn @"getIssueTypePropertyKeys"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueTypePropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7308,7 +7308,7 @@ pub fn @"getIssueTypePropertyKeys"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypePropertyResult" = union(enum) {
+pub const @"GetIssueTypePropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"EntityProperty",
     /// Returned if the issue type ID is invalid.
@@ -7341,7 +7341,7 @@ pub fn @"getIssueTypeProperty"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueTypePropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7364,7 +7364,7 @@ pub fn @"getIssueTypeProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllIssueTypeSchemesResult" = union(enum) {
+pub const @"GetAllIssueTypeSchemesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueTypeScheme",
     /// Returned if the request is not valid.
@@ -7398,7 +7398,7 @@ pub fn @"getAllIssueTypeSchemes"(
     // queryString; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScheme"
         const result = try json.parse(@"PageBeanIssueTypeScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllIssueTypeSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7421,7 +7421,7 @@ pub fn @"getAllIssueTypeSchemes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypeSchemesMappingResult" = union(enum) {
+pub const @"GetIssueTypeSchemesMappingResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueTypeSchemeMapping",
     /// Returned if the request is not valid.
@@ -7452,7 +7452,7 @@ pub fn @"getIssueTypeSchemesMapping"(
     // issueTypeSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeMapping"
         const result = try json.parse(@"PageBeanIssueTypeSchemeMapping", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueTypeSchemesMappingResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7475,7 +7475,7 @@ pub fn @"getIssueTypeSchemesMapping"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypeSchemeForProjectsResult" = union(enum) {
+pub const @"GetIssueTypeSchemeForProjectsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueTypeSchemeProjects",
     /// Returned if the request is not valid.
@@ -7506,7 +7506,7 @@ pub fn @"getIssueTypeSchemeForProjects"(
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeProjects"
         const result = try json.parse(@"PageBeanIssueTypeSchemeProjects", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueTypeSchemeForProjectsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7529,7 +7529,7 @@ pub fn @"getIssueTypeSchemeForProjects"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateIssueTypeSchemeResult" = union(enum) {
+pub const @"UpdateIssueTypeSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7587,7 +7587,7 @@ pub fn @"updateIssueTypeScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"AddIssueTypesToIssueTypeSchemeResult" = union(enum) {
+pub const @"AddIssueTypesToIssueTypeSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7646,7 +7646,7 @@ pub fn @"addIssueTypesToIssueTypeScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"ReorderIssueTypesInIssueTypeSchemeResult" = union(enum) {
+pub const @"ReorderIssueTypesInIssueTypeSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7705,7 +7705,7 @@ pub fn @"reorderIssueTypesInIssueTypeScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"RemoveIssueTypeFromIssueTypeSchemeResult" = union(enum) {
+pub const @"RemoveIssueTypeFromIssueTypeSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7766,7 +7766,7 @@ pub fn @"removeIssueTypeFromIssueTypeScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypeScreenSchemesResult" = union(enum) {
+pub const @"GetIssueTypeScreenSchemesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueTypeScreenScheme",
     /// Returned if the request is not valid.
@@ -7800,7 +7800,7 @@ pub fn @"getIssueTypeScreenSchemes"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenScheme"
         const result = try json.parse(@"PageBeanIssueTypeScreenScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueTypeScreenSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7823,7 +7823,7 @@ pub fn @"getIssueTypeScreenSchemes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypeScreenSchemeMappingsResult" = union(enum) {
+pub const @"GetIssueTypeScreenSchemeMappingsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueTypeScreenSchemeItem",
     /// Returned if the request is not valid.
@@ -7854,7 +7854,7 @@ pub fn @"getIssueTypeScreenSchemeMappings"(
     // issueTypeScreenSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemeItem"
         const result = try json.parse(@"PageBeanIssueTypeScreenSchemeItem", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueTypeScreenSchemeMappingsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7877,7 +7877,7 @@ pub fn @"getIssueTypeScreenSchemeMappings"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueTypeScreenSchemeProjectAssociationsResult" = union(enum) {
+pub const @"GetIssueTypeScreenSchemeProjectAssociationsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanIssueTypeScreenSchemesProjects",
     /// Returned if the request is not valid.
@@ -7908,7 +7908,7 @@ pub fn @"getIssueTypeScreenSchemeProjectAssociations"(
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemesProjects"
         const result = try json.parse(@"PageBeanIssueTypeScreenSchemesProjects", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7931,7 +7931,7 @@ pub fn @"getIssueTypeScreenSchemeProjectAssociations"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateIssueTypeScreenSchemeResult" = union(enum) {
+pub const @"UpdateIssueTypeScreenSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7989,7 +7989,7 @@ pub fn @"updateIssueTypeScreenScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"AppendMappingsForIssueTypeScreenSchemeResult" = union(enum) {
+pub const @"AppendMappingsForIssueTypeScreenSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -8054,7 +8054,7 @@ pub fn @"appendMappingsForIssueTypeScreenScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateDefaultScreenSchemeResult" = union(enum) {
+pub const @"UpdateDefaultScreenSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -8113,7 +8113,7 @@ pub fn @"updateDefaultScreenScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"RemoveMappingsFromIssueTypeScreenSchemeResult" = union(enum) {
+pub const @"RemoveMappingsFromIssueTypeScreenSchemeResult" = union(enum) {
     /// Returned if the screen scheme mappings are removed from the issue type screen scheme.
     _204: void,
     /// Returned if the request is not valid.
@@ -8172,7 +8172,7 @@ pub fn @"removeMappingsFromIssueTypeScreenScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectsForIssueTypeScreenSchemeResult" = union(enum) {
+pub const @"GetProjectsForIssueTypeScreenSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanProjectDetails",
     /// Returned if the request is not valid.
@@ -8206,7 +8206,7 @@ pub fn @"getProjectsForIssueTypeScreenScheme"(
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProjectDetails"
         const result = try json.parse(@"PageBeanProjectDetails", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8229,7 +8229,7 @@ pub fn @"getProjectsForIssueTypeScreenScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAutoCompleteResult" = union(enum) {
+pub const @"GetAutoCompleteResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"JQLReferenceData",
     /// Returned if the authentication credentials are incorrect.
@@ -8253,7 +8253,7 @@ pub fn @"getAutoComplete"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JQLReferenceData"
         const result = try json.parse(@"JQLReferenceData", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAutoCompleteResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -8268,7 +8268,7 @@ pub fn @"getAutoComplete"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFieldAutoCompleteForQueryStringResult" = union(enum) {
+pub const @"GetFieldAutoCompleteForQueryStringResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"AutoCompleteSuggestions",
     /// Returned if an invalid combination of parameters is passed.
@@ -8298,7 +8298,7 @@ pub fn @"getFieldAutoCompleteForQueryString"(
     // predicateValue; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AutoCompleteSuggestions"
         const result = try json.parse(@"AutoCompleteSuggestions", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFieldAutoCompleteForQueryStringResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8317,7 +8317,7 @@ pub fn @"getFieldAutoCompleteForQueryString"(
     return error.UnknownStatusCode;
 }
 
-const @"MatchIssuesResult" = union(enum) {
+pub const @"MatchIssuesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueMatches",
     /// Returned if `jqls` exceeds the maximum number of JQL queries or `issueIds` exceeds the maximum number of issue IDs.
@@ -8341,7 +8341,7 @@ pub fn @"matchIssues"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueMatches"
         const result = try json.parse(@"IssueMatches", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"MatchIssuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8356,7 +8356,7 @@ pub fn @"matchIssues"(
     return error.UnknownStatusCode;
 }
 
-const @"ParseJqlQueriesResult" = union(enum) {
+pub const @"ParseJqlQueriesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ParsedJqlQueries",
     /// Returned if the request is invalid.
@@ -8383,12 +8383,12 @@ pub fn @"parseJqlQueries"(
     // validation; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ParsedJqlQueries"
         const result = try json.parse(@"ParsedJqlQueries", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"ParseJqlQueriesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"ParseJqlQueriesResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -8403,7 +8403,7 @@ pub fn @"parseJqlQueries"(
     return error.UnknownStatusCode;
 }
 
-const @"MigrateQueriesResult" = union(enum) {
+pub const @"MigrateQueriesResult" = union(enum) {
     /// Returned if the request is successful. Note that the JQL queries are returned in the same order that they were passed.
     _200: @"ConvertedJQLQueries",
     /// Returned if at least one of the queries cannot be converted. For example, the JQL has invalid operators or invalid keywords, or the users in the query cannot be found.
@@ -8429,7 +8429,7 @@ pub fn @"migrateQueries"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConvertedJQLQueries"
         const result = try json.parse(@"ConvertedJQLQueries", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"MigrateQueriesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8448,7 +8448,7 @@ pub fn @"migrateQueries"(
     return error.UnknownStatusCode;
 }
 
-const @"SanitiseJqlQueriesResult" = union(enum) {
+pub const @"SanitiseJqlQueriesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"SanitizedJqlQueries",
     /// Returned if the request is invalid.
@@ -8476,22 +8476,22 @@ pub fn @"sanitiseJqlQueries"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SanitizedJqlQueries"
         const result = try json.parse(@"SanitizedJqlQueries", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SanitiseJqlQueriesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SanitiseJqlQueriesResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SanitiseJqlQueriesResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SanitiseJqlQueriesResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8502,7 +8502,7 @@ pub fn @"sanitiseJqlQueries"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllLabelsResult" = union(enum) {
+pub const @"GetAllLabelsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanString",
     _400: void,
@@ -8526,7 +8526,7 @@ pub fn @"getAllLabels"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanString"
         const result = try json.parse(@"PageBeanString", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllLabelsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8537,7 +8537,7 @@ pub fn @"getAllLabels"(
     return error.UnknownStatusCode;
 }
 
-const @"GetMyPermissionsResult" = union(enum) {
+pub const @"GetMyPermissionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Permissions",
     /// Returned if `permissions` is empty, contains an invalid key, or does not equal BROWSE\_PROJECTS when commentId is provided.
@@ -8573,22 +8573,22 @@ pub fn @"getMyPermissions"(
     // commentId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
         const result = try json.parse(@"Permissions", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetMyPermissionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetMyPermissionsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetMyPermissionsResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetMyPermissionsResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8599,7 +8599,7 @@ pub fn @"getMyPermissions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetPreferenceResult" = union(enum) {
+pub const @"GetPreferenceResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8644,7 +8644,7 @@ pub fn @"getPreference"(
     return error.UnknownStatusCode;
 }
 
-const @"GetLocaleResult" = union(enum) {
+pub const @"GetLocaleResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Locale",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8668,7 +8668,7 @@ pub fn @"getLocale"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Locale"
         const result = try json.parse(@"Locale", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetLocaleResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -8683,7 +8683,7 @@ pub fn @"getLocale"(
     return error.UnknownStatusCode;
 }
 
-const @"GetCurrentUserResult" = union(enum) {
+pub const @"GetCurrentUserResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"User",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8708,7 +8708,7 @@ pub fn @"getCurrentUser"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
         const result = try json.parse(@"User", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetCurrentUserResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -8723,7 +8723,7 @@ pub fn @"getCurrentUser"(
     return error.UnknownStatusCode;
 }
 
-const @"GetNotificationSchemesResult" = union(enum) {
+pub const @"GetNotificationSchemesResult" = union(enum) {
     /// Returned if the request is successful. Only returns notification schemes that the user has permission to access. An empty list is returned if the user lacks permission to access all notification schemes.
     _200: @"PageBeanNotificationScheme",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8750,7 +8750,7 @@ pub fn @"getNotificationSchemes"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanNotificationScheme"
         const result = try json.parse(@"PageBeanNotificationScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetNotificationSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -8765,7 +8765,7 @@ pub fn @"getNotificationSchemes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetNotificationSchemeResult" = union(enum) {
+pub const @"GetNotificationSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"NotificationScheme",
     /// Returned if the request is invalid.
@@ -8796,7 +8796,7 @@ pub fn @"getNotificationScheme"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
         const result = try json.parse(@"NotificationScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetNotificationSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8819,7 +8819,7 @@ pub fn @"getNotificationScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllPermissionsResult" = union(enum) {
+pub const @"GetAllPermissionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Permissions",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8845,7 +8845,7 @@ pub fn @"getAllPermissions"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
         const result = try json.parse(@"Permissions", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllPermissionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -8864,7 +8864,7 @@ pub fn @"getAllPermissions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetBulkPermissionsResult" = union(enum) {
+pub const @"GetBulkPermissionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"BulkPermissionGrants",
     /// Returned if:
@@ -8896,17 +8896,17 @@ pub fn @"getBulkPermissions"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkPermissionGrants"
         const result = try json.parse(@"BulkPermissionGrants", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetBulkPermissionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetBulkPermissionsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetBulkPermissionsResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8917,7 +8917,7 @@ pub fn @"getBulkPermissions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetPermittedProjectsResult" = union(enum) {
+pub const @"GetPermittedProjectsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PermittedProjects",
     /// Returned if a project permission is not found.
@@ -8943,7 +8943,7 @@ pub fn @"getPermittedProjects"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermittedProjects"
         const result = try json.parse(@"PermittedProjects", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetPermittedProjectsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8962,7 +8962,7 @@ pub fn @"getPermittedProjects"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllPermissionSchemesResult" = union(enum) {
+pub const @"GetAllPermissionSchemesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PermissionSchemes",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8987,7 +8987,7 @@ pub fn @"getAllPermissionSchemes"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionSchemes"
         const result = try json.parse(@"PermissionSchemes", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllPermissionSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9002,7 +9002,7 @@ pub fn @"getAllPermissionSchemes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetPermissionSchemeResult" = union(enum) {
+pub const @"GetPermissionSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PermissionScheme",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9031,7 +9031,7 @@ pub fn @"getPermissionScheme"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
         const result = try json.parse(@"PermissionScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetPermissionSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9050,7 +9050,7 @@ pub fn @"getPermissionScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetPermissionSchemeGrantsResult" = union(enum) {
+pub const @"GetPermissionSchemeGrantsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PermissionGrants",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9080,7 +9080,7 @@ pub fn @"getPermissionSchemeGrants"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrants"
         const result = try json.parse(@"PermissionGrants", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetPermissionSchemeGrantsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9099,7 +9099,7 @@ pub fn @"getPermissionSchemeGrants"(
     return error.UnknownStatusCode;
 }
 
-const @"GetPermissionSchemeGrantResult" = union(enum) {
+pub const @"GetPermissionSchemeGrantResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PermissionGrant",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9131,7 +9131,7 @@ pub fn @"getPermissionSchemeGrant"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrant"
         const result = try json.parse(@"PermissionGrant", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetPermissionSchemeGrantResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9150,7 +9150,7 @@ pub fn @"getPermissionSchemeGrant"(
     return error.UnknownStatusCode;
 }
 
-const @"GetPrioritiesResult" = union(enum) {
+pub const @"GetPrioritiesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -9188,7 +9188,7 @@ pub fn @"getPriorities"(
     return error.UnknownStatusCode;
 }
 
-const @"SetDefaultPriorityResult" = union(enum) {
+pub const @"SetDefaultPriorityResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -9222,22 +9222,22 @@ pub fn @"setDefaultPriority"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SetDefaultPriorityResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SetDefaultPriorityResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SetDefaultPriorityResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SetDefaultPriorityResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9248,7 +9248,7 @@ pub fn @"setDefaultPriority"(
     return error.UnknownStatusCode;
 }
 
-const @"SearchPrioritiesResult" = union(enum) {
+pub const @"SearchPrioritiesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanPriority",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9276,12 +9276,12 @@ pub fn @"searchPriorities"(
     // onlyDefault; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanPriority"
         const result = try json.parse(@"PageBeanPriority", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SearchPrioritiesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SearchPrioritiesResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9292,7 +9292,7 @@ pub fn @"searchPriorities"(
     return error.UnknownStatusCode;
 }
 
-const @"GetPriorityResult" = union(enum) {
+pub const @"GetPriorityResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Priority",
     /// Returned if the authentication credentials are incorrect.
@@ -9320,7 +9320,7 @@ pub fn @"getPriority"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Priority"
         const result = try json.parse(@"Priority", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetPriorityResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9339,7 +9339,7 @@ pub fn @"getPriority"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllProjectsResult" = union(enum) {
+pub const @"GetAllProjectsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9380,7 +9380,7 @@ pub fn @"getAllProjects"(
     return error.UnknownStatusCode;
 }
 
-const @"GetRecentResult" = union(enum) {
+pub const @"GetRecentResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -9426,7 +9426,7 @@ pub fn @"getRecent"(
     return error.UnknownStatusCode;
 }
 
-const @"SearchProjectsResult" = union(enum) {
+pub const @"SearchProjectsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanProject",
     /// Returned if the request is not valid.
@@ -9467,7 +9467,7 @@ pub fn @"searchProjects"(
     // propertyQuery; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProject"
         const result = try json.parse(@"PageBeanProject", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SearchProjectsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9490,7 +9490,7 @@ pub fn @"searchProjects"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllProjectTypesResult" = union(enum) {
+pub const @"GetAllProjectTypesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -9528,7 +9528,7 @@ pub fn @"getAllProjectTypes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllAccessibleProjectTypesResult" = union(enum) {
+pub const @"GetAllAccessibleProjectTypesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     _400: void,
@@ -9560,7 +9560,7 @@ pub fn @"getAllAccessibleProjectTypes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectTypeByKeyResult" = union(enum) {
+pub const @"GetProjectTypeByKeyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectType",
     /// Returned if the authentication credentials are incorrect.
@@ -9588,7 +9588,7 @@ pub fn @"getProjectTypeByKey"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
         const result = try json.parse(@"ProjectType", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectTypeByKeyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9607,7 +9607,7 @@ pub fn @"getProjectTypeByKey"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAccessibleProjectTypeByKeyResult" = union(enum) {
+pub const @"GetAccessibleProjectTypeByKeyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectType",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9636,7 +9636,7 @@ pub fn @"getAccessibleProjectTypeByKey"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
         const result = try json.parse(@"ProjectType", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAccessibleProjectTypeByKeyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9655,7 +9655,7 @@ pub fn @"getAccessibleProjectTypeByKey"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectResult" = union(enum) {
+pub const @"GetProjectResult" = union(enum) {
     /// Returned if successful.
     _200: @"Project",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9685,7 +9685,7 @@ pub fn @"getProject"(
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
         const result = try json.parse(@"Project", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9704,7 +9704,7 @@ pub fn @"getProject"(
     return error.UnknownStatusCode;
 }
 
-const @"ArchiveProjectResult" = union(enum) {
+pub const @"ArchiveProjectResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -9763,7 +9763,7 @@ pub fn @"archiveProject"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateProjectAvatarResult" = union(enum) {
+pub const @"UpdateProjectAvatarResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9816,7 +9816,7 @@ pub fn @"updateProjectAvatar"(
     return error.UnknownStatusCode;
 }
 
-const @"DeleteProjectAvatarResult" = union(enum) {
+pub const @"DeleteProjectAvatarResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9871,7 +9871,7 @@ pub fn @"deleteProjectAvatar"(
     return error.UnknownStatusCode;
 }
 
-const @"CreateProjectAvatarResult" = union(enum) {
+pub const @"CreateProjectAvatarResult" = union(enum) {
     /// Returned if the request is successful.
     _201: @"Avatar",
     /// Returned if:
@@ -9911,7 +9911,7 @@ pub fn @"createProjectAvatar"(
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
         const result = try json.parse(@"Avatar", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateProjectAvatarResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9938,7 +9938,7 @@ pub fn @"createProjectAvatar"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllProjectAvatarsResult" = union(enum) {
+pub const @"GetAllProjectAvatarsResult" = union(enum) {
     /// Returned if request is successful.
     _200: @"ProjectAvatars",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9967,7 +9967,7 @@ pub fn @"getAllProjectAvatars"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectAvatars"
         const result = try json.parse(@"ProjectAvatars", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllProjectAvatarsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9986,7 +9986,7 @@ pub fn @"getAllProjectAvatars"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectComponentsPaginatedResult" = union(enum) {
+pub const @"GetProjectComponentsPaginatedResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanComponentWithIssueCount",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10019,7 +10019,7 @@ pub fn @"getProjectComponentsPaginated"(
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComponentWithIssueCount"
         const result = try json.parse(@"PageBeanComponentWithIssueCount", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectComponentsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -10038,7 +10038,7 @@ pub fn @"getProjectComponentsPaginated"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectComponentsResult" = union(enum) {
+pub const @"GetProjectComponentsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10085,7 +10085,7 @@ pub fn @"getProjectComponents"(
     return error.UnknownStatusCode;
 }
 
-const @"DeleteProjectAsynchronouslyResult" = union(enum) {
+pub const @"DeleteProjectAsynchronouslyResult" = union(enum) {
     /// Returned if the request is successful.
     _303: @"TaskProgressBeanObject",
     /// Returned if the request is not valid.
@@ -10116,7 +10116,7 @@ pub fn @"deleteProjectAsynchronously"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
         const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteProjectAsynchronouslyResult"{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10139,7 +10139,7 @@ pub fn @"deleteProjectAsynchronously"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFeaturesForProjectResult" = union(enum) {
+pub const @"GetFeaturesForProjectResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ContainerForProjectFeatures",
     /// Returned if the request is not valid.
@@ -10172,7 +10172,7 @@ pub fn @"getFeaturesForProject"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
         const result = try json.parse(@"ContainerForProjectFeatures", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFeaturesForProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10199,7 +10199,7 @@ pub fn @"getFeaturesForProject"(
     return error.UnknownStatusCode;
 }
 
-const @"ToggleFeatureForProjectResult" = union(enum) {
+pub const @"ToggleFeatureForProjectResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ContainerForProjectFeatures",
     /// Returned if the request is not valid.
@@ -10234,7 +10234,7 @@ pub fn @"toggleFeatureForProject"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
         const result = try json.parse(@"ContainerForProjectFeatures", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"ToggleFeatureForProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10261,7 +10261,7 @@ pub fn @"toggleFeatureForProject"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectPropertyKeysResult" = union(enum) {
+pub const @"GetProjectPropertyKeysResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PropertyKeys",
     /// Returned if the request is not valid.
@@ -10294,7 +10294,7 @@ pub fn @"getProjectPropertyKeys"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10321,7 +10321,7 @@ pub fn @"getProjectPropertyKeys"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectPropertyResult" = union(enum) {
+pub const @"GetProjectPropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"EntityProperty",
     /// Returned if the request is not valid.
@@ -10356,7 +10356,7 @@ pub fn @"getProjectProperty"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10383,7 +10383,7 @@ pub fn @"getProjectProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"RestoreResult" = union(enum) {
+pub const @"RestoreResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Project",
     /// Returned if the request is not valid.
@@ -10414,7 +10414,7 @@ pub fn @"restore"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
         const result = try json.parse(@"Project", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RestoreResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10437,7 +10437,7 @@ pub fn @"restore"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectRolesResult" = union(enum) {
+pub const @"GetProjectRolesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing or if the user lacks administrative permissions for the project.
@@ -10484,7 +10484,7 @@ pub fn @"getProjectRoles"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectRoleResult" = union(enum) {
+pub const @"GetProjectRoleResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectRole",
     /// Returned if the request is not valid.
@@ -10521,7 +10521,7 @@ pub fn @"getProjectRole"(
     // excludeInactiveUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
         const result = try json.parse(@"ProjectRole", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectRoleResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10544,7 +10544,7 @@ pub fn @"getProjectRole"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectRoleDetailsResult" = union(enum) {
+pub const @"GetProjectRoleDetailsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10593,7 +10593,7 @@ pub fn @"getProjectRoleDetails"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllStatusesResult" = union(enum) {
+pub const @"GetAllStatusesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10640,7 +10640,7 @@ pub fn @"getAllStatuses"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateProjectTypeResult" = union(enum) {
+pub const @"UpdateProjectTypeResult" = union(enum) {
     /// Returned if the project type is updated.
     _200: @"Project",
     /// Returned if the request is not valid.
@@ -10673,7 +10673,7 @@ pub fn @"updateProjectType"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
         const result = try json.parse(@"Project", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"UpdateProjectTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10696,7 +10696,7 @@ pub fn @"updateProjectType"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectVersionsPaginatedResult" = union(enum) {
+pub const @"GetProjectVersionsPaginatedResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanVersion",
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -10729,7 +10729,7 @@ pub fn @"getProjectVersionsPaginated"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanVersion"
         const result = try json.parse(@"PageBeanVersion", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectVersionsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -10744,7 +10744,7 @@ pub fn @"getProjectVersionsPaginated"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectVersionsResult" = union(enum) {
+pub const @"GetProjectVersionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -10786,7 +10786,7 @@ pub fn @"getProjectVersions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectEmailResult" = union(enum) {
+pub const @"GetProjectEmailResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectEmailAddress",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10817,7 +10817,7 @@ pub fn @"getProjectEmail"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectEmailAddress"
         const result = try json.parse(@"ProjectEmailAddress", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectEmailResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -10840,7 +10840,7 @@ pub fn @"getProjectEmail"(
     return error.UnknownStatusCode;
 }
 
-const @"GetHierarchyResult" = union(enum) {
+pub const @"GetHierarchyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectIssueTypeHierarchy",
     /// Returned if the request is invalid.
@@ -10871,7 +10871,7 @@ pub fn @"getHierarchy"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueTypeHierarchy"
         const result = try json.parse(@"ProjectIssueTypeHierarchy", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetHierarchyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10894,7 +10894,7 @@ pub fn @"getHierarchy"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectIssueSecuritySchemeResult" = union(enum) {
+pub const @"GetProjectIssueSecuritySchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"SecurityScheme",
     /// Returned if the request is invalid.
@@ -10927,7 +10927,7 @@ pub fn @"getProjectIssueSecurityScheme"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
         const result = try json.parse(@"SecurityScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectIssueSecuritySchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10954,7 +10954,7 @@ pub fn @"getProjectIssueSecurityScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetNotificationSchemeForProjectResult" = union(enum) {
+pub const @"GetNotificationSchemeForProjectResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"NotificationScheme",
     /// Returned if the request is not valid.
@@ -10986,7 +10986,7 @@ pub fn @"getNotificationSchemeForProject"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
         const result = try json.parse(@"NotificationScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetNotificationSchemeForProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -11009,7 +11009,7 @@ pub fn @"getNotificationSchemeForProject"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAssignedPermissionSchemeResult" = union(enum) {
+pub const @"GetAssignedPermissionSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PermissionScheme",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11041,7 +11041,7 @@ pub fn @"getAssignedPermissionScheme"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
         const result = try json.parse(@"PermissionScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAssignedPermissionSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11064,7 +11064,7 @@ pub fn @"getAssignedPermissionScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetSecurityLevelsForProjectResult" = union(enum) {
+pub const @"GetSecurityLevelsForProjectResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectIssueSecurityLevels",
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -11091,7 +11091,7 @@ pub fn @"getSecurityLevelsForProject"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueSecurityLevels"
         const result = try json.parse(@"ProjectIssueSecurityLevels", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetSecurityLevelsForProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -11106,7 +11106,7 @@ pub fn @"getSecurityLevelsForProject"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllProjectCategoriesResult" = union(enum) {
+pub const @"GetAllProjectCategoriesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11144,7 +11144,7 @@ pub fn @"getAllProjectCategories"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectCategoryByIdResult" = union(enum) {
+pub const @"GetProjectCategoryByIdResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectCategory",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11172,7 +11172,7 @@ pub fn @"getProjectCategoryById"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectCategory"
         const result = try json.parse(@"ProjectCategory", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectCategoryByIdResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11191,7 +11191,7 @@ pub fn @"getProjectCategoryById"(
     return error.UnknownStatusCode;
 }
 
-const @"ValidateProjectKeyResult" = union(enum) {
+pub const @"ValidateProjectKeyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ErrorCollection",
     /// Returned if the authentication credentials are incorrect.
@@ -11216,7 +11216,7 @@ pub fn @"validateProjectKey"(
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"ValidateProjectKeyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11231,7 +11231,7 @@ pub fn @"validateProjectKey"(
     return error.UnknownStatusCode;
 }
 
-const @"GetValidProjectKeyResult" = union(enum) {
+pub const @"GetValidProjectKeyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -11270,7 +11270,7 @@ pub fn @"getValidProjectKey"(
     return error.UnknownStatusCode;
 }
 
-const @"GetValidProjectNameResult" = union(enum) {
+pub const @"GetValidProjectNameResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -11321,7 +11321,7 @@ pub fn @"getValidProjectName"(
     return error.UnknownStatusCode;
 }
 
-const @"GetResolutionsResult" = union(enum) {
+pub const @"GetResolutionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11359,7 +11359,7 @@ pub fn @"getResolutions"(
     return error.UnknownStatusCode;
 }
 
-const @"GetResolutionResult" = union(enum) {
+pub const @"GetResolutionResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Resolution",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11387,7 +11387,7 @@ pub fn @"getResolution"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Resolution"
         const result = try json.parse(@"Resolution", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetResolutionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11406,7 +11406,7 @@ pub fn @"getResolution"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllProjectRolesResult" = union(enum) {
+pub const @"GetAllProjectRolesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11450,7 +11450,7 @@ pub fn @"getAllProjectRoles"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectRoleByIdResult" = union(enum) {
+pub const @"GetProjectRoleByIdResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectRole",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11480,7 +11480,7 @@ pub fn @"getProjectRoleById"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
         const result = try json.parse(@"ProjectRole", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectRoleByIdResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11503,7 +11503,7 @@ pub fn @"getProjectRoleById"(
     return error.UnknownStatusCode;
 }
 
-const @"GetProjectRoleActorsForRoleResult" = union(enum) {
+pub const @"GetProjectRoleActorsForRoleResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ProjectRole",
     /// Returned if the request is invalid.
@@ -11536,7 +11536,7 @@ pub fn @"getProjectRoleActorsForRole"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
         const result = try json.parse(@"ProjectRole", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetProjectRoleActorsForRoleResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -11563,7 +11563,7 @@ pub fn @"getProjectRoleActorsForRole"(
     return error.UnknownStatusCode;
 }
 
-const @"GetScreensResult" = union(enum) {
+pub const @"GetScreensResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanScreen",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11595,7 +11595,7 @@ pub fn @"getScreens"(
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreen"
         const result = try json.parse(@"PageBeanScreen", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetScreensResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11614,7 +11614,7 @@ pub fn @"getScreens"(
     return error.UnknownStatusCode;
 }
 
-const @"AddFieldToDefaultScreenResult" = union(enum) {
+pub const @"AddFieldToDefaultScreenResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11666,7 +11666,7 @@ pub fn @"addFieldToDefaultScreen"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateScreenResult" = union(enum) {
+pub const @"UpdateScreenResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Screen",
     /// Returned if the request is not valid.
@@ -11698,7 +11698,7 @@ pub fn @"updateScreen"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Screen"
         const result = try json.parse(@"Screen", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"UpdateScreenResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -11725,7 +11725,7 @@ pub fn @"updateScreen"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAvailableScreenFieldsResult" = union(enum) {
+pub const @"GetAvailableScreenFieldsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11778,7 +11778,7 @@ pub fn @"getAvailableScreenFields"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllScreenTabsResult" = union(enum) {
+pub const @"GetAllScreenTabsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the screen ID is invalid.
@@ -11838,7 +11838,7 @@ pub fn @"getAllScreenTabs"(
     return error.UnknownStatusCode;
 }
 
-const @"RenameScreenTabResult" = union(enum) {
+pub const @"RenameScreenTabResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ScreenableTab",
     /// Returned if the request is invalid.
@@ -11873,7 +11873,7 @@ pub fn @"renameScreenTab"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ScreenableTab"
         const result = try json.parse(@"ScreenableTab", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RenameScreenTabResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -11900,7 +11900,7 @@ pub fn @"renameScreenTab"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllScreenTabFieldsResult" = union(enum) {
+pub const @"GetAllScreenTabFieldsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11957,7 +11957,7 @@ pub fn @"getAllScreenTabFields"(
     return error.UnknownStatusCode;
 }
 
-const @"RemoveScreenTabFieldResult" = union(enum) {
+pub const @"RemoveScreenTabFieldResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -12021,7 +12021,7 @@ pub fn @"removeScreenTabField"(
     return error.UnknownStatusCode;
 }
 
-const @"MoveScreenTabFieldResult" = union(enum) {
+pub const @"MoveScreenTabFieldResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -12086,7 +12086,7 @@ pub fn @"moveScreenTabField"(
     return error.UnknownStatusCode;
 }
 
-const @"MoveScreenTabResult" = union(enum) {
+pub const @"MoveScreenTabResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -12150,7 +12150,7 @@ pub fn @"moveScreenTab"(
     return error.UnknownStatusCode;
 }
 
-const @"GetScreenSchemesResult" = union(enum) {
+pub const @"GetScreenSchemesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanScreenScheme",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12182,7 +12182,7 @@ pub fn @"getScreenSchemes"(
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenScheme"
         const result = try json.parse(@"PageBeanScreenScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetScreenSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12201,7 +12201,7 @@ pub fn @"getScreenSchemes"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateScreenSchemeResult" = union(enum) {
+pub const @"UpdateScreenSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -12259,7 +12259,7 @@ pub fn @"updateScreenScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"SearchForIssuesUsingJqlResult" = union(enum) {
+pub const @"SearchForIssuesUsingJqlResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"SearchResults",
     /// Returned if the JQL query is invalid.
@@ -12293,7 +12293,7 @@ pub fn @"searchForIssuesUsingJql"(
     // fieldsByKeys; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SearchResults"
         const result = try json.parse(@"SearchResults", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SearchForIssuesUsingJqlResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -12312,7 +12312,7 @@ pub fn @"searchForIssuesUsingJql"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueSecurityLevelResult" = union(enum) {
+pub const @"GetIssueSecurityLevelResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"SecurityLevel",
     /// Returned if the authentication credentials are incorrect.
@@ -12340,7 +12340,7 @@ pub fn @"getIssueSecurityLevel"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityLevel"
         const result = try json.parse(@"SecurityLevel", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIssueSecurityLevelResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12359,7 +12359,7 @@ pub fn @"getIssueSecurityLevel"(
     return error.UnknownStatusCode;
 }
 
-const @"GetServerInfoResult" = union(enum) {
+pub const @"GetServerInfoResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ServerInformation",
     /// Returned if the authentication credentials are incorrect.
@@ -12383,7 +12383,7 @@ pub fn @"getServerInfo"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ServerInformation"
         const result = try json.parse(@"ServerInformation", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetServerInfoResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12398,7 +12398,7 @@ pub fn @"getServerInfo"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIssueNavigatorDefaultColumnsResult" = union(enum) {
+pub const @"GetIssueNavigatorDefaultColumnsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12442,7 +12442,7 @@ pub fn @"getIssueNavigatorDefaultColumns"(
     return error.UnknownStatusCode;
 }
 
-const @"GetStatusesResult" = union(enum) {
+pub const @"GetStatusesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12480,7 +12480,7 @@ pub fn @"getStatuses"(
     return error.UnknownStatusCode;
 }
 
-const @"GetStatusResult" = union(enum) {
+pub const @"GetStatusResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"StatusDetails",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12512,7 +12512,7 @@ pub fn @"getStatus"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusDetails"
         const result = try json.parse(@"StatusDetails", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetStatusResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12531,7 +12531,7 @@ pub fn @"getStatus"(
     return error.UnknownStatusCode;
 }
 
-const @"GetStatusCategoriesResult" = union(enum) {
+pub const @"GetStatusCategoriesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12569,7 +12569,7 @@ pub fn @"getStatusCategories"(
     return error.UnknownStatusCode;
 }
 
-const @"GetStatusCategoryResult" = union(enum) {
+pub const @"GetStatusCategoryResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"StatusCategory",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12597,7 +12597,7 @@ pub fn @"getStatusCategory"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusCategory"
         const result = try json.parse(@"StatusCategory", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetStatusCategoryResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12616,7 +12616,7 @@ pub fn @"getStatusCategory"(
     return error.UnknownStatusCode;
 }
 
-const @"GetStatusesByIdResult" = union(enum) {
+pub const @"GetStatusesByIdResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -12662,7 +12662,7 @@ pub fn @"getStatusesById"(
     return error.UnknownStatusCode;
 }
 
-const @"SearchResult" = union(enum) {
+pub const @"SearchResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageOfStatuses",
     /// Returned if the request is not valid.
@@ -12694,7 +12694,7 @@ pub fn @"search"(
     // statusCategory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfStatuses"
         const result = try json.parse(@"PageOfStatuses", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"SearchResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -12713,7 +12713,7 @@ pub fn @"search"(
     return error.UnknownStatusCode;
 }
 
-const @"GetTaskResult" = union(enum) {
+pub const @"GetTaskResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"TaskProgressBeanObject",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12743,7 +12743,7 @@ pub fn @"getTask"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TaskProgressBeanObject"
         const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetTaskResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12766,7 +12766,7 @@ pub fn @"getTask"(
     return error.UnknownStatusCode;
 }
 
-const @"CancelTaskResult" = union(enum) {
+pub const @"CancelTaskResult" = union(enum) {
     /// Returned if the request is successful.
     _202: void,
     /// Returned if cancellation of the task is not possible.
@@ -12825,7 +12825,7 @@ pub fn @"cancelTask"(
     return error.UnknownStatusCode;
 }
 
-const @"GetUiModificationsResult" = union(enum) {
+pub const @"GetUiModificationsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanUiModificationDetails",
     /// Returned if the request is not valid.
@@ -12856,7 +12856,7 @@ pub fn @"getUiModifications"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUiModificationDetails"
         const result = try json.parse(@"PageBeanUiModificationDetails", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetUiModificationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -12879,7 +12879,7 @@ pub fn @"getUiModifications"(
     return error.UnknownStatusCode;
 }
 
-const @"UpdateUiModificationResult" = union(enum) {
+pub const @"UpdateUiModificationResult" = union(enum) {
     /// Returned if the UI modification is updated.
     _204: void,
     /// Returned if the request is not valid.
@@ -12937,7 +12937,7 @@ pub fn @"updateUiModification"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAvatarsResult" = union(enum) {
+pub const @"GetAvatarsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Avatars",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12968,7 +12968,7 @@ pub fn @"getAvatars"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Avatars"
         const result = try json.parse(@"Avatars", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12987,7 +12987,7 @@ pub fn @"getAvatars"(
     return error.UnknownStatusCode;
 }
 
-const @"DeleteAvatarResult" = union(enum) {
+pub const @"DeleteAvatarResult" = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -13045,7 +13045,7 @@ pub fn @"deleteAvatar"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAvatarImageByTypeResult" = union(enum) {
+pub const @"GetAvatarImageByTypeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -13081,17 +13081,17 @@ pub fn @"getAvatarImageByType"(
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByTypeResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByTypeResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByTypeResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13102,7 +13102,7 @@ pub fn @"getAvatarImageByType"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAvatarImageByIDResult" = union(enum) {
+pub const @"GetAvatarImageByIDResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -13143,22 +13143,22 @@ pub fn @"getAvatarImageByID"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByIDResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByIDResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByIDResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByIDResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13169,7 +13169,7 @@ pub fn @"getAvatarImageByID"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAvatarImageByOwnerResult" = union(enum) {
+pub const @"GetAvatarImageByOwnerResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -13210,22 +13210,22 @@ pub fn @"getAvatarImageByOwner"(
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByOwnerResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByOwnerResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByOwnerResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAvatarImageByOwnerResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13236,7 +13236,7 @@ pub fn @"getAvatarImageByOwner"(
     return error.UnknownStatusCode;
 }
 
-const @"GetUserResult" = union(enum) {
+pub const @"GetUserResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"User",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13268,7 +13268,7 @@ pub fn @"getUser"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
         const result = try json.parse(@"User", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetUserResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -13291,7 +13291,7 @@ pub fn @"getUser"(
     return error.UnknownStatusCode;
 }
 
-const @"FindBulkAssignableUsersResult" = union(enum) {
+pub const @"FindBulkAssignableUsersResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -13357,7 +13357,7 @@ pub fn @"findBulkAssignableUsers"(
     return error.UnknownStatusCode;
 }
 
-const @"FindAssignableUsersResult" = union(enum) {
+pub const @"FindAssignableUsersResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -13427,7 +13427,7 @@ pub fn @"findAssignableUsers"(
     return error.UnknownStatusCode;
 }
 
-const @"BulkGetUsersResult" = union(enum) {
+pub const @"BulkGetUsersResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanUser",
     /// Returned if `accountID` is missing.
@@ -13458,7 +13458,7 @@ pub fn @"bulkGetUsers"(
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
         const result = try json.parse(@"PageBeanUser", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"BulkGetUsersResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13477,7 +13477,7 @@ pub fn @"bulkGetUsers"(
     return error.UnknownStatusCode;
 }
 
-const @"BulkGetUsersMigrationResult" = union(enum) {
+pub const @"BulkGetUsersMigrationResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if `key` or `username`
@@ -13525,7 +13525,7 @@ pub fn @"bulkGetUsersMigration"(
     return error.UnknownStatusCode;
 }
 
-const @"GetUserDefaultColumnsResult" = union(enum) {
+pub const @"GetUserDefaultColumnsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13577,7 +13577,7 @@ pub fn @"getUserDefaultColumns"(
     return error.UnknownStatusCode;
 }
 
-const @"GetUserEmailResult" = union(enum) {
+pub const @"GetUserEmailResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"UnrestrictedUserEmail",
     /// Returned if the calling app is not approved to use this API.
@@ -13608,7 +13608,7 @@ pub fn @"getUserEmail"(
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
         const result = try json.parse(@"UnrestrictedUserEmail", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetUserEmailResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13635,7 +13635,7 @@ pub fn @"getUserEmail"(
     return error.UnknownStatusCode;
 }
 
-const @"GetUserEmailBulkResult" = union(enum) {
+pub const @"GetUserEmailBulkResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"UnrestrictedUserEmail",
     /// Returned if the calling app is not approved to use this API.
@@ -13664,7 +13664,7 @@ pub fn @"getUserEmailBulk"(
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
         const result = try json.parse(@"UnrestrictedUserEmail", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetUserEmailBulkResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13687,7 +13687,7 @@ pub fn @"getUserEmailBulk"(
     return error.UnknownStatusCode;
 }
 
-const @"GetUserGroupsResult" = union(enum) {
+pub const @"GetUserGroupsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13740,7 +13740,7 @@ pub fn @"getUserGroups"(
     return error.UnknownStatusCode;
 }
 
-const @"FindUsersWithAllPermissionsResult" = union(enum) {
+pub const @"FindUsersWithAllPermissionsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -13815,7 +13815,7 @@ pub fn @"findUsersWithAllPermissions"(
     return error.UnknownStatusCode;
 }
 
-const @"FindUsersForPickerResult" = union(enum) {
+pub const @"FindUsersForPickerResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"FoundUsers",
     /// Returned if `exclude` and `excludeAccountIds` are provided.
@@ -13850,7 +13850,7 @@ pub fn @"findUsersForPicker"(
     // excludeConnectUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsers"
         const result = try json.parse(@"FoundUsers", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"FindUsersForPickerResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13873,7 +13873,7 @@ pub fn @"findUsersForPicker"(
     return error.UnknownStatusCode;
 }
 
-const @"GetUserPropertyKeysResult" = union(enum) {
+pub const @"GetUserPropertyKeysResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PropertyKeys",
     /// Returned if `accountId` is missing.
@@ -13906,7 +13906,7 @@ pub fn @"getUserPropertyKeys"(
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetUserPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13933,7 +13933,7 @@ pub fn @"getUserPropertyKeys"(
     return error.UnknownStatusCode;
 }
 
-const @"GetUserPropertyResult" = union(enum) {
+pub const @"GetUserPropertyResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"EntityProperty",
     /// Returned if `accountId` is missing.
@@ -13968,7 +13968,7 @@ pub fn @"getUserProperty"(
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetUserPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13995,7 +13995,7 @@ pub fn @"getUserProperty"(
     return error.UnknownStatusCode;
 }
 
-const @"FindUsersResult" = union(enum) {
+pub const @"FindUsersResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -14055,7 +14055,7 @@ pub fn @"findUsers"(
     return error.UnknownStatusCode;
 }
 
-const @"FindUsersByQueryResult" = union(enum) {
+pub const @"FindUsersByQueryResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanUser",
     /// Returned if the query is invalid.
@@ -14088,7 +14088,7 @@ pub fn @"findUsersByQuery"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
         const result = try json.parse(@"PageBeanUser", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"FindUsersByQueryResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14115,7 +14115,7 @@ pub fn @"findUsersByQuery"(
     return error.UnknownStatusCode;
 }
 
-const @"FindUserKeysByQueryResult" = union(enum) {
+pub const @"FindUserKeysByQueryResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanUserKey",
     /// Returned if the query is invalid.
@@ -14148,7 +14148,7 @@ pub fn @"findUserKeysByQuery"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserKey"
         const result = try json.parse(@"PageBeanUserKey", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"FindUserKeysByQueryResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14175,7 +14175,7 @@ pub fn @"findUserKeysByQuery"(
     return error.UnknownStatusCode;
 }
 
-const @"FindUsersWithBrowsePermissionResult" = union(enum) {
+pub const @"FindUsersWithBrowsePermissionResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -14242,7 +14242,7 @@ pub fn @"findUsersWithBrowsePermission"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllUsersDefaultResult" = union(enum) {
+pub const @"GetAllUsersDefaultResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -14294,7 +14294,7 @@ pub fn @"getAllUsersDefault"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllUsersResult" = union(enum) {
+pub const @"GetAllUsersResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -14346,7 +14346,7 @@ pub fn @"getAllUsers"(
     return error.UnknownStatusCode;
 }
 
-const @"CreateVersionResult" = union(enum) {
+pub const @"CreateVersionResult" = union(enum) {
     /// Returned if the request is successful.
     _201: @"Version",
     /// Returned if the request is invalid.
@@ -14377,7 +14377,7 @@ pub fn @"createVersion"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Version"
         const result = try json.parse(@"Version", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateVersionResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14400,7 +14400,7 @@ pub fn @"createVersion"(
     return error.UnknownStatusCode;
 }
 
-const @"GetVersionResult" = union(enum) {
+pub const @"GetVersionResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Version",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14429,7 +14429,7 @@ pub fn @"getVersion"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
         const result = try json.parse(@"Version", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetVersionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -14448,7 +14448,7 @@ pub fn @"getVersion"(
     return error.UnknownStatusCode;
 }
 
-const @"MergeVersionsResult" = union(enum) {
+pub const @"MergeVersionsResult" = union(enum) {
     /// Returned if the version is deleted.
     _204: void,
     /// Returned if the request is invalid.
@@ -14506,7 +14506,7 @@ pub fn @"mergeVersions"(
     return error.UnknownStatusCode;
 }
 
-const @"MoveVersionResult" = union(enum) {
+pub const @"MoveVersionResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"Version",
     /// Returned if:
@@ -14544,7 +14544,7 @@ pub fn @"moveVersion"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
         const result = try json.parse(@"Version", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"MoveVersionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14567,7 +14567,7 @@ pub fn @"moveVersion"(
     return error.UnknownStatusCode;
 }
 
-const @"GetVersionRelatedIssuesResult" = union(enum) {
+pub const @"GetVersionRelatedIssuesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"VersionIssueCounts",
     /// Returned if the authentication credentials are incorrect.
@@ -14599,7 +14599,7 @@ pub fn @"getVersionRelatedIssues"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionIssueCounts"
         const result = try json.parse(@"VersionIssueCounts", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetVersionRelatedIssuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -14618,7 +14618,7 @@ pub fn @"getVersionRelatedIssues"(
     return error.UnknownStatusCode;
 }
 
-const @"DeleteAndReplaceVersionResult" = union(enum) {
+pub const @"DeleteAndReplaceVersionResult" = union(enum) {
     /// Returned if the version is deleted.
     _204: void,
     /// Returned if the request is invalid.
@@ -14674,7 +14674,7 @@ pub fn @"deleteAndReplaceVersion"(
     return error.UnknownStatusCode;
 }
 
-const @"GetVersionUnresolvedIssuesResult" = union(enum) {
+pub const @"GetVersionUnresolvedIssuesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"VersionUnresolvedIssuesCount",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14706,7 +14706,7 @@ pub fn @"getVersionUnresolvedIssues"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionUnresolvedIssuesCount"
         const result = try json.parse(@"VersionUnresolvedIssuesCount", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetVersionUnresolvedIssuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -14725,7 +14725,7 @@ pub fn @"getVersionUnresolvedIssues"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDynamicWebhooksForAppResult" = union(enum) {
+pub const @"GetDynamicWebhooksForAppResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanWebhook",
     /// Returned if the request is invalid.
@@ -14753,17 +14753,17 @@ pub fn @"getDynamicWebhooksForApp"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWebhook"
         const result = try json.parse(@"PageBeanWebhook", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDynamicWebhooksForAppResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDynamicWebhooksForAppResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDynamicWebhooksForAppResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14774,7 +14774,7 @@ pub fn @"getDynamicWebhooksForApp"(
     return error.UnknownStatusCode;
 }
 
-const @"GetFailedWebhooksResult" = union(enum) {
+pub const @"GetFailedWebhooksResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"FailedWebhooks",
     /// 400 response
@@ -14802,17 +14802,17 @@ pub fn @"getFailedWebhooks"(
     // after; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FailedWebhooks"
         const result = try json.parse(@"FailedWebhooks", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFailedWebhooksResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFailedWebhooksResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetFailedWebhooksResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14823,7 +14823,7 @@ pub fn @"getFailedWebhooks"(
     return error.UnknownStatusCode;
 }
 
-const @"RefreshWebhooksResult" = union(enum) {
+pub const @"RefreshWebhooksResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"WebhooksExpirationDate",
     /// Returned if the request is invalid.
@@ -14849,17 +14849,17 @@ pub fn @"refreshWebhooks"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WebhooksExpirationDate"
         const result = try json.parse(@"WebhooksExpirationDate", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RefreshWebhooksResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RefreshWebhooksResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"RefreshWebhooksResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14870,7 +14870,7 @@ pub fn @"refreshWebhooks"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllWorkflowsResult" = union(enum) {
+pub const @"GetAllWorkflowsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the user does not have the necessary permission.
@@ -14909,7 +14909,7 @@ pub fn @"getAllWorkflows"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorkflowTransitionRuleConfigurationsResult" = union(enum) {
+pub const @"GetWorkflowTransitionRuleConfigurationsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanWorkflowTransitionRules",
     /// Returned if the request is invalid.
@@ -14945,17 +14945,17 @@ pub fn @"getWorkflowTransitionRuleConfigurations"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowTransitionRules"
         const result = try json.parse(@"PageBeanWorkflowTransitionRules", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -14970,7 +14970,7 @@ pub fn @"getWorkflowTransitionRuleConfigurations"(
     return error.UnknownStatusCode;
 }
 
-const @"DeleteWorkflowTransitionRuleConfigurationsResult" = union(enum) {
+pub const @"DeleteWorkflowTransitionRuleConfigurationsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"WorkflowTransitionRulesUpdateErrors",
     /// Returned if the request is invalid.
@@ -14996,17 +14996,17 @@ pub fn @"deleteWorkflowTransitionRuleConfigurations"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionRulesUpdateErrors"
         const result = try json.parse(@"WorkflowTransitionRulesUpdateErrors", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15017,7 +15017,7 @@ pub fn @"deleteWorkflowTransitionRuleConfigurations"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorkflowsPaginatedResult" = union(enum) {
+pub const @"GetWorkflowsPaginatedResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanWorkflow",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15050,7 +15050,7 @@ pub fn @"getWorkflowsPaginated"(
     // isActive; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflow"
         const result = try json.parse(@"PageBeanWorkflow", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15059,7 +15059,7 @@ pub fn @"getWorkflowsPaginated"(
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowsPaginatedResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15070,7 +15070,7 @@ pub fn @"getWorkflowsPaginated"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorkflowTransitionPropertiesResult" = union(enum) {
+pub const @"GetWorkflowTransitionPropertiesResult" = union(enum) {
     /// 200 response
     _200: @"WorkflowTransitionProperty",
     /// Returned if the request is invalid.
@@ -15107,7 +15107,7 @@ pub fn @"getWorkflowTransitionProperties"(
     // workflowMode; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionProperty"
         const result = try json.parse(@"WorkflowTransitionProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowTransitionPropertiesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15134,7 +15134,7 @@ pub fn @"getWorkflowTransitionProperties"(
     return error.UnknownStatusCode;
 }
 
-const @"DeleteInactiveWorkflowResult" = union(enum) {
+pub const @"DeleteInactiveWorkflowResult" = union(enum) {
     /// Returned if the workflow is deleted.
     _204: void,
     /// Returned if the request is not valid.
@@ -15192,7 +15192,7 @@ pub fn @"deleteInactiveWorkflow"(
     return error.UnknownStatusCode;
 }
 
-const @"GetAllWorkflowSchemesResult" = union(enum) {
+pub const @"GetAllWorkflowSchemesResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PageBeanWorkflowScheme",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15220,7 +15220,7 @@ pub fn @"getAllWorkflowSchemes"(
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowScheme"
         const result = try json.parse(@"PageBeanWorkflowScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetAllWorkflowSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15239,7 +15239,7 @@ pub fn @"getAllWorkflowSchemes"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorkflowSchemeProjectAssociationsResult" = union(enum) {
+pub const @"GetWorkflowSchemeProjectAssociationsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ContainerOfWorkflowSchemeAssociations",
     /// Returned if the request is invalid.
@@ -15268,7 +15268,7 @@ pub fn @"getWorkflowSchemeProjectAssociations"(
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerOfWorkflowSchemeAssociations"
         const result = try json.parse(@"ContainerOfWorkflowSchemeAssociations", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeProjectAssociationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15291,7 +15291,7 @@ pub fn @"getWorkflowSchemeProjectAssociations"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorkflowSchemeResult" = union(enum) {
+pub const @"GetWorkflowSchemeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"WorkflowScheme",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15322,7 +15322,7 @@ pub fn @"getWorkflowScheme"(
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
         const result = try json.parse(@"WorkflowScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15345,7 +15345,7 @@ pub fn @"getWorkflowScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"CreateWorkflowSchemeDraftFromParentResult" = union(enum) {
+pub const @"CreateWorkflowSchemeDraftFromParentResult" = union(enum) {
     /// Returned if the request is successful.
     _201: @"WorkflowScheme",
     /// Returned if the request is invalid.
@@ -15376,7 +15376,7 @@ pub fn @"createWorkflowSchemeDraftFromParent"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"WorkflowScheme"
         const result = try json.parse(@"WorkflowScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"CreateWorkflowSchemeDraftFromParentResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15399,7 +15399,7 @@ pub fn @"createWorkflowSchemeDraftFromParent"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDefaultWorkflowResult" = union(enum) {
+pub const @"GetDefaultWorkflowResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"DefaultWorkflow",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15431,7 +15431,7 @@ pub fn @"getDefaultWorkflow"(
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
         const result = try json.parse(@"DefaultWorkflow", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDefaultWorkflowResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15454,7 +15454,7 @@ pub fn @"getDefaultWorkflow"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorkflowSchemeDraftResult" = union(enum) {
+pub const @"GetWorkflowSchemeDraftResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"WorkflowScheme",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15488,7 +15488,7 @@ pub fn @"getWorkflowSchemeDraft"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
         const result = try json.parse(@"WorkflowScheme", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeDraftResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15511,7 +15511,7 @@ pub fn @"getWorkflowSchemeDraft"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDraftDefaultWorkflowResult" = union(enum) {
+pub const @"GetDraftDefaultWorkflowResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"DefaultWorkflow",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15545,7 +15545,7 @@ pub fn @"getDraftDefaultWorkflow"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
         const result = try json.parse(@"DefaultWorkflow", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDraftDefaultWorkflowResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15568,7 +15568,7 @@ pub fn @"getDraftDefaultWorkflow"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorkflowSchemeDraftIssueTypeResult" = union(enum) {
+pub const @"GetWorkflowSchemeDraftIssueTypeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueTypeWorkflowMapping",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15601,7 +15601,7 @@ pub fn @"getWorkflowSchemeDraftIssueType"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
         const result = try json.parse(@"IssueTypeWorkflowMapping", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15624,7 +15624,7 @@ pub fn @"getWorkflowSchemeDraftIssueType"(
     return error.UnknownStatusCode;
 }
 
-const @"PublishDraftWorkflowSchemeResult" = union(enum) {
+pub const @"PublishDraftWorkflowSchemeResult" = union(enum) {
     /// Returned if the request is only for validation and is successful.
     _204: void,
     /// Returned if the request is successful.
@@ -15668,7 +15668,7 @@ pub fn @"publishDraftWorkflowScheme"(
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
         const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"PublishDraftWorkflowSchemeResult"{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15695,7 +15695,7 @@ pub fn @"publishDraftWorkflowScheme"(
     return error.UnknownStatusCode;
 }
 
-const @"GetDraftWorkflowResult" = union(enum) {
+pub const @"GetDraftWorkflowResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueTypesWorkflowMapping",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15727,7 +15727,7 @@ pub fn @"getDraftWorkflow"(
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
         const result = try json.parse(@"IssueTypesWorkflowMapping", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetDraftWorkflowResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15750,7 +15750,7 @@ pub fn @"getDraftWorkflow"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorkflowSchemeIssueTypeResult" = union(enum) {
+pub const @"GetWorkflowSchemeIssueTypeResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueTypeWorkflowMapping",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15784,7 +15784,7 @@ pub fn @"getWorkflowSchemeIssueType"(
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
         const result = try json.parse(@"IssueTypeWorkflowMapping", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeIssueTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15807,7 +15807,7 @@ pub fn @"getWorkflowSchemeIssueType"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorkflowResult" = union(enum) {
+pub const @"GetWorkflowResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"IssueTypesWorkflowMapping",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15840,7 +15840,7 @@ pub fn @"getWorkflow"(
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
         const result = try json.parse(@"IssueTypesWorkflowMapping", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetWorkflowResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15863,7 +15863,7 @@ pub fn @"getWorkflow"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIdsOfWorklogsDeletedSinceResult" = union(enum) {
+pub const @"GetIdsOfWorklogsDeletedSinceResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ChangedWorklogs",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15888,7 +15888,7 @@ pub fn @"getIdsOfWorklogsDeletedSince"(
     // since; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
         const result = try json.parse(@"ChangedWorklogs", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIdsOfWorklogsDeletedSinceResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15903,7 +15903,7 @@ pub fn @"getIdsOfWorklogsDeletedSince"(
     return error.UnknownStatusCode;
 }
 
-const @"GetWorklogsForIdsResult" = union(enum) {
+pub const @"GetWorklogsForIdsResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request contains more than 1000 worklog IDs or is empty.
@@ -15948,7 +15948,7 @@ pub fn @"getWorklogsForIds"(
     return error.UnknownStatusCode;
 }
 
-const @"GetIdsOfWorklogsModifiedSinceResult" = union(enum) {
+pub const @"GetIdsOfWorklogsModifiedSinceResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ChangedWorklogs",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15974,7 +15974,7 @@ pub fn @"getIdsOfWorklogsModifiedSince"(
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
         const result = try json.parse(@"ChangedWorklogs", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"GetIdsOfWorklogsModifiedSinceResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15989,7 +15989,7 @@ pub fn @"getIdsOfWorklogsModifiedSince"(
     return error.UnknownStatusCode;
 }
 
-const @"AddonPropertiesResource.getAddonProperties_getResult" = union(enum) {
+pub const @"AddonPropertiesResource.getAddonProperties_getResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"PropertyKeys",
     /// Returned if the authentication credentials are incorrect or missing.
@@ -16016,12 +16016,12 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
         const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -16032,7 +16032,7 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     return error.UnknownStatusCode;
 }
 
-const @"AddonPropertiesResource.getAddonProperty_getResult" = union(enum) {
+pub const @"AddonPropertiesResource.getAddonProperty_getResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"EntityProperty",
     /// Returned if the property key is longer than 127 characters.
@@ -16065,22 +16065,22 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"OperationMessage"
         const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
         const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"OperationMessage"
         const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -16091,7 +16091,7 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     return error.UnknownStatusCode;
 }
 
-const @"DynamicModulesResource.getModules_getResult" = union(enum) {
+pub const @"DynamicModulesResource.getModules_getResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"ConnectModules",
     /// Returned if the call is not from a Connect app.
@@ -16115,12 +16115,12 @@ pub fn @"DynamicModulesResource.getModules_get"(
     var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConnectModules"
         const result = try json.parse(@"ConnectModules", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DynamicModulesResource.getModules_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorMessage"
         const result = try json.parse(@"ErrorMessage", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"DynamicModulesResource.getModules_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -16131,7 +16131,7 @@ pub fn @"DynamicModulesResource.getModules_get"(
     return error.UnknownStatusCode;
 }
 
-const @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult" = union(enum) {
+pub const @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -16178,7 +16178,7 @@ pub fn @"AppIssueFieldValueUpdateResource.updateIssueFields_put"(
     return error.UnknownStatusCode;
 }
 
-const @"MigrationResource.updateEntityPropertiesValue_putResult" = union(enum) {
+pub const @"MigrationResource.updateEntityPropertiesValue_putResult" = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -16225,7 +16225,7 @@ pub fn @"MigrationResource.updateEntityPropertiesValue_put"(
     return error.UnknownStatusCode;
 }
 
-const @"MigrationResource.workflowRuleSearch_postResult" = union(enum) {
+pub const @"MigrationResource.workflowRuleSearch_postResult" = union(enum) {
     /// Returned if the request is successful.
     _200: @"WorkflowRulesSearchDetails",
     /// Returned if the request is not valid.
@@ -16252,7 +16252,7 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowRulesSearchDetails"
         const result = try json.parse(@"WorkflowRulesSearchDetails", &token_stream, parseOptions(alloc));
-        result.deinit(alloc);
+        errdefer result.deinit(alloc);
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -16271,3127 +16271,3127 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
     return error.UnknownStatusCode;
 }
 
-const @"AnnouncementBannerConfiguration" = struct {
+pub const @"AnnouncementBannerConfiguration" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ErrorCollection" = struct {
+pub const @"ErrorCollection" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AnnouncementBannerConfigurationUpdate" = struct {
+pub const @"AnnouncementBannerConfigurationUpdate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IdBean" = struct {
+pub const @"IdBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AvatarUrlsBean" = struct {
+pub const @"AvatarUrlsBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PermissionGrant" = struct {
+pub const @"PermissionGrant" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PermissionHolder" = struct {
+pub const @"PermissionHolder" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PermissionScheme" = struct {
+pub const @"PermissionScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectDetails" = struct {
+pub const @"ProjectDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Scope" = struct {
+pub const @"Scope" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdatedProjectCategory" = struct {
+pub const @"UpdatedProjectCategory" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Permissions" = struct {
+pub const @"Permissions" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserPermission" = struct {
+pub const @"UserPermission" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"BulkPermissionsRequestBean" = struct {
+pub const @"BulkPermissionsRequestBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"BulkProjectPermissions" = struct {
+pub const @"BulkProjectPermissions" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"BulkPermissionGrants" = struct {
+pub const @"BulkPermissionGrants" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"BulkProjectPermissionGrants" = struct {
+pub const @"BulkProjectPermissionGrants" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PermissionsKeysBean" = struct {
+pub const @"PermissionsKeysBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PermittedProjects" = struct {
+pub const @"PermittedProjects" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIdentifierBean" = struct {
+pub const @"ProjectIdentifierBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"EventNotification" = struct {
+pub const @"EventNotification" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldDetails" = struct {
+pub const @"FieldDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"GroupName" = struct {
+pub const @"GroupName" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JsonTypeBean" = struct {
+pub const @"JsonTypeBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"NotificationEvent" = struct {
+pub const @"NotificationEvent" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"NotificationScheme" = struct {
+pub const @"NotificationScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"NotificationSchemeEvent" = struct {
+pub const @"NotificationSchemeEvent" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectRole" = struct {
+pub const @"ProjectRole" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectRoleGroup" = struct {
+pub const @"ProjectRoleGroup" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectRoleUser" = struct {
+pub const @"ProjectRoleUser" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RoleActor" = struct {
+pub const @"RoleActor" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserDetails" = struct {
+pub const @"UserDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanNotificationScheme" = struct {
+pub const @"PageBeanNotificationScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Locale" = struct {
+pub const @"Locale" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"HealthCheckResult" = struct {
+pub const @"HealthCheckResult" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ServerInformation" = struct {
+pub const @"ServerInformation" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssuesAndJQLQueries" = struct {
+pub const @"IssuesAndJQLQueries" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueMatches" = struct {
+pub const @"IssueMatches" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueMatchesForJQL" = struct {
+pub const @"IssueMatchesForJQL" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PropertyKey" = struct {
+pub const @"PropertyKey" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PropertyKeys" = struct {
+pub const @"PropertyKeys" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"EntityProperty" = struct {
+pub const @"EntityProperty" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SimpleLink" = struct {
+pub const @"SimpleLink" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Version" = struct {
+pub const @"Version" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"VersionIssuesStatus" = struct {
+pub const @"VersionIssuesStatus" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldReplacement" = struct {
+pub const @"CustomFieldReplacement" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DeleteAndReplaceVersionBean" = struct {
+pub const @"DeleteAndReplaceVersionBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"VersionIssueCounts" = struct {
+pub const @"VersionIssueCounts" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"VersionUsageInCustomField" = struct {
+pub const @"VersionUsageInCustomField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"VersionUnresolvedIssuesCount" = struct {
+pub const @"VersionUnresolvedIssuesCount" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"VersionMoveBean" = struct {
+pub const @"VersionMoveBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ApplicationRole" = struct {
+pub const @"ApplicationRole" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ListWrapperCallbackApplicationRole" = struct {
+pub const @"ListWrapperCallbackApplicationRole" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ListWrapperCallbackGroupName" = struct {
+pub const @"ListWrapperCallbackGroupName" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SimpleListWrapperApplicationRole" = struct {
+pub const @"SimpleListWrapperApplicationRole" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SimpleListWrapperGroupName" = struct {
+pub const @"SimpleListWrapperGroupName" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"User" = struct {
+pub const @"User" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FoundUsers" = struct {
+pub const @"FoundUsers" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserPickerUser" = struct {
+pub const @"UserPickerUser" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"NewUserDetails" = struct {
+pub const @"NewUserDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ColumnItem" = struct {
+pub const @"ColumnItem" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Avatar" = struct {
+pub const @"Avatar" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Avatars" = struct {
+pub const @"Avatars" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"StatusCategory" = struct {
+pub const @"StatusCategory" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"StatusDetails" = struct {
+pub const @"StatusDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ScreenableTab" = struct {
+pub const @"ScreenableTab" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanScreen" = struct {
+pub const @"PageBeanScreen" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Screen" = struct {
+pub const @"Screen" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ScreenableField" = struct {
+pub const @"ScreenableField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"MoveFieldBean" = struct {
+pub const @"MoveFieldBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AddFieldBean" = struct {
+pub const @"AddFieldBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ScreenDetails" = struct {
+pub const @"ScreenDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdateScreenDetails" = struct {
+pub const @"UpdateScreenDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Resolution" = struct {
+pub const @"Resolution" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Hierarchy" = struct {
+pub const @"Hierarchy" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeDetails" = struct {
+pub const @"IssueTypeDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Project" = struct {
+pub const @"Project" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectCategory" = struct {
+pub const @"ProjectCategory" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectComponent" = struct {
+pub const @"ProjectComponent" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectInsight" = struct {
+pub const @"ProjectInsight" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectLandingPageInfo" = struct {
+pub const @"ProjectLandingPageInfo" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectPermissions" = struct {
+pub const @"ProjectPermissions" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ServiceManagementNavigationInfo" = struct {
+pub const @"ServiceManagementNavigationInfo" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SimplifiedHierarchyLevel" = struct {
+pub const @"SimplifiedHierarchyLevel" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SoftwareNavigationInfo" = struct {
+pub const @"SoftwareNavigationInfo" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkManagementNavigationInfo" = struct {
+pub const @"WorkManagementNavigationInfo" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateProjectDetails" = struct {
+pub const @"CreateProjectDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIdentifiers" = struct {
+pub const @"ProjectIdentifiers" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdateProjectDetails" = struct {
+pub const @"UpdateProjectDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"TaskProgressBeanObject" = struct {
+pub const @"TaskProgressBeanObject" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanVersion" = struct {
+pub const @"PageBeanVersion" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ComponentWithIssueCount" = struct {
+pub const @"ComponentWithIssueCount" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanComponentWithIssueCount" = struct {
+pub const @"PageBeanComponentWithIssueCount" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"StringList" = struct {
+pub const @"StringList" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanProject" = struct {
+pub const @"PageBeanProject" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectAvatars" = struct {
+pub const @"ProjectAvatars" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeWithStatus" = struct {
+pub const @"IssueTypeWithStatus" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SecurityLevel" = struct {
+pub const @"SecurityLevel" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SecurityScheme" = struct {
+pub const @"SecurityScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ContainerForProjectFeatures" = struct {
+pub const @"ContainerForProjectFeatures" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectFeature" = struct {
+pub const @"ProjectFeature" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectFeatureState" = struct {
+pub const @"ProjectFeatureState" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Priority" = struct {
+pub const @"Priority" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreatePriorityDetails" = struct {
+pub const @"CreatePriorityDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PriorityId" = struct {
+pub const @"PriorityId" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdatePriorityDetails" = struct {
+pub const @"UpdatePriorityDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanPriority" = struct {
+pub const @"PageBeanPriority" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SetDefaultPriorityRequest" = struct {
+pub const @"SetDefaultPriorityRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Comment" = struct {
+pub const @"Comment" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Fields" = struct {
+pub const @"Fields" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueLinkType" = struct {
+pub const @"IssueLinkType" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"LinkIssueRequestJsonBean" = struct {
+pub const @"LinkIssueRequestJsonBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"LinkedIssue" = struct {
+pub const @"LinkedIssue" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RichText" = struct {
+pub const @"RichText" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"TimeTrackingDetails" = struct {
+pub const @"TimeTrackingDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Visibility" = struct {
+pub const @"Visibility" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueLink" = struct {
+pub const @"IssueLink" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageOfWorklogs" = struct {
+pub const @"PageOfWorklogs" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Worklog" = struct {
+pub const @"Worklog" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeCreateBean" = struct {
+pub const @"IssueTypeCreateBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeUpdateBean" = struct {
+pub const @"IssueTypeUpdateBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SecuritySchemes" = struct {
+pub const @"SecuritySchemes" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueSecurityLevelMember" = struct {
+pub const @"IssueSecurityLevelMember" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanIssueSecurityLevelMember" = struct {
+pub const @"PageBeanIssueSecurityLevelMember" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldMetadata" = struct {
+pub const @"FieldMetadata" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTransition" = struct {
+pub const @"IssueTransition" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Transitions" = struct {
+pub const @"Transitions" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssuePickerSuggestions" = struct {
+pub const @"IssuePickerSuggestions" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssuePickerSuggestionsIssueType" = struct {
+pub const @"IssuePickerSuggestionsIssueType" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SuggestedIssue" = struct {
+pub const @"SuggestedIssue" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldUpdateOperation" = struct {
+pub const @"FieldUpdateOperation" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"HistoryMetadata" = struct {
+pub const @"HistoryMetadata" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"HistoryMetadataParticipant" = struct {
+pub const @"HistoryMetadataParticipant" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueUpdateDetails" = struct {
+pub const @"IssueUpdateDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Votes" = struct {
+pub const @"Votes" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ChangeDetails" = struct {
+pub const @"ChangeDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Changelog" = struct {
+pub const @"Changelog" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IncludedFields" = struct {
+pub const @"IncludedFields" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueBean" = struct {
+pub const @"IssueBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueUpdateMetadata" = struct {
+pub const @"IssueUpdateMetadata" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"LinkGroup" = struct {
+pub const @"LinkGroup" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Operations" = struct {
+pub const @"Operations" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageOfChangelogs" = struct {
+pub const @"PageOfChangelogs" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueList" = struct {
+pub const @"IssueList" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"BulkIssueIsWatching" = struct {
+pub const @"BulkIssueIsWatching" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Watchers" = struct {
+pub const @"Watchers" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreatedIssue" = struct {
+pub const @"CreatedIssue" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"NestedResponse" = struct {
+pub const @"NestedResponse" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssuesUpdateBean" = struct {
+pub const @"IssuesUpdateBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"BulkOperationErrorResult" = struct {
+pub const @"BulkOperationErrorResult" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreatedIssues" = struct {
+pub const @"CreatedIssues" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueCreateMetadata" = struct {
+pub const @"IssueCreateMetadata" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeIssueCreateMetadata" = struct {
+pub const @"IssueTypeIssueCreateMetadata" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIssueCreateMetadata" = struct {
+pub const @"ProjectIssueCreateMetadata" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Application" = struct {
+pub const @"Application" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IconBean" = struct {
+pub const @"IconBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RemoteIssueLink" = struct {
+pub const @"RemoteIssueLink" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RemoteObject" = struct {
+pub const @"RemoteObject" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Status" = struct {
+pub const @"Status" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Icon" = struct {
+pub const @"Icon" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RemoteIssueLinkRequest" = struct {
+pub const @"RemoteIssueLinkRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RemoteIssueLinkIdentifies" = struct {
+pub const @"RemoteIssueLinkIdentifies" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Notification" = struct {
+pub const @"Notification" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"NotificationRecipients" = struct {
+pub const @"NotificationRecipients" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"NotificationRecipientsRestrictions" = struct {
+pub const @"NotificationRecipientsRestrictions" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RestrictedPermission" = struct {
+pub const @"RestrictedPermission" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueLinkTypes" = struct {
+pub const @"IssueLinkTypes" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageOfComments" = struct {
+pub const @"PageOfComments" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PaginatedResponseComment" = struct {
+pub const @"PaginatedResponseComment" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueCommentListRequestBean" = struct {
+pub const @"IssueCommentListRequestBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanComment" = struct {
+pub const @"PageBeanComment" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanChangelog" = struct {
+pub const @"PageBeanChangelog" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueChangelogIds" = struct {
+pub const @"IssueChangelogIds" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Attachment" = struct {
+pub const @"Attachment" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Group" = struct {
+pub const @"Group" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PagedListUserDetailsApplicationUser" = struct {
+pub const @"PagedListUserDetailsApplicationUser" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanUserDetails" = struct {
+pub const @"PageBeanUserDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AddGroupBean" = struct {
+pub const @"AddGroupBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdateUserToGroupBean" = struct {
+pub const @"UpdateUserToGroupBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FoundGroup" = struct {
+pub const @"FoundGroup" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FoundGroups" = struct {
+pub const @"FoundGroups" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"GroupLabel" = struct {
+pub const @"GroupLabel" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FoundUsersAndGroups" = struct {
+pub const @"FoundUsersAndGroups" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldDefinitionJsonBean" = struct {
+pub const @"CustomFieldDefinitionJsonBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdateCustomFieldDetails" = struct {
+pub const @"UpdateCustomFieldDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanScreenWithTab" = struct {
+pub const @"PageBeanScreenWithTab" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ScreenWithTab" = struct {
+pub const @"ScreenWithTab" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Context" = struct {
+pub const @"Context" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanContext" = struct {
+pub const @"PageBeanContext" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextOption" = struct {
+pub const @"CustomFieldContextOption" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanCustomFieldContextOption" = struct {
+pub const @"PageBeanCustomFieldContextOption" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"BulkCustomFieldOptionCreateRequest" = struct {
+pub const @"BulkCustomFieldOptionCreateRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldOptionCreate" = struct {
+pub const @"CustomFieldOptionCreate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldCreatedContextOptionsList" = struct {
+pub const @"CustomFieldCreatedContextOptionsList" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"OrderOfCustomFieldOptions" = struct {
+pub const @"OrderOfCustomFieldOptions" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"BulkCustomFieldOptionUpdateRequest" = struct {
+pub const @"BulkCustomFieldOptionUpdateRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldOptionUpdate" = struct {
+pub const @"CustomFieldOptionUpdate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldUpdatedContextOptionsList" = struct {
+pub const @"CustomFieldUpdatedContextOptionsList" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ComponentIssuesCount" = struct {
+pub const @"ComponentIssuesCount" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SystemAvatars" = struct {
+pub const @"SystemAvatars" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScreenScheme" = struct {
+pub const @"IssueTypeScreenScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanIssueTypeScreenScheme" = struct {
+pub const @"PageBeanIssueTypeScreenScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanScreenScheme" = struct {
+pub const @"PageBeanScreenScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ScreenScheme" = struct {
+pub const @"ScreenScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ScreenTypes" = struct {
+pub const @"ScreenTypes" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ScreenSchemeDetails" = struct {
+pub const @"ScreenSchemeDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ScreenSchemeId" = struct {
+pub const @"ScreenSchemeId" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdateScreenSchemeDetails" = struct {
+pub const @"UpdateScreenSchemeDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdateScreenTypes" = struct {
+pub const @"UpdateScreenTypes" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ChangedWorklog" = struct {
+pub const @"ChangedWorklog" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ChangedWorklogs" = struct {
+pub const @"ChangedWorklogs" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorklogIdsRequestBean" = struct {
+pub const @"WorklogIdsRequestBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"GlobalScopeBean" = struct {
+pub const @"GlobalScopeBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueFieldOption" = struct {
+pub const @"IssueFieldOption" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueFieldOptionConfiguration" = struct {
+pub const @"IssueFieldOptionConfiguration" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueFieldOptionScopeBean" = struct {
+pub const @"IssueFieldOptionScopeBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanIssueFieldOption" = struct {
+pub const @"PageBeanIssueFieldOption" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectScopeBean" = struct {
+pub const @"ProjectScopeBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueFieldOptionCreateBean" = struct {
+pub const @"IssueFieldOptionCreateBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RemoveOptionFromIssuesResult" = struct {
+pub const @"RemoveOptionFromIssuesResult" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SimpleErrorCollection" = struct {
+pub const @"SimpleErrorCollection" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"TaskProgressBeanRemoveOptionFromIssuesResult" = struct {
+pub const @"TaskProgressBeanRemoveOptionFromIssuesResult" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Field" = struct {
+pub const @"Field" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldLastUsed" = struct {
+pub const @"FieldLastUsed" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanField" = struct {
+pub const @"PageBeanField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldConfigurationScheme" = struct {
+pub const @"FieldConfigurationScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanFieldConfigurationScheme" = struct {
+pub const @"PageBeanFieldConfigurationScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldConfigurationIssueTypeItem" = struct {
+pub const @"FieldConfigurationIssueTypeItem" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanFieldConfigurationIssueTypeItem" = struct {
+pub const @"PageBeanFieldConfigurationIssueTypeItem" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AssociateFieldConfigurationsWithIssueTypesRequest" = struct {
+pub const @"AssociateFieldConfigurationsWithIssueTypesRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldConfigurationToIssueTypeMapping" = struct {
+pub const @"FieldConfigurationToIssueTypeMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldConfigurationSchemeProjects" = struct {
+pub const @"FieldConfigurationSchemeProjects" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanFieldConfigurationSchemeProjects" = struct {
+pub const @"PageBeanFieldConfigurationSchemeProjects" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldConfigurationSchemeProjectAssociation" = struct {
+pub const @"FieldConfigurationSchemeProjectAssociation" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdateFieldConfigurationSchemeDetails" = struct {
+pub const @"UpdateFieldConfigurationSchemeDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeIdsToRemove" = struct {
+pub const @"IssueTypeIdsToRemove" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldConfigurationDetails" = struct {
+pub const @"FieldConfigurationDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanFieldConfigurationDetails" = struct {
+pub const @"PageBeanFieldConfigurationDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldConfigurationItem" = struct {
+pub const @"FieldConfigurationItem" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanFieldConfigurationItem" = struct {
+pub const @"PageBeanFieldConfigurationItem" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldConfiguration" = struct {
+pub const @"FieldConfiguration" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldConfigurationItemsDetails" = struct {
+pub const @"FieldConfigurationItemsDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScreenSchemeItem" = struct {
+pub const @"IssueTypeScreenSchemeItem" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanIssueTypeScreenSchemeItem" = struct {
+pub const @"PageBeanIssueTypeScreenSchemeItem" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScreenSchemesProjects" = struct {
+pub const @"IssueTypeScreenSchemesProjects" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanIssueTypeScreenSchemesProjects" = struct {
+pub const @"PageBeanIssueTypeScreenSchemesProjects" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanProjectDetails" = struct {
+pub const @"PageBeanProjectDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScreenSchemeProjectAssociation" = struct {
+pub const @"IssueTypeScreenSchemeProjectAssociation" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScreenSchemeDetails" = struct {
+pub const @"IssueTypeScreenSchemeDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScreenSchemeMapping" = struct {
+pub const @"IssueTypeScreenSchemeMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScreenSchemeId" = struct {
+pub const @"IssueTypeScreenSchemeId" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScreenSchemeUpdateDetails" = struct {
+pub const @"IssueTypeScreenSchemeUpdateDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScreenSchemeMappingDetails" = struct {
+pub const @"IssueTypeScreenSchemeMappingDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdateDefaultScreenScheme" = struct {
+pub const @"UpdateDefaultScreenScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeIds" = struct {
+pub const @"IssueTypeIds" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateUpdateRoleRequestBean" = struct {
+pub const @"CreateUpdateRoleRequestBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ActorInputBean" = struct {
+pub const @"ActorInputBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectRoleActorsUpdateBean" = struct {
+pub const @"ProjectRoleActorsUpdateBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ActorsMap" = struct {
+pub const @"ActorsMap" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectRoleDetails" = struct {
+pub const @"ProjectRoleDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeScheme" = struct {
+pub const @"IssueTypeScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanIssueTypeScheme" = struct {
+pub const @"PageBeanIssueTypeScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeSchemeProjects" = struct {
+pub const @"IssueTypeSchemeProjects" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanIssueTypeSchemeProjects" = struct {
+pub const @"PageBeanIssueTypeSchemeProjects" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeSchemeMapping" = struct {
+pub const @"IssueTypeSchemeMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanIssueTypeSchemeMapping" = struct {
+pub const @"PageBeanIssueTypeSchemeMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeSchemeProjectAssociation" = struct {
+pub const @"IssueTypeSchemeProjectAssociation" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeSchemeDetails" = struct {
+pub const @"IssueTypeSchemeDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeSchemeID" = struct {
+pub const @"IssueTypeSchemeID" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeSchemeUpdateDetails" = struct {
+pub const @"IssueTypeSchemeUpdateDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"OrderOfIssueTypes" = struct {
+pub const @"OrderOfIssueTypes" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AttachmentMetadata" = struct {
+pub const @"AttachmentMetadata" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AttachmentSettings" = struct {
+pub const @"AttachmentSettings" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AttachmentArchiveEntry" = struct {
+pub const @"AttachmentArchiveEntry" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AttachmentArchiveImpl" = struct {
+pub const @"AttachmentArchiveImpl" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AttachmentArchive" = struct {
+pub const @"AttachmentArchive" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AttachmentArchiveItemReadable" = struct {
+pub const @"AttachmentArchiveItemReadable" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AttachmentArchiveMetadataReadable" = struct {
+pub const @"AttachmentArchiveMetadataReadable" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanUiModificationDetails" = struct {
+pub const @"PageBeanUiModificationDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UiModificationContextDetails" = struct {
+pub const @"UiModificationContextDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UiModificationDetails" = struct {
+pub const @"UiModificationDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateUiModificationDetails" = struct {
+pub const @"CreateUiModificationDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UiModificationIdentifiers" = struct {
+pub const @"UiModificationIdentifiers" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UpdateUiModificationDetails" = struct {
+pub const @"UpdateUiModificationDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldOption" = struct {
+pub const @"CustomFieldOption" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextProjectMapping" = struct {
+pub const @"CustomFieldContextProjectMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanCustomFieldContextProjectMapping" = struct {
+pub const @"PageBeanCustomFieldContextProjectMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContext" = struct {
+pub const @"CustomFieldContext" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanCustomFieldContext" = struct {
+pub const @"PageBeanCustomFieldContext" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValue" = struct {
+pub const @"CustomFieldContextDefaultValue" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueCascadingOption" = struct {
+pub const @"CustomFieldContextDefaultValueCascadingOption" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueDate" = struct {
+pub const @"CustomFieldContextDefaultValueDate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueDateTime" = struct {
+pub const @"CustomFieldContextDefaultValueDateTime" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueFloat" = struct {
+pub const @"CustomFieldContextDefaultValueFloat" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueForgeDateTimeField" = struct {
+pub const @"CustomFieldContextDefaultValueForgeDateTimeField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueForgeGroupField" = struct {
+pub const @"CustomFieldContextDefaultValueForgeGroupField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueForgeMultiGroupField" = struct {
+pub const @"CustomFieldContextDefaultValueForgeMultiGroupField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueForgeMultiStringField" = struct {
+pub const @"CustomFieldContextDefaultValueForgeMultiStringField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueForgeMultiUserField" = struct {
+pub const @"CustomFieldContextDefaultValueForgeMultiUserField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueForgeNumberField" = struct {
+pub const @"CustomFieldContextDefaultValueForgeNumberField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueForgeObjectField" = struct {
+pub const @"CustomFieldContextDefaultValueForgeObjectField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueForgeStringField" = struct {
+pub const @"CustomFieldContextDefaultValueForgeStringField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueForgeUserField" = struct {
+pub const @"CustomFieldContextDefaultValueForgeUserField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueLabels" = struct {
+pub const @"CustomFieldContextDefaultValueLabels" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueMultiUserPicker" = struct {
+pub const @"CustomFieldContextDefaultValueMultiUserPicker" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueMultipleGroupPicker" = struct {
+pub const @"CustomFieldContextDefaultValueMultipleGroupPicker" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueMultipleOption" = struct {
+pub const @"CustomFieldContextDefaultValueMultipleOption" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueMultipleVersionPicker" = struct {
+pub const @"CustomFieldContextDefaultValueMultipleVersionPicker" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueProject" = struct {
+pub const @"CustomFieldContextDefaultValueProject" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueReadOnly" = struct {
+pub const @"CustomFieldContextDefaultValueReadOnly" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueSingleGroupPicker" = struct {
+pub const @"CustomFieldContextDefaultValueSingleGroupPicker" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueSingleOption" = struct {
+pub const @"CustomFieldContextDefaultValueSingleOption" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueSingleVersionPicker" = struct {
+pub const @"CustomFieldContextDefaultValueSingleVersionPicker" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueTextArea" = struct {
+pub const @"CustomFieldContextDefaultValueTextArea" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueTextField" = struct {
+pub const @"CustomFieldContextDefaultValueTextField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueURL" = struct {
+pub const @"CustomFieldContextDefaultValueURL" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextSingleUserPickerDefaults" = struct {
+pub const @"CustomFieldContextSingleUserPickerDefaults" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanCustomFieldContextDefaultValue" = struct {
+pub const @"PageBeanCustomFieldContextDefaultValue" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserFilter" = struct {
+pub const @"UserFilter" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateCustomFieldContext" = struct {
+pub const @"CreateCustomFieldContext" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIds" = struct {
+pub const @"ProjectIds" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextUpdateDetails" = struct {
+pub const @"CustomFieldContextUpdateDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIssueTypeMapping" = struct {
+pub const @"ProjectIssueTypeMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIssueTypeMappings" = struct {
+pub const @"ProjectIssueTypeMappings" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ContextForProjectAndIssueType" = struct {
+pub const @"ContextForProjectAndIssueType" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanContextForProjectAndIssueType" = struct {
+pub const @"PageBeanContextForProjectAndIssueType" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldContextDefaultValueUpdate" = struct {
+pub const @"CustomFieldContextDefaultValueUpdate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeToContextMapping" = struct {
+pub const @"IssueTypeToContextMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanIssueTypeToContextMapping" = struct {
+pub const @"PageBeanIssueTypeToContextMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldValueUpdate" = struct {
+pub const @"CustomFieldValueUpdate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldValueUpdateDetails" = struct {
+pub const @"CustomFieldValueUpdateDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"MultipleCustomFieldValuesUpdate" = struct {
+pub const @"MultipleCustomFieldValuesUpdate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"MultipleCustomFieldValuesUpdateDetails" = struct {
+pub const @"MultipleCustomFieldValuesUpdateDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ContextualConfiguration" = struct {
+pub const @"ContextualConfiguration" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanContextualConfiguration" = struct {
+pub const @"PageBeanContextualConfiguration" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomFieldConfigurations" = struct {
+pub const @"CustomFieldConfigurations" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanUser" = struct {
+pub const @"PageBeanUser" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserMigrationBean" = struct {
+pub const @"UserMigrationBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UnrestrictedUserEmail" = struct {
+pub const @"UnrestrictedUserEmail" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"License" = struct {
+pub const @"License" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"LicensedApplication" = struct {
+pub const @"LicensedApplication" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueEvent" = struct {
+pub const @"IssueEvent" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Configuration" = struct {
+pub const @"Configuration" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"TimeTrackingConfiguration" = struct {
+pub const @"TimeTrackingConfiguration" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ApplicationProperty" = struct {
+pub const @"ApplicationProperty" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SimpleApplicationPropertyBean" = struct {
+pub const @"SimpleApplicationPropertyBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AssociatedItemBean" = struct {
+pub const @"AssociatedItemBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AuditRecordBean" = struct {
+pub const @"AuditRecordBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AuditRecords" = struct {
+pub const @"AuditRecords" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ChangedValueBean" = struct {
+pub const @"ChangedValueBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraStatus" = struct {
+pub const @"JiraStatus" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectId" = struct {
+pub const @"ProjectId" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIssueTypes" = struct {
+pub const @"ProjectIssueTypes" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"StatusScope" = struct {
+pub const @"StatusScope" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageOfStatuses" = struct {
+pub const @"PageOfStatuses" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"StatusCreate" = struct {
+pub const @"StatusCreate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"StatusCreateRequest" = struct {
+pub const @"StatusCreateRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"StatusUpdate" = struct {
+pub const @"StatusUpdate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"StatusUpdateRequest" = struct {
+pub const @"StatusUpdateRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"TimeTrackingProvider" = struct {
+pub const @"TimeTrackingProvider" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanWorkflowScheme" = struct {
+pub const @"PageBeanWorkflowScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowScheme" = struct {
+pub const @"WorkflowScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypesWorkflowMapping" = struct {
+pub const @"IssueTypesWorkflowMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeWorkflowMapping" = struct {
+pub const @"IssueTypeWorkflowMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DefaultWorkflow" = struct {
+pub const @"DefaultWorkflow" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PublishDraftWorkflowScheme" = struct {
+pub const @"PublishDraftWorkflowScheme" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"StatusMapping" = struct {
+pub const @"StatusMapping" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ContainerOfWorkflowSchemeAssociations" = struct {
+pub const @"ContainerOfWorkflowSchemeAssociations" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowSchemeAssociations" = struct {
+pub const @"WorkflowSchemeAssociations" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowSchemeProjectAssociation" = struct {
+pub const @"WorkflowSchemeProjectAssociation" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PermissionSchemes" = struct {
+pub const @"PermissionSchemes" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PermissionGrants" = struct {
+pub const @"PermissionGrants" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DeprecatedWorkflow" = struct {
+pub const @"DeprecatedWorkflow" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateWorkflowCondition" = struct {
+pub const @"CreateWorkflowCondition" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateWorkflowDetails" = struct {
+pub const @"CreateWorkflowDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateWorkflowStatusDetails" = struct {
+pub const @"CreateWorkflowStatusDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateWorkflowTransitionDetails" = struct {
+pub const @"CreateWorkflowTransitionDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateWorkflowTransitionRule" = struct {
+pub const @"CreateWorkflowTransitionRule" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateWorkflowTransitionRulesDetails" = struct {
+pub const @"CreateWorkflowTransitionRulesDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CreateWorkflowTransitionScreenDetails" = struct {
+pub const @"CreateWorkflowTransitionScreenDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowIDs" = struct {
+pub const @"WorkflowIDs" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowTransitionProperty" = struct {
+pub const @"WorkflowTransitionProperty" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanWorkflow" = struct {
+pub const @"PageBeanWorkflow" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PublishedWorkflowId" = struct {
+pub const @"PublishedWorkflowId" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Transition" = struct {
+pub const @"Transition" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"TransitionScreenDetails" = struct {
+pub const @"TransitionScreenDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Workflow" = struct {
+pub const @"Workflow" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowCompoundCondition" = struct {
+pub const @"WorkflowCompoundCondition" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowCondition" = struct {
+pub const @"WorkflowCondition" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowOperations" = struct {
+pub const @"WorkflowOperations" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowRules" = struct {
+pub const @"WorkflowRules" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowSchemeIdName" = struct {
+pub const @"WorkflowSchemeIdName" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowSimpleCondition" = struct {
+pub const @"WorkflowSimpleCondition" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowStatus" = struct {
+pub const @"WorkflowStatus" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowTransitionRule" = struct {
+pub const @"WorkflowTransitionRule" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ConnectWorkflowTransitionRule" = struct {
+pub const @"ConnectWorkflowTransitionRule" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanWorkflowTransitionRules" = struct {
+pub const @"PageBeanWorkflowTransitionRules" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RuleConfiguration" = struct {
+pub const @"RuleConfiguration" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowId" = struct {
+pub const @"WorkflowId" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowTransition" = struct {
+pub const @"WorkflowTransition" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowTransitionRules" = struct {
+pub const @"WorkflowTransitionRules" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowTransitionRulesUpdate" = struct {
+pub const @"WorkflowTransitionRulesUpdate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowTransitionRulesUpdateErrorDetails" = struct {
+pub const @"WorkflowTransitionRulesUpdateErrorDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowTransitionRulesUpdateErrors" = struct {
+pub const @"WorkflowTransitionRulesUpdateErrors" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowTransitionRulesDetails" = struct {
+pub const @"WorkflowTransitionRulesDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowsWithTransitionRulesDetails" = struct {
+pub const @"WorkflowsWithTransitionRulesDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CustomContextVariable" = struct {
+pub const @"CustomContextVariable" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IdOrKeyBean" = struct {
+pub const @"IdOrKeyBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueContextVariable" = struct {
+pub const @"IssueContextVariable" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JexpIssues" = struct {
+pub const @"JexpIssues" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JexpJqlIssues" = struct {
+pub const @"JexpJqlIssues" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionEvalContextBean" = struct {
+pub const @"JiraExpressionEvalContextBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionEvalRequestBean" = struct {
+pub const @"JiraExpressionEvalRequestBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JsonContextVariable" = struct {
+pub const @"JsonContextVariable" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserContextVariable" = struct {
+pub const @"UserContextVariable" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssuesJqlMetaDataBean" = struct {
+pub const @"IssuesJqlMetaDataBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssuesMetaBean" = struct {
+pub const @"IssuesMetaBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionEvaluationMetaDataBean" = struct {
+pub const @"JiraExpressionEvaluationMetaDataBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionResult" = struct {
+pub const @"JiraExpressionResult" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionsComplexityBean" = struct {
+pub const @"JiraExpressionsComplexityBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionsComplexityValueBean" = struct {
+pub const @"JiraExpressionsComplexityValueBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionForAnalysis" = struct {
+pub const @"JiraExpressionForAnalysis" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionAnalysis" = struct {
+pub const @"JiraExpressionAnalysis" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionComplexity" = struct {
+pub const @"JiraExpressionComplexity" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionValidationError" = struct {
+pub const @"JiraExpressionValidationError" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JiraExpressionsAnalysis" = struct {
+pub const @"JiraExpressionsAnalysis" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIssueSecurityLevels" = struct {
+pub const @"ProjectIssueSecurityLevels" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectEmailAddress" = struct {
+pub const @"ProjectEmailAddress" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectType" = struct {
+pub const @"ProjectType" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Dashboard" = struct {
+pub const @"Dashboard" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageOfDashboards" = struct {
+pub const @"PageOfDashboards" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SharePermission" = struct {
+pub const @"SharePermission" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserBean" = struct {
+pub const @"UserBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserBeanAvatarUrls" = struct {
+pub const @"UserBeanAvatarUrls" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanDashboard" = struct {
+pub const @"PageBeanDashboard" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DashboardDetails" = struct {
+pub const @"DashboardDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AvailableDashboardGadget" = struct {
+pub const @"AvailableDashboardGadget" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AvailableDashboardGadgetsResponse" = struct {
+pub const @"AvailableDashboardGadgetsResponse" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DashboardGadget" = struct {
+pub const @"DashboardGadget" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DashboardGadgetPosition" = struct {
+pub const @"DashboardGadgetPosition" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DashboardGadgetResponse" = struct {
+pub const @"DashboardGadgetResponse" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DashboardGadgetSettings" = struct {
+pub const @"DashboardGadgetSettings" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DashboardGadgetUpdateRequest" = struct {
+pub const @"DashboardGadgetUpdateRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueTypeInfo" = struct {
+pub const @"IssueTypeInfo" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIssueTypeHierarchy" = struct {
+pub const @"ProjectIssueTypeHierarchy" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ProjectIssueTypesHierarchyLevel" = struct {
+pub const @"ProjectIssueTypesHierarchyLevel" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanUserKey" = struct {
+pub const @"PageBeanUserKey" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserKey" = struct {
+pub const @"UserKey" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SearchResults" = struct {
+pub const @"SearchResults" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SearchRequestBean" = struct {
+pub const @"SearchRequestBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldReferenceData" = struct {
+pub const @"FieldReferenceData" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FunctionReferenceData" = struct {
+pub const @"FunctionReferenceData" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JQLReferenceData" = struct {
+pub const @"JQLReferenceData" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SearchAutoCompleteFilter" = struct {
+pub const @"SearchAutoCompleteFilter" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AutoCompleteSuggestion" = struct {
+pub const @"AutoCompleteSuggestion" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"AutoCompleteSuggestions" = struct {
+pub const @"AutoCompleteSuggestions" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JQLPersonalDataMigrationRequest" = struct {
+pub const @"JQLPersonalDataMigrationRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ConvertedJQLQueries" = struct {
+pub const @"ConvertedJQLQueries" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JQLQueryWithUnknownUsers" = struct {
+pub const @"JQLQueryWithUnknownUsers" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Filter" = struct {
+pub const @"Filter" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FilterSubscription" = struct {
+pub const @"FilterSubscription" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FilterSubscriptionsList" = struct {
+pub const @"FilterSubscriptionsList" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"UserList" = struct {
+pub const @"UserList" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FilterDetails" = struct {
+pub const @"FilterDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanFilterDetails" = struct {
+pub const @"PageBeanFilterDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ChangeFilterOwner" = struct {
+pub const @"ChangeFilterOwner" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"DefaultShareScope" = struct {
+pub const @"DefaultShareScope" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SharePermissionInputBean" = struct {
+pub const @"SharePermissionInputBean" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"GroupDetails" = struct {
+pub const @"GroupDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanGroupDetails" = struct {
+pub const @"PageBeanGroupDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueriesToSanitize" = struct {
+pub const @"JqlQueriesToSanitize" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueryToSanitize" = struct {
+pub const @"JqlQueryToSanitize" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SanitizedJqlQueries" = struct {
+pub const @"SanitizedJqlQueries" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"SanitizedJqlQuery" = struct {
+pub const @"SanitizedJqlQuery" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueriesToParse" = struct {
+pub const @"JqlQueriesToParse" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"CompoundClause" = struct {
+pub const @"CompoundClause" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldChangedClause" = struct {
+pub const @"FieldChangedClause" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldValueClause" = struct {
+pub const @"FieldValueClause" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FieldWasClause" = struct {
+pub const @"FieldWasClause" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FunctionOperand" = struct {
+pub const @"FunctionOperand" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQuery" = struct {
+pub const @"JqlQuery" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueryClause" = struct {
+pub const @"JqlQueryClause" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueryClauseOperand" = struct {
+pub const @"JqlQueryClauseOperand" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueryClauseTimePredicate" = struct {
+pub const @"JqlQueryClauseTimePredicate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueryField" = struct {
+pub const @"JqlQueryField" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueryFieldEntityProperty" = struct {
+pub const @"JqlQueryFieldEntityProperty" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueryOrderByClause" = struct {
+pub const @"JqlQueryOrderByClause" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueryOrderByClauseElement" = struct {
+pub const @"JqlQueryOrderByClauseElement" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JqlQueryUnitaryOperand" = struct {
+pub const @"JqlQueryUnitaryOperand" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"KeywordOperand" = struct {
+pub const @"KeywordOperand" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ListOperand" = struct {
+pub const @"ListOperand" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ParsedJqlQueries" = struct {
+pub const @"ParsedJqlQueries" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ParsedJqlQuery" = struct {
+pub const @"ParsedJqlQuery" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ValueOperand" = struct {
+pub const @"ValueOperand" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"BulkIssuePropertyUpdateRequest" = struct {
+pub const @"BulkIssuePropertyUpdateRequest" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueFilterForBulkPropertySet" = struct {
+pub const @"IssueFilterForBulkPropertySet" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueFilterForBulkPropertyDelete" = struct {
+pub const @"IssueFilterForBulkPropertyDelete" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueEntityProperties" = struct {
+pub const @"IssueEntityProperties" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"JsonNode" = struct {
+pub const @"JsonNode" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"IssueEntityPropertiesForMultiUpdate" = struct {
+pub const @"IssueEntityPropertiesForMultiUpdate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"MultiIssueEntityProperties" = struct {
+pub const @"MultiIssueEntityProperties" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FailedWebhook" = struct {
+pub const @"FailedWebhook" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"FailedWebhooks" = struct {
+pub const @"FailedWebhooks" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WebhookDetails" = struct {
+pub const @"WebhookDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WebhookRegistrationDetails" = struct {
+pub const @"WebhookRegistrationDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ContainerForRegisteredWebhooks" = struct {
+pub const @"ContainerForRegisteredWebhooks" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"RegisteredWebhook" = struct {
+pub const @"RegisteredWebhook" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanWebhook" = struct {
+pub const @"PageBeanWebhook" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"Webhook" = struct {
+pub const @"Webhook" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ContainerForWebhookIDs" = struct {
+pub const @"ContainerForWebhookIDs" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WebhooksExpirationDate" = struct {
+pub const @"WebhooksExpirationDate" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"PageBeanString" = struct {
+pub const @"PageBeanString" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"OperationMessage" = struct {
+pub const @"OperationMessage" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ErrorMessage" = struct {
+pub const @"ErrorMessage" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ConnectModules" = struct {
+pub const @"ConnectModules" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ConnectModule" = struct {
+pub const @"ConnectModule" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowRulesSearch" = struct {
+pub const @"WorkflowRulesSearch" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"WorkflowRulesSearchDetails" = struct {
+pub const @"WorkflowRulesSearchDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"EntityPropertyDetails" = struct {
+pub const @"EntityPropertyDetails" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ConnectCustomFieldValue" = struct {
+pub const @"ConnectCustomFieldValue" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
 };
 
-const @"ConnectCustomFieldValues" = struct {
+pub const @"ConnectCustomFieldValues" = struct {
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
