@@ -16926,6 +16926,9 @@ pub const @"Comment" = struct {
 };
 
 pub const @"Fields" = struct {
+
+    summary: []const u8,
+
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
@@ -17100,6 +17103,9 @@ pub const @"IncludedFields" = struct {
 };
 
 pub const @"IssueBean" = struct {
+
+    fields: Fields,
+
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
     }
