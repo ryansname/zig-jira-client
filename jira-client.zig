@@ -29,24 +29,25 @@ pub fn @"getBanner"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AnnouncementBannerConfiguration"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"AnnouncementBannerConfiguration", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetBannerResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetBannerResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetBannerResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetBannerResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -78,26 +79,20 @@ pub fn @"updateMultipleCustomFieldValues"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // generateChangelog; location: query
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateMultipleCustomFieldValuesResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateMultipleCustomFieldValuesResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateMultipleCustomFieldValuesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateMultipleCustomFieldValuesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateMultipleCustomFieldValuesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -134,7 +129,6 @@ pub fn @"getCustomFieldConfiguration"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // id; location: query
     // fieldContextId; location: query
     // issueId; location: query
@@ -143,28 +137,24 @@ pub fn @"getCustomFieldConfiguration"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextualConfiguration"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanContextualConfiguration", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCustomFieldConfigurationResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldConfigurationResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldConfigurationResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldConfigurationResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldConfigurationResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldConfigurationResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -199,26 +189,20 @@ pub fn @"updateCustomFieldValue"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // generateChangelog; location: query
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldValueResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldValueResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldValueResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldValueResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldValueResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -248,24 +232,19 @@ pub fn @"getApplicationProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // key; location: query
     // permissionLevel; location: query
     // keyFilter; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetApplicationPropertyResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetApplicationPropertyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetApplicationPropertyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetApplicationPropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -295,21 +274,16 @@ pub fn @"getAdvancedSettings"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAdvancedSettingsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAdvancedSettingsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAdvancedSettingsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAdvancedSettingsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -345,30 +319,25 @@ pub fn @"setApplicationProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ApplicationProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SetApplicationPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetApplicationPropertyResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetApplicationPropertyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetApplicationPropertyResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetApplicationPropertyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetApplicationPropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -398,21 +367,16 @@ pub fn @"getAllApplicationRoles"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllApplicationRolesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllApplicationRolesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllApplicationRolesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllApplicationRolesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -446,26 +410,22 @@ pub fn @"getApplicationRole"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationRole"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ApplicationRole", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetApplicationRoleResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetApplicationRoleResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetApplicationRoleResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetApplicationRoleResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetApplicationRoleResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -510,42 +470,32 @@ pub fn @"getAttachmentContent"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // redirect; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentContentResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "206", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentContentResult"{ ._206 = {} };
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentContentResult"{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentContentResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentContentResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentContentResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentContentResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "416", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentContentResult"{ ._416 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentContentResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -573,18 +523,16 @@ pub fn @"getAttachmentMeta"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentSettings"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"AttachmentSettings", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAttachmentMetaResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentMetaResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentMetaResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -626,37 +574,29 @@ pub fn @"getAttachmentThumbnail"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // redirect; location: query
     // fallbackToDefault; location: query
     // width; location: query
     // height; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentThumbnailResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentThumbnailResult"{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentThumbnailResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentThumbnailResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentThumbnailResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentThumbnailResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentThumbnailResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -693,26 +633,22 @@ pub fn @"getAttachment"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentMetadata"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"AttachmentMetadata", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAttachmentResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAttachmentResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -752,30 +688,25 @@ pub fn @"expandAttachmentForHumans"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveMetadataReadable"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"AttachmentArchiveMetadataReadable", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"ExpandAttachmentForHumansResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForHumansResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForHumansResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForHumansResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForHumansResult"{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForHumansResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -815,30 +746,25 @@ pub fn @"expandAttachmentForMachines"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveImpl"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"AttachmentArchiveImpl", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"ExpandAttachmentForMachinesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForMachinesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForMachinesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForMachinesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForMachinesResult"{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ExpandAttachmentForMachinesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -871,27 +797,24 @@ pub fn @"getAuditRecords"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // offset; location: query
     // limit; location: query
     // filter; location: query
     // from; location: query
     // to; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AuditRecords"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"AuditRecords", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAuditRecordsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAuditRecordsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAuditRecordsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAuditRecordsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -924,22 +847,19 @@ pub fn @"getAllSystemAvatars"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SystemAvatars"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"SystemAvatars", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllSystemAvatarsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllSystemAvatarsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "500", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllSystemAvatarsResult"{ ._500 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllSystemAvatarsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -967,19 +887,17 @@ pub fn @"getCommentsByIds"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComment"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanComment", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCommentsByIdsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentsByIdsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentsByIdsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1016,30 +934,25 @@ pub fn @"getCommentPropertyKeys"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCommentPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyKeysResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyKeysResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyKeysResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyKeysResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyKeysResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1078,30 +991,25 @@ pub fn @"getCommentProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCommentPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentPropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1141,30 +1049,25 @@ pub fn @"createComponent"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"ProjectComponent"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectComponent", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateComponentResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateComponentResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateComponentResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateComponentResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateComponentResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateComponentResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1196,22 +1099,19 @@ pub fn @"getComponent"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectComponent"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectComponent", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetComponentResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetComponentResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetComponentResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetComponentResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1244,22 +1144,19 @@ pub fn @"getComponentRelatedIssues"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ComponentIssuesCount"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ComponentIssuesCount", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetComponentRelatedIssuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetComponentRelatedIssuesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetComponentRelatedIssuesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetComponentRelatedIssuesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1287,18 +1184,16 @@ pub fn @"getConfiguration"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Configuration"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Configuration", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetConfigurationResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetConfigurationResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetConfigurationResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1330,26 +1225,22 @@ pub fn @"getSelectedTimeTrackingImplementation"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingProvider"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"TimeTrackingProvider", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetSelectedTimeTrackingImplementationResult"{ ._200 = result };
     }
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSelectedTimeTrackingImplementationResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSelectedTimeTrackingImplementationResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSelectedTimeTrackingImplementationResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSelectedTimeTrackingImplementationResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1379,21 +1270,16 @@ pub fn @"getAvailableTimeTrackingImplementations"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvailableTimeTrackingImplementationsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvailableTimeTrackingImplementationsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvailableTimeTrackingImplementationsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvailableTimeTrackingImplementationsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1423,22 +1309,19 @@ pub fn @"getSharedTimeTrackingConfiguration"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingConfiguration"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"TimeTrackingConfiguration", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetSharedTimeTrackingConfigurationResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharedTimeTrackingConfigurationResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharedTimeTrackingConfigurationResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharedTimeTrackingConfigurationResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1473,22 +1356,19 @@ pub fn @"getCustomFieldOption"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"CustomFieldOption"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"CustomFieldOption", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCustomFieldOptionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldOptionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldOptionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldOptionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1518,27 +1398,28 @@ pub fn @"getAllDashboards"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // filter; location: query
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfDashboards"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageOfDashboards", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllDashboardsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllDashboardsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllDashboardsResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllDashboardsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1568,24 +1449,25 @@ pub fn @"getAllAvailableDashboardGadgets"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AvailableDashboardGadgetsResponse"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"AvailableDashboardGadgetsResponse", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllAvailableDashboardGadgetsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllAvailableDashboardGadgetsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllAvailableDashboardGadgetsResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllAvailableDashboardGadgetsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1620,7 +1502,6 @@ pub fn @"getDashboardsPaginated"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // dashboardName; location: query
     // accountId; location: query
     // owner; location: query
@@ -1633,22 +1514,24 @@ pub fn @"getDashboardsPaginated"(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanDashboard"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanDashboard", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDashboardsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDashboardsPaginatedResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDashboardsPaginatedResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDashboardsPaginatedResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1681,26 +1564,25 @@ pub fn @"getAllGadgets"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // moduleKey; location: query
     // uri; location: query
     // gadgetId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DashboardGadgetResponse"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"DashboardGadgetResponse", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllGadgetsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllGadgetsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllGadgetsResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllGadgetsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1737,27 +1619,25 @@ pub fn @"updateGadget"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateGadgetResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"UpdateGadgetResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateGadgetResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"UpdateGadgetResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateGadgetResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1793,22 +1673,19 @@ pub fn @"getDashboardItemPropertyKeys"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDashboardItemPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDashboardItemPropertyKeysResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDashboardItemPropertyKeysResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDashboardItemPropertyKeysResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1846,22 +1723,19 @@ pub fn @"getDashboardItemProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDashboardItemPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDashboardItemPropertyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDashboardItemPropertyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDashboardItemPropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1895,28 +1769,28 @@ pub fn @"getDashboard"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Dashboard", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDashboardResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDashboardResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDashboardResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDashboardResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDashboardResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -1951,29 +1825,31 @@ pub fn @"copyDashboard"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Dashboard", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CopyDashboardResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CopyDashboardResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CopyDashboardResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CopyDashboardResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CopyDashboardResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2003,21 +1879,16 @@ pub fn @"getEvents"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetEventsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetEventsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetEventsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetEventsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2049,29 +1920,29 @@ pub fn @"analyseExpression"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // check; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionsAnalysis"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"JiraExpressionsAnalysis", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AnalyseExpressionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AnalyseExpressionResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AnalyseExpressionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AnalyseExpressionResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AnalyseExpressionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2109,29 +1980,29 @@ pub fn @"evaluateJiraExpression"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionResult"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"JiraExpressionResult", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"EvaluateJiraExpressionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"EvaluateJiraExpressionResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"EvaluateJiraExpressionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"EvaluateJiraExpressionResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"EvaluateJiraExpressionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2159,17 +2030,13 @@ pub fn @"getFields"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2201,7 +2068,6 @@ pub fn @"getFieldsPaginated"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // type; location: query
@@ -2210,26 +2076,27 @@ pub fn @"getFieldsPaginated"(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanField", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFieldsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFieldsPaginatedResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldsPaginatedResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFieldsPaginatedResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldsPaginatedResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2261,33 +2128,33 @@ pub fn @"getTrashedFieldsPaginated"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
     // query; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanField", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetTrashedFieldsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetTrashedFieldsPaginatedResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetTrashedFieldsPaginatedResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetTrashedFieldsPaginatedResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetTrashedFieldsPaginatedResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2323,29 +2190,22 @@ pub fn @"updateCustomField"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2380,31 +2240,27 @@ pub fn @"getContextsForField"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // isAnyIssueType; location: query
     // isGlobalContext; location: query
     // contextId; location: query
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContext"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanCustomFieldContext", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetContextsForFieldResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetContextsForFieldResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetContextsForFieldResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetContextsForFieldResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetContextsForFieldResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2439,29 +2295,25 @@ pub fn @"getDefaultValues"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // contextId; location: query
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextDefaultValue"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanCustomFieldContextDefaultValue", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDefaultValuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultValuesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultValuesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultValuesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultValuesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2494,25 +2346,22 @@ pub fn @"getIssueTypeMappingsForContexts"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // contextId; location: query
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeToContextMapping"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueTypeToContextMapping", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueTypeMappingsForContextsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeMappingsForContextsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeMappingsForContextsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeMappingsForContextsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2549,32 +2398,27 @@ pub fn @"getCustomFieldContextsForProjectsAndIssueTypes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextForProjectAndIssueType"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanContextForProjectAndIssueType", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2609,29 +2453,25 @@ pub fn @"getProjectContextMapping"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // contextId; location: query
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextProjectMapping"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanCustomFieldContextProjectMapping", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectContextMappingResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectContextMappingResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectContextMappingResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectContextMappingResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectContextMappingResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2670,29 +2510,22 @@ pub fn @"updateCustomFieldContext"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldContextResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldContextResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldContextResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldContextResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldContextResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateCustomFieldContextResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2734,33 +2567,25 @@ pub fn @"addIssueTypesToContext"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToContextResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToContextResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToContextResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToContextResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToContextResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToContextResult"{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToContextResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2800,29 +2625,22 @@ pub fn @"removeIssueTypesFromContext"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypesFromContextResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypesFromContextResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypesFromContextResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypesFromContextResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypesFromContextResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypesFromContextResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2862,34 +2680,29 @@ pub fn @"getOptionsForContext"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // optionId; location: query
     // onlyOptions; location: query
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextOption"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanCustomFieldContextOption", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetOptionsForContextResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetOptionsForContextResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetOptionsForContextResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetOptionsForContextResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetOptionsForContextResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetOptionsForContextResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2929,29 +2742,22 @@ pub fn @"reorderCustomFieldOptions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderCustomFieldOptionsResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderCustomFieldOptionsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderCustomFieldOptionsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderCustomFieldOptionsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderCustomFieldOptionsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderCustomFieldOptionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -2993,29 +2799,22 @@ pub fn @"deleteCustomFieldOption"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteCustomFieldOptionResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteCustomFieldOptionResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteCustomFieldOptionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteCustomFieldOptionResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteCustomFieldOptionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteCustomFieldOptionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3055,29 +2854,22 @@ pub fn @"assignProjectsToCustomFieldContext"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignProjectsToCustomFieldContextResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignProjectsToCustomFieldContextResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignProjectsToCustomFieldContextResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignProjectsToCustomFieldContextResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignProjectsToCustomFieldContextResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignProjectsToCustomFieldContextResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3117,29 +2909,22 @@ pub fn @"removeCustomFieldContextFromProjects"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveCustomFieldContextFromProjectsResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveCustomFieldContextFromProjectsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveCustomFieldContextFromProjectsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveCustomFieldContextFromProjectsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveCustomFieldContextFromProjectsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveCustomFieldContextFromProjectsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3172,24 +2957,21 @@ pub fn @"getContextsForFieldDeprecated"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContext"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanContext", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetContextsForFieldDeprecatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetContextsForFieldDeprecatedResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetContextsForFieldDeprecatedResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetContextsForFieldDeprecatedResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3222,25 +3004,22 @@ pub fn @"getScreensForField"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenWithTab"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanScreenWithTab", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetScreensForFieldResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetScreensForFieldResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetScreensForFieldResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetScreensForFieldResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3273,24 +3052,21 @@ pub fn @"getAllIssueFieldOptions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueFieldOption", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllIssueFieldOptionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllIssueFieldOptionsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllIssueFieldOptionsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllIssueFieldOptionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3323,25 +3099,22 @@ pub fn @"getSelectableIssueFieldOptions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueFieldOption", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetSelectableIssueFieldOptionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSelectableIssueFieldOptionsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSelectableIssueFieldOptionsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSelectableIssueFieldOptionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3374,25 +3147,22 @@ pub fn @"getVisibleIssueFieldOptions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueFieldOption", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetVisibleIssueFieldOptionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVisibleIssueFieldOptionsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVisibleIssueFieldOptionsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVisibleIssueFieldOptionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3429,26 +3199,22 @@ pub fn @"getIssueFieldOption"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueFieldOption"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueFieldOption", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueFieldOptionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueFieldOptionResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueFieldOptionResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueFieldOptionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueFieldOptionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3486,30 +3252,26 @@ pub fn @"replaceIssueFieldOption"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // replaceWith; location: query
     // jql; location: query
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanRemoveOptionFromIssuesResult"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"TaskProgressBeanRemoveOptionFromIssuesResult", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"ReplaceIssueFieldOptionResult"{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReplaceIssueFieldOptionResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReplaceIssueFieldOptionResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReplaceIssueFieldOptionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReplaceIssueFieldOptionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3551,39 +3313,43 @@ pub fn @"deleteCustomField"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._404 = result };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteCustomFieldResult"{ ._409 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteCustomFieldResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3620,33 +3386,34 @@ pub fn @"restoreCustomField"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RestoreCustomFieldResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RestoreCustomFieldResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RestoreCustomFieldResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RestoreCustomFieldResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RestoreCustomFieldResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RestoreCustomFieldResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3683,33 +3450,34 @@ pub fn @"trashCustomField"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"TrashCustomFieldResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"TrashCustomFieldResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"TrashCustomFieldResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"TrashCustomFieldResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"TrashCustomFieldResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"TrashCustomFieldResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3739,27 +3507,24 @@ pub fn @"getAllFieldConfigurations"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
     // isDefault; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationDetails"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanFieldConfigurationDetails", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllFieldConfigurationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllFieldConfigurationsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllFieldConfigurationsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllFieldConfigurationsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3795,29 +3560,22 @@ pub fn @"updateFieldConfiguration"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3852,28 +3610,24 @@ pub fn @"getFieldConfigurationItems"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationItem"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanFieldConfigurationItem", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFieldConfigurationItemsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationItemsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationItemsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationItemsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationItemsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3905,29 +3659,25 @@ pub fn @"getAllFieldConfigurationSchemes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanFieldConfigurationScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllFieldConfigurationSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllFieldConfigurationSchemesResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllFieldConfigurationSchemesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllFieldConfigurationSchemesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllFieldConfigurationSchemesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -3961,33 +3711,28 @@ pub fn @"getFieldConfigurationSchemeMappings"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // fieldConfigurationSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationIssueTypeItem"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanFieldConfigurationIssueTypeItem", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFieldConfigurationSchemeMappingsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationSchemeMappingsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationSchemeMappingsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationSchemeMappingsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationSchemeMappingsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationSchemeMappingsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4019,29 +3764,25 @@ pub fn @"getFieldConfigurationSchemeProjectMapping"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationSchemeProjects"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanFieldConfigurationSchemeProjects", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4077,29 +3818,22 @@ pub fn @"updateFieldConfigurationScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateFieldConfigurationSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4136,29 +3870,22 @@ pub fn @"setFieldConfigurationSchemeMapping"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetFieldConfigurationSchemeMappingResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetFieldConfigurationSchemeMappingResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetFieldConfigurationSchemeMappingResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetFieldConfigurationSchemeMappingResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetFieldConfigurationSchemeMappingResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetFieldConfigurationSchemeMappingResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4195,33 +3922,34 @@ pub fn @"removeIssueTypesFromGlobalFieldConfigurationScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4247,14 +3975,11 @@ pub fn @"getFilters"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFiltersResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFiltersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4282,18 +4007,16 @@ pub fn @"getDefaultShareScope"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultShareScope"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"DefaultShareScope", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDefaultShareScopeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultShareScopeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultShareScopeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4321,18 +4044,14 @@ pub fn @"getFavouriteFilters"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFavouriteFiltersResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFavouriteFiltersResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFavouriteFiltersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4360,19 +4079,15 @@ pub fn @"getMyFilters"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     // includeFavourites; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetMyFiltersResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetMyFiltersResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetMyFiltersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4406,7 +4121,6 @@ pub fn @"getFiltersPaginated"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // filterName; location: query
     // accountId; location: query
     // owner; location: query
@@ -4420,21 +4134,21 @@ pub fn @"getFiltersPaginated"(
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFilterDetails"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanFilterDetails", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFiltersPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFiltersPaginatedResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFiltersPaginatedResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFiltersPaginatedResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4466,24 +4180,21 @@ pub fn @"getFilter"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Filter", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFilterResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFilterResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFilterResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFilterResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4518,25 +4229,19 @@ pub fn @"getColumns"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetColumnsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetColumnsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetColumnsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetColumnsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetColumnsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4570,19 +4275,17 @@ pub fn @"setFavouriteForFilter"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Filter", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SetFavouriteForFilterResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetFavouriteForFilterResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetFavouriteForFilterResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4620,25 +4323,19 @@ pub fn @"changeFilterOwner"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ChangeFilterOwnerResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ChangeFilterOwnerResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ChangeFilterOwnerResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ChangeFilterOwnerResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ChangeFilterOwnerResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4674,21 +4371,16 @@ pub fn @"getSharePermissions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharePermissionsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharePermissionsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharePermissionsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharePermissionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4727,22 +4419,19 @@ pub fn @"getSharePermission"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SharePermission"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"SharePermission", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetSharePermissionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharePermissionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharePermissionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSharePermissionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4776,33 +4465,28 @@ pub fn @"getGroup"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // groupname; location: query
     // groupId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Group"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Group", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetGroupResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetGroupResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetGroupResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetGroupResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetGroupResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetGroupResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4834,30 +4518,26 @@ pub fn @"bulkGetGroups"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // groupId; location: query
     // groupName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanGroupDetails"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanGroupDetails", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"BulkGetGroupsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetGroupsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetGroupsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetGroupsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetGroupsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4891,35 +4571,30 @@ pub fn @"getUsersFromGroup"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // groupname; location: query
     // groupId; location: query
     // includeInactiveUsers; location: query
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserDetails"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanUserDetails", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetUsersFromGroupResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUsersFromGroupResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUsersFromGroupResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUsersFromGroupResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUsersFromGroupResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUsersFromGroupResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -4956,32 +4631,27 @@ pub fn @"addUserToGroup"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // groupname; location: query
     // groupId; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Group"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Group", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AddUserToGroupResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddUserToGroupResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddUserToGroupResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddUserToGroupResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddUserToGroupResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddUserToGroupResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5007,7 +4677,6 @@ pub fn @"findGroups"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // accountId; location: query
     // query; location: query
     // exclude; location: query
@@ -5015,12 +4684,12 @@ pub fn @"findGroups"(
     // maxResults; location: query
     // userName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundGroups"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"FoundGroups", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"FindGroupsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindGroupsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5054,7 +4723,6 @@ pub fn @"findUsersAndGroups"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // maxResults; location: query
     // showAvatar; location: query
@@ -5065,28 +4733,24 @@ pub fn @"findUsersAndGroups"(
     // caseInsensitive; location: query
     // excludeConnectAddons; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsersAndGroups"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"FoundUsersAndGroups", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"FindUsersAndGroupsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersAndGroupsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersAndGroupsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersAndGroupsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersAndGroupsResult"{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersAndGroupsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5114,18 +4778,16 @@ pub fn @"getLicense"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"License"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"License", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetLicenseResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetLicenseResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetLicenseResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5165,30 +4827,32 @@ pub fn @"createIssue"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // updateHistory; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssue"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"CreatedIssue", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateIssueResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateIssueResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateIssueResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateIssueResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateIssueResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5234,23 +4898,22 @@ pub fn @"createIssues"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssues"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"CreatedIssues", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateIssuesResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"CreatedIssues"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"CreatedIssues", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateIssuesResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateIssuesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateIssuesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5278,23 +4941,21 @@ pub fn @"getCreateIssueMeta"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // projectIds; location: query
     // projectKeys; location: query
     // issuetypeIds; location: query
     // issuetypeNames; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueCreateMetadata"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueCreateMetadata", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCreateIssueMetaResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCreateIssueMetaResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCreateIssueMetaResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5322,7 +4983,6 @@ pub fn @"getIssuePickerResource"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // currentJQL; location: query
     // currentIssueKey; location: query
@@ -5330,16 +4990,15 @@ pub fn @"getIssuePickerResource"(
     // showSubTasks; location: query
     // showSubTaskParent; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssuePickerSuggestions"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssuePickerSuggestions", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssuePickerResourceResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssuePickerResourceResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssuePickerResourceResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5369,23 +5028,22 @@ pub fn @"bulkSetIssuesPropertiesList"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkSetIssuesPropertiesListResult"{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"BulkSetIssuesPropertiesListResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"BulkSetIssuesPropertiesListResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkSetIssuesPropertiesListResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5417,28 +5075,28 @@ pub fn @"bulkSetIssuePropertiesByIssue"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkSetIssuePropertiesByIssueResult"{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertiesByIssueResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertiesByIssueResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertiesByIssueResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkSetIssuePropertiesByIssueResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5470,23 +5128,22 @@ pub fn @"bulkSetIssueProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkSetIssuePropertyResult"{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertyResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"BulkSetIssuePropertyResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkSetIssuePropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5514,18 +5171,16 @@ pub fn @"getIsWatchingIssueBulk"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkIssueIsWatching"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"BulkIssueIsWatching", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIsWatchingIssueBulkResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIsWatchingIssueBulkResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIsWatchingIssueBulkResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5557,27 +5212,24 @@ pub fn @"getIssue"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // fields; location: query
     // fieldsByKeys; location: query
     // expand; location: query
     // properties; location: query
     // updateHistory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueBean"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueBean", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5616,25 +5268,19 @@ pub fn @"assignIssue"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignIssueResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignIssueResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignIssueResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignIssueResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AssignIssueResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5672,25 +5318,19 @@ pub fn @"addAttachment"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddAttachmentResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddAttachmentResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddAttachmentResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "413", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddAttachmentResult"{ ._413 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddAttachmentResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5721,20 +5361,18 @@ pub fn @"getChangeLogs"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanChangelog"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanChangelog", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetChangeLogsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetChangeLogsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetChangeLogsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5767,22 +5405,19 @@ pub fn @"getChangeLogsByIds"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfChangelogs"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageOfChangelogs", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetChangeLogsByIdsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetChangeLogsByIdsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetChangeLogsByIdsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetChangeLogsByIdsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5817,30 +5452,26 @@ pub fn @"getComments"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfComments"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageOfComments", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCommentsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5875,23 +5506,20 @@ pub fn @"getComment"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Comment"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Comment", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCommentResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCommentResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5926,28 +5554,24 @@ pub fn @"getEditIssueMeta"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueUpdateMetadata"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueUpdateMetadata", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetEditIssueMetaResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetEditIssueMetaResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetEditIssueMetaResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetEditIssueMetaResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetEditIssueMetaResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -5989,25 +5613,19 @@ pub fn @"notify"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"NotifyResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"NotifyResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"NotifyResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"NotifyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"NotifyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6038,18 +5656,16 @@ pub fn @"getIssuePropertyKeys"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssuePropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssuePropertyKeysResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssuePropertyKeysResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6084,22 +5700,19 @@ pub fn @"getIssueProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssuePropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssuePropertyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssuePropertyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssuePropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6136,31 +5749,26 @@ pub fn @"getRemoteIssueLinks"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // globalId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"RemoteIssueLink", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetRemoteIssueLinksResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinksResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinksResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinksResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinksResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinksResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6199,30 +5807,25 @@ pub fn @"getRemoteIssueLinkById"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"RemoteIssueLink", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetRemoteIssueLinkByIdResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinkByIdResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinkByIdResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinkByIdResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinkByIdResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRemoteIssueLinkByIdResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6255,27 +5858,24 @@ pub fn @"getTransitions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     // transitionId; location: query
     // skipRemoteOnlyCondition; location: query
     // includeUnavailableTransitions; location: query
     // sortByOpsBarAndStatus; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Transitions"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Transitions", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetTransitionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetTransitionsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetTransitionsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetTransitionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6312,22 +5912,19 @@ pub fn @"getVotes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Votes"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Votes", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetVotesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVotesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVotesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVotesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6360,22 +5957,19 @@ pub fn @"getIssueWatchers"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Watchers"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Watchers", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueWatchersResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueWatchersResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueWatchersResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueWatchersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6412,27 +6006,24 @@ pub fn @"getIssueWorklog"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // startedAfter; location: query
     // startedBefore; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfWorklogs"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageOfWorklogs", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueWorklogResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueWorklogResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueWorklogResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueWorklogResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6473,23 +6064,20 @@ pub fn @"getWorklog"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Worklog"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Worklog", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorklogResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6530,26 +6118,22 @@ pub fn @"getWorklogPropertyKeys"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorklogPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogPropertyKeysResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogPropertyKeysResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogPropertyKeysResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogPropertyKeysResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6592,26 +6176,22 @@ pub fn @"getWorklogProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorklogPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogPropertyResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogPropertyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogPropertyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogPropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6649,25 +6229,19 @@ pub fn @"linkIssues"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "201", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"LinkIssuesResult"{ ._201 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"LinkIssuesResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"LinkIssuesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"LinkIssuesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"LinkIssuesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6705,26 +6279,22 @@ pub fn @"getIssueLink"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLink"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueLink", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueLinkResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6754,22 +6324,19 @@ pub fn @"getIssueLinkTypes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkTypes"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueLinkTypes", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueLinkTypesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkTypesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkTypesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkTypesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6807,26 +6374,22 @@ pub fn @"getIssueLinkType"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkType"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueLinkType", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueLinkTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkTypeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkTypeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkTypeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueLinkTypeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6856,22 +6419,19 @@ pub fn @"getIssueSecuritySchemes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecuritySchemes"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"SecuritySchemes", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueSecuritySchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecuritySchemesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecuritySchemesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecuritySchemesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6903,22 +6463,19 @@ pub fn @"getIssueSecurityScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"SecurityScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueSecuritySchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecuritySchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecuritySchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecuritySchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -6955,34 +6512,29 @@ pub fn @"getIssueSecurityLevelMembers"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // issueSecurityLevelId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueSecurityLevelMember"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueSecurityLevelMember", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueSecurityLevelMembersResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecurityLevelMembersResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecurityLevelMembersResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecurityLevelMembersResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecurityLevelMembersResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecurityLevelMembersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7010,17 +6562,13 @@ pub fn @"getIssueAllTypes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueAllTypesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueAllTypesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueAllTypesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7055,27 +6603,21 @@ pub fn @"getIssueTypesForProject"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // projectId; location: query
     // level; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypesForProjectResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypesForProjectResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypesForProjectResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypesForProjectResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypesForProjectResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7112,26 +6654,22 @@ pub fn @"getIssueType"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeDetails"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueTypeDetails", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7167,21 +6705,16 @@ pub fn @"getAlternativeIssueTypes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAlternativeIssueTypesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAlternativeIssueTypesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAlternativeIssueTypesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAlternativeIssueTypesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7224,33 +6757,28 @@ pub fn @"createIssueTypeAvatar"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // x; location: query
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Avatar", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateIssueTypeAvatarResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateIssueTypeAvatarResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateIssueTypeAvatarResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateIssueTypeAvatarResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateIssueTypeAvatarResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateIssueTypeAvatarResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7286,22 +6814,19 @@ pub fn @"getIssueTypePropertyKeys"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueTypePropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypePropertyKeysResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypePropertyKeysResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypePropertyKeysResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7338,26 +6863,22 @@ pub fn @"getIssueTypeProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueTypePropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypePropertyResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypePropertyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypePropertyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypePropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7389,7 +6910,6 @@ pub fn @"getAllIssueTypeSchemes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -7397,24 +6917,21 @@ pub fn @"getAllIssueTypeSchemes"(
     // expand; location: query
     // queryString; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueTypeScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllIssueTypeSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllIssueTypeSchemesResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllIssueTypeSchemesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllIssueTypeSchemesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllIssueTypeSchemesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7446,29 +6963,25 @@ pub fn @"getIssueTypeSchemesMapping"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // issueTypeSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeMapping"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueTypeSchemeMapping", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueTypeSchemesMappingResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeSchemesMappingResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeSchemesMappingResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeSchemesMappingResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeSchemesMappingResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7500,29 +7013,25 @@ pub fn @"getIssueTypeSchemeForProjects"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeProjects"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueTypeSchemeProjects", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueTypeSchemeForProjectsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeSchemeForProjectsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeSchemeForProjectsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeSchemeForProjectsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeSchemeForProjectsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7558,29 +7067,22 @@ pub fn @"updateIssueTypeScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7617,29 +7119,22 @@ pub fn @"addIssueTypesToIssueTypeScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToIssueTypeSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToIssueTypeSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToIssueTypeSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToIssueTypeSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToIssueTypeSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddIssueTypesToIssueTypeSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7676,29 +7171,22 @@ pub fn @"reorderIssueTypesInIssueTypeScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7737,29 +7225,22 @@ pub fn @"removeIssueTypeFromIssueTypeScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7791,7 +7272,6 @@ pub fn @"getIssueTypeScreenSchemes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -7799,24 +7279,21 @@ pub fn @"getIssueTypeScreenSchemes"(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueTypeScreenScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueTypeScreenSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemesResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7848,29 +7325,25 @@ pub fn @"getIssueTypeScreenSchemeMappings"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // issueTypeScreenSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemeItem"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueTypeScreenSchemeItem", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueTypeScreenSchemeMappingsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemeMappingsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemeMappingsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemeMappingsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemeMappingsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7902,29 +7375,25 @@ pub fn @"getIssueTypeScreenSchemeProjectAssociations"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemesProjects"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanIssueTypeScreenSchemesProjects", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -7960,29 +7429,22 @@ pub fn @"updateIssueTypeScreenScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeScreenSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeScreenSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeScreenSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeScreenSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeScreenSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateIssueTypeScreenSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8021,33 +7483,25 @@ pub fn @"appendMappingsForIssueTypeScreenScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8084,29 +7538,22 @@ pub fn @"updateDefaultScreenScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateDefaultScreenSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateDefaultScreenSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateDefaultScreenSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateDefaultScreenSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateDefaultScreenSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateDefaultScreenSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8143,29 +7590,22 @@ pub fn @"removeMappingsFromIssueTypeScreenScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8200,29 +7640,25 @@ pub fn @"getProjectsForIssueTypeScreenScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProjectDetails"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanProjectDetails", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8250,18 +7686,16 @@ pub fn @"getAutoComplete"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JQLReferenceData"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"JQLReferenceData", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAutoCompleteResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAutoCompleteResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAutoCompleteResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8291,26 +7725,23 @@ pub fn @"getFieldAutoCompleteForQueryString"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // fieldName; location: query
     // fieldValue; location: query
     // predicateName; location: query
     // predicateValue; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AutoCompleteSuggestions"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"AutoCompleteSuggestions", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFieldAutoCompleteForQueryStringResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldAutoCompleteForQueryStringResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldAutoCompleteForQueryStringResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFieldAutoCompleteForQueryStringResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8338,18 +7769,16 @@ pub fn @"matchIssues"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueMatches"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueMatches", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"MatchIssuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MatchIssuesResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MatchIssuesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8379,24 +7808,23 @@ pub fn @"parseJqlQueries"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // validation; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ParsedJqlQueries"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ParsedJqlQueries", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"ParseJqlQueriesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"ParseJqlQueriesResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ParseJqlQueriesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ParseJqlQueriesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8426,22 +7854,19 @@ pub fn @"migrateQueries"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConvertedJQLQueries"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ConvertedJQLQueries", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"MigrateQueriesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrateQueriesResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrateQueriesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrateQueriesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8473,29 +7898,31 @@ pub fn @"sanitiseJqlQueries"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SanitizedJqlQueries"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"SanitizedJqlQueries", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SanitiseJqlQueriesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SanitiseJqlQueriesResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SanitiseJqlQueriesResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SanitiseJqlQueriesResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SanitiseJqlQueriesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8521,16 +7948,15 @@ pub fn @"getAllLabels"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanString"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanString", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllLabelsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllLabelsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8562,7 +7988,6 @@ pub fn @"getMyPermissions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // projectKey; location: query
     // projectId; location: query
     // issueKey; location: query
@@ -8572,27 +7997,30 @@ pub fn @"getMyPermissions"(
     // projectConfigurationUuid; location: query
     // commentId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Permissions", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetMyPermissionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetMyPermissionsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetMyPermissionsResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetMyPermissionsResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetMyPermissionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8622,22 +8050,17 @@ pub fn @"getPreference"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPreferenceResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPreferenceResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPreferenceResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPreferenceResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8665,18 +8088,16 @@ pub fn @"getLocale"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Locale"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Locale", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetLocaleResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetLocaleResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetLocaleResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8704,19 +8125,17 @@ pub fn @"getCurrentUser"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"User", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetCurrentUserResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCurrentUserResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetCurrentUserResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8744,21 +8163,19 @@ pub fn @"getNotificationSchemes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanNotificationScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanNotificationScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetNotificationSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8792,27 +8209,23 @@ pub fn @"getNotificationScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"NotificationScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetNotificationSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8842,22 +8255,19 @@ pub fn @"getAllPermissions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Permissions", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllPermissionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllPermissionsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllPermissionsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllPermissionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8893,24 +8303,25 @@ pub fn @"getBulkPermissions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkPermissionGrants"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"BulkPermissionGrants", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetBulkPermissionsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetBulkPermissionsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetBulkPermissionsResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetBulkPermissionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8940,22 +8351,19 @@ pub fn @"getPermittedProjects"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermittedProjects"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PermittedProjects", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetPermittedProjectsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermittedProjectsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermittedProjectsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermittedProjectsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -8983,19 +8391,17 @@ pub fn @"getAllPermissionSchemes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionSchemes"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PermissionSchemes", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllPermissionSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllPermissionSchemesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllPermissionSchemesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9027,23 +8433,20 @@ pub fn @"getPermissionScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PermissionScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetPermissionSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermissionSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermissionSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermissionSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9076,23 +8479,20 @@ pub fn @"getPermissionSchemeGrants"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrants"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PermissionGrants", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetPermissionSchemeGrantsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermissionSchemeGrantsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermissionSchemeGrantsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermissionSchemeGrantsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9127,23 +8527,20 @@ pub fn @"getPermissionSchemeGrant"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrant"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PermissionGrant", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetPermissionSchemeGrantResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermissionSchemeGrantResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermissionSchemeGrantResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPermissionSchemeGrantResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9171,17 +8568,13 @@ pub fn @"getPriorities"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPrioritiesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPrioritiesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPrioritiesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9215,33 +8608,34 @@ pub fn @"setDefaultPriority"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetDefaultPriorityResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SetDefaultPriorityResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SetDefaultPriorityResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SetDefaultPriorityResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SetDefaultPriorityResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SetDefaultPriorityResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9269,23 +8663,23 @@ pub fn @"searchPriorities"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
     // onlyDefault; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanPriority"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanPriority", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SearchPrioritiesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SearchPrioritiesResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchPrioritiesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9317,22 +8711,19 @@ pub fn @"getPriority"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Priority"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Priority", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetPriorityResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPriorityResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPriorityResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetPriorityResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9360,20 +8751,16 @@ pub fn @"getAllProjects"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     // recent; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9403,23 +8790,18 @@ pub fn @"getRecent"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRecentResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRecentResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRecentResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetRecentResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9451,7 +8833,6 @@ pub fn @"searchProjects"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // orderBy; location: query
@@ -9466,24 +8847,21 @@ pub fn @"searchProjects"(
     // properties; location: query
     // propertyQuery; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProject"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanProject", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SearchProjectsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchProjectsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchProjectsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchProjectsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchProjectsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9511,17 +8889,13 @@ pub fn @"getAllProjectTypes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectTypesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectTypesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectTypesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9547,13 +8921,10 @@ pub fn @"getAllAccessibleProjectTypes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllAccessibleProjectTypesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllAccessibleProjectTypesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9585,22 +8956,19 @@ pub fn @"getProjectTypeByKey"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectType", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectTypeByKeyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectTypeByKeyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectTypeByKeyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectTypeByKeyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9633,22 +9001,19 @@ pub fn @"getAccessibleProjectTypeByKey"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectType", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAccessibleProjectTypeByKeyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAccessibleProjectTypeByKeyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAccessibleProjectTypeByKeyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAccessibleProjectTypeByKeyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9680,24 +9045,21 @@ pub fn @"getProject"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Project", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9734,29 +9096,22 @@ pub fn @"archiveProject"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ArchiveProjectResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ArchiveProjectResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ArchiveProjectResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ArchiveProjectResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ArchiveProjectResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ArchiveProjectResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9791,25 +9146,19 @@ pub fn @"updateProjectAvatar"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateProjectAvatarResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateProjectAvatarResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateProjectAvatarResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateProjectAvatarResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateProjectAvatarResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9846,25 +9195,19 @@ pub fn @"deleteProjectAvatar"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteProjectAvatarResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteProjectAvatarResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteProjectAvatarResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteProjectAvatarResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteProjectAvatarResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9905,33 +9248,28 @@ pub fn @"createProjectAvatar"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // x; location: query
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Avatar", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateProjectAvatarResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateProjectAvatarResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateProjectAvatarResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateProjectAvatarResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateProjectAvatarResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateProjectAvatarResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -9964,22 +9302,19 @@ pub fn @"getAllProjectAvatars"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectAvatars"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectAvatars", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllProjectAvatarsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectAvatarsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectAvatarsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectAvatarsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10012,26 +9347,23 @@ pub fn @"getProjectComponentsPaginated"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // orderBy; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComponentWithIssueCount"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanComponentWithIssueCount", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectComponentsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectComponentsPaginatedResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectComponentsPaginatedResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectComponentsPaginatedResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10064,21 +9396,16 @@ pub fn @"getProjectComponents"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectComponentsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectComponentsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectComponentsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectComponentsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10113,26 +9440,22 @@ pub fn @"deleteProjectAsynchronously"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteProjectAsynchronouslyResult"{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteProjectAsynchronouslyResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteProjectAsynchronouslyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteProjectAsynchronouslyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteProjectAsynchronouslyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10169,30 +9492,25 @@ pub fn @"getFeaturesForProject"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ContainerForProjectFeatures", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFeaturesForProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFeaturesForProjectResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFeaturesForProjectResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFeaturesForProjectResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFeaturesForProjectResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFeaturesForProjectResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10231,30 +9549,25 @@ pub fn @"toggleFeatureForProject"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ContainerForProjectFeatures", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"ToggleFeatureForProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ToggleFeatureForProjectResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ToggleFeatureForProjectResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ToggleFeatureForProjectResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ToggleFeatureForProjectResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ToggleFeatureForProjectResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10291,30 +9604,25 @@ pub fn @"getProjectPropertyKeys"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyKeysResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyKeysResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyKeysResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyKeysResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyKeysResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10353,30 +9661,25 @@ pub fn @"getProjectProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectPropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10411,26 +9714,22 @@ pub fn @"restore"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Project", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RestoreResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RestoreResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RestoreResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RestoreResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RestoreResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10463,21 +9762,16 @@ pub fn @"getProjectRoles"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRolesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRolesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRolesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRolesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10517,27 +9811,23 @@ pub fn @"getProjectRole"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // excludeInactiveUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectRole", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectRoleResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10570,23 +9860,18 @@ pub fn @"getProjectRoleDetails"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // currentMember; location: query
     // excludeConnectAddons; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleDetailsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleDetailsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleDetailsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleDetailsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10619,21 +9904,16 @@ pub fn @"getAllStatuses"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllStatusesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllStatusesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllStatusesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllStatusesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10670,26 +9950,22 @@ pub fn @"updateProjectType"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Project", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"UpdateProjectTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateProjectTypeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateProjectTypeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateProjectTypeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateProjectTypeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10720,7 +9996,6 @@ pub fn @"getProjectVersionsPaginated"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // orderBy; location: query
@@ -10728,16 +10003,15 @@ pub fn @"getProjectVersionsPaginated"(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanVersion"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanVersion", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectVersionsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectVersionsPaginatedResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectVersionsPaginatedResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10768,18 +10042,14 @@ pub fn @"getProjectVersions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectVersionsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectVersionsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectVersionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10814,26 +10084,22 @@ pub fn @"getProjectEmail"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectEmailAddress"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectEmailAddress", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectEmailResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectEmailResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectEmailResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectEmailResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectEmailResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10868,26 +10134,22 @@ pub fn @"getHierarchy"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueTypeHierarchy"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectIssueTypeHierarchy", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetHierarchyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetHierarchyResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetHierarchyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetHierarchyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetHierarchyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10924,30 +10186,25 @@ pub fn @"getProjectIssueSecurityScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"SecurityScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectIssueSecuritySchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectIssueSecuritySchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectIssueSecuritySchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectIssueSecuritySchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectIssueSecuritySchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectIssueSecuritySchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -10982,27 +10239,23 @@ pub fn @"getNotificationSchemeForProject"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"NotificationScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetNotificationSchemeForProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemeForProjectResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemeForProjectResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemeForProjectResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetNotificationSchemeForProjectResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11037,27 +10290,23 @@ pub fn @"getAssignedPermissionScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PermissionScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAssignedPermissionSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAssignedPermissionSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAssignedPermissionSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAssignedPermissionSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAssignedPermissionSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11088,18 +10337,16 @@ pub fn @"getSecurityLevelsForProject"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueSecurityLevels"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectIssueSecurityLevels", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetSecurityLevelsForProjectResult"{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSecurityLevelsForProjectResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetSecurityLevelsForProjectResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11127,17 +10374,13 @@ pub fn @"getAllProjectCategories"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectCategoriesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectCategoriesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectCategoriesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11169,22 +10412,19 @@ pub fn @"getProjectCategoryById"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectCategory"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectCategory", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectCategoryByIdResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectCategoryByIdResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectCategoryByIdResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectCategoryByIdResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11212,19 +10452,17 @@ pub fn @"validateProjectKey"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"ValidateProjectKeyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ValidateProjectKeyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"ValidateProjectKeyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11252,18 +10490,14 @@ pub fn @"getValidProjectKey"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetValidProjectKeyResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetValidProjectKeyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetValidProjectKeyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11295,26 +10529,20 @@ pub fn @"getValidProjectName"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // name; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetValidProjectNameResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetValidProjectNameResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetValidProjectNameResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetValidProjectNameResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetValidProjectNameResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11342,17 +10570,13 @@ pub fn @"getResolutions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetResolutionsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetResolutionsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetResolutionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11384,22 +10608,19 @@ pub fn @"getResolution"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Resolution"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Resolution", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetResolutionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetResolutionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetResolutionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetResolutionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11429,21 +10650,16 @@ pub fn @"getAllProjectRoles"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectRolesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectRolesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectRolesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllProjectRolesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11477,26 +10693,22 @@ pub fn @"getProjectRoleById"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectRole", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectRoleByIdResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleByIdResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleByIdResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleByIdResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleByIdResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11533,30 +10745,25 @@ pub fn @"getProjectRoleActorsForRole"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ProjectRole", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetProjectRoleActorsForRoleResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleActorsForRoleResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleActorsForRoleResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleActorsForRoleResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleActorsForRoleResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetProjectRoleActorsForRoleResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11586,7 +10793,6 @@ pub fn @"getScreens"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -11594,20 +10800,18 @@ pub fn @"getScreens"(
     // scope; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreen"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanScreen", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetScreensResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetScreensResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetScreensResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetScreensResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11641,25 +10845,19 @@ pub fn @"addFieldToDefaultScreen"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddFieldToDefaultScreenResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddFieldToDefaultScreenResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddFieldToDefaultScreenResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddFieldToDefaultScreenResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddFieldToDefaultScreenResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11695,30 +10893,25 @@ pub fn @"updateScreen"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Screen"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Screen", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"UpdateScreenResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11753,25 +10946,19 @@ pub fn @"getAvailableScreenFields"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvailableScreenFieldsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvailableScreenFieldsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvailableScreenFieldsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvailableScreenFieldsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvailableScreenFieldsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11808,30 +10995,23 @@ pub fn @"getAllScreenTabs"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // projectKey; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11870,30 +11050,25 @@ pub fn @"renameScreenTab"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ScreenableTab"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ScreenableTab", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RenameScreenTabResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RenameScreenTabResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RenameScreenTabResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RenameScreenTabResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RenameScreenTabResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RenameScreenTabResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11931,26 +11106,20 @@ pub fn @"getAllScreenTabFields"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // projectKey; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabFieldsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabFieldsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabFieldsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabFieldsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllScreenTabFieldsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -11992,29 +11161,22 @@ pub fn @"removeScreenTabField"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveScreenTabFieldResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveScreenTabFieldResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveScreenTabFieldResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveScreenTabFieldResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveScreenTabFieldResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RemoveScreenTabFieldResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12057,29 +11219,22 @@ pub fn @"moveScreenTabField"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabFieldResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabFieldResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabFieldResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabFieldResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabFieldResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabFieldResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12121,29 +11276,22 @@ pub fn @"moveScreenTab"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveScreenTabResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12173,7 +11321,6 @@ pub fn @"getScreenSchemes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -12181,20 +11328,18 @@ pub fn @"getScreenSchemes"(
     // queryString; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanScreenScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetScreenSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetScreenSchemesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetScreenSchemesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetScreenSchemesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12230,29 +11375,22 @@ pub fn @"updateScreenScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateScreenSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12282,7 +11420,6 @@ pub fn @"searchForIssuesUsingJql"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // jql; location: query
     // startAt; location: query
     // maxResults; location: query
@@ -12292,20 +11429,18 @@ pub fn @"searchForIssuesUsingJql"(
     // properties; location: query
     // fieldsByKeys; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SearchResults"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"SearchResults", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SearchForIssuesUsingJqlResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchForIssuesUsingJqlResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchForIssuesUsingJqlResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchForIssuesUsingJqlResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12337,22 +11472,19 @@ pub fn @"getIssueSecurityLevel"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityLevel"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"SecurityLevel", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIssueSecurityLevelResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecurityLevelResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecurityLevelResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueSecurityLevelResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12380,18 +11512,16 @@ pub fn @"getServerInfo"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ServerInformation"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ServerInformation", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetServerInfoResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetServerInfoResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetServerInfoResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12421,21 +11551,16 @@ pub fn @"getIssueNavigatorDefaultColumns"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueNavigatorDefaultColumnsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueNavigatorDefaultColumnsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueNavigatorDefaultColumnsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIssueNavigatorDefaultColumnsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12463,17 +11588,13 @@ pub fn @"getStatuses"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12509,22 +11630,19 @@ pub fn @"getStatus"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusDetails"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"StatusDetails", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetStatusResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12552,17 +11670,13 @@ pub fn @"getStatusCategories"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusCategoriesResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusCategoriesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusCategoriesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12594,22 +11708,19 @@ pub fn @"getStatusCategory"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusCategory"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"StatusCategory", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetStatusCategoryResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusCategoryResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusCategoryResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusCategoryResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12639,23 +11750,18 @@ pub fn @"getStatusesById"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     // id; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusesByIdResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusesByIdResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusesByIdResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetStatusesByIdResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12685,7 +11791,6 @@ pub fn @"search"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     // projectId; location: query
     // startAt; location: query
@@ -12693,20 +11798,18 @@ pub fn @"search"(
     // searchString; location: query
     // statusCategory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfStatuses"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageOfStatuses", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"SearchResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"SearchResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12740,26 +11843,22 @@ pub fn @"getTask"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TaskProgressBeanObject"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetTaskResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetTaskResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetTaskResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetTaskResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetTaskResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12796,29 +11895,22 @@ pub fn @"cancelTask"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "202", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CancelTaskResult"{ ._202 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CancelTaskResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CancelTaskResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CancelTaskResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CancelTaskResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CancelTaskResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12850,29 +11942,25 @@ pub fn @"getUiModifications"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUiModificationDetails"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanUiModificationDetails", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetUiModificationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUiModificationsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUiModificationsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUiModificationsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUiModificationsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12908,29 +11996,22 @@ pub fn @"updateUiModification"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateUiModificationResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateUiModificationResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateUiModificationResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateUiModificationResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateUiModificationResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"UpdateUiModificationResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -12965,22 +12046,19 @@ pub fn @"getAvatars"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Avatars"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Avatars", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvatarsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvatarsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvatarsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13020,25 +12098,19 @@ pub fn @"deleteAvatar"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAvatarResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAvatarResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAvatarResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAvatarResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAvatarResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13072,30 +12144,30 @@ pub fn @"getAvatarImageByType"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // size; location: query
     // format; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvatarImageByTypeResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByTypeResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByTypeResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByTypeResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvatarImageByTypeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13134,35 +12206,36 @@ pub fn @"getAvatarImageByID"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // size; location: query
     // format; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvatarImageByIDResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByIDResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByIDResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByIDResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByIDResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvatarImageByIDResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13201,35 +12274,36 @@ pub fn @"getAvatarImageByOwner"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // size; location: query
     // format; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvatarImageByOwnerResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByOwnerResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByOwnerResult"{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByOwnerResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAvatarImageByOwnerResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAvatarImageByOwnerResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13261,30 +12335,26 @@ pub fn @"getUser"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // accountId; location: query
     // username; location: query
     // key; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"User", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetUserResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13322,7 +12392,6 @@ pub fn @"findBulkAssignableUsers"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // username; location: query
     // accountId; location: query
@@ -13330,27 +12399,21 @@ pub fn @"findBulkAssignableUsers"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindBulkAssignableUsersResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindBulkAssignableUsersResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindBulkAssignableUsersResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindBulkAssignableUsersResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindBulkAssignableUsersResult"{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindBulkAssignableUsersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13388,7 +12451,6 @@ pub fn @"findAssignableUsers"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // sessionId; location: query
     // username; location: query
@@ -13400,27 +12462,21 @@ pub fn @"findAssignableUsers"(
     // actionDescriptorId; location: query
     // recommend; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindAssignableUsersResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindAssignableUsersResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindAssignableUsersResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindAssignableUsersResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindAssignableUsersResult"{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindAssignableUsersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13450,27 +12506,24 @@ pub fn @"bulkGetUsers"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // username; location: query
     // key; location: query
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanUser", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"BulkGetUsersResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetUsersResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetUsersResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetUsersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13500,25 +12553,20 @@ pub fn @"bulkGetUsersMigration"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // username; location: query
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetUsersMigrationResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetUsersMigrationResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetUsersMigrationResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"BulkGetUsersMigrationResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13550,27 +12598,21 @@ pub fn @"getUserDefaultColumns"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // accountId; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserDefaultColumnsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserDefaultColumnsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserDefaultColumnsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserDefaultColumnsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserDefaultColumnsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13604,31 +12646,26 @@ pub fn @"getUserEmail"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"UnrestrictedUserEmail", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetUserEmailResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserEmailResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserEmailResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserEmailResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "503", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserEmailResult"{ ._503 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserEmailResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13660,27 +12697,23 @@ pub fn @"getUserEmailBulk"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"UnrestrictedUserEmail", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetUserEmailBulkResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserEmailBulkResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserEmailBulkResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "503", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserEmailBulkResult"{ ._503 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserEmailBulkResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13712,28 +12745,22 @@ pub fn @"getUserGroups"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // accountId; location: query
     // username; location: query
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserGroupsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserGroupsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserGroupsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserGroupsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserGroupsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13774,7 +12801,6 @@ pub fn @"findUsersWithAllPermissions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // username; location: query
     // accountId; location: query
@@ -13784,31 +12810,24 @@ pub fn @"findUsersWithAllPermissions"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithAllPermissionsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithAllPermissionsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithAllPermissionsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithAllPermissionsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithAllPermissionsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithAllPermissionsResult"{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithAllPermissionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13840,7 +12859,6 @@ pub fn @"findUsersForPicker"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // maxResults; location: query
     // showAvatar; location: query
@@ -13849,24 +12867,21 @@ pub fn @"findUsersForPicker"(
     // avatarSize; location: query
     // excludeConnectUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsers"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"FoundUsers", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"FindUsersForPickerResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersForPickerResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersForPickerResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersForPickerResult"{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersForPickerResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13900,33 +12915,28 @@ pub fn @"getUserPropertyKeys"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // accountId; location: query
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetUserPropertyKeysResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyKeysResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyKeysResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyKeysResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyKeysResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyKeysResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -13962,33 +12972,28 @@ pub fn @"getUserProperty"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // accountId; location: query
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetUserPropertyResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetUserPropertyResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14024,7 +13029,6 @@ pub fn @"findUsers"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // username; location: query
     // accountId; location: query
@@ -14032,23 +13036,18 @@ pub fn @"findUsers"(
     // maxResults; location: query
     // property; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersResult"{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14082,33 +13081,28 @@ pub fn @"findUsersByQuery"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanUser", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"FindUsersByQueryResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersByQueryResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersByQueryResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersByQueryResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "408", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersByQueryResult"{ ._408 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersByQueryResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14142,33 +13136,28 @@ pub fn @"findUserKeysByQuery"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserKey"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanUserKey", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"FindUserKeysByQueryResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUserKeysByQueryResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUserKeysByQueryResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUserKeysByQueryResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "408", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUserKeysByQueryResult"{ ._408 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUserKeysByQueryResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14206,7 +13195,6 @@ pub fn @"findUsersWithBrowsePermission"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // query; location: query
     // username; location: query
     // accountId; location: query
@@ -14215,27 +13203,21 @@ pub fn @"findUsersWithBrowsePermission"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithBrowsePermissionResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithBrowsePermissionResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithBrowsePermissionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithBrowsePermissionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithBrowsePermissionResult"{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"FindUsersWithBrowsePermissionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14267,27 +13249,21 @@ pub fn @"getAllUsersDefault"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersDefaultResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersDefaultResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersDefaultResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersDefaultResult"{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersDefaultResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14319,27 +13295,21 @@ pub fn @"getAllUsers"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersResult"{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllUsersResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14374,26 +13344,22 @@ pub fn @"createVersion"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Version"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Version", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateVersionResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateVersionResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateVersionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateVersionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateVersionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14425,23 +13391,20 @@ pub fn @"getVersion"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Version", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetVersionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVersionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVersionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVersionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14481,25 +13444,19 @@ pub fn @"mergeVersions"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MergeVersionsResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MergeVersionsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MergeVersionsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MergeVersionsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MergeVersionsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14541,26 +13498,22 @@ pub fn @"moveVersion"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"Version", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"MoveVersionResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveVersionResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveVersionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveVersionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MoveVersionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14596,22 +13549,19 @@ pub fn @"getVersionRelatedIssues"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionIssueCounts"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"VersionIssueCounts", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetVersionRelatedIssuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVersionRelatedIssuesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVersionRelatedIssuesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVersionRelatedIssuesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14649,25 +13599,19 @@ pub fn @"deleteAndReplaceVersion"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAndReplaceVersionResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAndReplaceVersionResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAndReplaceVersionResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAndReplaceVersionResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteAndReplaceVersionResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14703,22 +13647,19 @@ pub fn @"getVersionUnresolvedIssues"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionUnresolvedIssuesCount"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"VersionUnresolvedIssuesCount", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetVersionUnresolvedIssuesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVersionUnresolvedIssuesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVersionUnresolvedIssuesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetVersionUnresolvedIssuesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14748,26 +13689,27 @@ pub fn @"getDynamicWebhooksForApp"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWebhook"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanWebhook", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDynamicWebhooksForAppResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDynamicWebhooksForAppResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDynamicWebhooksForAppResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDynamicWebhooksForAppResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14797,26 +13739,27 @@ pub fn @"getFailedWebhooks"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // maxResults; location: query
     // after; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FailedWebhooks"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"FailedWebhooks", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFailedWebhooksResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFailedWebhooksResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetFailedWebhooksResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetFailedWebhooksResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14846,24 +13789,25 @@ pub fn @"refreshWebhooks"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WebhooksExpirationDate"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"WebhooksExpirationDate", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RefreshWebhooksResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RefreshWebhooksResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"RefreshWebhooksResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"RefreshWebhooksResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14891,18 +13835,14 @@ pub fn @"getAllWorkflows"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllWorkflowsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllWorkflowsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllWorkflowsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14934,7 +13874,6 @@ pub fn @"getWorkflowTransitionRuleConfigurations"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // types; location: query
@@ -14944,26 +13883,27 @@ pub fn @"getWorkflowTransitionRuleConfigurations"(
     // draft; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowTransitionRules"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanWorkflowTransitionRules", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -14993,24 +13933,25 @@ pub fn @"deleteWorkflowTransitionRuleConfigurations"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionRulesUpdateErrors"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"WorkflowTransitionRulesUpdateErrors", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15040,7 +13981,6 @@ pub fn @"getWorkflowsPaginated"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     // workflowName; location: query
@@ -15049,21 +13989,21 @@ pub fn @"getWorkflowsPaginated"(
     // orderBy; location: query
     // isActive; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflow"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanWorkflow", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowsPaginatedResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowsPaginatedResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowsPaginatedResult"{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowsPaginatedResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15100,34 +14040,29 @@ pub fn @"getWorkflowTransitionProperties"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // includeReservedKeys; location: query
     // key; location: query
     // workflowName; location: query
     // workflowMode; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"WorkflowTransitionProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowTransitionPropertiesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowTransitionPropertiesResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowTransitionPropertiesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowTransitionPropertiesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowTransitionPropertiesResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowTransitionPropertiesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15163,29 +14098,22 @@ pub fn @"deleteInactiveWorkflow"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteInactiveWorkflowResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteInactiveWorkflowResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteInactiveWorkflowResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteInactiveWorkflowResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteInactiveWorkflowResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DeleteInactiveWorkflowResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15215,24 +14143,21 @@ pub fn @"getAllWorkflowSchemes"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PageBeanWorkflowScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetAllWorkflowSchemesResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllWorkflowSchemesResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllWorkflowSchemesResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetAllWorkflowSchemesResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15264,27 +14189,23 @@ pub fn @"getWorkflowSchemeProjectAssociations"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerOfWorkflowSchemeAssociations"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ContainerOfWorkflowSchemeAssociations", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeProjectAssociationsResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeProjectAssociationsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeProjectAssociationsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeProjectAssociationsResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeProjectAssociationsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15318,27 +14239,23 @@ pub fn @"getWorkflowScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"WorkflowScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15373,26 +14290,22 @@ pub fn @"createWorkflowSchemeDraftFromParent"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"WorkflowScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"WorkflowScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"CreateWorkflowSchemeDraftFromParentResult"{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateWorkflowSchemeDraftFromParentResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateWorkflowSchemeDraftFromParentResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateWorkflowSchemeDraftFromParentResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"CreateWorkflowSchemeDraftFromParentResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15427,27 +14340,23 @@ pub fn @"getDefaultWorkflow"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"DefaultWorkflow", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDefaultWorkflowResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultWorkflowResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultWorkflowResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultWorkflowResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDefaultWorkflowResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15485,26 +14394,22 @@ pub fn @"getWorkflowSchemeDraft"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"WorkflowScheme", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeDraftResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeDraftResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeDraftResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeDraftResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeDraftResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15542,26 +14447,22 @@ pub fn @"getDraftDefaultWorkflow"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"DefaultWorkflow", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDraftDefaultWorkflowResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDraftDefaultWorkflowResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDraftDefaultWorkflowResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDraftDefaultWorkflowResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDraftDefaultWorkflowResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15598,26 +14499,22 @@ pub fn @"getWorkflowSchemeDraftIssueType"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueTypeWorkflowMapping", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15660,35 +14557,29 @@ pub fn @"publishDraftWorkflowScheme"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // validateOnly; location: query
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"PublishDraftWorkflowSchemeResult"{ ._204 = {} };
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"PublishDraftWorkflowSchemeResult"{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"PublishDraftWorkflowSchemeResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"PublishDraftWorkflowSchemeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"PublishDraftWorkflowSchemeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"PublishDraftWorkflowSchemeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"PublishDraftWorkflowSchemeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15723,27 +14614,23 @@ pub fn @"getDraftWorkflow"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueTypesWorkflowMapping", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetDraftWorkflowResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDraftWorkflowResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDraftWorkflowResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDraftWorkflowResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetDraftWorkflowResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15780,27 +14667,23 @@ pub fn @"getWorkflowSchemeIssueType"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueTypeWorkflowMapping", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowSchemeIssueTypeResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeIssueTypeResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeIssueTypeResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeIssueTypeResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowSchemeIssueTypeResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15835,28 +14718,24 @@ pub fn @"getWorkflow"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // workflowName; location: query
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"IssueTypesWorkflowMapping", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetWorkflowResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowResult"{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorkflowResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15884,19 +14763,17 @@ pub fn @"getIdsOfWorklogsDeletedSince"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // since; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ChangedWorklogs", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIdsOfWorklogsDeletedSinceResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIdsOfWorklogsDeletedSinceResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIdsOfWorklogsDeletedSinceResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15926,22 +14803,17 @@ pub fn @"getWorklogsForIds"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogsForIdsResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogsForIdsResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogsForIdsResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetWorklogsForIdsResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -15969,20 +14841,18 @@ pub fn @"getIdsOfWorklogsModifiedSince"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // since; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ChangedWorklogs", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"GetIdsOfWorklogsModifiedSinceResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIdsOfWorklogsModifiedSinceResult"{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"GetIdsOfWorklogsModifiedSinceResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -16013,19 +14883,19 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -16062,29 +14932,31 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"OperationMessage"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"OperationMessage"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -16112,19 +14984,19 @@ pub fn @"DynamicModulesResource.getModules_get"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConnectModules"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ConnectModules", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DynamicModulesResource.getModules_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorMessage"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"ErrorMessage", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"DynamicModulesResource.getModules_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"DynamicModulesResource.getModules_getResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -16156,22 +15028,17 @@ pub fn @"AppIssueFieldValueUpdateResource.updateIssueFields_put"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -16203,22 +15070,17 @@ pub fn @"MigrationResource.updateEntityPropertiesValue_put"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrationResource.updateEntityPropertiesValue_putResult"{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrationResource.updateEntityPropertiesValue_putResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrationResource.updateEntityPropertiesValue_putResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrationResource.updateEntityPropertiesValue_putResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -16248,23 +15110,20 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
     defer http_response.deinit(alloc);
 
     errdefer std.log.warn("{s}", .{http_response.body});
-    var token_stream = json.TokenStream.init(http_response.body);
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowRulesSearchDetails"
+        var token_stream = json.TokenStream.init(http_response.body);
         const result = try json.parse(@"WorkflowRulesSearchDetails", &token_stream, parseOptions(alloc));
         errdefer result.deinit(alloc);
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        _ = token_stream;
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
@@ -16926,7 +15785,6 @@ pub const @"Comment" = struct {
 };
 
 pub const @"Fields" = struct {
-
     summary: []const u8,
 
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
@@ -17103,8 +15961,8 @@ pub const @"IncludedFields" = struct {
 };
 
 pub const @"IssueBean" = struct {
-
     fields: Fields,
+
 
     pub fn deinit(self: @This(), alloc: mem.Allocator) void {
         json.parseFree(@This(), self, parseOptions(alloc));
@@ -19449,7 +18307,7 @@ pub const Client = struct {
         self.username = try alloc.dupeZ(u8, username);
         self.password = try alloc.dupeZ(u8, password);
 
-        log.debug("Set user/pass to {s}/redacted", .{self.username});
+        log.debug("Set user/pass to {s}/redacted", .{self.username.?});
         reset(self.*);
     }
 };
