@@ -1,26 +1,20 @@
-fn parseOptions(alloc: mem.Allocator) json.ParseOptions {
-    return .{
-        .allocator = alloc,
-        .ignore_unknown_fields = true,
-        .allow_trailing_data = true,
-    };
-}
-
-pub const @"GetBannerResult" = union(enum) {
+const types = @import("jira-types.zig");
+pub usingnamespace types;
+pub const GetBannerResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"AnnouncementBannerConfiguration",
+    _200: types.AnnouncementBannerConfiguration,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Get announcement banner configuration
-pub fn @"getBanner"(
+pub fn getBanner(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetBannerResult" {
+) !GetBannerResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/announcementBanner");
     try url_buffer.append(0);
@@ -30,31 +24,28 @@ pub fn @"getBanner"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AnnouncementBannerConfiguration"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"AnnouncementBannerConfiguration", &token_stream, parseOptions(alloc));
+        const result = types.AnnouncementBannerConfiguration.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetBannerResult"{ ._200 = result };
+        return GetBannerResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetBannerResult"{ ._401 = result };
+        return GetBannerResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetBannerResult"{ ._403 = result };
+        return GetBannerResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetBannerResult"{ ._400 = {} };
+        return GetBannerResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateMultipleCustomFieldValuesResult" = union(enum) {
+pub const UpdateMultipleCustomFieldValuesResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -67,10 +58,10 @@ pub const @"UpdateMultipleCustomFieldValuesResult" = union(enum) {
 };
 
 /// Update custom fields
-pub fn @"updateMultipleCustomFieldValues"(
+pub fn updateMultipleCustomFieldValues(
     client: Client,
     alloc: mem.Allocator,
-) !@"UpdateMultipleCustomFieldValuesResult" {
+) !UpdateMultipleCustomFieldValuesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/app/field/value");
     try url_buffer.append(0);
@@ -81,27 +72,27 @@ pub fn @"updateMultipleCustomFieldValues"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // generateChangelog; location: query
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateMultipleCustomFieldValuesResult"{ ._204 = {} };
+        return UpdateMultipleCustomFieldValuesResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateMultipleCustomFieldValuesResult"{ ._400 = {} };
+        return UpdateMultipleCustomFieldValuesResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateMultipleCustomFieldValuesResult"{ ._403 = {} };
+        return UpdateMultipleCustomFieldValuesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateMultipleCustomFieldValuesResult"{ ._404 = {} };
+        return UpdateMultipleCustomFieldValuesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateMultipleCustomFieldValuesResult"{ ._400 = {} };
+        return UpdateMultipleCustomFieldValuesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCustomFieldConfigurationResult" = union(enum) {
+pub const GetCustomFieldConfigurationResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanContextualConfiguration",
+    _200: types.PageBeanContextualConfiguration,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -114,14 +105,14 @@ pub const @"GetCustomFieldConfigurationResult" = union(enum) {
 };
 
 /// Get custom field configurations
-pub fn @"getCustomFieldConfiguration"(
+pub fn getCustomFieldConfiguration(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldIdOrKey": []const u8,
-) !@"GetCustomFieldConfigurationResult" {
+    fieldIdOrKey: []const u8,
+) !GetCustomFieldConfigurationResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/app/field/");
-    try url_buffer.appendSlice(@"fieldIdOrKey");
+    try url_buffer.appendSlice(fieldIdOrKey);
     try url_buffer.appendSlice("/context/configuration");
     try url_buffer.append(0);
 
@@ -137,31 +128,30 @@ pub fn @"getCustomFieldConfiguration"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextualConfiguration"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanContextualConfiguration", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanContextualConfiguration.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCustomFieldConfigurationResult"{ ._200 = result };
+        return GetCustomFieldConfigurationResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCustomFieldConfigurationResult"{ ._400 = {} };
+        return GetCustomFieldConfigurationResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetCustomFieldConfigurationResult"{ ._401 = {} };
+        return GetCustomFieldConfigurationResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetCustomFieldConfigurationResult"{ ._403 = {} };
+        return GetCustomFieldConfigurationResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetCustomFieldConfigurationResult"{ ._404 = {} };
+        return GetCustomFieldConfigurationResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCustomFieldConfigurationResult"{ ._400 = {} };
+        return GetCustomFieldConfigurationResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateCustomFieldValueResult" = union(enum) {
+pub const UpdateCustomFieldValueResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -174,14 +164,14 @@ pub const @"UpdateCustomFieldValueResult" = union(enum) {
 };
 
 /// Update custom field value
-pub fn @"updateCustomFieldValue"(
+pub fn updateCustomFieldValue(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldIdOrKey": []const u8,
-) !@"UpdateCustomFieldValueResult" {
+    fieldIdOrKey: []const u8,
+) !UpdateCustomFieldValueResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/app/field/");
-    try url_buffer.appendSlice(@"fieldIdOrKey");
+    try url_buffer.appendSlice(fieldIdOrKey);
     try url_buffer.appendSlice("/value");
     try url_buffer.append(0);
 
@@ -191,25 +181,25 @@ pub fn @"updateCustomFieldValue"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // generateChangelog; location: query
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldValueResult"{ ._204 = {} };
+        return UpdateCustomFieldValueResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldValueResult"{ ._400 = {} };
+        return UpdateCustomFieldValueResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldValueResult"{ ._403 = {} };
+        return UpdateCustomFieldValueResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldValueResult"{ ._404 = {} };
+        return UpdateCustomFieldValueResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldValueResult"{ ._400 = {} };
+        return UpdateCustomFieldValueResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetApplicationPropertyResult" = union(enum) {
+pub const GetApplicationPropertyResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -220,10 +210,10 @@ pub const @"GetApplicationPropertyResult" = union(enum) {
 };
 
 /// Get application property
-pub fn @"getApplicationProperty"(
+pub fn getApplicationProperty(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetApplicationPropertyResult" {
+) !GetApplicationPropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/application-properties");
     try url_buffer.append(0);
@@ -236,22 +226,22 @@ pub fn @"getApplicationProperty"(
     // permissionLevel; location: query
     // keyFilter; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetApplicationPropertyResult"{ ._200 = {} };
+        return GetApplicationPropertyResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetApplicationPropertyResult"{ ._401 = {} };
+        return GetApplicationPropertyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetApplicationPropertyResult"{ ._404 = {} };
+        return GetApplicationPropertyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetApplicationPropertyResult"{ ._400 = {} };
+        return GetApplicationPropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAdvancedSettingsResult" = union(enum) {
+pub const GetAdvancedSettingsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -262,10 +252,10 @@ pub const @"GetAdvancedSettingsResult" = union(enum) {
 };
 
 /// Get advanced settings
-pub fn @"getAdvancedSettings"(
+pub fn getAdvancedSettings(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAdvancedSettingsResult" {
+) !GetAdvancedSettingsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/application-properties/advanced-settings");
     try url_buffer.append(0);
@@ -275,24 +265,24 @@ pub fn @"getAdvancedSettings"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAdvancedSettingsResult"{ ._200 = {} };
+        return GetAdvancedSettingsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAdvancedSettingsResult"{ ._401 = {} };
+        return GetAdvancedSettingsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAdvancedSettingsResult"{ ._403 = {} };
+        return GetAdvancedSettingsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAdvancedSettingsResult"{ ._400 = {} };
+        return GetAdvancedSettingsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"SetApplicationPropertyResult" = union(enum) {
+pub const SetApplicationPropertyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ApplicationProperty",
+    _200: types.ApplicationProperty,
     /// Returned if the data type of the `value` does not match the application property's data type. For example, a string is provided instead of an integer.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -305,14 +295,14 @@ pub const @"SetApplicationPropertyResult" = union(enum) {
 };
 
 /// Set application property
-pub fn @"setApplicationProperty"(
+pub fn setApplicationProperty(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"SetApplicationPropertyResult" {
+    id: []const u8,
+) !SetApplicationPropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/application-properties/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/application-properties/{id}");
@@ -320,31 +310,30 @@ pub fn @"setApplicationProperty"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ApplicationProperty", &token_stream, parseOptions(alloc));
+        const result = types.ApplicationProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SetApplicationPropertyResult"{ ._200 = result };
+        return SetApplicationPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SetApplicationPropertyResult"{ ._400 = {} };
+        return SetApplicationPropertyResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"SetApplicationPropertyResult"{ ._401 = {} };
+        return SetApplicationPropertyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"SetApplicationPropertyResult"{ ._403 = {} };
+        return SetApplicationPropertyResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"SetApplicationPropertyResult"{ ._404 = {} };
+        return SetApplicationPropertyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SetApplicationPropertyResult"{ ._400 = {} };
+        return SetApplicationPropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllApplicationRolesResult" = union(enum) {
+pub const GetAllApplicationRolesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -355,10 +344,10 @@ pub const @"GetAllApplicationRolesResult" = union(enum) {
 };
 
 /// Get all application roles
-pub fn @"getAllApplicationRoles"(
+pub fn getAllApplicationRoles(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllApplicationRolesResult" {
+) !GetAllApplicationRolesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/applicationrole");
     try url_buffer.append(0);
@@ -368,24 +357,24 @@ pub fn @"getAllApplicationRoles"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllApplicationRolesResult"{ ._200 = {} };
+        return GetAllApplicationRolesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllApplicationRolesResult"{ ._401 = {} };
+        return GetAllApplicationRolesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllApplicationRolesResult"{ ._403 = {} };
+        return GetAllApplicationRolesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllApplicationRolesResult"{ ._400 = {} };
+        return GetAllApplicationRolesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetApplicationRoleResult" = union(enum) {
+pub const GetApplicationRoleResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ApplicationRole",
+    _200: types.ApplicationRole,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user is not an administrator.
@@ -396,14 +385,14 @@ pub const @"GetApplicationRoleResult" = union(enum) {
 };
 
 /// Get application role
-pub fn @"getApplicationRole"(
+pub fn getApplicationRole(
     client: Client,
     alloc: mem.Allocator,
-    @"key": []const u8,
-) !@"GetApplicationRoleResult" {
+    key: []const u8,
+) !GetApplicationRoleResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/applicationrole/");
-    try url_buffer.appendSlice(@"key");
+    try url_buffer.appendSlice(key);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -411,28 +400,27 @@ pub fn @"getApplicationRole"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationRole"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ApplicationRole", &token_stream, parseOptions(alloc));
+        const result = types.ApplicationRole.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetApplicationRoleResult"{ ._200 = result };
+        return GetApplicationRoleResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetApplicationRoleResult"{ ._401 = {} };
+        return GetApplicationRoleResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetApplicationRoleResult"{ ._403 = {} };
+        return GetApplicationRoleResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetApplicationRoleResult"{ ._404 = {} };
+        return GetApplicationRoleResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetApplicationRoleResult"{ ._400 = {} };
+        return GetApplicationRoleResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAttachmentContentResult" = union(enum) {
+pub const GetAttachmentContentResult = union(enum) {
     /// Returned if the request is successful when `redirect` is set to `false`.
     _200: void,
     /// Returned if the request is successful when a `Range` header is provided and `redirect` is set to `false`.
@@ -456,14 +444,14 @@ pub const @"GetAttachmentContentResult" = union(enum) {
 };
 
 /// Get attachment content
-pub fn @"getAttachmentContent"(
+pub fn getAttachmentContent(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetAttachmentContentResult" {
+    id: []const u8,
+) !GetAttachmentContentResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/attachment/content/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -472,49 +460,49 @@ pub fn @"getAttachmentContent"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // redirect; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAttachmentContentResult"{ ._200 = {} };
+        return GetAttachmentContentResult{ ._200 = {} };
     }
     if (mem.eql(u8, "206", http_response.status_code)) { // Make void
-        return @"GetAttachmentContentResult"{ ._206 = {} };
+        return GetAttachmentContentResult{ ._206 = {} };
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        return @"GetAttachmentContentResult"{ ._303 = {} };
+        return GetAttachmentContentResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAttachmentContentResult"{ ._400 = {} };
+        return GetAttachmentContentResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAttachmentContentResult"{ ._401 = {} };
+        return GetAttachmentContentResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAttachmentContentResult"{ ._403 = {} };
+        return GetAttachmentContentResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAttachmentContentResult"{ ._404 = {} };
+        return GetAttachmentContentResult{ ._404 = {} };
     }
     if (mem.eql(u8, "416", http_response.status_code)) { // Make void
-        return @"GetAttachmentContentResult"{ ._416 = {} };
+        return GetAttachmentContentResult{ ._416 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAttachmentContentResult"{ ._400 = {} };
+        return GetAttachmentContentResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAttachmentMetaResult" = union(enum) {
+pub const GetAttachmentMetaResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"AttachmentSettings",
+    _200: types.AttachmentSettings,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get Jira attachment settings
-pub fn @"getAttachmentMeta"(
+pub fn getAttachmentMeta(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAttachmentMetaResult" {
+) !GetAttachmentMetaResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/attachment/meta");
     try url_buffer.append(0);
@@ -524,22 +512,21 @@ pub fn @"getAttachmentMeta"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentSettings"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"AttachmentSettings", &token_stream, parseOptions(alloc));
+        const result = types.AttachmentSettings.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAttachmentMetaResult"{ ._200 = result };
+        return GetAttachmentMetaResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAttachmentMetaResult"{ ._401 = {} };
+        return GetAttachmentMetaResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAttachmentMetaResult"{ ._400 = {} };
+        return GetAttachmentMetaResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAttachmentThumbnailResult" = union(enum) {
+pub const GetAttachmentThumbnailResult = union(enum) {
     /// Returned if the request is successful when `redirect` is set to `false`.
     _200: void,
     /// Returned if the request is successful. See the `Location` header for the download URL.
@@ -560,14 +547,14 @@ pub const @"GetAttachmentThumbnailResult" = union(enum) {
 };
 
 /// Get attachment thumbnail
-pub fn @"getAttachmentThumbnail"(
+pub fn getAttachmentThumbnail(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetAttachmentThumbnailResult" {
+    id: []const u8,
+) !GetAttachmentThumbnailResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/attachment/thumbnail/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -579,33 +566,33 @@ pub fn @"getAttachmentThumbnail"(
     // width; location: query
     // height; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAttachmentThumbnailResult"{ ._200 = {} };
+        return GetAttachmentThumbnailResult{ ._200 = {} };
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        return @"GetAttachmentThumbnailResult"{ ._303 = {} };
+        return GetAttachmentThumbnailResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAttachmentThumbnailResult"{ ._400 = {} };
+        return GetAttachmentThumbnailResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAttachmentThumbnailResult"{ ._401 = {} };
+        return GetAttachmentThumbnailResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAttachmentThumbnailResult"{ ._403 = {} };
+        return GetAttachmentThumbnailResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAttachmentThumbnailResult"{ ._404 = {} };
+        return GetAttachmentThumbnailResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAttachmentThumbnailResult"{ ._400 = {} };
+        return GetAttachmentThumbnailResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAttachmentResult" = union(enum) {
+pub const GetAttachmentResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"AttachmentMetadata",
+    _200: types.AttachmentMetadata,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -619,14 +606,14 @@ pub const @"GetAttachmentResult" = union(enum) {
 };
 
 /// Get attachment metadata
-pub fn @"getAttachment"(
+pub fn getAttachment(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetAttachmentResult" {
+    id: []const u8,
+) !GetAttachmentResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/attachment/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -634,30 +621,29 @@ pub fn @"getAttachment"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentMetadata"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"AttachmentMetadata", &token_stream, parseOptions(alloc));
+        const result = types.AttachmentMetadata.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAttachmentResult"{ ._200 = result };
+        return GetAttachmentResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAttachmentResult"{ ._401 = {} };
+        return GetAttachmentResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAttachmentResult"{ ._403 = {} };
+        return GetAttachmentResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAttachmentResult"{ ._404 = {} };
+        return GetAttachmentResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAttachmentResult"{ ._400 = {} };
+        return GetAttachmentResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ExpandAttachmentForHumansResult" = union(enum) {
+pub const ExpandAttachmentForHumansResult = union(enum) {
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
-    _200: @"AttachmentArchiveMetadataReadable",
+    _200: types.AttachmentArchiveMetadataReadable,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// The user does not have the necessary permission.
@@ -673,14 +659,14 @@ pub const @"ExpandAttachmentForHumansResult" = union(enum) {
 };
 
 /// Get all metadata for an expanded attachment
-pub fn @"expandAttachmentForHumans"(
+pub fn expandAttachmentForHumans(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"ExpandAttachmentForHumansResult" {
+    id: []const u8,
+) !ExpandAttachmentForHumansResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/attachment/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/expand/human");
     try url_buffer.append(0);
 
@@ -689,33 +675,32 @@ pub fn @"expandAttachmentForHumans"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveMetadataReadable"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"AttachmentArchiveMetadataReadable", &token_stream, parseOptions(alloc));
+        const result = types.AttachmentArchiveMetadataReadable.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"ExpandAttachmentForHumansResult"{ ._200 = result };
+        return ExpandAttachmentForHumansResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForHumansResult"{ ._401 = {} };
+        return ExpandAttachmentForHumansResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForHumansResult"{ ._403 = {} };
+        return ExpandAttachmentForHumansResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForHumansResult"{ ._404 = {} };
+        return ExpandAttachmentForHumansResult{ ._404 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForHumansResult"{ ._409 = {} };
+        return ExpandAttachmentForHumansResult{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForHumansResult"{ ._400 = {} };
+        return ExpandAttachmentForHumansResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ExpandAttachmentForMachinesResult" = union(enum) {
+pub const ExpandAttachmentForMachinesResult = union(enum) {
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
-    _200: @"AttachmentArchiveImpl",
+    _200: types.AttachmentArchiveImpl,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// The user does not have the necessary permission.
@@ -731,14 +716,14 @@ pub const @"ExpandAttachmentForMachinesResult" = union(enum) {
 };
 
 /// Get contents metadata for an expanded attachment
-pub fn @"expandAttachmentForMachines"(
+pub fn expandAttachmentForMachines(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"ExpandAttachmentForMachinesResult" {
+    id: []const u8,
+) !ExpandAttachmentForMachinesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/attachment/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/expand/raw");
     try url_buffer.append(0);
 
@@ -747,33 +732,32 @@ pub fn @"expandAttachmentForMachines"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveImpl"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"AttachmentArchiveImpl", &token_stream, parseOptions(alloc));
+        const result = types.AttachmentArchiveImpl.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"ExpandAttachmentForMachinesResult"{ ._200 = result };
+        return ExpandAttachmentForMachinesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForMachinesResult"{ ._401 = {} };
+        return ExpandAttachmentForMachinesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForMachinesResult"{ ._403 = {} };
+        return ExpandAttachmentForMachinesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForMachinesResult"{ ._404 = {} };
+        return ExpandAttachmentForMachinesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForMachinesResult"{ ._409 = {} };
+        return ExpandAttachmentForMachinesResult{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ExpandAttachmentForMachinesResult"{ ._400 = {} };
+        return ExpandAttachmentForMachinesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAuditRecordsResult" = union(enum) {
+pub const GetAuditRecordsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"AuditRecords",
+    _200: types.AuditRecords,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -785,10 +769,10 @@ pub const @"GetAuditRecordsResult" = union(enum) {
 };
 
 /// Get audit records
-pub fn @"getAuditRecords"(
+pub fn getAuditRecords(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAuditRecordsResult" {
+) !GetAuditRecordsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/auditing/record");
     try url_buffer.append(0);
@@ -803,27 +787,26 @@ pub fn @"getAuditRecords"(
     // from; location: query
     // to; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AuditRecords"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"AuditRecords", &token_stream, parseOptions(alloc));
+        const result = types.AuditRecords.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAuditRecordsResult"{ ._200 = result };
+        return GetAuditRecordsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAuditRecordsResult"{ ._401 = {} };
+        return GetAuditRecordsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAuditRecordsResult"{ ._403 = {} };
+        return GetAuditRecordsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAuditRecordsResult"{ ._400 = {} };
+        return GetAuditRecordsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllSystemAvatarsResult" = union(enum) {
+pub const GetAllSystemAvatarsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"SystemAvatars",
+    _200: types.SystemAvatars,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if an error occurs while retrieving the list of avatars.
@@ -832,11 +815,11 @@ pub const @"GetAllSystemAvatarsResult" = union(enum) {
 };
 
 /// Get system avatars by type
-pub fn @"getAllSystemAvatars"(
+pub fn getAllSystemAvatars(
     client: Client,
     alloc: mem.Allocator,
     @"type": []const u8,
-) !@"GetAllSystemAvatarsResult" {
+) !GetAllSystemAvatarsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/avatar/");
     try url_buffer.appendSlice(@"type");
@@ -848,37 +831,36 @@ pub fn @"getAllSystemAvatars"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SystemAvatars"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"SystemAvatars", &token_stream, parseOptions(alloc));
+        const result = types.SystemAvatars.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllSystemAvatarsResult"{ ._200 = result };
+        return GetAllSystemAvatarsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllSystemAvatarsResult"{ ._401 = {} };
+        return GetAllSystemAvatarsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "500", http_response.status_code)) { // Make void
-        return @"GetAllSystemAvatarsResult"{ ._500 = {} };
+        return GetAllSystemAvatarsResult{ ._500 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllSystemAvatarsResult"{ ._400 = {} };
+        return GetAllSystemAvatarsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCommentsByIdsResult" = union(enum) {
+pub const GetCommentsByIdsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanComment",
+    _200: types.PageBeanComment,
     /// Returned if the request contains more than 1000 IDs or is empty.
     _400: void,
     _400: void,
 };
 
 /// Get comments by IDs
-pub fn @"getCommentsByIds"(
+pub fn getCommentsByIds(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetCommentsByIdsResult" {
+) !GetCommentsByIdsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/comment/list");
     try url_buffer.append(0);
@@ -889,24 +871,23 @@ pub fn @"getCommentsByIds"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComment"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanComment", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanComment.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCommentsByIdsResult"{ ._200 = result };
+        return GetCommentsByIdsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCommentsByIdsResult"{ ._400 = {} };
+        return GetCommentsByIdsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCommentsByIdsResult"{ ._400 = {} };
+        return GetCommentsByIdsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCommentPropertyKeysResult" = union(enum) {
+pub const GetCommentPropertyKeysResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PropertyKeys",
+    _200: types.PropertyKeys,
     /// Returned if the comment ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -919,14 +900,14 @@ pub const @"GetCommentPropertyKeysResult" = union(enum) {
 };
 
 /// Get comment property keys
-pub fn @"getCommentPropertyKeys"(
+pub fn getCommentPropertyKeys(
     client: Client,
     alloc: mem.Allocator,
-    @"commentId": []const u8,
-) !@"GetCommentPropertyKeysResult" {
+    commentId: []const u8,
+) !GetCommentPropertyKeysResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/comment/");
-    try url_buffer.appendSlice(@"commentId");
+    try url_buffer.appendSlice(commentId);
     try url_buffer.appendSlice("/properties");
     try url_buffer.append(0);
 
@@ -935,33 +916,32 @@ pub fn @"getCommentPropertyKeys"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
+        const result = types.PropertyKeys.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCommentPropertyKeysResult"{ ._200 = result };
+        return GetCommentPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyKeysResult"{ ._400 = {} };
+        return GetCommentPropertyKeysResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyKeysResult"{ ._401 = {} };
+        return GetCommentPropertyKeysResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyKeysResult"{ ._403 = {} };
+        return GetCommentPropertyKeysResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyKeysResult"{ ._404 = {} };
+        return GetCommentPropertyKeysResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyKeysResult"{ ._400 = {} };
+        return GetCommentPropertyKeysResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCommentPropertyResult" = union(enum) {
+pub const GetCommentPropertyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"EntityProperty",
+    _200: types.EntityProperty,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -974,17 +954,17 @@ pub const @"GetCommentPropertyResult" = union(enum) {
 };
 
 /// Get comment property
-pub fn @"getCommentProperty"(
+pub fn getCommentProperty(
     client: Client,
     alloc: mem.Allocator,
-    @"commentId": []const u8,
-    @"propertyKey": []const u8,
-) !@"GetCommentPropertyResult" {
+    commentId: []const u8,
+    propertyKey: []const u8,
+) !GetCommentPropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/comment/");
-    try url_buffer.appendSlice(@"commentId");
+    try url_buffer.appendSlice(commentId);
     try url_buffer.appendSlice("/properties/");
-    try url_buffer.appendSlice(@"propertyKey");
+    try url_buffer.appendSlice(propertyKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -992,33 +972,32 @@ pub fn @"getCommentProperty"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
+        const result = types.EntityProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCommentPropertyResult"{ ._200 = result };
+        return GetCommentPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyResult"{ ._400 = {} };
+        return GetCommentPropertyResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyResult"{ ._401 = {} };
+        return GetCommentPropertyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyResult"{ ._403 = {} };
+        return GetCommentPropertyResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyResult"{ ._404 = {} };
+        return GetCommentPropertyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCommentPropertyResult"{ ._400 = {} };
+        return GetCommentPropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"CreateComponentResult" = union(enum) {
+pub const CreateComponentResult = union(enum) {
     /// Returned if the request is successful.
-    _201: @"ProjectComponent",
+    _201: types.ProjectComponent,
     /// Returned if:
     ///
     ///  *  the user is not found.
@@ -1037,10 +1016,10 @@ pub const @"CreateComponentResult" = union(enum) {
 };
 
 /// Create component
-pub fn @"createComponent"(
+pub fn createComponent(
     client: Client,
     alloc: mem.Allocator,
-) !@"CreateComponentResult" {
+) !CreateComponentResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/component");
     try url_buffer.append(0);
@@ -1050,33 +1029,32 @@ pub fn @"createComponent"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"ProjectComponent"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectComponent", &token_stream, parseOptions(alloc));
+        const result = types.ProjectComponent.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateComponentResult"{ ._201 = result };
+        return CreateComponentResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateComponentResult"{ ._400 = {} };
+        return CreateComponentResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"CreateComponentResult"{ ._401 = {} };
+        return CreateComponentResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"CreateComponentResult"{ ._403 = {} };
+        return CreateComponentResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"CreateComponentResult"{ ._404 = {} };
+        return CreateComponentResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateComponentResult"{ ._400 = {} };
+        return CreateComponentResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetComponentResult" = union(enum) {
+pub const GetComponentResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectComponent",
+    _200: types.ProjectComponent,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the component is not found or the user does not have permission to browse the project containing the component.
@@ -1085,14 +1063,14 @@ pub const @"GetComponentResult" = union(enum) {
 };
 
 /// Get component
-pub fn @"getComponent"(
+pub fn getComponent(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetComponentResult" {
+    id: []const u8,
+) !GetComponentResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/component/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -1100,27 +1078,26 @@ pub fn @"getComponent"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectComponent"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectComponent", &token_stream, parseOptions(alloc));
+        const result = types.ProjectComponent.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetComponentResult"{ ._200 = result };
+        return GetComponentResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetComponentResult"{ ._401 = {} };
+        return GetComponentResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetComponentResult"{ ._404 = {} };
+        return GetComponentResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetComponentResult"{ ._400 = {} };
+        return GetComponentResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetComponentRelatedIssuesResult" = union(enum) {
+pub const GetComponentRelatedIssuesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ComponentIssuesCount",
+    _200: types.ComponentIssuesCount,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the component is not found.
@@ -1129,14 +1106,14 @@ pub const @"GetComponentRelatedIssuesResult" = union(enum) {
 };
 
 /// Get component issues count
-pub fn @"getComponentRelatedIssues"(
+pub fn getComponentRelatedIssues(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetComponentRelatedIssuesResult" {
+    id: []const u8,
+) !GetComponentRelatedIssuesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/component/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/relatedIssueCounts");
     try url_buffer.append(0);
 
@@ -1145,37 +1122,36 @@ pub fn @"getComponentRelatedIssues"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ComponentIssuesCount"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ComponentIssuesCount", &token_stream, parseOptions(alloc));
+        const result = types.ComponentIssuesCount.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetComponentRelatedIssuesResult"{ ._200 = result };
+        return GetComponentRelatedIssuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetComponentRelatedIssuesResult"{ ._401 = {} };
+        return GetComponentRelatedIssuesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetComponentRelatedIssuesResult"{ ._404 = {} };
+        return GetComponentRelatedIssuesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetComponentRelatedIssuesResult"{ ._400 = {} };
+        return GetComponentRelatedIssuesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetConfigurationResult" = union(enum) {
+pub const GetConfigurationResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Configuration",
+    _200: types.Configuration,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get global settings
-pub fn @"getConfiguration"(
+pub fn getConfiguration(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetConfigurationResult" {
+) !GetConfigurationResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/configuration");
     try url_buffer.append(0);
@@ -1185,24 +1161,23 @@ pub fn @"getConfiguration"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Configuration"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Configuration", &token_stream, parseOptions(alloc));
+        const result = types.Configuration.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetConfigurationResult"{ ._200 = result };
+        return GetConfigurationResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetConfigurationResult"{ ._401 = {} };
+        return GetConfigurationResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetConfigurationResult"{ ._400 = {} };
+        return GetConfigurationResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetSelectedTimeTrackingImplementationResult" = union(enum) {
+pub const GetSelectedTimeTrackingImplementationResult = union(enum) {
     /// Returned if the request is successful and time tracking is enabled.
-    _200: @"TimeTrackingProvider",
+    _200: types.TimeTrackingProvider,
     /// Returned if the request is successful but time tracking is disabled.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1213,10 +1188,10 @@ pub const @"GetSelectedTimeTrackingImplementationResult" = union(enum) {
 };
 
 /// Get selected time tracking provider
-pub fn @"getSelectedTimeTrackingImplementation"(
+pub fn getSelectedTimeTrackingImplementation(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetSelectedTimeTrackingImplementationResult" {
+) !GetSelectedTimeTrackingImplementationResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/configuration/timetracking");
     try url_buffer.append(0);
@@ -1226,28 +1201,27 @@ pub fn @"getSelectedTimeTrackingImplementation"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingProvider"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"TimeTrackingProvider", &token_stream, parseOptions(alloc));
+        const result = types.TimeTrackingProvider.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetSelectedTimeTrackingImplementationResult"{ ._200 = result };
+        return GetSelectedTimeTrackingImplementationResult{ ._200 = result };
     }
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"GetSelectedTimeTrackingImplementationResult"{ ._204 = {} };
+        return GetSelectedTimeTrackingImplementationResult{ ._204 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetSelectedTimeTrackingImplementationResult"{ ._401 = {} };
+        return GetSelectedTimeTrackingImplementationResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetSelectedTimeTrackingImplementationResult"{ ._403 = {} };
+        return GetSelectedTimeTrackingImplementationResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetSelectedTimeTrackingImplementationResult"{ ._400 = {} };
+        return GetSelectedTimeTrackingImplementationResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAvailableTimeTrackingImplementationsResult" = union(enum) {
+pub const GetAvailableTimeTrackingImplementationsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1258,10 +1232,10 @@ pub const @"GetAvailableTimeTrackingImplementationsResult" = union(enum) {
 };
 
 /// Get all time tracking providers
-pub fn @"getAvailableTimeTrackingImplementations"(
+pub fn getAvailableTimeTrackingImplementations(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAvailableTimeTrackingImplementationsResult" {
+) !GetAvailableTimeTrackingImplementationsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/configuration/timetracking/list");
     try url_buffer.append(0);
@@ -1271,24 +1245,24 @@ pub fn @"getAvailableTimeTrackingImplementations"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAvailableTimeTrackingImplementationsResult"{ ._200 = {} };
+        return GetAvailableTimeTrackingImplementationsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAvailableTimeTrackingImplementationsResult"{ ._401 = {} };
+        return GetAvailableTimeTrackingImplementationsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAvailableTimeTrackingImplementationsResult"{ ._403 = {} };
+        return GetAvailableTimeTrackingImplementationsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAvailableTimeTrackingImplementationsResult"{ ._400 = {} };
+        return GetAvailableTimeTrackingImplementationsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetSharedTimeTrackingConfigurationResult" = union(enum) {
+pub const GetSharedTimeTrackingConfigurationResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"TimeTrackingConfiguration",
+    _200: types.TimeTrackingConfiguration,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -1297,10 +1271,10 @@ pub const @"GetSharedTimeTrackingConfigurationResult" = union(enum) {
 };
 
 /// Get time tracking settings
-pub fn @"getSharedTimeTrackingConfiguration"(
+pub fn getSharedTimeTrackingConfiguration(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetSharedTimeTrackingConfigurationResult" {
+) !GetSharedTimeTrackingConfigurationResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/configuration/timetracking/options");
     try url_buffer.append(0);
@@ -1310,27 +1284,26 @@ pub fn @"getSharedTimeTrackingConfiguration"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingConfiguration"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"TimeTrackingConfiguration", &token_stream, parseOptions(alloc));
+        const result = types.TimeTrackingConfiguration.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetSharedTimeTrackingConfigurationResult"{ ._200 = result };
+        return GetSharedTimeTrackingConfigurationResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetSharedTimeTrackingConfigurationResult"{ ._401 = {} };
+        return GetSharedTimeTrackingConfigurationResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetSharedTimeTrackingConfigurationResult"{ ._403 = {} };
+        return GetSharedTimeTrackingConfigurationResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetSharedTimeTrackingConfigurationResult"{ ._400 = {} };
+        return GetSharedTimeTrackingConfigurationResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCustomFieldOptionResult" = union(enum) {
+pub const GetCustomFieldOptionResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"CustomFieldOption",
+    _200: types.CustomFieldOption,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -1342,14 +1315,14 @@ pub const @"GetCustomFieldOptionResult" = union(enum) {
 };
 
 /// Get custom field option
-pub fn @"getCustomFieldOption"(
+pub fn getCustomFieldOption(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetCustomFieldOptionResult" {
+    id: []const u8,
+) !GetCustomFieldOptionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/customFieldOption/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -1357,39 +1330,38 @@ pub fn @"getCustomFieldOption"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"CustomFieldOption"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"CustomFieldOption", &token_stream, parseOptions(alloc));
+        const result = types.CustomFieldOption.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCustomFieldOptionResult"{ ._200 = result };
+        return GetCustomFieldOptionResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetCustomFieldOptionResult"{ ._401 = {} };
+        return GetCustomFieldOptionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetCustomFieldOptionResult"{ ._404 = {} };
+        return GetCustomFieldOptionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCustomFieldOptionResult"{ ._400 = {} };
+        return GetCustomFieldOptionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllDashboardsResult" = union(enum) {
+pub const GetAllDashboardsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageOfDashboards",
+    _200: types.PageOfDashboards,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     _400: void,
 };
 
 /// Get all dashboards
-pub fn @"getAllDashboards"(
+pub fn getAllDashboards(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllDashboardsResult" {
+) !GetAllDashboardsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/dashboard");
     try url_buffer.append(0);
@@ -1402,45 +1374,42 @@ pub fn @"getAllDashboards"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfDashboards"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageOfDashboards", &token_stream, parseOptions(alloc));
+        const result = types.PageOfDashboards.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllDashboardsResult"{ ._200 = result };
+        return GetAllDashboardsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllDashboardsResult"{ ._400 = result };
+        return GetAllDashboardsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllDashboardsResult"{ ._401 = result };
+        return GetAllDashboardsResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllDashboardsResult"{ ._400 = {} };
+        return GetAllDashboardsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllAvailableDashboardGadgetsResult" = union(enum) {
+pub const GetAllAvailableDashboardGadgetsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"AvailableDashboardGadgetsResponse",
+    _200: types.AvailableDashboardGadgetsResponse,
     /// 400 response
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     _400: void,
 };
 
 /// Get available gadgets
-pub fn @"getAllAvailableDashboardGadgets"(
+pub fn getAllAvailableDashboardGadgets(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllAvailableDashboardGadgetsResult" {
+) !GetAllAvailableDashboardGadgetsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/dashboard/gadgets");
     try url_buffer.append(0);
@@ -1450,50 +1419,47 @@ pub fn @"getAllAvailableDashboardGadgets"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AvailableDashboardGadgetsResponse"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"AvailableDashboardGadgetsResponse", &token_stream, parseOptions(alloc));
+        const result = types.AvailableDashboardGadgetsResponse.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllAvailableDashboardGadgetsResult"{ ._200 = result };
+        return GetAllAvailableDashboardGadgetsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllAvailableDashboardGadgetsResult"{ ._400 = result };
+        return GetAllAvailableDashboardGadgetsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllAvailableDashboardGadgetsResult"{ ._401 = result };
+        return GetAllAvailableDashboardGadgetsResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllAvailableDashboardGadgetsResult"{ ._400 = {} };
+        return GetAllAvailableDashboardGadgetsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDashboardsPaginatedResult" = union(enum) {
+pub const GetDashboardsPaginatedResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanDashboard",
+    _200: types.PageBeanDashboard,
     /// Returned if:
     ///
     ///  *  `orderBy` is invalid.
     ///  *  `expand` includes an invalid value.
     ///  *  `accountId` and `owner` are provided.
     ///  *  `groupname` and `groupId` are provided.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// 401 response
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     _400: void,
 };
 
 /// Search for dashboards
-pub fn @"getDashboardsPaginated"(
+pub fn getDashboardsPaginated(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetDashboardsPaginatedResult" {
+) !GetDashboardsPaginatedResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/dashboard/search");
     try url_buffer.append(0);
@@ -1514,49 +1480,46 @@ pub fn @"getDashboardsPaginated"(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanDashboard"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanDashboard", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanDashboard.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDashboardsPaginatedResult"{ ._200 = result };
+        return GetDashboardsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDashboardsPaginatedResult"{ ._400 = result };
+        return GetDashboardsPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDashboardsPaginatedResult"{ ._401 = result };
+        return GetDashboardsPaginatedResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDashboardsPaginatedResult"{ ._400 = {} };
+        return GetDashboardsPaginatedResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllGadgetsResult" = union(enum) {
+pub const GetAllGadgetsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"DashboardGadgetResponse",
+    _200: types.DashboardGadgetResponse,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the dashboard is not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Get gadgets
-pub fn @"getAllGadgets"(
+pub fn getAllGadgets(
     client: Client,
     alloc: mem.Allocator,
-    @"dashboardId": []const u8,
-) !@"GetAllGadgetsResult" {
+    dashboardId: []const u8,
+) !GetAllGadgetsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/dashboard/");
-    try url_buffer.appendSlice(@"dashboardId");
+    try url_buffer.appendSlice(dashboardId);
     try url_buffer.appendSlice("/gadget");
     try url_buffer.append(0);
 
@@ -1568,51 +1531,49 @@ pub fn @"getAllGadgets"(
     // uri; location: query
     // gadgetId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DashboardGadgetResponse"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"DashboardGadgetResponse", &token_stream, parseOptions(alloc));
+        const result = types.DashboardGadgetResponse.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllGadgetsResult"{ ._200 = result };
+        return GetAllGadgetsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllGadgetsResult"{ ._401 = {} };
+        return GetAllGadgetsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllGadgetsResult"{ ._404 = result };
+        return GetAllGadgetsResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllGadgetsResult"{ ._400 = {} };
+        return GetAllGadgetsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateGadgetResult" = union(enum) {
+pub const UpdateGadgetResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the gadget or the dashboard is not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Update gadget on dashboard
-pub fn @"updateGadget"(
+pub fn updateGadget(
     client: Client,
     alloc: mem.Allocator,
-    @"dashboardId": []const u8,
-    @"gadgetId": []const u8,
-) !@"UpdateGadgetResult" {
+    dashboardId: []const u8,
+    gadgetId: []const u8,
+) !UpdateGadgetResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/dashboard/");
-    try url_buffer.appendSlice(@"dashboardId");
+    try url_buffer.appendSlice(dashboardId);
     try url_buffer.appendSlice("/gadget/");
-    try url_buffer.appendSlice(@"gadgetId");
+    try url_buffer.appendSlice(gadgetId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}");
@@ -1620,33 +1581,31 @@ pub fn @"updateGadget"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateGadgetResult"{ ._204 = {} };
+        return UpdateGadgetResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"UpdateGadgetResult"{ ._400 = result };
+        return UpdateGadgetResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateGadgetResult"{ ._401 = {} };
+        return UpdateGadgetResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"UpdateGadgetResult"{ ._404 = result };
+        return UpdateGadgetResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateGadgetResult"{ ._400 = {} };
+        return UpdateGadgetResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDashboardItemPropertyKeysResult" = union(enum) {
+pub const GetDashboardItemPropertyKeysResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PropertyKeys",
+    _200: types.PropertyKeys,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the dashboard or dashboard item is not found, or the dashboard is not owned by or shared with the user.
@@ -1655,17 +1614,17 @@ pub const @"GetDashboardItemPropertyKeysResult" = union(enum) {
 };
 
 /// Get dashboard item property keys
-pub fn @"getDashboardItemPropertyKeys"(
+pub fn getDashboardItemPropertyKeys(
     client: Client,
     alloc: mem.Allocator,
-    @"dashboardId": []const u8,
-    @"itemId": []const u8,
-) !@"GetDashboardItemPropertyKeysResult" {
+    dashboardId: []const u8,
+    itemId: []const u8,
+) !GetDashboardItemPropertyKeysResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/dashboard/");
-    try url_buffer.appendSlice(@"dashboardId");
+    try url_buffer.appendSlice(dashboardId);
     try url_buffer.appendSlice("/items/");
-    try url_buffer.appendSlice(@"itemId");
+    try url_buffer.appendSlice(itemId);
     try url_buffer.appendSlice("/properties");
     try url_buffer.append(0);
 
@@ -1674,27 +1633,26 @@ pub fn @"getDashboardItemPropertyKeys"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
+        const result = types.PropertyKeys.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDashboardItemPropertyKeysResult"{ ._200 = result };
+        return GetDashboardItemPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetDashboardItemPropertyKeysResult"{ ._401 = {} };
+        return GetDashboardItemPropertyKeysResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetDashboardItemPropertyKeysResult"{ ._404 = {} };
+        return GetDashboardItemPropertyKeysResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDashboardItemPropertyKeysResult"{ ._400 = {} };
+        return GetDashboardItemPropertyKeysResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDashboardItemPropertyResult" = union(enum) {
+pub const GetDashboardItemPropertyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"EntityProperty",
+    _200: types.EntityProperty,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the dashboard, the dashboard item, or dashboard item property is not found, or the dashboard is not owned by or shared with the user.
@@ -1703,20 +1661,20 @@ pub const @"GetDashboardItemPropertyResult" = union(enum) {
 };
 
 /// Get dashboard item property
-pub fn @"getDashboardItemProperty"(
+pub fn getDashboardItemProperty(
     client: Client,
     alloc: mem.Allocator,
-    @"dashboardId": []const u8,
-    @"itemId": []const u8,
-    @"propertyKey": []const u8,
-) !@"GetDashboardItemPropertyResult" {
+    dashboardId: []const u8,
+    itemId: []const u8,
+    propertyKey: []const u8,
+) !GetDashboardItemPropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/dashboard/");
-    try url_buffer.appendSlice(@"dashboardId");
+    try url_buffer.appendSlice(dashboardId);
     try url_buffer.appendSlice("/items/");
-    try url_buffer.appendSlice(@"itemId");
+    try url_buffer.appendSlice(itemId);
     try url_buffer.appendSlice("/properties/");
-    try url_buffer.appendSlice(@"propertyKey");
+    try url_buffer.appendSlice(propertyKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -1724,45 +1682,44 @@ pub fn @"getDashboardItemProperty"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
+        const result = types.EntityProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDashboardItemPropertyResult"{ ._200 = result };
+        return GetDashboardItemPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetDashboardItemPropertyResult"{ ._401 = {} };
+        return GetDashboardItemPropertyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetDashboardItemPropertyResult"{ ._404 = {} };
+        return GetDashboardItemPropertyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDashboardItemPropertyResult"{ ._400 = {} };
+        return GetDashboardItemPropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDashboardResult" = union(enum) {
+pub const GetDashboardResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Dashboard",
+    _200: types.Dashboard,
     /// 400 response
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the dashboard is not found or the dashboard is not owned by or shared with the user.
     _404: void,
     _400: void,
 };
 
 /// Get dashboard
-pub fn @"getDashboard"(
+pub fn getDashboard(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetDashboardResult" {
+    id: []const u8,
+) !GetDashboardResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/dashboard/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -1770,54 +1727,51 @@ pub fn @"getDashboard"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Dashboard", &token_stream, parseOptions(alloc));
+        const result = types.Dashboard.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDashboardResult"{ ._200 = result };
+        return GetDashboardResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDashboardResult"{ ._400 = result };
+        return GetDashboardResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDashboardResult"{ ._401 = result };
+        return GetDashboardResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetDashboardResult"{ ._404 = {} };
+        return GetDashboardResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDashboardResult"{ ._400 = {} };
+        return GetDashboardResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"CopyDashboardResult" = union(enum) {
+pub const CopyDashboardResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Dashboard",
+    _200: types.Dashboard,
     /// Returned if the request is not valid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the dashboard is not found or the dashboard is not owned by or shared with the user.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Copy dashboard
-pub fn @"copyDashboard"(
+pub fn copyDashboard(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"CopyDashboardResult" {
+    id: []const u8,
+) !CopyDashboardResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/dashboard/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/copy");
     try url_buffer.append(0);
 
@@ -1826,37 +1780,33 @@ pub fn @"copyDashboard"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Dashboard", &token_stream, parseOptions(alloc));
+        const result = types.Dashboard.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CopyDashboardResult"{ ._200 = result };
+        return CopyDashboardResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CopyDashboardResult"{ ._400 = result };
+        return CopyDashboardResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CopyDashboardResult"{ ._401 = result };
+        return CopyDashboardResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CopyDashboardResult"{ ._404 = result };
+        return CopyDashboardResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CopyDashboardResult"{ ._400 = {} };
+        return CopyDashboardResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetEventsResult" = union(enum) {
+pub const GetEventsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1867,10 +1817,10 @@ pub const @"GetEventsResult" = union(enum) {
 };
 
 /// Get events
-pub fn @"getEvents"(
+pub fn getEvents(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetEventsResult" {
+) !GetEventsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/events");
     try url_buffer.append(0);
@@ -1880,38 +1830,38 @@ pub fn @"getEvents"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetEventsResult"{ ._200 = {} };
+        return GetEventsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetEventsResult"{ ._401 = {} };
+        return GetEventsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetEventsResult"{ ._403 = {} };
+        return GetEventsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetEventsResult"{ ._400 = {} };
+        return GetEventsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"AnalyseExpressionResult" = union(enum) {
+pub const AnalyseExpressionResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"JiraExpressionsAnalysis",
+    _200: types.JiraExpressionsAnalysis,
     /// 400 response
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// 404 response
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Analyse Jira expression
-pub fn @"analyseExpression"(
+pub fn analyseExpression(
     client: Client,
     alloc: mem.Allocator,
-) !@"AnalyseExpressionResult" {
+) !AnalyseExpressionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/expression/analyse");
     try url_buffer.append(0);
@@ -1922,36 +1872,33 @@ pub fn @"analyseExpression"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // check; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionsAnalysis"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"JiraExpressionsAnalysis", &token_stream, parseOptions(alloc));
+        const result = types.JiraExpressionsAnalysis.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"AnalyseExpressionResult"{ ._200 = result };
+        return AnalyseExpressionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"AnalyseExpressionResult"{ ._400 = result };
+        return AnalyseExpressionResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"AnalyseExpressionResult"{ ._401 = {} };
+        return AnalyseExpressionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"AnalyseExpressionResult"{ ._404 = result };
+        return AnalyseExpressionResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AnalyseExpressionResult"{ ._400 = {} };
+        return AnalyseExpressionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"EvaluateJiraExpressionResult" = union(enum) {
+pub const EvaluateJiraExpressionResult = union(enum) {
     /// Returned if the evaluation results in a value. The result is a JSON primitive value, list, or object.
-    _200: @"JiraExpressionResult",
+    _200: types.JiraExpressionResult,
     /// Returned if:
     ///
     ///  *  the request is invalid, that is:
@@ -1959,19 +1906,19 @@ pub const @"EvaluateJiraExpressionResult" = union(enum) {
     ///      *  invalid data is provided, such as a request including issue ID and key.
     ///      *  the expression is invalid and can not be parsed.
     ///  *  evaluation fails at runtime. This may happen for various reasons. For example, accessing a property on a null object (such as the expression `issue.id` where `issue` is `null`). In this case an error message is provided.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if any object provided in the request context is not found or the user does not have permission to view it.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Evaluate Jira expression
-pub fn @"evaluateJiraExpression"(
+pub fn evaluateJiraExpression(
     client: Client,
     alloc: mem.Allocator,
-) !@"EvaluateJiraExpressionResult" {
+) !EvaluateJiraExpressionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/expression/eval");
     try url_buffer.append(0);
@@ -1982,34 +1929,31 @@ pub fn @"evaluateJiraExpression"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionResult"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"JiraExpressionResult", &token_stream, parseOptions(alloc));
+        const result = types.JiraExpressionResult.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"EvaluateJiraExpressionResult"{ ._200 = result };
+        return EvaluateJiraExpressionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"EvaluateJiraExpressionResult"{ ._400 = result };
+        return EvaluateJiraExpressionResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"EvaluateJiraExpressionResult"{ ._401 = {} };
+        return EvaluateJiraExpressionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"EvaluateJiraExpressionResult"{ ._404 = result };
+        return EvaluateJiraExpressionResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"EvaluateJiraExpressionResult"{ ._400 = {} };
+        return EvaluateJiraExpressionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFieldsResult" = union(enum) {
+pub const GetFieldsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2018,10 +1962,10 @@ pub const @"GetFieldsResult" = union(enum) {
 };
 
 /// Get fields
-pub fn @"getFields"(
+pub fn getFields(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetFieldsResult" {
+) !GetFieldsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field");
     try url_buffer.append(0);
@@ -2031,35 +1975,35 @@ pub fn @"getFields"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetFieldsResult"{ ._200 = {} };
+        return GetFieldsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFieldsResult"{ ._401 = {} };
+        return GetFieldsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFieldsResult"{ ._400 = {} };
+        return GetFieldsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFieldsPaginatedResult" = union(enum) {
+pub const GetFieldsPaginatedResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanField",
+    _200: types.PageBeanField,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Get fields paginated
-pub fn @"getFieldsPaginated"(
+pub fn getFieldsPaginated(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetFieldsPaginatedResult" {
+) !GetFieldsPaginatedResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/search");
     try url_buffer.append(0);
@@ -2076,50 +2020,47 @@ pub fn @"getFieldsPaginated"(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanField", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanField.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFieldsPaginatedResult"{ ._200 = result };
+        return GetFieldsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFieldsPaginatedResult"{ ._400 = result };
+        return GetFieldsPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFieldsPaginatedResult"{ ._401 = {} };
+        return GetFieldsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFieldsPaginatedResult"{ ._403 = result };
+        return GetFieldsPaginatedResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFieldsPaginatedResult"{ ._400 = {} };
+        return GetFieldsPaginatedResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetTrashedFieldsPaginatedResult" = union(enum) {
+pub const GetTrashedFieldsPaginatedResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanField",
+    _200: types.PageBeanField,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Get fields in trash paginated
-pub fn @"getTrashedFieldsPaginated"(
+pub fn getTrashedFieldsPaginated(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetTrashedFieldsPaginatedResult" {
+) !GetTrashedFieldsPaginatedResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/search/trashed");
     try url_buffer.append(0);
@@ -2134,34 +2075,31 @@ pub fn @"getTrashedFieldsPaginated"(
     // query; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanField", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanField.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetTrashedFieldsPaginatedResult"{ ._200 = result };
+        return GetTrashedFieldsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetTrashedFieldsPaginatedResult"{ ._400 = result };
+        return GetTrashedFieldsPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetTrashedFieldsPaginatedResult"{ ._401 = {} };
+        return GetTrashedFieldsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetTrashedFieldsPaginatedResult"{ ._403 = result };
+        return GetTrashedFieldsPaginatedResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetTrashedFieldsPaginatedResult"{ ._400 = {} };
+        return GetTrashedFieldsPaginatedResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateCustomFieldResult" = union(enum) {
+pub const UpdateCustomFieldResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2176,14 +2114,14 @@ pub const @"UpdateCustomFieldResult" = union(enum) {
 };
 
 /// Update custom field
-pub fn @"updateCustomField"(
+pub fn updateCustomField(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-) !@"UpdateCustomFieldResult" {
+    fieldId: []const u8,
+) !UpdateCustomFieldResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}");
@@ -2191,30 +2129,30 @@ pub fn @"updateCustomField"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldResult"{ ._204 = {} };
+        return UpdateCustomFieldResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldResult"{ ._400 = {} };
+        return UpdateCustomFieldResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldResult"{ ._401 = {} };
+        return UpdateCustomFieldResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldResult"{ ._403 = {} };
+        return UpdateCustomFieldResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldResult"{ ._404 = {} };
+        return UpdateCustomFieldResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldResult"{ ._400 = {} };
+        return UpdateCustomFieldResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetContextsForFieldResult" = union(enum) {
+pub const GetContextsForFieldResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanCustomFieldContext",
+    _200: types.PageBeanCustomFieldContext,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2225,14 +2163,14 @@ pub const @"GetContextsForFieldResult" = union(enum) {
 };
 
 /// Get custom field contexts
-pub fn @"getContextsForField"(
+pub fn getContextsForField(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-) !@"GetContextsForFieldResult" {
+    fieldId: []const u8,
+) !GetContextsForFieldResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context");
     try url_buffer.append(0);
 
@@ -2246,30 +2184,29 @@ pub fn @"getContextsForField"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContext"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanCustomFieldContext", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanCustomFieldContext.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetContextsForFieldResult"{ ._200 = result };
+        return GetContextsForFieldResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetContextsForFieldResult"{ ._401 = {} };
+        return GetContextsForFieldResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetContextsForFieldResult"{ ._403 = {} };
+        return GetContextsForFieldResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetContextsForFieldResult"{ ._404 = {} };
+        return GetContextsForFieldResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetContextsForFieldResult"{ ._400 = {} };
+        return GetContextsForFieldResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDefaultValuesResult" = union(enum) {
+pub const GetDefaultValuesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanCustomFieldContextDefaultValue",
+    _200: types.PageBeanCustomFieldContextDefaultValue,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2280,14 +2217,14 @@ pub const @"GetDefaultValuesResult" = union(enum) {
 };
 
 /// Get custom field contexts default values
-pub fn @"getDefaultValues"(
+pub fn getDefaultValues(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-) !@"GetDefaultValuesResult" {
+    fieldId: []const u8,
+) !GetDefaultValuesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/defaultValue");
     try url_buffer.append(0);
 
@@ -2299,30 +2236,29 @@ pub fn @"getDefaultValues"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextDefaultValue"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanCustomFieldContextDefaultValue", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanCustomFieldContextDefaultValue.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDefaultValuesResult"{ ._200 = result };
+        return GetDefaultValuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetDefaultValuesResult"{ ._401 = {} };
+        return GetDefaultValuesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetDefaultValuesResult"{ ._403 = {} };
+        return GetDefaultValuesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetDefaultValuesResult"{ ._404 = {} };
+        return GetDefaultValuesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDefaultValuesResult"{ ._400 = {} };
+        return GetDefaultValuesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypeMappingsForContextsResult" = union(enum) {
+pub const GetIssueTypeMappingsForContextsResult = union(enum) {
     /// Returned if operation is successful.
-    _200: @"PageBeanIssueTypeToContextMapping",
+    _200: types.PageBeanIssueTypeToContextMapping,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2331,14 +2267,14 @@ pub const @"GetIssueTypeMappingsForContextsResult" = union(enum) {
 };
 
 /// Get issue types for custom field context
-pub fn @"getIssueTypeMappingsForContexts"(
+pub fn getIssueTypeMappingsForContexts(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-) !@"GetIssueTypeMappingsForContextsResult" {
+    fieldId: []const u8,
+) !GetIssueTypeMappingsForContextsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/issuetypemapping");
     try url_buffer.append(0);
 
@@ -2350,27 +2286,26 @@ pub fn @"getIssueTypeMappingsForContexts"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeToContextMapping"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueTypeToContextMapping", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueTypeToContextMapping.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueTypeMappingsForContextsResult"{ ._200 = result };
+        return GetIssueTypeMappingsForContextsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueTypeMappingsForContextsResult"{ ._401 = {} };
+        return GetIssueTypeMappingsForContextsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueTypeMappingsForContextsResult"{ ._403 = {} };
+        return GetIssueTypeMappingsForContextsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeMappingsForContextsResult"{ ._400 = {} };
+        return GetIssueTypeMappingsForContextsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCustomFieldContextsForProjectsAndIssueTypesResult" = union(enum) {
+pub const GetCustomFieldContextsForProjectsAndIssueTypesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanContextForProjectAndIssueType",
+    _200: types.PageBeanContextForProjectAndIssueType,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2383,14 +2318,14 @@ pub const @"GetCustomFieldContextsForProjectsAndIssueTypesResult" = union(enum) 
 };
 
 /// Get custom field contexts for projects and issue types
-pub fn @"getCustomFieldContextsForProjectsAndIssueTypes"(
+pub fn getCustomFieldContextsForProjectsAndIssueTypes(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-) !@"GetCustomFieldContextsForProjectsAndIssueTypesResult" {
+    fieldId: []const u8,
+) !GetCustomFieldContextsForProjectsAndIssueTypesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/mapping");
     try url_buffer.append(0);
 
@@ -2401,33 +2336,32 @@ pub fn @"getCustomFieldContextsForProjectsAndIssueTypes"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextForProjectAndIssueType"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanContextForProjectAndIssueType", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanContextForProjectAndIssueType.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._200 = result };
+        return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._400 = {} };
+        return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._401 = {} };
+        return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._403 = {} };
+        return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._404 = {} };
+        return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCustomFieldContextsForProjectsAndIssueTypesResult"{ ._400 = {} };
+        return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectContextMappingResult" = union(enum) {
+pub const GetProjectContextMappingResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanCustomFieldContextProjectMapping",
+    _200: types.PageBeanCustomFieldContextProjectMapping,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2438,14 +2372,14 @@ pub const @"GetProjectContextMappingResult" = union(enum) {
 };
 
 /// Get project mappings for custom field context
-pub fn @"getProjectContextMapping"(
+pub fn getProjectContextMapping(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-) !@"GetProjectContextMappingResult" {
+    fieldId: []const u8,
+) !GetProjectContextMappingResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/projectmapping");
     try url_buffer.append(0);
 
@@ -2457,28 +2391,27 @@ pub fn @"getProjectContextMapping"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextProjectMapping"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanCustomFieldContextProjectMapping", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanCustomFieldContextProjectMapping.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectContextMappingResult"{ ._200 = result };
+        return GetProjectContextMappingResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectContextMappingResult"{ ._401 = {} };
+        return GetProjectContextMappingResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetProjectContextMappingResult"{ ._403 = {} };
+        return GetProjectContextMappingResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectContextMappingResult"{ ._404 = {} };
+        return GetProjectContextMappingResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectContextMappingResult"{ ._400 = {} };
+        return GetProjectContextMappingResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateCustomFieldContextResult" = union(enum) {
+pub const UpdateCustomFieldContextResult = union(enum) {
     /// Returned if the context is updated.
     _204: void,
     /// Returned if the request is not valid.
@@ -2493,17 +2426,17 @@ pub const @"UpdateCustomFieldContextResult" = union(enum) {
 };
 
 /// Update custom field context
-pub fn @"updateCustomFieldContext"(
+pub fn updateCustomFieldContext(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-    @"contextId": []const u8,
-) !@"UpdateCustomFieldContextResult" {
+    fieldId: []const u8,
+    contextId: []const u8,
+) !UpdateCustomFieldContextResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/");
-    try url_buffer.appendSlice(@"contextId");
+    try url_buffer.appendSlice(contextId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/{contextId}");
@@ -2511,28 +2444,28 @@ pub fn @"updateCustomFieldContext"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldContextResult"{ ._204 = {} };
+        return UpdateCustomFieldContextResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldContextResult"{ ._400 = {} };
+        return UpdateCustomFieldContextResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldContextResult"{ ._401 = {} };
+        return UpdateCustomFieldContextResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldContextResult"{ ._403 = {} };
+        return UpdateCustomFieldContextResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldContextResult"{ ._404 = {} };
+        return UpdateCustomFieldContextResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateCustomFieldContextResult"{ ._400 = {} };
+        return UpdateCustomFieldContextResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"AddIssueTypesToContextResult" = union(enum) {
+pub const AddIssueTypesToContextResult = union(enum) {
     /// Returned if operation is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2549,17 +2482,17 @@ pub const @"AddIssueTypesToContextResult" = union(enum) {
 };
 
 /// Add issue types to context
-pub fn @"addIssueTypesToContext"(
+pub fn addIssueTypesToContext(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-    @"contextId": []const u8,
-) !@"AddIssueTypesToContextResult" {
+    fieldId: []const u8,
+    contextId: []const u8,
+) !AddIssueTypesToContextResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/");
-    try url_buffer.appendSlice(@"contextId");
+    try url_buffer.appendSlice(contextId);
     try url_buffer.appendSlice("/issuetype");
     try url_buffer.append(0);
 
@@ -2568,31 +2501,31 @@ pub fn @"addIssueTypesToContext"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToContextResult"{ ._204 = {} };
+        return AddIssueTypesToContextResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToContextResult"{ ._400 = {} };
+        return AddIssueTypesToContextResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToContextResult"{ ._401 = {} };
+        return AddIssueTypesToContextResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToContextResult"{ ._403 = {} };
+        return AddIssueTypesToContextResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToContextResult"{ ._404 = {} };
+        return AddIssueTypesToContextResult{ ._404 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToContextResult"{ ._409 = {} };
+        return AddIssueTypesToContextResult{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToContextResult"{ ._400 = {} };
+        return AddIssueTypesToContextResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RemoveIssueTypesFromContextResult" = union(enum) {
+pub const RemoveIssueTypesFromContextResult = union(enum) {
     /// Returned if operation is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2607,17 +2540,17 @@ pub const @"RemoveIssueTypesFromContextResult" = union(enum) {
 };
 
 /// Remove issue types from context
-pub fn @"removeIssueTypesFromContext"(
+pub fn removeIssueTypesFromContext(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-    @"contextId": []const u8,
-) !@"RemoveIssueTypesFromContextResult" {
+    fieldId: []const u8,
+    contextId: []const u8,
+) !RemoveIssueTypesFromContextResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/");
-    try url_buffer.appendSlice(@"contextId");
+    try url_buffer.appendSlice(contextId);
     try url_buffer.appendSlice("/issuetype/remove");
     try url_buffer.append(0);
 
@@ -2626,30 +2559,30 @@ pub fn @"removeIssueTypesFromContext"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypesFromContextResult"{ ._204 = {} };
+        return RemoveIssueTypesFromContextResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypesFromContextResult"{ ._400 = {} };
+        return RemoveIssueTypesFromContextResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypesFromContextResult"{ ._401 = {} };
+        return RemoveIssueTypesFromContextResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypesFromContextResult"{ ._403 = {} };
+        return RemoveIssueTypesFromContextResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypesFromContextResult"{ ._404 = {} };
+        return RemoveIssueTypesFromContextResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypesFromContextResult"{ ._400 = {} };
+        return RemoveIssueTypesFromContextResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetOptionsForContextResult" = union(enum) {
+pub const GetOptionsForContextResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanCustomFieldContextOption",
+    _200: types.PageBeanCustomFieldContextOption,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2662,17 +2595,17 @@ pub const @"GetOptionsForContextResult" = union(enum) {
 };
 
 /// Get custom field options (context)
-pub fn @"getOptionsForContext"(
+pub fn getOptionsForContext(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-    @"contextId": []const u8,
-) !@"GetOptionsForContextResult" {
+    fieldId: []const u8,
+    contextId: []const u8,
+) !GetOptionsForContextResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/");
-    try url_buffer.appendSlice(@"contextId");
+    try url_buffer.appendSlice(contextId);
     try url_buffer.appendSlice("/option");
     try url_buffer.append(0);
 
@@ -2685,31 +2618,30 @@ pub fn @"getOptionsForContext"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextOption"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanCustomFieldContextOption", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanCustomFieldContextOption.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetOptionsForContextResult"{ ._200 = result };
+        return GetOptionsForContextResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetOptionsForContextResult"{ ._400 = {} };
+        return GetOptionsForContextResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetOptionsForContextResult"{ ._401 = {} };
+        return GetOptionsForContextResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetOptionsForContextResult"{ ._403 = {} };
+        return GetOptionsForContextResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetOptionsForContextResult"{ ._404 = {} };
+        return GetOptionsForContextResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetOptionsForContextResult"{ ._400 = {} };
+        return GetOptionsForContextResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ReorderCustomFieldOptionsResult" = union(enum) {
+pub const ReorderCustomFieldOptionsResult = union(enum) {
     /// Returned if options are reordered.
     _204: void,
     /// Returned if the request is not valid.
@@ -2724,17 +2656,17 @@ pub const @"ReorderCustomFieldOptionsResult" = union(enum) {
 };
 
 /// Reorder custom field options (context)
-pub fn @"reorderCustomFieldOptions"(
+pub fn reorderCustomFieldOptions(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-    @"contextId": []const u8,
-) !@"ReorderCustomFieldOptionsResult" {
+    fieldId: []const u8,
+    contextId: []const u8,
+) !ReorderCustomFieldOptionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/");
-    try url_buffer.appendSlice(@"contextId");
+    try url_buffer.appendSlice(contextId);
     try url_buffer.appendSlice("/option/move");
     try url_buffer.append(0);
 
@@ -2743,28 +2675,28 @@ pub fn @"reorderCustomFieldOptions"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"ReorderCustomFieldOptionsResult"{ ._204 = {} };
+        return ReorderCustomFieldOptionsResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ReorderCustomFieldOptionsResult"{ ._400 = {} };
+        return ReorderCustomFieldOptionsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"ReorderCustomFieldOptionsResult"{ ._401 = {} };
+        return ReorderCustomFieldOptionsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"ReorderCustomFieldOptionsResult"{ ._403 = {} };
+        return ReorderCustomFieldOptionsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"ReorderCustomFieldOptionsResult"{ ._404 = {} };
+        return ReorderCustomFieldOptionsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ReorderCustomFieldOptionsResult"{ ._400 = {} };
+        return ReorderCustomFieldOptionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"DeleteCustomFieldOptionResult" = union(enum) {
+pub const DeleteCustomFieldOptionResult = union(enum) {
     /// Returned if the option is deleted.
     _204: void,
     /// Returned if the request is not valid.
@@ -2779,20 +2711,20 @@ pub const @"DeleteCustomFieldOptionResult" = union(enum) {
 };
 
 /// Delete custom field options (context)
-pub fn @"deleteCustomFieldOption"(
+pub fn deleteCustomFieldOption(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-    @"contextId": []const u8,
-    @"optionId": []const u8,
-) !@"DeleteCustomFieldOptionResult" {
+    fieldId: []const u8,
+    contextId: []const u8,
+    optionId: []const u8,
+) !DeleteCustomFieldOptionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/");
-    try url_buffer.appendSlice(@"contextId");
+    try url_buffer.appendSlice(contextId);
     try url_buffer.appendSlice("/option/");
-    try url_buffer.appendSlice(@"optionId");
+    try url_buffer.appendSlice(optionId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/{contextId}/option/{optionId}");
@@ -2800,28 +2732,28 @@ pub fn @"deleteCustomFieldOption"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"DeleteCustomFieldOptionResult"{ ._204 = {} };
+        return DeleteCustomFieldOptionResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteCustomFieldOptionResult"{ ._400 = {} };
+        return DeleteCustomFieldOptionResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"DeleteCustomFieldOptionResult"{ ._401 = {} };
+        return DeleteCustomFieldOptionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"DeleteCustomFieldOptionResult"{ ._403 = {} };
+        return DeleteCustomFieldOptionResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"DeleteCustomFieldOptionResult"{ ._404 = {} };
+        return DeleteCustomFieldOptionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteCustomFieldOptionResult"{ ._400 = {} };
+        return DeleteCustomFieldOptionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"AssignProjectsToCustomFieldContextResult" = union(enum) {
+pub const AssignProjectsToCustomFieldContextResult = union(enum) {
     /// Returned if operation is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2836,17 +2768,17 @@ pub const @"AssignProjectsToCustomFieldContextResult" = union(enum) {
 };
 
 /// Assign custom field context to projects
-pub fn @"assignProjectsToCustomFieldContext"(
+pub fn assignProjectsToCustomFieldContext(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-    @"contextId": []const u8,
-) !@"AssignProjectsToCustomFieldContextResult" {
+    fieldId: []const u8,
+    contextId: []const u8,
+) !AssignProjectsToCustomFieldContextResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/");
-    try url_buffer.appendSlice(@"contextId");
+    try url_buffer.appendSlice(contextId);
     try url_buffer.appendSlice("/project");
     try url_buffer.append(0);
 
@@ -2855,28 +2787,28 @@ pub fn @"assignProjectsToCustomFieldContext"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"AssignProjectsToCustomFieldContextResult"{ ._204 = {} };
+        return AssignProjectsToCustomFieldContextResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AssignProjectsToCustomFieldContextResult"{ ._400 = {} };
+        return AssignProjectsToCustomFieldContextResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"AssignProjectsToCustomFieldContextResult"{ ._401 = {} };
+        return AssignProjectsToCustomFieldContextResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"AssignProjectsToCustomFieldContextResult"{ ._403 = {} };
+        return AssignProjectsToCustomFieldContextResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"AssignProjectsToCustomFieldContextResult"{ ._404 = {} };
+        return AssignProjectsToCustomFieldContextResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AssignProjectsToCustomFieldContextResult"{ ._400 = {} };
+        return AssignProjectsToCustomFieldContextResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RemoveCustomFieldContextFromProjectsResult" = union(enum) {
+pub const RemoveCustomFieldContextFromProjectsResult = union(enum) {
     /// Returned if the custom field context is removed from the projects.
     _204: void,
     /// Returned if the request is not valid.
@@ -2891,17 +2823,17 @@ pub const @"RemoveCustomFieldContextFromProjectsResult" = union(enum) {
 };
 
 /// Remove custom field context from projects
-pub fn @"removeCustomFieldContextFromProjects"(
+pub fn removeCustomFieldContextFromProjects(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-    @"contextId": []const u8,
-) !@"RemoveCustomFieldContextFromProjectsResult" {
+    fieldId: []const u8,
+    contextId: []const u8,
+) !RemoveCustomFieldContextFromProjectsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/context/");
-    try url_buffer.appendSlice(@"contextId");
+    try url_buffer.appendSlice(contextId);
     try url_buffer.appendSlice("/project/remove");
     try url_buffer.append(0);
 
@@ -2910,30 +2842,30 @@ pub fn @"removeCustomFieldContextFromProjects"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"RemoveCustomFieldContextFromProjectsResult"{ ._204 = {} };
+        return RemoveCustomFieldContextFromProjectsResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveCustomFieldContextFromProjectsResult"{ ._400 = {} };
+        return RemoveCustomFieldContextFromProjectsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"RemoveCustomFieldContextFromProjectsResult"{ ._401 = {} };
+        return RemoveCustomFieldContextFromProjectsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"RemoveCustomFieldContextFromProjectsResult"{ ._403 = {} };
+        return RemoveCustomFieldContextFromProjectsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"RemoveCustomFieldContextFromProjectsResult"{ ._404 = {} };
+        return RemoveCustomFieldContextFromProjectsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveCustomFieldContextFromProjectsResult"{ ._400 = {} };
+        return RemoveCustomFieldContextFromProjectsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetContextsForFieldDeprecatedResult" = union(enum) {
+pub const GetContextsForFieldDeprecatedResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanContext",
+    _200: types.PageBeanContext,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -2942,14 +2874,14 @@ pub const @"GetContextsForFieldDeprecatedResult" = union(enum) {
 };
 
 /// Get contexts for a field
-pub fn @"getContextsForFieldDeprecated"(
+pub fn getContextsForFieldDeprecated(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-) !@"GetContextsForFieldDeprecatedResult" {
+    fieldId: []const u8,
+) !GetContextsForFieldDeprecatedResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/contexts");
     try url_buffer.append(0);
 
@@ -2960,27 +2892,26 @@ pub fn @"getContextsForFieldDeprecated"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContext"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanContext", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanContext.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetContextsForFieldDeprecatedResult"{ ._200 = result };
+        return GetContextsForFieldDeprecatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetContextsForFieldDeprecatedResult"{ ._401 = {} };
+        return GetContextsForFieldDeprecatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetContextsForFieldDeprecatedResult"{ ._403 = {} };
+        return GetContextsForFieldDeprecatedResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetContextsForFieldDeprecatedResult"{ ._400 = {} };
+        return GetContextsForFieldDeprecatedResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetScreensForFieldResult" = union(enum) {
+pub const GetScreensForFieldResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanScreenWithTab",
+    _200: types.PageBeanScreenWithTab,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -2989,14 +2920,14 @@ pub const @"GetScreensForFieldResult" = union(enum) {
 };
 
 /// Get screens for a field
-pub fn @"getScreensForField"(
+pub fn getScreensForField(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-) !@"GetScreensForFieldResult" {
+    fieldId: []const u8,
+) !GetScreensForFieldResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.appendSlice("/screens");
     try url_buffer.append(0);
 
@@ -3008,27 +2939,26 @@ pub fn @"getScreensForField"(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenWithTab"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanScreenWithTab", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanScreenWithTab.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetScreensForFieldResult"{ ._200 = result };
+        return GetScreensForFieldResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetScreensForFieldResult"{ ._401 = {} };
+        return GetScreensForFieldResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetScreensForFieldResult"{ ._403 = {} };
+        return GetScreensForFieldResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetScreensForFieldResult"{ ._400 = {} };
+        return GetScreensForFieldResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllIssueFieldOptionsResult" = union(enum) {
+pub const GetAllIssueFieldOptionsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueFieldOption",
+    _200: types.PageBeanIssueFieldOption,
     /// Returned if the field is not found or does not support options.
     _400: void,
     /// Returned if the request is not authenticated as a Jira administrator or the app that provided the field.
@@ -3037,14 +2967,14 @@ pub const @"GetAllIssueFieldOptionsResult" = union(enum) {
 };
 
 /// Get all issue field options
-pub fn @"getAllIssueFieldOptions"(
+pub fn getAllIssueFieldOptions(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldKey": []const u8,
-) !@"GetAllIssueFieldOptionsResult" {
+    fieldKey: []const u8,
+) !GetAllIssueFieldOptionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldKey");
+    try url_buffer.appendSlice(fieldKey);
     try url_buffer.appendSlice("/option");
     try url_buffer.append(0);
 
@@ -3055,27 +2985,26 @@ pub fn @"getAllIssueFieldOptions"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueFieldOption", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueFieldOption.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllIssueFieldOptionsResult"{ ._200 = result };
+        return GetAllIssueFieldOptionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllIssueFieldOptionsResult"{ ._400 = {} };
+        return GetAllIssueFieldOptionsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllIssueFieldOptionsResult"{ ._403 = {} };
+        return GetAllIssueFieldOptionsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllIssueFieldOptionsResult"{ ._400 = {} };
+        return GetAllIssueFieldOptionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetSelectableIssueFieldOptionsResult" = union(enum) {
+pub const GetSelectableIssueFieldOptionsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueFieldOption",
+    _200: types.PageBeanIssueFieldOption,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the field is not found or does not support options.
@@ -3084,14 +3013,14 @@ pub const @"GetSelectableIssueFieldOptionsResult" = union(enum) {
 };
 
 /// Get selectable issue field options
-pub fn @"getSelectableIssueFieldOptions"(
+pub fn getSelectableIssueFieldOptions(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldKey": []const u8,
-) !@"GetSelectableIssueFieldOptionsResult" {
+    fieldKey: []const u8,
+) !GetSelectableIssueFieldOptionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldKey");
+    try url_buffer.appendSlice(fieldKey);
     try url_buffer.appendSlice("/option/suggestions/edit");
     try url_buffer.append(0);
 
@@ -3103,27 +3032,26 @@ pub fn @"getSelectableIssueFieldOptions"(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueFieldOption", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueFieldOption.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetSelectableIssueFieldOptionsResult"{ ._200 = result };
+        return GetSelectableIssueFieldOptionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetSelectableIssueFieldOptionsResult"{ ._401 = {} };
+        return GetSelectableIssueFieldOptionsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetSelectableIssueFieldOptionsResult"{ ._404 = {} };
+        return GetSelectableIssueFieldOptionsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetSelectableIssueFieldOptionsResult"{ ._400 = {} };
+        return GetSelectableIssueFieldOptionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetVisibleIssueFieldOptionsResult" = union(enum) {
+pub const GetVisibleIssueFieldOptionsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueFieldOption",
+    _200: types.PageBeanIssueFieldOption,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the field is not found or does not support options.
@@ -3132,14 +3060,14 @@ pub const @"GetVisibleIssueFieldOptionsResult" = union(enum) {
 };
 
 /// Get visible issue field options
-pub fn @"getVisibleIssueFieldOptions"(
+pub fn getVisibleIssueFieldOptions(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldKey": []const u8,
-) !@"GetVisibleIssueFieldOptionsResult" {
+    fieldKey: []const u8,
+) !GetVisibleIssueFieldOptionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldKey");
+    try url_buffer.appendSlice(fieldKey);
     try url_buffer.appendSlice("/option/suggestions/search");
     try url_buffer.append(0);
 
@@ -3151,27 +3079,26 @@ pub fn @"getVisibleIssueFieldOptions"(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueFieldOption", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueFieldOption.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetVisibleIssueFieldOptionsResult"{ ._200 = result };
+        return GetVisibleIssueFieldOptionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetVisibleIssueFieldOptionsResult"{ ._401 = {} };
+        return GetVisibleIssueFieldOptionsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetVisibleIssueFieldOptionsResult"{ ._404 = {} };
+        return GetVisibleIssueFieldOptionsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetVisibleIssueFieldOptionsResult"{ ._400 = {} };
+        return GetVisibleIssueFieldOptionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueFieldOptionResult" = union(enum) {
+pub const GetIssueFieldOptionResult = union(enum) {
     /// Returned if the requested option is returned.
-    _200: @"IssueFieldOption",
+    _200: types.IssueFieldOption,
     /// Returned if the field is not found or does not support options.
     _400: void,
     /// Returned if the request is not authenticated as a Jira administrator or the app that provided the field.
@@ -3182,17 +3109,17 @@ pub const @"GetIssueFieldOptionResult" = union(enum) {
 };
 
 /// Get issue field option
-pub fn @"getIssueFieldOption"(
+pub fn getIssueFieldOption(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldKey": []const u8,
-    @"optionId": []const u8,
-) !@"GetIssueFieldOptionResult" {
+    fieldKey: []const u8,
+    optionId: []const u8,
+) !GetIssueFieldOptionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldKey");
+    try url_buffer.appendSlice(fieldKey);
     try url_buffer.appendSlice("/option/");
-    try url_buffer.appendSlice(@"optionId");
+    try url_buffer.appendSlice(optionId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -3200,30 +3127,29 @@ pub fn @"getIssueFieldOption"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueFieldOption"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueFieldOption", &token_stream, parseOptions(alloc));
+        const result = types.IssueFieldOption.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueFieldOptionResult"{ ._200 = result };
+        return GetIssueFieldOptionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueFieldOptionResult"{ ._400 = {} };
+        return GetIssueFieldOptionResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueFieldOptionResult"{ ._403 = {} };
+        return GetIssueFieldOptionResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueFieldOptionResult"{ ._404 = {} };
+        return GetIssueFieldOptionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueFieldOptionResult"{ ._400 = {} };
+        return GetIssueFieldOptionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ReplaceIssueFieldOptionResult" = union(enum) {
+pub const ReplaceIssueFieldOptionResult = union(enum) {
     /// Returned if the long-running task to deselect the option is started.
-    _303: @"TaskProgressBeanRemoveOptionFromIssuesResult",
+    _303: types.TaskProgressBeanRemoveOptionFromIssuesResult,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the user does not have the necessary permission.
@@ -3234,17 +3160,17 @@ pub const @"ReplaceIssueFieldOptionResult" = union(enum) {
 };
 
 /// Replace issue field option
-pub fn @"replaceIssueFieldOption"(
+pub fn replaceIssueFieldOption(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldKey": []const u8,
-    @"optionId": []const u8,
-) !@"ReplaceIssueFieldOptionResult" {
+    fieldKey: []const u8,
+    optionId: []const u8,
+) !ReplaceIssueFieldOptionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"fieldKey");
+    try url_buffer.appendSlice(fieldKey);
     try url_buffer.appendSlice("/option/");
-    try url_buffer.appendSlice(@"optionId");
+    try url_buffer.appendSlice(optionId);
     try url_buffer.appendSlice("/issue");
     try url_buffer.append(0);
 
@@ -3257,56 +3183,55 @@ pub fn @"replaceIssueFieldOption"(
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanRemoveOptionFromIssuesResult"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"TaskProgressBeanRemoveOptionFromIssuesResult", &token_stream, parseOptions(alloc));
+        const result = types.TaskProgressBeanRemoveOptionFromIssuesResult.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"ReplaceIssueFieldOptionResult"{ ._303 = result };
+        return ReplaceIssueFieldOptionResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ReplaceIssueFieldOptionResult"{ ._400 = {} };
+        return ReplaceIssueFieldOptionResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"ReplaceIssueFieldOptionResult"{ ._403 = {} };
+        return ReplaceIssueFieldOptionResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"ReplaceIssueFieldOptionResult"{ ._404 = {} };
+        return ReplaceIssueFieldOptionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ReplaceIssueFieldOptionResult"{ ._400 = {} };
+        return ReplaceIssueFieldOptionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"DeleteCustomFieldResult" = union(enum) {
+pub const DeleteCustomFieldResult = union(enum) {
     /// Returned if the request is successful.
-    _303: @"TaskProgressBeanObject",
+    _303: types.TaskProgressBeanObject,
     /// Returned if any of these are true:
     ///
     ///  *  The custom field is locked.
     ///  *  The custom field is used in a issue security scheme or a permission scheme.
     ///  *  The custom field ID format is incorrect.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     /// Returned if the custom field is not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     /// Returned if a task to delete the custom field is running.
-    _409: @"ErrorCollection",
+    _409: types.ErrorCollection,
     _400: void,
 };
 
 /// Delete custom field
-pub fn @"deleteCustomField"(
+pub fn deleteCustomField(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"DeleteCustomFieldResult" {
+    id: []const u8,
+) !DeleteCustomFieldResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/field/{id}");
@@ -3314,71 +3239,65 @@ pub fn @"deleteCustomField"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
+        const result = types.TaskProgressBeanObject.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteCustomFieldResult"{ ._303 = result };
+        return DeleteCustomFieldResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteCustomFieldResult"{ ._400 = result };
+        return DeleteCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteCustomFieldResult"{ ._401 = result };
+        return DeleteCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteCustomFieldResult"{ ._403 = result };
+        return DeleteCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteCustomFieldResult"{ ._404 = result };
+        return DeleteCustomFieldResult{ ._404 = result };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteCustomFieldResult"{ ._409 = result };
+        return DeleteCustomFieldResult{ ._409 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteCustomFieldResult"{ ._400 = {} };
+        return DeleteCustomFieldResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RestoreCustomFieldResult" = union(enum) {
+pub const RestoreCustomFieldResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     /// Returned if the custom field is not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Restore custom field from trash
-pub fn @"restoreCustomField"(
+pub fn restoreCustomField(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"RestoreCustomFieldResult" {
+    id: []const u8,
+) !RestoreCustomFieldResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/restore");
     try url_buffer.append(0);
 
@@ -3387,62 +3306,58 @@ pub fn @"restoreCustomField"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"RestoreCustomFieldResult"{ ._200 = {} };
+        return RestoreCustomFieldResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RestoreCustomFieldResult"{ ._400 = result };
+        return RestoreCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RestoreCustomFieldResult"{ ._401 = result };
+        return RestoreCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RestoreCustomFieldResult"{ ._403 = result };
+        return RestoreCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RestoreCustomFieldResult"{ ._404 = result };
+        return RestoreCustomFieldResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RestoreCustomFieldResult"{ ._400 = {} };
+        return RestoreCustomFieldResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"TrashCustomFieldResult" = union(enum) {
+pub const TrashCustomFieldResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     /// Returned if the custom field is not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Move custom field to trash
-pub fn @"trashCustomField"(
+pub fn trashCustomField(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"TrashCustomFieldResult" {
+    id: []const u8,
+) !TrashCustomFieldResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/field/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/trash");
     try url_buffer.append(0);
 
@@ -3451,42 +3366,38 @@ pub fn @"trashCustomField"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"TrashCustomFieldResult"{ ._200 = {} };
+        return TrashCustomFieldResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"TrashCustomFieldResult"{ ._400 = result };
+        return TrashCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"TrashCustomFieldResult"{ ._401 = result };
+        return TrashCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"TrashCustomFieldResult"{ ._403 = result };
+        return TrashCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"TrashCustomFieldResult"{ ._404 = result };
+        return TrashCustomFieldResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"TrashCustomFieldResult"{ ._400 = {} };
+        return TrashCustomFieldResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllFieldConfigurationsResult" = union(enum) {
+pub const GetAllFieldConfigurationsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanFieldConfigurationDetails",
+    _200: types.PageBeanFieldConfigurationDetails,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3495,10 +3406,10 @@ pub const @"GetAllFieldConfigurationsResult" = union(enum) {
 };
 
 /// Get all field configurations
-pub fn @"getAllFieldConfigurations"(
+pub fn getAllFieldConfigurations(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllFieldConfigurationsResult" {
+) !GetAllFieldConfigurationsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/fieldconfiguration");
     try url_buffer.append(0);
@@ -3513,25 +3424,24 @@ pub fn @"getAllFieldConfigurations"(
     // isDefault; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationDetails"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanFieldConfigurationDetails", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanFieldConfigurationDetails.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllFieldConfigurationsResult"{ ._200 = result };
+        return GetAllFieldConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllFieldConfigurationsResult"{ ._401 = {} };
+        return GetAllFieldConfigurationsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllFieldConfigurationsResult"{ ._403 = {} };
+        return GetAllFieldConfigurationsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllFieldConfigurationsResult"{ ._400 = {} };
+        return GetAllFieldConfigurationsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateFieldConfigurationResult" = union(enum) {
+pub const UpdateFieldConfigurationResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -3546,14 +3456,14 @@ pub const @"UpdateFieldConfigurationResult" = union(enum) {
 };
 
 /// Update field configuration
-pub fn @"updateFieldConfiguration"(
+pub fn updateFieldConfiguration(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"UpdateFieldConfigurationResult" {
+    id: []const u8,
+) !UpdateFieldConfigurationResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/fieldconfiguration/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/fieldconfiguration/{id}");
@@ -3561,30 +3471,30 @@ pub fn @"updateFieldConfiguration"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationResult"{ ._204 = {} };
+        return UpdateFieldConfigurationResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationResult"{ ._400 = {} };
+        return UpdateFieldConfigurationResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationResult"{ ._401 = {} };
+        return UpdateFieldConfigurationResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationResult"{ ._403 = {} };
+        return UpdateFieldConfigurationResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationResult"{ ._404 = {} };
+        return UpdateFieldConfigurationResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationResult"{ ._400 = {} };
+        return UpdateFieldConfigurationResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFieldConfigurationItemsResult" = union(enum) {
+pub const GetFieldConfigurationItemsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanFieldConfigurationItem",
+    _200: types.PageBeanFieldConfigurationItem,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3595,14 +3505,14 @@ pub const @"GetFieldConfigurationItemsResult" = union(enum) {
 };
 
 /// Get field configuration items
-pub fn @"getFieldConfigurationItems"(
+pub fn getFieldConfigurationItems(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetFieldConfigurationItemsResult" {
+    id: []const u8,
+) !GetFieldConfigurationItemsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/fieldconfiguration/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/fields");
     try url_buffer.append(0);
 
@@ -3613,30 +3523,29 @@ pub fn @"getFieldConfigurationItems"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationItem"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanFieldConfigurationItem", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanFieldConfigurationItem.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFieldConfigurationItemsResult"{ ._200 = result };
+        return GetFieldConfigurationItemsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationItemsResult"{ ._401 = {} };
+        return GetFieldConfigurationItemsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationItemsResult"{ ._403 = {} };
+        return GetFieldConfigurationItemsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationItemsResult"{ ._404 = {} };
+        return GetFieldConfigurationItemsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationItemsResult"{ ._400 = {} };
+        return GetFieldConfigurationItemsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllFieldConfigurationSchemesResult" = union(enum) {
+pub const GetAllFieldConfigurationSchemesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanFieldConfigurationScheme",
+    _200: types.PageBeanFieldConfigurationScheme,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3647,10 +3556,10 @@ pub const @"GetAllFieldConfigurationSchemesResult" = union(enum) {
 };
 
 /// Get all field configuration schemes
-pub fn @"getAllFieldConfigurationSchemes"(
+pub fn getAllFieldConfigurationSchemes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllFieldConfigurationSchemesResult" {
+) !GetAllFieldConfigurationSchemesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/fieldconfigurationscheme");
     try url_buffer.append(0);
@@ -3663,30 +3572,29 @@ pub fn @"getAllFieldConfigurationSchemes"(
     // maxResults; location: query
     // id; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanFieldConfigurationScheme", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanFieldConfigurationScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllFieldConfigurationSchemesResult"{ ._200 = result };
+        return GetAllFieldConfigurationSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllFieldConfigurationSchemesResult"{ ._400 = {} };
+        return GetAllFieldConfigurationSchemesResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllFieldConfigurationSchemesResult"{ ._401 = {} };
+        return GetAllFieldConfigurationSchemesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllFieldConfigurationSchemesResult"{ ._403 = {} };
+        return GetAllFieldConfigurationSchemesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllFieldConfigurationSchemesResult"{ ._400 = {} };
+        return GetAllFieldConfigurationSchemesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFieldConfigurationSchemeMappingsResult" = union(enum) {
+pub const GetFieldConfigurationSchemeMappingsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanFieldConfigurationIssueTypeItem",
+    _200: types.PageBeanFieldConfigurationIssueTypeItem,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3699,10 +3607,10 @@ pub const @"GetFieldConfigurationSchemeMappingsResult" = union(enum) {
 };
 
 /// Get field configuration issue type items
-pub fn @"getFieldConfigurationSchemeMappings"(
+pub fn getFieldConfigurationSchemeMappings(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetFieldConfigurationSchemeMappingsResult" {
+) !GetFieldConfigurationSchemeMappingsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/fieldconfigurationscheme/mapping");
     try url_buffer.append(0);
@@ -3715,33 +3623,32 @@ pub fn @"getFieldConfigurationSchemeMappings"(
     // maxResults; location: query
     // fieldConfigurationSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationIssueTypeItem"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanFieldConfigurationIssueTypeItem", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanFieldConfigurationIssueTypeItem.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFieldConfigurationSchemeMappingsResult"{ ._200 = result };
+        return GetFieldConfigurationSchemeMappingsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationSchemeMappingsResult"{ ._400 = {} };
+        return GetFieldConfigurationSchemeMappingsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationSchemeMappingsResult"{ ._401 = {} };
+        return GetFieldConfigurationSchemeMappingsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationSchemeMappingsResult"{ ._403 = {} };
+        return GetFieldConfigurationSchemeMappingsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationSchemeMappingsResult"{ ._404 = {} };
+        return GetFieldConfigurationSchemeMappingsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationSchemeMappingsResult"{ ._400 = {} };
+        return GetFieldConfigurationSchemeMappingsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFieldConfigurationSchemeProjectMappingResult" = union(enum) {
+pub const GetFieldConfigurationSchemeProjectMappingResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanFieldConfigurationSchemeProjects",
+    _200: types.PageBeanFieldConfigurationSchemeProjects,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3752,10 +3659,10 @@ pub const @"GetFieldConfigurationSchemeProjectMappingResult" = union(enum) {
 };
 
 /// Get field configuration schemes for projects
-pub fn @"getFieldConfigurationSchemeProjectMapping"(
+pub fn getFieldConfigurationSchemeProjectMapping(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetFieldConfigurationSchemeProjectMappingResult" {
+) !GetFieldConfigurationSchemeProjectMappingResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/fieldconfigurationscheme/project");
     try url_buffer.append(0);
@@ -3768,28 +3675,27 @@ pub fn @"getFieldConfigurationSchemeProjectMapping"(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationSchemeProjects"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanFieldConfigurationSchemeProjects", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanFieldConfigurationSchemeProjects.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._200 = result };
+        return GetFieldConfigurationSchemeProjectMappingResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._400 = {} };
+        return GetFieldConfigurationSchemeProjectMappingResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._401 = {} };
+        return GetFieldConfigurationSchemeProjectMappingResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._403 = {} };
+        return GetFieldConfigurationSchemeProjectMappingResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFieldConfigurationSchemeProjectMappingResult"{ ._400 = {} };
+        return GetFieldConfigurationSchemeProjectMappingResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateFieldConfigurationSchemeResult" = union(enum) {
+pub const UpdateFieldConfigurationSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -3804,14 +3710,14 @@ pub const @"UpdateFieldConfigurationSchemeResult" = union(enum) {
 };
 
 /// Update field configuration scheme
-pub fn @"updateFieldConfigurationScheme"(
+pub fn updateFieldConfigurationScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"UpdateFieldConfigurationSchemeResult" {
+    id: []const u8,
+) !UpdateFieldConfigurationSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/fieldconfigurationscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/fieldconfigurationscheme/{id}");
@@ -3819,28 +3725,28 @@ pub fn @"updateFieldConfigurationScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationSchemeResult"{ ._204 = {} };
+        return UpdateFieldConfigurationSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationSchemeResult"{ ._400 = {} };
+        return UpdateFieldConfigurationSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationSchemeResult"{ ._401 = {} };
+        return UpdateFieldConfigurationSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationSchemeResult"{ ._403 = {} };
+        return UpdateFieldConfigurationSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationSchemeResult"{ ._404 = {} };
+        return UpdateFieldConfigurationSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateFieldConfigurationSchemeResult"{ ._400 = {} };
+        return UpdateFieldConfigurationSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"SetFieldConfigurationSchemeMappingResult" = union(enum) {
+pub const SetFieldConfigurationSchemeMappingResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -3855,14 +3761,14 @@ pub const @"SetFieldConfigurationSchemeMappingResult" = union(enum) {
 };
 
 /// Assign issue types to field configurations
-pub fn @"setFieldConfigurationSchemeMapping"(
+pub fn setFieldConfigurationSchemeMapping(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"SetFieldConfigurationSchemeMappingResult" {
+    id: []const u8,
+) !SetFieldConfigurationSchemeMappingResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/fieldconfigurationscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/mapping");
     try url_buffer.append(0);
 
@@ -3871,50 +3777,50 @@ pub fn @"setFieldConfigurationSchemeMapping"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"SetFieldConfigurationSchemeMappingResult"{ ._204 = {} };
+        return SetFieldConfigurationSchemeMappingResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SetFieldConfigurationSchemeMappingResult"{ ._400 = {} };
+        return SetFieldConfigurationSchemeMappingResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"SetFieldConfigurationSchemeMappingResult"{ ._401 = {} };
+        return SetFieldConfigurationSchemeMappingResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"SetFieldConfigurationSchemeMappingResult"{ ._403 = {} };
+        return SetFieldConfigurationSchemeMappingResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"SetFieldConfigurationSchemeMappingResult"{ ._404 = {} };
+        return SetFieldConfigurationSchemeMappingResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SetFieldConfigurationSchemeMappingResult"{ ._400 = {} };
+        return SetFieldConfigurationSchemeMappingResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult" = union(enum) {
+pub const RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     /// Returned if the field configuration scheme or the issue types are not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Remove issue types from field configuration scheme
-pub fn @"removeIssueTypesFromGlobalFieldConfigurationScheme"(
+pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult" {
+    id: []const u8,
+) !RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/fieldconfigurationscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/mapping/delete");
     try url_buffer.append(0);
 
@@ -3923,50 +3829,46 @@ pub fn @"removeIssueTypesFromGlobalFieldConfigurationScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._204 = {} };
+        return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._400 = result };
+        return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._401 = result };
+        return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._403 = result };
+        return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._404 = result };
+        return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult"{ ._400 = {} };
+        return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFiltersResult" = union(enum) {
+pub const GetFiltersResult = union(enum) {
     /// 200 response
     _200: void,
     _400: void,
 };
 
 /// Get filters
-pub fn @"getFilters"(
+pub fn getFilters(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetFiltersResult" {
+) !GetFiltersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter");
     try url_buffer.append(0);
@@ -3977,28 +3879,28 @@ pub fn @"getFilters"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetFiltersResult"{ ._200 = {} };
+        return GetFiltersResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFiltersResult"{ ._400 = {} };
+        return GetFiltersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDefaultShareScopeResult" = union(enum) {
+pub const GetDefaultShareScopeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"DefaultShareScope",
+    _200: types.DefaultShareScope,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get default share scope
-pub fn @"getDefaultShareScope"(
+pub fn getDefaultShareScope(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetDefaultShareScopeResult" {
+) !GetDefaultShareScopeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/defaultShareScope");
     try url_buffer.append(0);
@@ -4008,22 +3910,21 @@ pub fn @"getDefaultShareScope"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultShareScope"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"DefaultShareScope", &token_stream, parseOptions(alloc));
+        const result = types.DefaultShareScope.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDefaultShareScopeResult"{ ._200 = result };
+        return GetDefaultShareScopeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetDefaultShareScopeResult"{ ._401 = {} };
+        return GetDefaultShareScopeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDefaultShareScopeResult"{ ._400 = {} };
+        return GetDefaultShareScopeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFavouriteFiltersResult" = union(enum) {
+pub const GetFavouriteFiltersResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4032,10 +3933,10 @@ pub const @"GetFavouriteFiltersResult" = union(enum) {
 };
 
 /// Get favorite filters
-pub fn @"getFavouriteFilters"(
+pub fn getFavouriteFilters(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetFavouriteFiltersResult" {
+) !GetFavouriteFiltersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/favourite");
     try url_buffer.append(0);
@@ -4046,19 +3947,19 @@ pub fn @"getFavouriteFilters"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetFavouriteFiltersResult"{ ._200 = {} };
+        return GetFavouriteFiltersResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFavouriteFiltersResult"{ ._401 = {} };
+        return GetFavouriteFiltersResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFavouriteFiltersResult"{ ._400 = {} };
+        return GetFavouriteFiltersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetMyFiltersResult" = union(enum) {
+pub const GetMyFiltersResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4067,10 +3968,10 @@ pub const @"GetMyFiltersResult" = union(enum) {
 };
 
 /// Get my filters
-pub fn @"getMyFilters"(
+pub fn getMyFilters(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetMyFiltersResult" {
+) !GetMyFiltersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/my");
     try url_buffer.append(0);
@@ -4082,37 +3983,37 @@ pub fn @"getMyFilters"(
     // expand; location: query
     // includeFavourites; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetMyFiltersResult"{ ._200 = {} };
+        return GetMyFiltersResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetMyFiltersResult"{ ._401 = {} };
+        return GetMyFiltersResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetMyFiltersResult"{ ._400 = {} };
+        return GetMyFiltersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFiltersPaginatedResult" = union(enum) {
+pub const GetFiltersPaginatedResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanFilterDetails",
+    _200: types.PageBeanFilterDetails,
     /// Returned if:
     ///
     ///  *  `owner` and `accountId` are provided.
     ///  *  `expand` includes an invalid value.
     ///  *  `orderBy` is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Search for filters
-pub fn @"getFiltersPaginated"(
+pub fn getFiltersPaginated(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetFiltersPaginatedResult" {
+) !GetFiltersPaginatedResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/search");
     try url_buffer.append(0);
@@ -4134,30 +4035,28 @@ pub fn @"getFiltersPaginated"(
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFilterDetails"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanFilterDetails", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanFilterDetails.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFiltersPaginatedResult"{ ._200 = result };
+        return GetFiltersPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFiltersPaginatedResult"{ ._400 = result };
+        return GetFiltersPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFiltersPaginatedResult"{ ._401 = {} };
+        return GetFiltersPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFiltersPaginatedResult"{ ._400 = {} };
+        return GetFiltersPaginatedResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFilterResult" = union(enum) {
+pub const GetFilterResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Filter",
+    _200: types.Filter,
     /// Returned if the filter is not found or the user does not have permission to view it.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4166,14 +4065,14 @@ pub const @"GetFilterResult" = union(enum) {
 };
 
 /// Get filter
-pub fn @"getFilter"(
+pub fn getFilter(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetFilterResult" {
+    id: []const u8,
+) !GetFilterResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -4183,25 +4082,24 @@ pub fn @"getFilter"(
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Filter", &token_stream, parseOptions(alloc));
+        const result = types.Filter.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFilterResult"{ ._200 = result };
+        return GetFilterResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFilterResult"{ ._400 = {} };
+        return GetFilterResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFilterResult"{ ._401 = {} };
+        return GetFilterResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFilterResult"{ ._400 = {} };
+        return GetFilterResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetColumnsResult" = union(enum) {
+pub const GetColumnsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the user does not have permission to view the filter.
@@ -4214,14 +4112,14 @@ pub const @"GetColumnsResult" = union(enum) {
 };
 
 /// Get columns
-pub fn @"getColumns"(
+pub fn getColumns(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetColumnsResult" {
+    id: []const u8,
+) !GetColumnsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/columns");
     try url_buffer.append(0);
 
@@ -4230,27 +4128,27 @@ pub fn @"getColumns"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetColumnsResult"{ ._200 = {} };
+        return GetColumnsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetColumnsResult"{ ._400 = {} };
+        return GetColumnsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetColumnsResult"{ ._401 = {} };
+        return GetColumnsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetColumnsResult"{ ._404 = {} };
+        return GetColumnsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetColumnsResult"{ ._400 = {} };
+        return GetColumnsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"SetFavouriteForFilterResult" = union(enum) {
+pub const SetFavouriteForFilterResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Filter",
+    _200: types.Filter,
     /// Returned if:
     ///
     ///  *  the filter is not found.
@@ -4260,14 +4158,14 @@ pub const @"SetFavouriteForFilterResult" = union(enum) {
 };
 
 /// Add filter as favorite
-pub fn @"setFavouriteForFilter"(
+pub fn setFavouriteForFilter(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"SetFavouriteForFilterResult" {
+    id: []const u8,
+) !SetFavouriteForFilterResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/favourite");
     try url_buffer.append(0);
 
@@ -4277,22 +4175,21 @@ pub fn @"setFavouriteForFilter"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Filter", &token_stream, parseOptions(alloc));
+        const result = types.Filter.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SetFavouriteForFilterResult"{ ._200 = result };
+        return SetFavouriteForFilterResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SetFavouriteForFilterResult"{ ._400 = {} };
+        return SetFavouriteForFilterResult{ ._400 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SetFavouriteForFilterResult"{ ._400 = {} };
+        return SetFavouriteForFilterResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ChangeFilterOwnerResult" = union(enum) {
+pub const ChangeFilterOwnerResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned when:
@@ -4308,14 +4205,14 @@ pub const @"ChangeFilterOwnerResult" = union(enum) {
 };
 
 /// Change filter owner
-pub fn @"changeFilterOwner"(
+pub fn changeFilterOwner(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"ChangeFilterOwnerResult" {
+    id: []const u8,
+) !ChangeFilterOwnerResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/owner");
     try url_buffer.append(0);
 
@@ -4324,25 +4221,25 @@ pub fn @"changeFilterOwner"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"ChangeFilterOwnerResult"{ ._204 = {} };
+        return ChangeFilterOwnerResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ChangeFilterOwnerResult"{ ._400 = {} };
+        return ChangeFilterOwnerResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"ChangeFilterOwnerResult"{ ._403 = {} };
+        return ChangeFilterOwnerResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"ChangeFilterOwnerResult"{ ._404 = {} };
+        return ChangeFilterOwnerResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ChangeFilterOwnerResult"{ ._400 = {} };
+        return ChangeFilterOwnerResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetSharePermissionsResult" = union(enum) {
+pub const GetSharePermissionsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4356,14 +4253,14 @@ pub const @"GetSharePermissionsResult" = union(enum) {
 };
 
 /// Get share permissions
-pub fn @"getSharePermissions"(
+pub fn getSharePermissions(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetSharePermissionsResult" {
+    id: []const u8,
+) !GetSharePermissionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/permission");
     try url_buffer.append(0);
 
@@ -4372,24 +4269,24 @@ pub fn @"getSharePermissions"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetSharePermissionsResult"{ ._200 = {} };
+        return GetSharePermissionsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetSharePermissionsResult"{ ._401 = {} };
+        return GetSharePermissionsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetSharePermissionsResult"{ ._404 = {} };
+        return GetSharePermissionsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetSharePermissionsResult"{ ._400 = {} };
+        return GetSharePermissionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetSharePermissionResult" = union(enum) {
+pub const GetSharePermissionResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"SharePermission",
+    _200: types.SharePermission,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -4402,17 +4299,17 @@ pub const @"GetSharePermissionResult" = union(enum) {
 };
 
 /// Get share permission
-pub fn @"getSharePermission"(
+pub fn getSharePermission(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-    @"permissionId": []const u8,
-) !@"GetSharePermissionResult" {
+    id: []const u8,
+    permissionId: []const u8,
+) !GetSharePermissionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/filter/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/permission/");
-    try url_buffer.appendSlice(@"permissionId");
+    try url_buffer.appendSlice(permissionId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -4420,27 +4317,26 @@ pub fn @"getSharePermission"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SharePermission"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"SharePermission", &token_stream, parseOptions(alloc));
+        const result = types.SharePermission.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetSharePermissionResult"{ ._200 = result };
+        return GetSharePermissionResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetSharePermissionResult"{ ._401 = {} };
+        return GetSharePermissionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetSharePermissionResult"{ ._404 = {} };
+        return GetSharePermissionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetSharePermissionResult"{ ._400 = {} };
+        return GetSharePermissionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetGroupResult" = union(enum) {
+pub const GetGroupResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Group",
+    _200: types.Group,
     /// Returned if the group name is not specified.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4453,10 +4349,10 @@ pub const @"GetGroupResult" = union(enum) {
 };
 
 /// Get group
-pub fn @"getGroup"(
+pub fn getGroup(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetGroupResult" {
+) !GetGroupResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/group");
     try url_buffer.append(0);
@@ -4469,33 +4365,32 @@ pub fn @"getGroup"(
     // groupId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Group"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Group", &token_stream, parseOptions(alloc));
+        const result = types.Group.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetGroupResult"{ ._200 = result };
+        return GetGroupResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetGroupResult"{ ._400 = {} };
+        return GetGroupResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetGroupResult"{ ._401 = {} };
+        return GetGroupResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetGroupResult"{ ._403 = {} };
+        return GetGroupResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetGroupResult"{ ._404 = {} };
+        return GetGroupResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetGroupResult"{ ._400 = {} };
+        return GetGroupResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"BulkGetGroupsResult" = union(enum) {
+pub const BulkGetGroupsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanGroupDetails",
+    _200: types.PageBeanGroupDetails,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4506,10 +4401,10 @@ pub const @"BulkGetGroupsResult" = union(enum) {
 };
 
 /// Bulk get groups
-pub fn @"bulkGetGroups"(
+pub fn bulkGetGroups(
     client: Client,
     alloc: mem.Allocator,
-) !@"BulkGetGroupsResult" {
+) !BulkGetGroupsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/group/bulk");
     try url_buffer.append(0);
@@ -4523,30 +4418,29 @@ pub fn @"bulkGetGroups"(
     // groupId; location: query
     // groupName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanGroupDetails"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanGroupDetails", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanGroupDetails.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"BulkGetGroupsResult"{ ._200 = result };
+        return BulkGetGroupsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"BulkGetGroupsResult"{ ._400 = {} };
+        return BulkGetGroupsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"BulkGetGroupsResult"{ ._401 = {} };
+        return BulkGetGroupsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"BulkGetGroupsResult"{ ._403 = {} };
+        return BulkGetGroupsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"BulkGetGroupsResult"{ ._400 = {} };
+        return BulkGetGroupsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetUsersFromGroupResult" = union(enum) {
+pub const GetUsersFromGroupResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanUserDetails",
+    _200: types.PageBeanUserDetails,
     /// Returned if the group name is not specified.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4559,10 +4453,10 @@ pub const @"GetUsersFromGroupResult" = union(enum) {
 };
 
 /// Get users from group
-pub fn @"getUsersFromGroup"(
+pub fn getUsersFromGroup(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetUsersFromGroupResult" {
+) !GetUsersFromGroupResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/group/member");
     try url_buffer.append(0);
@@ -4577,33 +4471,32 @@ pub fn @"getUsersFromGroup"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserDetails"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanUserDetails", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanUserDetails.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetUsersFromGroupResult"{ ._200 = result };
+        return GetUsersFromGroupResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUsersFromGroupResult"{ ._400 = {} };
+        return GetUsersFromGroupResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetUsersFromGroupResult"{ ._401 = {} };
+        return GetUsersFromGroupResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetUsersFromGroupResult"{ ._403 = {} };
+        return GetUsersFromGroupResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetUsersFromGroupResult"{ ._404 = {} };
+        return GetUsersFromGroupResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUsersFromGroupResult"{ ._400 = {} };
+        return GetUsersFromGroupResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"AddUserToGroupResult" = union(enum) {
+pub const AddUserToGroupResult = union(enum) {
     /// Returned if the request is successful.
-    _201: @"Group",
+    _201: types.Group,
     /// Returned if:
     ///
     ///  *  `groupname` is not provided.
@@ -4619,10 +4512,10 @@ pub const @"AddUserToGroupResult" = union(enum) {
 };
 
 /// Add user to group
-pub fn @"addUserToGroup"(
+pub fn addUserToGroup(
     client: Client,
     alloc: mem.Allocator,
-) !@"AddUserToGroupResult" {
+) !AddUserToGroupResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/group/user");
     try url_buffer.append(0);
@@ -4634,41 +4527,40 @@ pub fn @"addUserToGroup"(
     // groupname; location: query
     // groupId; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Group"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Group", &token_stream, parseOptions(alloc));
+        const result = types.Group.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"AddUserToGroupResult"{ ._201 = result };
+        return AddUserToGroupResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AddUserToGroupResult"{ ._400 = {} };
+        return AddUserToGroupResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"AddUserToGroupResult"{ ._401 = {} };
+        return AddUserToGroupResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"AddUserToGroupResult"{ ._403 = {} };
+        return AddUserToGroupResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"AddUserToGroupResult"{ ._404 = {} };
+        return AddUserToGroupResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AddUserToGroupResult"{ ._400 = {} };
+        return AddUserToGroupResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindGroupsResult" = union(enum) {
+pub const FindGroupsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"FoundGroups",
+    _200: types.FoundGroups,
     _400: void,
 };
 
 /// Find groups
-pub fn @"findGroups"(
+pub fn findGroups(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindGroupsResult" {
+) !FindGroupsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/groups/picker");
     try url_buffer.append(0);
@@ -4684,21 +4576,20 @@ pub fn @"findGroups"(
     // maxResults; location: query
     // userName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundGroups"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"FoundGroups", &token_stream, parseOptions(alloc));
+        const result = types.FoundGroups.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"FindGroupsResult"{ ._200 = result };
+        return FindGroupsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindGroupsResult"{ ._400 = {} };
+        return FindGroupsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindUsersAndGroupsResult" = union(enum) {
+pub const FindUsersAndGroupsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"FoundUsersAndGroups",
+    _200: types.FoundUsersAndGroups,
     /// Returned if the query parameter is not provided.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4711,10 +4602,10 @@ pub const @"FindUsersAndGroupsResult" = union(enum) {
 };
 
 /// Find users and groups
-pub fn @"findUsersAndGroups"(
+pub fn findUsersAndGroups(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindUsersAndGroupsResult" {
+) !FindUsersAndGroupsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/groupuserpicker");
     try url_buffer.append(0);
@@ -4733,43 +4624,42 @@ pub fn @"findUsersAndGroups"(
     // caseInsensitive; location: query
     // excludeConnectAddons; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsersAndGroups"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"FoundUsersAndGroups", &token_stream, parseOptions(alloc));
+        const result = types.FoundUsersAndGroups.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"FindUsersAndGroupsResult"{ ._200 = result };
+        return FindUsersAndGroupsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersAndGroupsResult"{ ._400 = {} };
+        return FindUsersAndGroupsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"FindUsersAndGroupsResult"{ ._401 = {} };
+        return FindUsersAndGroupsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"FindUsersAndGroupsResult"{ ._403 = {} };
+        return FindUsersAndGroupsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        return @"FindUsersAndGroupsResult"{ ._429 = {} };
+        return FindUsersAndGroupsResult{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersAndGroupsResult"{ ._400 = {} };
+        return FindUsersAndGroupsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetLicenseResult" = union(enum) {
+pub const GetLicenseResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"License",
+    _200: types.License,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get license
-pub fn @"getLicense"(
+pub fn getLicense(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetLicenseResult" {
+) !GetLicenseResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/instance/license");
     try url_buffer.append(0);
@@ -4779,24 +4669,23 @@ pub fn @"getLicense"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"License"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"License", &token_stream, parseOptions(alloc));
+        const result = types.License.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetLicenseResult"{ ._200 = result };
+        return GetLicenseResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetLicenseResult"{ ._401 = {} };
+        return GetLicenseResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetLicenseResult"{ ._400 = {} };
+        return GetLicenseResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"CreateIssueResult" = union(enum) {
+pub const CreateIssueResult = union(enum) {
     /// Returned if the request is successful.
-    _201: @"CreatedIssue",
+    _201: types.CreatedIssue,
     /// Returned if the request:
     ///
     ///  *  is missing required fields.
@@ -4806,19 +4695,19 @@ pub const @"CreateIssueResult" = union(enum) {
     ///  *  is to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  is invalid for any other reason.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Create issue
-pub fn @"createIssue"(
+pub fn createIssue(
     client: Client,
     alloc: mem.Allocator,
-) !@"CreateIssueResult" {
+) !CreateIssueResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue");
     try url_buffer.append(0);
@@ -4829,37 +4718,33 @@ pub fn @"createIssue"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // updateHistory; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssue"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"CreatedIssue", &token_stream, parseOptions(alloc));
+        const result = types.CreatedIssue.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateIssueResult"{ ._201 = result };
+        return CreateIssueResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateIssueResult"{ ._400 = result };
+        return CreateIssueResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateIssueResult"{ ._401 = result };
+        return CreateIssueResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateIssueResult"{ ._403 = result };
+        return CreateIssueResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateIssueResult"{ ._400 = {} };
+        return CreateIssueResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"CreateIssuesResult" = union(enum) {
+pub const CreateIssuesResult = union(enum) {
     /// Returned if any of the issue or subtask creation requests were successful. A request may be unsuccessful when it:
     ///
     ///  *  is missing required fields.
@@ -4869,7 +4754,7 @@ pub const @"CreateIssuesResult" = union(enum) {
     ///  *  is to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  is invalid for any other reason.
-    _201: @"CreatedIssues",
+    _201: types.CreatedIssues,
     /// Returned if all requests are invalid. Requests may be unsuccessful when they:
     ///
     ///  *  are missing required fields.
@@ -4879,17 +4764,17 @@ pub const @"CreateIssuesResult" = union(enum) {
     ///  *  are to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  are invalid for any other reason.
-    _400: @"CreatedIssues",
+    _400: types.CreatedIssues,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Bulk create issue
-pub fn @"createIssues"(
+pub fn createIssues(
     client: Client,
     alloc: mem.Allocator,
-) !@"CreateIssuesResult" {
+) !CreateIssuesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/bulk");
     try url_buffer.append(0);
@@ -4899,40 +4784,38 @@ pub fn @"createIssues"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssues"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"CreatedIssues", &token_stream, parseOptions(alloc));
+        const result = types.CreatedIssues.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateIssuesResult"{ ._201 = result };
+        return CreateIssuesResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"CreatedIssues"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"CreatedIssues", &token_stream, parseOptions(alloc));
+        const result = types.CreatedIssues.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateIssuesResult"{ ._400 = result };
+        return CreateIssuesResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"CreateIssuesResult"{ ._401 = {} };
+        return CreateIssuesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateIssuesResult"{ ._400 = {} };
+        return CreateIssuesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCreateIssueMetaResult" = union(enum) {
+pub const GetCreateIssueMetaResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueCreateMetadata",
+    _200: types.IssueCreateMetadata,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get create issue metadata
-pub fn @"getCreateIssueMeta"(
+pub fn getCreateIssueMeta(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetCreateIssueMetaResult" {
+) !GetCreateIssueMetaResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/createmeta");
     try url_buffer.append(0);
@@ -4947,34 +4830,33 @@ pub fn @"getCreateIssueMeta"(
     // issuetypeNames; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueCreateMetadata"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueCreateMetadata", &token_stream, parseOptions(alloc));
+        const result = types.IssueCreateMetadata.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCreateIssueMetaResult"{ ._200 = result };
+        return GetCreateIssueMetaResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetCreateIssueMetaResult"{ ._401 = {} };
+        return GetCreateIssueMetaResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCreateIssueMetaResult"{ ._400 = {} };
+        return GetCreateIssueMetaResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssuePickerResourceResult" = union(enum) {
+pub const GetIssuePickerResourceResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssuePickerSuggestions",
+    _200: types.IssuePickerSuggestions,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get issue picker suggestions
-pub fn @"getIssuePickerResource"(
+pub fn getIssuePickerResource(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssuePickerResourceResult" {
+) !GetIssuePickerResourceResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/picker");
     try url_buffer.append(0);
@@ -4990,36 +4872,35 @@ pub fn @"getIssuePickerResource"(
     // showSubTasks; location: query
     // showSubTaskParent; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssuePickerSuggestions"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssuePickerSuggestions", &token_stream, parseOptions(alloc));
+        const result = types.IssuePickerSuggestions.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssuePickerResourceResult"{ ._200 = result };
+        return GetIssuePickerResourceResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssuePickerResourceResult"{ ._401 = {} };
+        return GetIssuePickerResourceResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssuePickerResourceResult"{ ._400 = {} };
+        return GetIssuePickerResourceResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"BulkSetIssuesPropertiesListResult" = union(enum) {
+pub const BulkSetIssuesPropertiesListResult = union(enum) {
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid or the user does not have the necessary permission.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     _400: void,
 };
 
 /// Bulk set issues properties by list
-pub fn @"bulkSetIssuesPropertiesList"(
+pub fn bulkSetIssuesPropertiesList(
     client: Client,
     alloc: mem.Allocator,
-) !@"BulkSetIssuesPropertiesListResult" {
+) !BulkSetIssuesPropertiesListResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/properties");
     try url_buffer.append(0);
@@ -5029,44 +4910,42 @@ pub fn @"bulkSetIssuesPropertiesList"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        return @"BulkSetIssuesPropertiesListResult"{ ._303 = {} };
+        return BulkSetIssuesPropertiesListResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"BulkSetIssuesPropertiesListResult"{ ._400 = result };
+        return BulkSetIssuesPropertiesListResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"BulkSetIssuesPropertiesListResult"{ ._401 = result };
+        return BulkSetIssuesPropertiesListResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"BulkSetIssuesPropertiesListResult"{ ._400 = {} };
+        return BulkSetIssuesPropertiesListResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"BulkSetIssuePropertiesByIssueResult" = union(enum) {
+pub const BulkSetIssuePropertiesByIssueResult = union(enum) {
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Return if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Bulk set issue properties by issue
-pub fn @"bulkSetIssuePropertiesByIssue"(
+pub fn bulkSetIssuePropertiesByIssue(
     client: Client,
     alloc: mem.Allocator,
-) !@"BulkSetIssuePropertiesByIssueResult" {
+) !BulkSetIssuePropertiesByIssueResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/properties/multi");
     try url_buffer.append(0);
@@ -5076,52 +4955,49 @@ pub fn @"bulkSetIssuePropertiesByIssue"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        return @"BulkSetIssuePropertiesByIssueResult"{ ._303 = {} };
+        return BulkSetIssuePropertiesByIssueResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"BulkSetIssuePropertiesByIssueResult"{ ._400 = result };
+        return BulkSetIssuePropertiesByIssueResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"BulkSetIssuePropertiesByIssueResult"{ ._401 = result };
+        return BulkSetIssuePropertiesByIssueResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"BulkSetIssuePropertiesByIssueResult"{ ._403 = result };
+        return BulkSetIssuePropertiesByIssueResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"BulkSetIssuePropertiesByIssueResult"{ ._400 = {} };
+        return BulkSetIssuePropertiesByIssueResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"BulkSetIssuePropertyResult" = union(enum) {
+pub const BulkSetIssuePropertyResult = union(enum) {
     /// Returned if the request is successful.
     _303: void,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     _400: void,
 };
 
 /// Bulk set issue property
-pub fn @"bulkSetIssueProperty"(
+pub fn bulkSetIssueProperty(
     client: Client,
     alloc: mem.Allocator,
-    @"propertyKey": []const u8,
-) !@"BulkSetIssuePropertyResult" {
+    propertyKey: []const u8,
+) !BulkSetIssuePropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/properties/");
-    try url_buffer.appendSlice(@"propertyKey");
+    try url_buffer.appendSlice(propertyKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/issue/properties/{propertyKey}");
@@ -5129,40 +5005,38 @@ pub fn @"bulkSetIssueProperty"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
-        return @"BulkSetIssuePropertyResult"{ ._303 = {} };
+        return BulkSetIssuePropertyResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"BulkSetIssuePropertyResult"{ ._400 = result };
+        return BulkSetIssuePropertyResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"BulkSetIssuePropertyResult"{ ._401 = result };
+        return BulkSetIssuePropertyResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"BulkSetIssuePropertyResult"{ ._400 = {} };
+        return BulkSetIssuePropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIsWatchingIssueBulkResult" = union(enum) {
+pub const GetIsWatchingIssueBulkResult = union(enum) {
     /// Returned if the request is successful
-    _200: @"BulkIssueIsWatching",
+    _200: types.BulkIssueIsWatching,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get is watching issue bulk
-pub fn @"getIsWatchingIssueBulk"(
+pub fn getIsWatchingIssueBulk(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIsWatchingIssueBulkResult" {
+) !GetIsWatchingIssueBulkResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/watching");
     try url_buffer.append(0);
@@ -5172,24 +5046,23 @@ pub fn @"getIsWatchingIssueBulk"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkIssueIsWatching"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"BulkIssueIsWatching", &token_stream, parseOptions(alloc));
+        const result = types.BulkIssueIsWatching.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIsWatchingIssueBulkResult"{ ._200 = result };
+        return GetIsWatchingIssueBulkResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIsWatchingIssueBulkResult"{ ._401 = {} };
+        return GetIsWatchingIssueBulkResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIsWatchingIssueBulkResult"{ ._400 = {} };
+        return GetIsWatchingIssueBulkResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueResult" = union(enum) {
+pub const GetIssueResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueBean",
+    _200: types.IssueBean,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -5198,14 +5071,14 @@ pub const @"GetIssueResult" = union(enum) {
 };
 
 /// Get issue
-pub fn @"getIssue"(
+pub fn getIssue(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetIssueResult" {
+    issueIdOrKey: []const u8,
+) !GetIssueResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -5218,25 +5091,24 @@ pub fn @"getIssue"(
     // properties; location: query
     // updateHistory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueBean"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueBean", &token_stream, parseOptions(alloc));
+        const result = types.IssueBean.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueResult"{ ._200 = result };
+        return GetIssueResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueResult"{ ._401 = {} };
+        return GetIssueResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueResult"{ ._404 = {} };
+        return GetIssueResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueResult"{ ._400 = {} };
+        return GetIssueResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"AssignIssueResult" = union(enum) {
+pub const AssignIssueResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if:
@@ -5253,14 +5125,14 @@ pub const @"AssignIssueResult" = union(enum) {
 };
 
 /// Assign issue
-pub fn @"assignIssue"(
+pub fn assignIssue(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"AssignIssueResult" {
+    issueIdOrKey: []const u8,
+) !AssignIssueResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/assignee");
     try url_buffer.append(0);
 
@@ -5269,25 +5141,25 @@ pub fn @"assignIssue"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"AssignIssueResult"{ ._204 = {} };
+        return AssignIssueResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AssignIssueResult"{ ._400 = {} };
+        return AssignIssueResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"AssignIssueResult"{ ._403 = {} };
+        return AssignIssueResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"AssignIssueResult"{ ._404 = {} };
+        return AssignIssueResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AssignIssueResult"{ ._400 = {} };
+        return AssignIssueResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"AddAttachmentResult" = union(enum) {
+pub const AddAttachmentResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the user does not have the necessary permission.
@@ -5303,14 +5175,14 @@ pub const @"AddAttachmentResult" = union(enum) {
 };
 
 /// Add attachment
-pub fn @"addAttachment"(
+pub fn addAttachment(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"AddAttachmentResult" {
+    issueIdOrKey: []const u8,
+) !AddAttachmentResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/attachments");
     try url_buffer.append(0);
 
@@ -5319,41 +5191,41 @@ pub fn @"addAttachment"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"AddAttachmentResult"{ ._200 = {} };
+        return AddAttachmentResult{ ._200 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"AddAttachmentResult"{ ._403 = {} };
+        return AddAttachmentResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"AddAttachmentResult"{ ._404 = {} };
+        return AddAttachmentResult{ ._404 = {} };
     }
     if (mem.eql(u8, "413", http_response.status_code)) { // Make void
-        return @"AddAttachmentResult"{ ._413 = {} };
+        return AddAttachmentResult{ ._413 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AddAttachmentResult"{ ._400 = {} };
+        return AddAttachmentResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetChangeLogsResult" = union(enum) {
+pub const GetChangeLogsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanChangelog",
+    _200: types.PageBeanChangelog,
     /// Returned if the issue is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
 };
 
 /// Get changelogs
-pub fn @"getChangeLogs"(
+pub fn getChangeLogs(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetChangeLogsResult" {
+    issueIdOrKey: []const u8,
+) !GetChangeLogsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/changelog");
     try url_buffer.append(0);
 
@@ -5364,24 +5236,23 @@ pub fn @"getChangeLogs"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanChangelog"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanChangelog", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanChangelog.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetChangeLogsResult"{ ._200 = result };
+        return GetChangeLogsResult{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetChangeLogsResult"{ ._404 = {} };
+        return GetChangeLogsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetChangeLogsResult"{ ._400 = {} };
+        return GetChangeLogsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetChangeLogsByIdsResult" = union(enum) {
+pub const GetChangeLogsByIdsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageOfChangelogs",
+    _200: types.PageOfChangelogs,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the issue is not found or the user does not have the necessary permission.
@@ -5390,14 +5261,14 @@ pub const @"GetChangeLogsByIdsResult" = union(enum) {
 };
 
 /// Get changelogs by IDs
-pub fn @"getChangeLogsByIds"(
+pub fn getChangeLogsByIds(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetChangeLogsByIdsResult" {
+    issueIdOrKey: []const u8,
+) !GetChangeLogsByIdsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/changelog/list");
     try url_buffer.append(0);
 
@@ -5406,27 +5277,26 @@ pub fn @"getChangeLogsByIds"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfChangelogs"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageOfChangelogs", &token_stream, parseOptions(alloc));
+        const result = types.PageOfChangelogs.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetChangeLogsByIdsResult"{ ._200 = result };
+        return GetChangeLogsByIdsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetChangeLogsByIdsResult"{ ._400 = {} };
+        return GetChangeLogsByIdsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetChangeLogsByIdsResult"{ ._404 = {} };
+        return GetChangeLogsByIdsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetChangeLogsByIdsResult"{ ._400 = {} };
+        return GetChangeLogsByIdsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCommentsResult" = union(enum) {
+pub const GetCommentsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageOfComments",
+    _200: types.PageOfComments,
     /// Returned if `orderBy` is set to a value other than *created*.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5437,14 +5307,14 @@ pub const @"GetCommentsResult" = union(enum) {
 };
 
 /// Get comments
-pub fn @"getComments"(
+pub fn getComments(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetCommentsResult" {
+    issueIdOrKey: []const u8,
+) !GetCommentsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/comment");
     try url_buffer.append(0);
 
@@ -5457,30 +5327,29 @@ pub fn @"getComments"(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfComments"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageOfComments", &token_stream, parseOptions(alloc));
+        const result = types.PageOfComments.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCommentsResult"{ ._200 = result };
+        return GetCommentsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCommentsResult"{ ._400 = {} };
+        return GetCommentsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetCommentsResult"{ ._401 = {} };
+        return GetCommentsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetCommentsResult"{ ._404 = {} };
+        return GetCommentsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCommentsResult"{ ._400 = {} };
+        return GetCommentsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCommentResult" = union(enum) {
+pub const GetCommentResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Comment",
+    _200: types.Comment,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue or comment is not found or the user does not have permission to view the issue or comment.
@@ -5489,17 +5358,17 @@ pub const @"GetCommentResult" = union(enum) {
 };
 
 /// Get comment
-pub fn @"getComment"(
+pub fn getComment(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-    @"id": []const u8,
-) !@"GetCommentResult" {
+    issueIdOrKey: []const u8,
+    id: []const u8,
+) !GetCommentResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/comment/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -5508,27 +5377,26 @@ pub fn @"getComment"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Comment"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Comment", &token_stream, parseOptions(alloc));
+        const result = types.Comment.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCommentResult"{ ._200 = result };
+        return GetCommentResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetCommentResult"{ ._401 = {} };
+        return GetCommentResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetCommentResult"{ ._404 = {} };
+        return GetCommentResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCommentResult"{ ._400 = {} };
+        return GetCommentResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetEditIssueMetaResult" = union(enum) {
+pub const GetEditIssueMetaResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueUpdateMetadata",
+    _200: types.IssueUpdateMetadata,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user uses an override parameter but doesn't have permission to do so.
@@ -5539,14 +5407,14 @@ pub const @"GetEditIssueMetaResult" = union(enum) {
 };
 
 /// Get edit issue metadata
-pub fn @"getEditIssueMeta"(
+pub fn getEditIssueMeta(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetEditIssueMetaResult" {
+    issueIdOrKey: []const u8,
+) !GetEditIssueMetaResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/editmeta");
     try url_buffer.append(0);
 
@@ -5557,28 +5425,27 @@ pub fn @"getEditIssueMeta"(
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueUpdateMetadata"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueUpdateMetadata", &token_stream, parseOptions(alloc));
+        const result = types.IssueUpdateMetadata.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetEditIssueMetaResult"{ ._200 = result };
+        return GetEditIssueMetaResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetEditIssueMetaResult"{ ._401 = {} };
+        return GetEditIssueMetaResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetEditIssueMetaResult"{ ._403 = {} };
+        return GetEditIssueMetaResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetEditIssueMetaResult"{ ._404 = {} };
+        return GetEditIssueMetaResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetEditIssueMetaResult"{ ._400 = {} };
+        return GetEditIssueMetaResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"NotifyResult" = union(enum) {
+pub const NotifyResult = union(enum) {
     /// Returned if the email is queued for sending.
     _204: void,
     /// Returned if:
@@ -5598,14 +5465,14 @@ pub const @"NotifyResult" = union(enum) {
 };
 
 /// Send notification for issue
-pub fn @"notify"(
+pub fn notify(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"NotifyResult" {
+    issueIdOrKey: []const u8,
+) !NotifyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/notify");
     try url_buffer.append(0);
 
@@ -5614,41 +5481,41 @@ pub fn @"notify"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"NotifyResult"{ ._204 = {} };
+        return NotifyResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"NotifyResult"{ ._400 = {} };
+        return NotifyResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"NotifyResult"{ ._403 = {} };
+        return NotifyResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"NotifyResult"{ ._404 = {} };
+        return NotifyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"NotifyResult"{ ._400 = {} };
+        return NotifyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssuePropertyKeysResult" = union(enum) {
+pub const GetIssuePropertyKeysResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PropertyKeys",
+    _200: types.PropertyKeys,
     /// Returned if the issue is not found or the user does not have permissions to view the issue.
     _404: void,
     _400: void,
 };
 
 /// Get issue property keys
-pub fn @"getIssuePropertyKeys"(
+pub fn getIssuePropertyKeys(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetIssuePropertyKeysResult" {
+    issueIdOrKey: []const u8,
+) !GetIssuePropertyKeysResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/properties");
     try url_buffer.append(0);
 
@@ -5657,24 +5524,23 @@ pub fn @"getIssuePropertyKeys"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
+        const result = types.PropertyKeys.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssuePropertyKeysResult"{ ._200 = result };
+        return GetIssuePropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssuePropertyKeysResult"{ ._404 = {} };
+        return GetIssuePropertyKeysResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssuePropertyKeysResult"{ ._400 = {} };
+        return GetIssuePropertyKeysResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssuePropertyResult" = union(enum) {
+pub const GetIssuePropertyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"EntityProperty",
+    _200: types.EntityProperty,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue or property is not found or the user does not have permission to see the issue.
@@ -5683,17 +5549,17 @@ pub const @"GetIssuePropertyResult" = union(enum) {
 };
 
 /// Get issue property
-pub fn @"getIssueProperty"(
+pub fn getIssueProperty(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-    @"propertyKey": []const u8,
-) !@"GetIssuePropertyResult" {
+    issueIdOrKey: []const u8,
+    propertyKey: []const u8,
+) !GetIssuePropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/properties/");
-    try url_buffer.appendSlice(@"propertyKey");
+    try url_buffer.appendSlice(propertyKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -5701,27 +5567,26 @@ pub fn @"getIssueProperty"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
+        const result = types.EntityProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssuePropertyResult"{ ._200 = result };
+        return GetIssuePropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssuePropertyResult"{ ._401 = {} };
+        return GetIssuePropertyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssuePropertyResult"{ ._404 = {} };
+        return GetIssuePropertyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssuePropertyResult"{ ._400 = {} };
+        return GetIssuePropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetRemoteIssueLinksResult" = union(enum) {
+pub const GetRemoteIssueLinksResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"RemoteIssueLink",
+    _200: types.RemoteIssueLink,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5734,14 +5599,14 @@ pub const @"GetRemoteIssueLinksResult" = union(enum) {
 };
 
 /// Get remote issue links
-pub fn @"getRemoteIssueLinks"(
+pub fn getRemoteIssueLinks(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetRemoteIssueLinksResult" {
+    issueIdOrKey: []const u8,
+) !GetRemoteIssueLinksResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/remotelink");
     try url_buffer.append(0);
 
@@ -5751,33 +5616,32 @@ pub fn @"getRemoteIssueLinks"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // globalId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"RemoteIssueLink", &token_stream, parseOptions(alloc));
+        const result = types.RemoteIssueLink.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetRemoteIssueLinksResult"{ ._200 = result };
+        return GetRemoteIssueLinksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinksResult"{ ._400 = {} };
+        return GetRemoteIssueLinksResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinksResult"{ ._401 = {} };
+        return GetRemoteIssueLinksResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinksResult"{ ._403 = {} };
+        return GetRemoteIssueLinksResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinksResult"{ ._404 = {} };
+        return GetRemoteIssueLinksResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinksResult"{ ._400 = {} };
+        return GetRemoteIssueLinksResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetRemoteIssueLinkByIdResult" = union(enum) {
+pub const GetRemoteIssueLinkByIdResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"RemoteIssueLink",
+    _200: types.RemoteIssueLink,
     /// Returned if the link ID is invalid or the remote issue link does not belong to the issue.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5790,17 +5654,17 @@ pub const @"GetRemoteIssueLinkByIdResult" = union(enum) {
 };
 
 /// Get remote issue link by ID
-pub fn @"getRemoteIssueLinkById"(
+pub fn getRemoteIssueLinkById(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-    @"linkId": []const u8,
-) !@"GetRemoteIssueLinkByIdResult" {
+    issueIdOrKey: []const u8,
+    linkId: []const u8,
+) !GetRemoteIssueLinkByIdResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/remotelink/");
-    try url_buffer.appendSlice(@"linkId");
+    try url_buffer.appendSlice(linkId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -5808,33 +5672,32 @@ pub fn @"getRemoteIssueLinkById"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"RemoteIssueLink", &token_stream, parseOptions(alloc));
+        const result = types.RemoteIssueLink.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetRemoteIssueLinkByIdResult"{ ._200 = result };
+        return GetRemoteIssueLinkByIdResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinkByIdResult"{ ._400 = {} };
+        return GetRemoteIssueLinkByIdResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinkByIdResult"{ ._401 = {} };
+        return GetRemoteIssueLinkByIdResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinkByIdResult"{ ._403 = {} };
+        return GetRemoteIssueLinkByIdResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinkByIdResult"{ ._404 = {} };
+        return GetRemoteIssueLinkByIdResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetRemoteIssueLinkByIdResult"{ ._400 = {} };
+        return GetRemoteIssueLinkByIdResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetTransitionsResult" = union(enum) {
+pub const GetTransitionsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Transitions",
+    _200: types.Transitions,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -5843,14 +5706,14 @@ pub const @"GetTransitionsResult" = union(enum) {
 };
 
 /// Get transitions
-pub fn @"getTransitions"(
+pub fn getTransitions(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetTransitionsResult" {
+    issueIdOrKey: []const u8,
+) !GetTransitionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/transitions");
     try url_buffer.append(0);
 
@@ -5864,27 +5727,26 @@ pub fn @"getTransitions"(
     // includeUnavailableTransitions; location: query
     // sortByOpsBarAndStatus; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Transitions"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Transitions", &token_stream, parseOptions(alloc));
+        const result = types.Transitions.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetTransitionsResult"{ ._200 = result };
+        return GetTransitionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetTransitionsResult"{ ._401 = {} };
+        return GetTransitionsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetTransitionsResult"{ ._404 = {} };
+        return GetTransitionsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetTransitionsResult"{ ._400 = {} };
+        return GetTransitionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetVotesResult" = union(enum) {
+pub const GetVotesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Votes",
+    _200: types.Votes,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -5897,14 +5759,14 @@ pub const @"GetVotesResult" = union(enum) {
 };
 
 /// Get votes
-pub fn @"getVotes"(
+pub fn getVotes(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetVotesResult" {
+    issueIdOrKey: []const u8,
+) !GetVotesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/votes");
     try url_buffer.append(0);
 
@@ -5913,27 +5775,26 @@ pub fn @"getVotes"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Votes"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Votes", &token_stream, parseOptions(alloc));
+        const result = types.Votes.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetVotesResult"{ ._200 = result };
+        return GetVotesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetVotesResult"{ ._401 = {} };
+        return GetVotesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetVotesResult"{ ._404 = {} };
+        return GetVotesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetVotesResult"{ ._400 = {} };
+        return GetVotesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueWatchersResult" = union(enum) {
+pub const GetIssueWatchersResult = union(enum) {
     /// Returned if the request is successful
-    _200: @"Watchers",
+    _200: types.Watchers,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -5942,14 +5803,14 @@ pub const @"GetIssueWatchersResult" = union(enum) {
 };
 
 /// Get issue watchers
-pub fn @"getIssueWatchers"(
+pub fn getIssueWatchers(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetIssueWatchersResult" {
+    issueIdOrKey: []const u8,
+) !GetIssueWatchersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/watchers");
     try url_buffer.append(0);
 
@@ -5958,27 +5819,26 @@ pub fn @"getIssueWatchers"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Watchers"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Watchers", &token_stream, parseOptions(alloc));
+        const result = types.Watchers.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueWatchersResult"{ ._200 = result };
+        return GetIssueWatchersResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueWatchersResult"{ ._401 = {} };
+        return GetIssueWatchersResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueWatchersResult"{ ._404 = {} };
+        return GetIssueWatchersResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueWatchersResult"{ ._400 = {} };
+        return GetIssueWatchersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueWorklogResult" = union(enum) {
+pub const GetIssueWorklogResult = union(enum) {
     /// Returned if the request is successful
-    _200: @"PageOfWorklogs",
+    _200: types.PageOfWorklogs,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -5991,14 +5851,14 @@ pub const @"GetIssueWorklogResult" = union(enum) {
 };
 
 /// Get issue worklogs
-pub fn @"getIssueWorklog"(
+pub fn getIssueWorklog(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-) !@"GetIssueWorklogResult" {
+    issueIdOrKey: []const u8,
+) !GetIssueWorklogResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/worklog");
     try url_buffer.append(0);
 
@@ -6012,27 +5872,26 @@ pub fn @"getIssueWorklog"(
     // startedBefore; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfWorklogs"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageOfWorklogs", &token_stream, parseOptions(alloc));
+        const result = types.PageOfWorklogs.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueWorklogResult"{ ._200 = result };
+        return GetIssueWorklogResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueWorklogResult"{ ._401 = {} };
+        return GetIssueWorklogResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueWorklogResult"{ ._404 = {} };
+        return GetIssueWorklogResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueWorklogResult"{ ._400 = {} };
+        return GetIssueWorklogResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorklogResult" = union(enum) {
+pub const GetWorklogResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Worklog",
+    _200: types.Worklog,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if:
@@ -6047,17 +5906,17 @@ pub const @"GetWorklogResult" = union(enum) {
 };
 
 /// Get worklog
-pub fn @"getWorklog"(
+pub fn getWorklog(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-    @"id": []const u8,
-) !@"GetWorklogResult" {
+    issueIdOrKey: []const u8,
+    id: []const u8,
+) !GetWorklogResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/worklog/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -6066,27 +5925,26 @@ pub fn @"getWorklog"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Worklog"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Worklog", &token_stream, parseOptions(alloc));
+        const result = types.Worklog.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorklogResult"{ ._200 = result };
+        return GetWorklogResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorklogResult"{ ._401 = {} };
+        return GetWorklogResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorklogResult"{ ._404 = {} };
+        return GetWorklogResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorklogResult"{ ._400 = {} };
+        return GetWorklogResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorklogPropertyKeysResult" = union(enum) {
+pub const GetWorklogPropertyKeysResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PropertyKeys",
+    _200: types.PropertyKeys,
     /// Returned if the worklog ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6100,17 +5958,17 @@ pub const @"GetWorklogPropertyKeysResult" = union(enum) {
 };
 
 /// Get worklog property keys
-pub fn @"getWorklogPropertyKeys"(
+pub fn getWorklogPropertyKeys(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-    @"worklogId": []const u8,
-) !@"GetWorklogPropertyKeysResult" {
+    issueIdOrKey: []const u8,
+    worklogId: []const u8,
+) !GetWorklogPropertyKeysResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/worklog/");
-    try url_buffer.appendSlice(@"worklogId");
+    try url_buffer.appendSlice(worklogId);
     try url_buffer.appendSlice("/properties");
     try url_buffer.append(0);
 
@@ -6119,30 +5977,29 @@ pub fn @"getWorklogPropertyKeys"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
+        const result = types.PropertyKeys.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorklogPropertyKeysResult"{ ._200 = result };
+        return GetWorklogPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorklogPropertyKeysResult"{ ._400 = {} };
+        return GetWorklogPropertyKeysResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorklogPropertyKeysResult"{ ._401 = {} };
+        return GetWorklogPropertyKeysResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorklogPropertyKeysResult"{ ._404 = {} };
+        return GetWorklogPropertyKeysResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorklogPropertyKeysResult"{ ._400 = {} };
+        return GetWorklogPropertyKeysResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorklogPropertyResult" = union(enum) {
+pub const GetWorklogPropertyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"EntityProperty",
+    _200: types.EntityProperty,
     /// Returned if the worklog ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6156,20 +6013,20 @@ pub const @"GetWorklogPropertyResult" = union(enum) {
 };
 
 /// Get worklog property
-pub fn @"getWorklogProperty"(
+pub fn getWorklogProperty(
     client: Client,
     alloc: mem.Allocator,
-    @"issueIdOrKey": []const u8,
-    @"worklogId": []const u8,
-    @"propertyKey": []const u8,
-) !@"GetWorklogPropertyResult" {
+    issueIdOrKey: []const u8,
+    worklogId: []const u8,
+    propertyKey: []const u8,
+) !GetWorklogPropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issue/");
-    try url_buffer.appendSlice(@"issueIdOrKey");
+    try url_buffer.appendSlice(issueIdOrKey);
     try url_buffer.appendSlice("/worklog/");
-    try url_buffer.appendSlice(@"worklogId");
+    try url_buffer.appendSlice(worklogId);
     try url_buffer.appendSlice("/properties/");
-    try url_buffer.appendSlice(@"propertyKey");
+    try url_buffer.appendSlice(propertyKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -6177,28 +6034,27 @@ pub fn @"getWorklogProperty"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
+        const result = types.EntityProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorklogPropertyResult"{ ._200 = result };
+        return GetWorklogPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorklogPropertyResult"{ ._400 = {} };
+        return GetWorklogPropertyResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorklogPropertyResult"{ ._401 = {} };
+        return GetWorklogPropertyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorklogPropertyResult"{ ._404 = {} };
+        return GetWorklogPropertyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorklogPropertyResult"{ ._400 = {} };
+        return GetWorklogPropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"LinkIssuesResult" = union(enum) {
+pub const LinkIssuesResult = union(enum) {
     /// Returned if the request is successful.
     _201: void,
     /// Returned if the comment is not created. The response contains an error message indicating why the comment wasn't created. The issue link is also not created.
@@ -6217,10 +6073,10 @@ pub const @"LinkIssuesResult" = union(enum) {
 };
 
 /// Create issue link
-pub fn @"linkIssues"(
+pub fn linkIssues(
     client: Client,
     alloc: mem.Allocator,
-) !@"LinkIssuesResult" {
+) !LinkIssuesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issueLink");
     try url_buffer.append(0);
@@ -6230,27 +6086,27 @@ pub fn @"linkIssues"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make void
-        return @"LinkIssuesResult"{ ._201 = {} };
+        return LinkIssuesResult{ ._201 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"LinkIssuesResult"{ ._400 = {} };
+        return LinkIssuesResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"LinkIssuesResult"{ ._401 = {} };
+        return LinkIssuesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"LinkIssuesResult"{ ._404 = {} };
+        return LinkIssuesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"LinkIssuesResult"{ ._400 = {} };
+        return LinkIssuesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueLinkResult" = union(enum) {
+pub const GetIssueLinkResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueLink",
+    _200: types.IssueLink,
     /// Returned if the issue link ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6265,14 +6121,14 @@ pub const @"GetIssueLinkResult" = union(enum) {
 };
 
 /// Get issue link
-pub fn @"getIssueLink"(
+pub fn getIssueLink(
     client: Client,
     alloc: mem.Allocator,
-    @"linkId": []const u8,
-) !@"GetIssueLinkResult" {
+    linkId: []const u8,
+) !GetIssueLinkResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issueLink/");
-    try url_buffer.appendSlice(@"linkId");
+    try url_buffer.appendSlice(linkId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -6280,30 +6136,29 @@ pub fn @"getIssueLink"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLink"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueLink", &token_stream, parseOptions(alloc));
+        const result = types.IssueLink.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueLinkResult"{ ._200 = result };
+        return GetIssueLinkResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueLinkResult"{ ._400 = {} };
+        return GetIssueLinkResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueLinkResult"{ ._401 = {} };
+        return GetIssueLinkResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueLinkResult"{ ._404 = {} };
+        return GetIssueLinkResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueLinkResult"{ ._400 = {} };
+        return GetIssueLinkResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueLinkTypesResult" = union(enum) {
+pub const GetIssueLinkTypesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueLinkTypes",
+    _200: types.IssueLinkTypes,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if issue linking is disabled.
@@ -6312,10 +6167,10 @@ pub const @"GetIssueLinkTypesResult" = union(enum) {
 };
 
 /// Get issue link types
-pub fn @"getIssueLinkTypes"(
+pub fn getIssueLinkTypes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueLinkTypesResult" {
+) !GetIssueLinkTypesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issueLinkType");
     try url_buffer.append(0);
@@ -6325,27 +6180,26 @@ pub fn @"getIssueLinkTypes"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkTypes"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueLinkTypes", &token_stream, parseOptions(alloc));
+        const result = types.IssueLinkTypes.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueLinkTypesResult"{ ._200 = result };
+        return GetIssueLinkTypesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueLinkTypesResult"{ ._401 = {} };
+        return GetIssueLinkTypesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueLinkTypesResult"{ ._404 = {} };
+        return GetIssueLinkTypesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueLinkTypesResult"{ ._400 = {} };
+        return GetIssueLinkTypesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueLinkTypeResult" = union(enum) {
+pub const GetIssueLinkTypeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueLinkType",
+    _200: types.IssueLinkType,
     /// Returned if the issue link type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6360,14 +6214,14 @@ pub const @"GetIssueLinkTypeResult" = union(enum) {
 };
 
 /// Get issue link type
-pub fn @"getIssueLinkType"(
+pub fn getIssueLinkType(
     client: Client,
     alloc: mem.Allocator,
-    @"issueLinkTypeId": []const u8,
-) !@"GetIssueLinkTypeResult" {
+    issueLinkTypeId: []const u8,
+) !GetIssueLinkTypeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issueLinkType/");
-    try url_buffer.appendSlice(@"issueLinkTypeId");
+    try url_buffer.appendSlice(issueLinkTypeId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -6375,30 +6229,29 @@ pub fn @"getIssueLinkType"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkType"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueLinkType", &token_stream, parseOptions(alloc));
+        const result = types.IssueLinkType.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueLinkTypeResult"{ ._200 = result };
+        return GetIssueLinkTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueLinkTypeResult"{ ._400 = {} };
+        return GetIssueLinkTypeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueLinkTypeResult"{ ._401 = {} };
+        return GetIssueLinkTypeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueLinkTypeResult"{ ._404 = {} };
+        return GetIssueLinkTypeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueLinkTypeResult"{ ._400 = {} };
+        return GetIssueLinkTypeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueSecuritySchemesResult" = union(enum) {
+pub const GetIssueSecuritySchemesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"SecuritySchemes",
+    _200: types.SecuritySchemes,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the user does not have permission to administer issue security schemes.
@@ -6407,10 +6260,10 @@ pub const @"GetIssueSecuritySchemesResult" = union(enum) {
 };
 
 /// Get issue security schemes
-pub fn @"getIssueSecuritySchemes"(
+pub fn getIssueSecuritySchemes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueSecuritySchemesResult" {
+) !GetIssueSecuritySchemesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuesecurityschemes");
     try url_buffer.append(0);
@@ -6420,27 +6273,26 @@ pub fn @"getIssueSecuritySchemes"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecuritySchemes"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"SecuritySchemes", &token_stream, parseOptions(alloc));
+        const result = types.SecuritySchemes.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueSecuritySchemesResult"{ ._200 = result };
+        return GetIssueSecuritySchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueSecuritySchemesResult"{ ._401 = {} };
+        return GetIssueSecuritySchemesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueSecuritySchemesResult"{ ._403 = {} };
+        return GetIssueSecuritySchemesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueSecuritySchemesResult"{ ._400 = {} };
+        return GetIssueSecuritySchemesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueSecuritySchemeResult" = union(enum) {
+pub const GetIssueSecuritySchemeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"SecurityScheme",
+    _200: types.SecurityScheme,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the administrator permission and the scheme is not used in any project where the user has administrative permission.
@@ -6449,14 +6301,14 @@ pub const @"GetIssueSecuritySchemeResult" = union(enum) {
 };
 
 /// Get issue security scheme
-pub fn @"getIssueSecurityScheme"(
+pub fn getIssueSecurityScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetIssueSecuritySchemeResult" {
+    id: []const u8,
+) !GetIssueSecuritySchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuesecurityschemes/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -6464,27 +6316,26 @@ pub fn @"getIssueSecurityScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"SecurityScheme", &token_stream, parseOptions(alloc));
+        const result = types.SecurityScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueSecuritySchemeResult"{ ._200 = result };
+        return GetIssueSecuritySchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueSecuritySchemeResult"{ ._401 = {} };
+        return GetIssueSecuritySchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueSecuritySchemeResult"{ ._403 = {} };
+        return GetIssueSecuritySchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueSecuritySchemeResult"{ ._400 = {} };
+        return GetIssueSecuritySchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueSecurityLevelMembersResult" = union(enum) {
+pub const GetIssueSecurityLevelMembersResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueSecurityLevelMember",
+    _200: types.PageBeanIssueSecurityLevelMember,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6497,14 +6348,14 @@ pub const @"GetIssueSecurityLevelMembersResult" = union(enum) {
 };
 
 /// Get issue security level members
-pub fn @"getIssueSecurityLevelMembers"(
+pub fn getIssueSecurityLevelMembers(
     client: Client,
     alloc: mem.Allocator,
-    @"issueSecuritySchemeId": []const u8,
-) !@"GetIssueSecurityLevelMembersResult" {
+    issueSecuritySchemeId: []const u8,
+) !GetIssueSecurityLevelMembersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuesecurityschemes/");
-    try url_buffer.appendSlice(@"issueSecuritySchemeId");
+    try url_buffer.appendSlice(issueSecuritySchemeId);
     try url_buffer.appendSlice("/members");
     try url_buffer.append(0);
 
@@ -6517,31 +6368,30 @@ pub fn @"getIssueSecurityLevelMembers"(
     // issueSecurityLevelId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueSecurityLevelMember"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueSecurityLevelMember", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueSecurityLevelMember.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueSecurityLevelMembersResult"{ ._200 = result };
+        return GetIssueSecurityLevelMembersResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueSecurityLevelMembersResult"{ ._400 = {} };
+        return GetIssueSecurityLevelMembersResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueSecurityLevelMembersResult"{ ._401 = {} };
+        return GetIssueSecurityLevelMembersResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueSecurityLevelMembersResult"{ ._403 = {} };
+        return GetIssueSecurityLevelMembersResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueSecurityLevelMembersResult"{ ._404 = {} };
+        return GetIssueSecurityLevelMembersResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueSecurityLevelMembersResult"{ ._400 = {} };
+        return GetIssueSecurityLevelMembersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueAllTypesResult" = union(enum) {
+pub const GetIssueAllTypesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6550,10 +6400,10 @@ pub const @"GetIssueAllTypesResult" = union(enum) {
 };
 
 /// Get all issue types for user
-pub fn @"getIssueAllTypes"(
+pub fn getIssueAllTypes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueAllTypesResult" {
+) !GetIssueAllTypesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetype");
     try url_buffer.append(0);
@@ -6563,19 +6413,19 @@ pub fn @"getIssueAllTypes"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetIssueAllTypesResult"{ ._200 = {} };
+        return GetIssueAllTypesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueAllTypesResult"{ ._401 = {} };
+        return GetIssueAllTypesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueAllTypesResult"{ ._400 = {} };
+        return GetIssueAllTypesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypesForProjectResult" = union(enum) {
+pub const GetIssueTypesForProjectResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -6591,10 +6441,10 @@ pub const @"GetIssueTypesForProjectResult" = union(enum) {
 };
 
 /// Get issue types for project
-pub fn @"getIssueTypesForProject"(
+pub fn getIssueTypesForProject(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueTypesForProjectResult" {
+) !GetIssueTypesForProjectResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetype/project");
     try url_buffer.append(0);
@@ -6606,27 +6456,27 @@ pub fn @"getIssueTypesForProject"(
     // projectId; location: query
     // level; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetIssueTypesForProjectResult"{ ._200 = {} };
+        return GetIssueTypesForProjectResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypesForProjectResult"{ ._400 = {} };
+        return GetIssueTypesForProjectResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueTypesForProjectResult"{ ._401 = {} };
+        return GetIssueTypesForProjectResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueTypesForProjectResult"{ ._404 = {} };
+        return GetIssueTypesForProjectResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypesForProjectResult"{ ._400 = {} };
+        return GetIssueTypesForProjectResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypeResult" = union(enum) {
+pub const GetIssueTypeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueTypeDetails",
+    _200: types.IssueTypeDetails,
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6640,14 +6490,14 @@ pub const @"GetIssueTypeResult" = union(enum) {
 };
 
 /// Get issue type
-pub fn @"getIssueType"(
+pub fn getIssueType(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetIssueTypeResult" {
+    id: []const u8,
+) !GetIssueTypeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetype/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -6655,28 +6505,27 @@ pub fn @"getIssueType"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeDetails"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueTypeDetails", &token_stream, parseOptions(alloc));
+        const result = types.IssueTypeDetails.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueTypeResult"{ ._200 = result };
+        return GetIssueTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeResult"{ ._400 = {} };
+        return GetIssueTypeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueTypeResult"{ ._401 = {} };
+        return GetIssueTypeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueTypeResult"{ ._404 = {} };
+        return GetIssueTypeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeResult"{ ._400 = {} };
+        return GetIssueTypeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAlternativeIssueTypesResult" = union(enum) {
+pub const GetAlternativeIssueTypesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6690,14 +6539,14 @@ pub const @"GetAlternativeIssueTypesResult" = union(enum) {
 };
 
 /// Get alternative issue types
-pub fn @"getAlternativeIssueTypes"(
+pub fn getAlternativeIssueTypes(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetAlternativeIssueTypesResult" {
+    id: []const u8,
+) !GetAlternativeIssueTypesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetype/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/alternatives");
     try url_buffer.append(0);
 
@@ -6706,24 +6555,24 @@ pub fn @"getAlternativeIssueTypes"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAlternativeIssueTypesResult"{ ._200 = {} };
+        return GetAlternativeIssueTypesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAlternativeIssueTypesResult"{ ._401 = {} };
+        return GetAlternativeIssueTypesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAlternativeIssueTypesResult"{ ._404 = {} };
+        return GetAlternativeIssueTypesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAlternativeIssueTypesResult"{ ._400 = {} };
+        return GetAlternativeIssueTypesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"CreateIssueTypeAvatarResult" = union(enum) {
+pub const CreateIssueTypeAvatarResult = union(enum) {
     /// Returned if the request is successful.
-    _201: @"Avatar",
+    _201: types.Avatar,
     /// Returned if:
     ///
     ///  *  an image isn't included in the request.
@@ -6742,14 +6591,14 @@ pub const @"CreateIssueTypeAvatarResult" = union(enum) {
 };
 
 /// Load issue type avatar
-pub fn @"createIssueTypeAvatar"(
+pub fn createIssueTypeAvatar(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"CreateIssueTypeAvatarResult" {
+    id: []const u8,
+) !CreateIssueTypeAvatarResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetype/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/avatar2");
     try url_buffer.append(0);
 
@@ -6761,33 +6610,32 @@ pub fn @"createIssueTypeAvatar"(
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Avatar", &token_stream, parseOptions(alloc));
+        const result = types.Avatar.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateIssueTypeAvatarResult"{ ._201 = result };
+        return CreateIssueTypeAvatarResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateIssueTypeAvatarResult"{ ._400 = {} };
+        return CreateIssueTypeAvatarResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"CreateIssueTypeAvatarResult"{ ._401 = {} };
+        return CreateIssueTypeAvatarResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"CreateIssueTypeAvatarResult"{ ._403 = {} };
+        return CreateIssueTypeAvatarResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"CreateIssueTypeAvatarResult"{ ._404 = {} };
+        return CreateIssueTypeAvatarResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateIssueTypeAvatarResult"{ ._400 = {} };
+        return CreateIssueTypeAvatarResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypePropertyKeysResult" = union(enum) {
+pub const GetIssueTypePropertyKeysResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PropertyKeys",
+    _200: types.PropertyKeys,
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if:
@@ -6799,14 +6647,14 @@ pub const @"GetIssueTypePropertyKeysResult" = union(enum) {
 };
 
 /// Get issue type property keys
-pub fn @"getIssueTypePropertyKeys"(
+pub fn getIssueTypePropertyKeys(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeId": []const u8,
-) !@"GetIssueTypePropertyKeysResult" {
+    issueTypeId: []const u8,
+) !GetIssueTypePropertyKeysResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetype/");
-    try url_buffer.appendSlice(@"issueTypeId");
+    try url_buffer.appendSlice(issueTypeId);
     try url_buffer.appendSlice("/properties");
     try url_buffer.append(0);
 
@@ -6815,27 +6663,26 @@ pub fn @"getIssueTypePropertyKeys"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
+        const result = types.PropertyKeys.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueTypePropertyKeysResult"{ ._200 = result };
+        return GetIssueTypePropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypePropertyKeysResult"{ ._400 = {} };
+        return GetIssueTypePropertyKeysResult{ ._400 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueTypePropertyKeysResult"{ ._404 = {} };
+        return GetIssueTypePropertyKeysResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypePropertyKeysResult"{ ._400 = {} };
+        return GetIssueTypePropertyKeysResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypePropertyResult" = union(enum) {
+pub const GetIssueTypePropertyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"EntityProperty",
+    _200: types.EntityProperty,
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6846,17 +6693,17 @@ pub const @"GetIssueTypePropertyResult" = union(enum) {
 };
 
 /// Get issue type property
-pub fn @"getIssueTypeProperty"(
+pub fn getIssueTypeProperty(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeId": []const u8,
-    @"propertyKey": []const u8,
-) !@"GetIssueTypePropertyResult" {
+    issueTypeId: []const u8,
+    propertyKey: []const u8,
+) !GetIssueTypePropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetype/");
-    try url_buffer.appendSlice(@"issueTypeId");
+    try url_buffer.appendSlice(issueTypeId);
     try url_buffer.appendSlice("/properties/");
-    try url_buffer.appendSlice(@"propertyKey");
+    try url_buffer.appendSlice(propertyKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -6864,30 +6711,29 @@ pub fn @"getIssueTypeProperty"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
+        const result = types.EntityProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueTypePropertyResult"{ ._200 = result };
+        return GetIssueTypePropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypePropertyResult"{ ._400 = {} };
+        return GetIssueTypePropertyResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueTypePropertyResult"{ ._401 = {} };
+        return GetIssueTypePropertyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueTypePropertyResult"{ ._404 = {} };
+        return GetIssueTypePropertyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypePropertyResult"{ ._400 = {} };
+        return GetIssueTypePropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllIssueTypeSchemesResult" = union(enum) {
+pub const GetAllIssueTypeSchemesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueTypeScheme",
+    _200: types.PageBeanIssueTypeScheme,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6898,10 +6744,10 @@ pub const @"GetAllIssueTypeSchemesResult" = union(enum) {
 };
 
 /// Get all issue type schemes
-pub fn @"getAllIssueTypeSchemes"(
+pub fn getAllIssueTypeSchemes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllIssueTypeSchemesResult" {
+) !GetAllIssueTypeSchemesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescheme");
     try url_buffer.append(0);
@@ -6917,30 +6763,29 @@ pub fn @"getAllIssueTypeSchemes"(
     // expand; location: query
     // queryString; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueTypeScheme", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueTypeScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllIssueTypeSchemesResult"{ ._200 = result };
+        return GetAllIssueTypeSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllIssueTypeSchemesResult"{ ._400 = {} };
+        return GetAllIssueTypeSchemesResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllIssueTypeSchemesResult"{ ._401 = {} };
+        return GetAllIssueTypeSchemesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllIssueTypeSchemesResult"{ ._403 = {} };
+        return GetAllIssueTypeSchemesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllIssueTypeSchemesResult"{ ._400 = {} };
+        return GetAllIssueTypeSchemesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypeSchemesMappingResult" = union(enum) {
+pub const GetIssueTypeSchemesMappingResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueTypeSchemeMapping",
+    _200: types.PageBeanIssueTypeSchemeMapping,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6951,10 +6796,10 @@ pub const @"GetIssueTypeSchemesMappingResult" = union(enum) {
 };
 
 /// Get issue type scheme items
-pub fn @"getIssueTypeSchemesMapping"(
+pub fn getIssueTypeSchemesMapping(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueTypeSchemesMappingResult" {
+) !GetIssueTypeSchemesMappingResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescheme/mapping");
     try url_buffer.append(0);
@@ -6967,30 +6812,29 @@ pub fn @"getIssueTypeSchemesMapping"(
     // maxResults; location: query
     // issueTypeSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeMapping"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueTypeSchemeMapping", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueTypeSchemeMapping.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueTypeSchemesMappingResult"{ ._200 = result };
+        return GetIssueTypeSchemesMappingResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeSchemesMappingResult"{ ._400 = {} };
+        return GetIssueTypeSchemesMappingResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueTypeSchemesMappingResult"{ ._401 = {} };
+        return GetIssueTypeSchemesMappingResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueTypeSchemesMappingResult"{ ._403 = {} };
+        return GetIssueTypeSchemesMappingResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeSchemesMappingResult"{ ._400 = {} };
+        return GetIssueTypeSchemesMappingResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypeSchemeForProjectsResult" = union(enum) {
+pub const GetIssueTypeSchemeForProjectsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueTypeSchemeProjects",
+    _200: types.PageBeanIssueTypeSchemeProjects,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7001,10 +6845,10 @@ pub const @"GetIssueTypeSchemeForProjectsResult" = union(enum) {
 };
 
 /// Get issue type schemes for projects
-pub fn @"getIssueTypeSchemeForProjects"(
+pub fn getIssueTypeSchemeForProjects(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueTypeSchemeForProjectsResult" {
+) !GetIssueTypeSchemeForProjectsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescheme/project");
     try url_buffer.append(0);
@@ -7017,28 +6861,27 @@ pub fn @"getIssueTypeSchemeForProjects"(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeProjects"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueTypeSchemeProjects", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueTypeSchemeProjects.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueTypeSchemeForProjectsResult"{ ._200 = result };
+        return GetIssueTypeSchemeForProjectsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeSchemeForProjectsResult"{ ._400 = {} };
+        return GetIssueTypeSchemeForProjectsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueTypeSchemeForProjectsResult"{ ._401 = {} };
+        return GetIssueTypeSchemeForProjectsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueTypeSchemeForProjectsResult"{ ._403 = {} };
+        return GetIssueTypeSchemeForProjectsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeSchemeForProjectsResult"{ ._400 = {} };
+        return GetIssueTypeSchemeForProjectsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateIssueTypeSchemeResult" = union(enum) {
+pub const UpdateIssueTypeSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7053,14 +6896,14 @@ pub const @"UpdateIssueTypeSchemeResult" = union(enum) {
 };
 
 /// Update issue type scheme
-pub fn @"updateIssueTypeScheme"(
+pub fn updateIssueTypeScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeSchemeId": []const u8,
-) !@"UpdateIssueTypeSchemeResult" {
+    issueTypeSchemeId: []const u8,
+) !UpdateIssueTypeSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescheme/");
-    try url_buffer.appendSlice(@"issueTypeSchemeId");
+    try url_buffer.appendSlice(issueTypeSchemeId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescheme/{issueTypeSchemeId}");
@@ -7068,28 +6911,28 @@ pub fn @"updateIssueTypeScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeSchemeResult"{ ._204 = {} };
+        return UpdateIssueTypeSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeSchemeResult"{ ._400 = {} };
+        return UpdateIssueTypeSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeSchemeResult"{ ._401 = {} };
+        return UpdateIssueTypeSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeSchemeResult"{ ._403 = {} };
+        return UpdateIssueTypeSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeSchemeResult"{ ._404 = {} };
+        return UpdateIssueTypeSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeSchemeResult"{ ._400 = {} };
+        return UpdateIssueTypeSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"AddIssueTypesToIssueTypeSchemeResult" = union(enum) {
+pub const AddIssueTypesToIssueTypeSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7104,14 +6947,14 @@ pub const @"AddIssueTypesToIssueTypeSchemeResult" = union(enum) {
 };
 
 /// Add issue types to issue type scheme
-pub fn @"addIssueTypesToIssueTypeScheme"(
+pub fn addIssueTypesToIssueTypeScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeSchemeId": []const u8,
-) !@"AddIssueTypesToIssueTypeSchemeResult" {
+    issueTypeSchemeId: []const u8,
+) !AddIssueTypesToIssueTypeSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescheme/");
-    try url_buffer.appendSlice(@"issueTypeSchemeId");
+    try url_buffer.appendSlice(issueTypeSchemeId);
     try url_buffer.appendSlice("/issuetype");
     try url_buffer.append(0);
 
@@ -7120,28 +6963,28 @@ pub fn @"addIssueTypesToIssueTypeScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToIssueTypeSchemeResult"{ ._204 = {} };
+        return AddIssueTypesToIssueTypeSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToIssueTypeSchemeResult"{ ._400 = {} };
+        return AddIssueTypesToIssueTypeSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToIssueTypeSchemeResult"{ ._401 = {} };
+        return AddIssueTypesToIssueTypeSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToIssueTypeSchemeResult"{ ._403 = {} };
+        return AddIssueTypesToIssueTypeSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToIssueTypeSchemeResult"{ ._404 = {} };
+        return AddIssueTypesToIssueTypeSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AddIssueTypesToIssueTypeSchemeResult"{ ._400 = {} };
+        return AddIssueTypesToIssueTypeSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ReorderIssueTypesInIssueTypeSchemeResult" = union(enum) {
+pub const ReorderIssueTypesInIssueTypeSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7156,14 +6999,14 @@ pub const @"ReorderIssueTypesInIssueTypeSchemeResult" = union(enum) {
 };
 
 /// Change order of issue types
-pub fn @"reorderIssueTypesInIssueTypeScheme"(
+pub fn reorderIssueTypesInIssueTypeScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeSchemeId": []const u8,
-) !@"ReorderIssueTypesInIssueTypeSchemeResult" {
+    issueTypeSchemeId: []const u8,
+) !ReorderIssueTypesInIssueTypeSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescheme/");
-    try url_buffer.appendSlice(@"issueTypeSchemeId");
+    try url_buffer.appendSlice(issueTypeSchemeId);
     try url_buffer.appendSlice("/issuetype/move");
     try url_buffer.append(0);
 
@@ -7172,28 +7015,28 @@ pub fn @"reorderIssueTypesInIssueTypeScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._204 = {} };
+        return ReorderIssueTypesInIssueTypeSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._400 = {} };
+        return ReorderIssueTypesInIssueTypeSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._401 = {} };
+        return ReorderIssueTypesInIssueTypeSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._403 = {} };
+        return ReorderIssueTypesInIssueTypeSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._404 = {} };
+        return ReorderIssueTypesInIssueTypeSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ReorderIssueTypesInIssueTypeSchemeResult"{ ._400 = {} };
+        return ReorderIssueTypesInIssueTypeSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RemoveIssueTypeFromIssueTypeSchemeResult" = union(enum) {
+pub const RemoveIssueTypeFromIssueTypeSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7208,17 +7051,17 @@ pub const @"RemoveIssueTypeFromIssueTypeSchemeResult" = union(enum) {
 };
 
 /// Remove issue type from issue type scheme
-pub fn @"removeIssueTypeFromIssueTypeScheme"(
+pub fn removeIssueTypeFromIssueTypeScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeSchemeId": []const u8,
-    @"issueTypeId": []const u8,
-) !@"RemoveIssueTypeFromIssueTypeSchemeResult" {
+    issueTypeSchemeId: []const u8,
+    issueTypeId: []const u8,
+) !RemoveIssueTypeFromIssueTypeSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescheme/");
-    try url_buffer.appendSlice(@"issueTypeSchemeId");
+    try url_buffer.appendSlice(issueTypeSchemeId);
     try url_buffer.appendSlice("/issuetype/");
-    try url_buffer.appendSlice(@"issueTypeId");
+    try url_buffer.appendSlice(issueTypeId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeId}");
@@ -7226,30 +7069,30 @@ pub fn @"removeIssueTypeFromIssueTypeScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._204 = {} };
+        return RemoveIssueTypeFromIssueTypeSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._400 = {} };
+        return RemoveIssueTypeFromIssueTypeSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._401 = {} };
+        return RemoveIssueTypeFromIssueTypeSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._403 = {} };
+        return RemoveIssueTypeFromIssueTypeSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._404 = {} };
+        return RemoveIssueTypeFromIssueTypeSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveIssueTypeFromIssueTypeSchemeResult"{ ._400 = {} };
+        return RemoveIssueTypeFromIssueTypeSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypeScreenSchemesResult" = union(enum) {
+pub const GetIssueTypeScreenSchemesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueTypeScreenScheme",
+    _200: types.PageBeanIssueTypeScreenScheme,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7260,10 +7103,10 @@ pub const @"GetIssueTypeScreenSchemesResult" = union(enum) {
 };
 
 /// Get issue type screen schemes
-pub fn @"getIssueTypeScreenSchemes"(
+pub fn getIssueTypeScreenSchemes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueTypeScreenSchemesResult" {
+) !GetIssueTypeScreenSchemesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescreenscheme");
     try url_buffer.append(0);
@@ -7279,30 +7122,29 @@ pub fn @"getIssueTypeScreenSchemes"(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueTypeScreenScheme", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueTypeScreenScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueTypeScreenSchemesResult"{ ._200 = result };
+        return GetIssueTypeScreenSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemesResult"{ ._400 = {} };
+        return GetIssueTypeScreenSchemesResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemesResult"{ ._401 = {} };
+        return GetIssueTypeScreenSchemesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemesResult"{ ._403 = {} };
+        return GetIssueTypeScreenSchemesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemesResult"{ ._400 = {} };
+        return GetIssueTypeScreenSchemesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypeScreenSchemeMappingsResult" = union(enum) {
+pub const GetIssueTypeScreenSchemeMappingsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueTypeScreenSchemeItem",
+    _200: types.PageBeanIssueTypeScreenSchemeItem,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7313,10 +7155,10 @@ pub const @"GetIssueTypeScreenSchemeMappingsResult" = union(enum) {
 };
 
 /// Get issue type screen scheme items
-pub fn @"getIssueTypeScreenSchemeMappings"(
+pub fn getIssueTypeScreenSchemeMappings(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueTypeScreenSchemeMappingsResult" {
+) !GetIssueTypeScreenSchemeMappingsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescreenscheme/mapping");
     try url_buffer.append(0);
@@ -7329,30 +7171,29 @@ pub fn @"getIssueTypeScreenSchemeMappings"(
     // maxResults; location: query
     // issueTypeScreenSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemeItem"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueTypeScreenSchemeItem", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueTypeScreenSchemeItem.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueTypeScreenSchemeMappingsResult"{ ._200 = result };
+        return GetIssueTypeScreenSchemeMappingsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemeMappingsResult"{ ._400 = {} };
+        return GetIssueTypeScreenSchemeMappingsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemeMappingsResult"{ ._401 = {} };
+        return GetIssueTypeScreenSchemeMappingsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemeMappingsResult"{ ._403 = {} };
+        return GetIssueTypeScreenSchemeMappingsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemeMappingsResult"{ ._400 = {} };
+        return GetIssueTypeScreenSchemeMappingsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueTypeScreenSchemeProjectAssociationsResult" = union(enum) {
+pub const GetIssueTypeScreenSchemeProjectAssociationsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanIssueTypeScreenSchemesProjects",
+    _200: types.PageBeanIssueTypeScreenSchemesProjects,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7363,10 +7204,10 @@ pub const @"GetIssueTypeScreenSchemeProjectAssociationsResult" = union(enum) {
 };
 
 /// Get issue type screen schemes for projects
-pub fn @"getIssueTypeScreenSchemeProjectAssociations"(
+pub fn getIssueTypeScreenSchemeProjectAssociations(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueTypeScreenSchemeProjectAssociationsResult" {
+) !GetIssueTypeScreenSchemeProjectAssociationsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescreenscheme/project");
     try url_buffer.append(0);
@@ -7379,28 +7220,27 @@ pub fn @"getIssueTypeScreenSchemeProjectAssociations"(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemesProjects"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanIssueTypeScreenSchemesProjects", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanIssueTypeScreenSchemesProjects.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._200 = result };
+        return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._400 = {} };
+        return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._401 = {} };
+        return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._403 = {} };
+        return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueTypeScreenSchemeProjectAssociationsResult"{ ._400 = {} };
+        return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateIssueTypeScreenSchemeResult" = union(enum) {
+pub const UpdateIssueTypeScreenSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7415,14 +7255,14 @@ pub const @"UpdateIssueTypeScreenSchemeResult" = union(enum) {
 };
 
 /// Update issue type screen scheme
-pub fn @"updateIssueTypeScreenScheme"(
+pub fn updateIssueTypeScreenScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeScreenSchemeId": []const u8,
-) !@"UpdateIssueTypeScreenSchemeResult" {
+    issueTypeScreenSchemeId: []const u8,
+) !UpdateIssueTypeScreenSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescreenscheme/");
-    try url_buffer.appendSlice(@"issueTypeScreenSchemeId");
+    try url_buffer.appendSlice(issueTypeScreenSchemeId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}");
@@ -7430,28 +7270,28 @@ pub fn @"updateIssueTypeScreenScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeScreenSchemeResult"{ ._204 = {} };
+        return UpdateIssueTypeScreenSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeScreenSchemeResult"{ ._400 = {} };
+        return UpdateIssueTypeScreenSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeScreenSchemeResult"{ ._401 = {} };
+        return UpdateIssueTypeScreenSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeScreenSchemeResult"{ ._403 = {} };
+        return UpdateIssueTypeScreenSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeScreenSchemeResult"{ ._404 = {} };
+        return UpdateIssueTypeScreenSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateIssueTypeScreenSchemeResult"{ ._400 = {} };
+        return UpdateIssueTypeScreenSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"AppendMappingsForIssueTypeScreenSchemeResult" = union(enum) {
+pub const AppendMappingsForIssueTypeScreenSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7468,14 +7308,14 @@ pub const @"AppendMappingsForIssueTypeScreenSchemeResult" = union(enum) {
 };
 
 /// Append mappings to issue type screen scheme
-pub fn @"appendMappingsForIssueTypeScreenScheme"(
+pub fn appendMappingsForIssueTypeScreenScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeScreenSchemeId": []const u8,
-) !@"AppendMappingsForIssueTypeScreenSchemeResult" {
+    issueTypeScreenSchemeId: []const u8,
+) !AppendMappingsForIssueTypeScreenSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescreenscheme/");
-    try url_buffer.appendSlice(@"issueTypeScreenSchemeId");
+    try url_buffer.appendSlice(issueTypeScreenSchemeId);
     try url_buffer.appendSlice("/mapping");
     try url_buffer.append(0);
 
@@ -7484,31 +7324,31 @@ pub fn @"appendMappingsForIssueTypeScreenScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._204 = {} };
+        return AppendMappingsForIssueTypeScreenSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._400 = {} };
+        return AppendMappingsForIssueTypeScreenSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._401 = {} };
+        return AppendMappingsForIssueTypeScreenSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._403 = {} };
+        return AppendMappingsForIssueTypeScreenSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._404 = {} };
+        return AppendMappingsForIssueTypeScreenSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._409 = {} };
+        return AppendMappingsForIssueTypeScreenSchemeResult{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AppendMappingsForIssueTypeScreenSchemeResult"{ ._400 = {} };
+        return AppendMappingsForIssueTypeScreenSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateDefaultScreenSchemeResult" = union(enum) {
+pub const UpdateDefaultScreenSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7523,14 +7363,14 @@ pub const @"UpdateDefaultScreenSchemeResult" = union(enum) {
 };
 
 /// Update issue type screen scheme default screen scheme
-pub fn @"updateDefaultScreenScheme"(
+pub fn updateDefaultScreenScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeScreenSchemeId": []const u8,
-) !@"UpdateDefaultScreenSchemeResult" {
+    issueTypeScreenSchemeId: []const u8,
+) !UpdateDefaultScreenSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescreenscheme/");
-    try url_buffer.appendSlice(@"issueTypeScreenSchemeId");
+    try url_buffer.appendSlice(issueTypeScreenSchemeId);
     try url_buffer.appendSlice("/mapping/default");
     try url_buffer.append(0);
 
@@ -7539,28 +7379,28 @@ pub fn @"updateDefaultScreenScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateDefaultScreenSchemeResult"{ ._204 = {} };
+        return UpdateDefaultScreenSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateDefaultScreenSchemeResult"{ ._400 = {} };
+        return UpdateDefaultScreenSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateDefaultScreenSchemeResult"{ ._401 = {} };
+        return UpdateDefaultScreenSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateDefaultScreenSchemeResult"{ ._403 = {} };
+        return UpdateDefaultScreenSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateDefaultScreenSchemeResult"{ ._404 = {} };
+        return UpdateDefaultScreenSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateDefaultScreenSchemeResult"{ ._400 = {} };
+        return UpdateDefaultScreenSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RemoveMappingsFromIssueTypeScreenSchemeResult" = union(enum) {
+pub const RemoveMappingsFromIssueTypeScreenSchemeResult = union(enum) {
     /// Returned if the screen scheme mappings are removed from the issue type screen scheme.
     _204: void,
     /// Returned if the request is not valid.
@@ -7575,14 +7415,14 @@ pub const @"RemoveMappingsFromIssueTypeScreenSchemeResult" = union(enum) {
 };
 
 /// Remove mappings from issue type screen scheme
-pub fn @"removeMappingsFromIssueTypeScreenScheme"(
+pub fn removeMappingsFromIssueTypeScreenScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeScreenSchemeId": []const u8,
-) !@"RemoveMappingsFromIssueTypeScreenSchemeResult" {
+    issueTypeScreenSchemeId: []const u8,
+) !RemoveMappingsFromIssueTypeScreenSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescreenscheme/");
-    try url_buffer.appendSlice(@"issueTypeScreenSchemeId");
+    try url_buffer.appendSlice(issueTypeScreenSchemeId);
     try url_buffer.appendSlice("/mapping/remove");
     try url_buffer.append(0);
 
@@ -7591,30 +7431,30 @@ pub fn @"removeMappingsFromIssueTypeScreenScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._204 = {} };
+        return RemoveMappingsFromIssueTypeScreenSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._400 = {} };
+        return RemoveMappingsFromIssueTypeScreenSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._401 = {} };
+        return RemoveMappingsFromIssueTypeScreenSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._403 = {} };
+        return RemoveMappingsFromIssueTypeScreenSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._404 = {} };
+        return RemoveMappingsFromIssueTypeScreenSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveMappingsFromIssueTypeScreenSchemeResult"{ ._400 = {} };
+        return RemoveMappingsFromIssueTypeScreenSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectsForIssueTypeScreenSchemeResult" = union(enum) {
+pub const GetProjectsForIssueTypeScreenSchemeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanProjectDetails",
+    _200: types.PageBeanProjectDetails,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7625,14 +7465,14 @@ pub const @"GetProjectsForIssueTypeScreenSchemeResult" = union(enum) {
 };
 
 /// Get issue type screen scheme projects
-pub fn @"getProjectsForIssueTypeScreenScheme"(
+pub fn getProjectsForIssueTypeScreenScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"issueTypeScreenSchemeId": []const u8,
-) !@"GetProjectsForIssueTypeScreenSchemeResult" {
+    issueTypeScreenSchemeId: []const u8,
+) !GetProjectsForIssueTypeScreenSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/issuetypescreenscheme/");
-    try url_buffer.appendSlice(@"issueTypeScreenSchemeId");
+    try url_buffer.appendSlice(issueTypeScreenSchemeId);
     try url_buffer.appendSlice("/project");
     try url_buffer.append(0);
 
@@ -7644,40 +7484,39 @@ pub fn @"getProjectsForIssueTypeScreenScheme"(
     // maxResults; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProjectDetails"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanProjectDetails", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanProjectDetails.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._200 = result };
+        return GetProjectsForIssueTypeScreenSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._400 = {} };
+        return GetProjectsForIssueTypeScreenSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._401 = {} };
+        return GetProjectsForIssueTypeScreenSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._403 = {} };
+        return GetProjectsForIssueTypeScreenSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectsForIssueTypeScreenSchemeResult"{ ._400 = {} };
+        return GetProjectsForIssueTypeScreenSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAutoCompleteResult" = union(enum) {
+pub const GetAutoCompleteResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"JQLReferenceData",
+    _200: types.JQLReferenceData,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
 };
 
 /// Get field reference data (GET)
-pub fn @"getAutoComplete"(
+pub fn getAutoComplete(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAutoCompleteResult" {
+) !GetAutoCompleteResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/jql/autocompletedata");
     try url_buffer.append(0);
@@ -7687,24 +7526,23 @@ pub fn @"getAutoComplete"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JQLReferenceData"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"JQLReferenceData", &token_stream, parseOptions(alloc));
+        const result = types.JQLReferenceData.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAutoCompleteResult"{ ._200 = result };
+        return GetAutoCompleteResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAutoCompleteResult"{ ._401 = {} };
+        return GetAutoCompleteResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAutoCompleteResult"{ ._400 = {} };
+        return GetAutoCompleteResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFieldAutoCompleteForQueryStringResult" = union(enum) {
+pub const GetFieldAutoCompleteForQueryStringResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"AutoCompleteSuggestions",
+    _200: types.AutoCompleteSuggestions,
     /// Returned if an invalid combination of parameters is passed.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -7713,10 +7551,10 @@ pub const @"GetFieldAutoCompleteForQueryStringResult" = union(enum) {
 };
 
 /// Get field auto complete suggestions
-pub fn @"getFieldAutoCompleteForQueryString"(
+pub fn getFieldAutoCompleteForQueryString(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetFieldAutoCompleteForQueryStringResult" {
+) !GetFieldAutoCompleteForQueryStringResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/jql/autocompletedata/suggestions");
     try url_buffer.append(0);
@@ -7730,37 +7568,36 @@ pub fn @"getFieldAutoCompleteForQueryString"(
     // predicateName; location: query
     // predicateValue; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AutoCompleteSuggestions"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"AutoCompleteSuggestions", &token_stream, parseOptions(alloc));
+        const result = types.AutoCompleteSuggestions.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFieldAutoCompleteForQueryStringResult"{ ._200 = result };
+        return GetFieldAutoCompleteForQueryStringResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFieldAutoCompleteForQueryStringResult"{ ._400 = {} };
+        return GetFieldAutoCompleteForQueryStringResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFieldAutoCompleteForQueryStringResult"{ ._401 = {} };
+        return GetFieldAutoCompleteForQueryStringResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFieldAutoCompleteForQueryStringResult"{ ._400 = {} };
+        return GetFieldAutoCompleteForQueryStringResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"MatchIssuesResult" = union(enum) {
+pub const MatchIssuesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueMatches",
+    _200: types.IssueMatches,
     /// Returned if `jqls` exceeds the maximum number of JQL queries or `issueIds` exceeds the maximum number of issue IDs.
     _400: void,
     _400: void,
 };
 
 /// Check issues against JQL
-pub fn @"matchIssues"(
+pub fn matchIssues(
     client: Client,
     alloc: mem.Allocator,
-) !@"MatchIssuesResult" {
+) !MatchIssuesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/jql/match");
     try url_buffer.append(0);
@@ -7770,36 +7607,35 @@ pub fn @"matchIssues"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueMatches"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueMatches", &token_stream, parseOptions(alloc));
+        const result = types.IssueMatches.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"MatchIssuesResult"{ ._200 = result };
+        return MatchIssuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MatchIssuesResult"{ ._400 = {} };
+        return MatchIssuesResult{ ._400 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MatchIssuesResult"{ ._400 = {} };
+        return MatchIssuesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ParseJqlQueriesResult" = union(enum) {
+pub const ParseJqlQueriesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ParsedJqlQueries",
+    _200: types.ParsedJqlQueries,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
 };
 
 /// Parse JQL query
-pub fn @"parseJqlQueries"(
+pub fn parseJqlQueries(
     client: Client,
     alloc: mem.Allocator,
-) !@"ParseJqlQueriesResult" {
+) !ParseJqlQueriesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/jql/parse");
     try url_buffer.append(0);
@@ -7810,30 +7646,28 @@ pub fn @"parseJqlQueries"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // validation; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ParsedJqlQueries"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ParsedJqlQueries", &token_stream, parseOptions(alloc));
+        const result = types.ParsedJqlQueries.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"ParseJqlQueriesResult"{ ._200 = result };
+        return ParseJqlQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"ParseJqlQueriesResult"{ ._400 = result };
+        return ParseJqlQueriesResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"ParseJqlQueriesResult"{ ._401 = {} };
+        return ParseJqlQueriesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ParseJqlQueriesResult"{ ._400 = {} };
+        return ParseJqlQueriesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"MigrateQueriesResult" = union(enum) {
+pub const MigrateQueriesResult = union(enum) {
     /// Returned if the request is successful. Note that the JQL queries are returned in the same order that they were passed.
-    _200: @"ConvertedJQLQueries",
+    _200: types.ConvertedJQLQueries,
     /// Returned if at least one of the queries cannot be converted. For example, the JQL has invalid operators or invalid keywords, or the users in the query cannot be found.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7842,10 +7676,10 @@ pub const @"MigrateQueriesResult" = union(enum) {
 };
 
 /// Convert user identifiers to account IDs in JQL queries
-pub fn @"migrateQueries"(
+pub fn migrateQueries(
     client: Client,
     alloc: mem.Allocator,
-) !@"MigrateQueriesResult" {
+) !MigrateQueriesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/jql/pdcleaner");
     try url_buffer.append(0);
@@ -7855,41 +7689,40 @@ pub fn @"migrateQueries"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConvertedJQLQueries"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ConvertedJQLQueries", &token_stream, parseOptions(alloc));
+        const result = types.ConvertedJQLQueries.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"MigrateQueriesResult"{ ._200 = result };
+        return MigrateQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MigrateQueriesResult"{ ._400 = {} };
+        return MigrateQueriesResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"MigrateQueriesResult"{ ._401 = {} };
+        return MigrateQueriesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MigrateQueriesResult"{ ._400 = {} };
+        return MigrateQueriesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"SanitiseJqlQueriesResult" = union(enum) {
+pub const SanitiseJqlQueriesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"SanitizedJqlQueries",
+    _200: types.SanitizedJqlQueries,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Sanitize JQL queries
-pub fn @"sanitiseJqlQueries"(
+pub fn sanitiseJqlQueries(
     client: Client,
     alloc: mem.Allocator,
-) !@"SanitiseJqlQueriesResult" {
+) !SanitiseJqlQueriesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/jql/sanitize");
     try url_buffer.append(0);
@@ -7899,47 +7732,43 @@ pub fn @"sanitiseJqlQueries"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SanitizedJqlQueries"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"SanitizedJqlQueries", &token_stream, parseOptions(alloc));
+        const result = types.SanitizedJqlQueries.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SanitiseJqlQueriesResult"{ ._200 = result };
+        return SanitiseJqlQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SanitiseJqlQueriesResult"{ ._400 = result };
+        return SanitiseJqlQueriesResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SanitiseJqlQueriesResult"{ ._401 = result };
+        return SanitiseJqlQueriesResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SanitiseJqlQueriesResult"{ ._403 = result };
+        return SanitiseJqlQueriesResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SanitiseJqlQueriesResult"{ ._400 = {} };
+        return SanitiseJqlQueriesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllLabelsResult" = union(enum) {
+pub const GetAllLabelsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanString",
+    _200: types.PageBeanString,
     _400: void,
 };
 
 /// Get all labels
-pub fn @"getAllLabels"(
+pub fn getAllLabels(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllLabelsResult" {
+) !GetAllLabelsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/label");
     try url_buffer.append(0);
@@ -7951,35 +7780,34 @@ pub fn @"getAllLabels"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanString"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanString", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanString.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllLabelsResult"{ ._200 = result };
+        return GetAllLabelsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllLabelsResult"{ ._400 = {} };
+        return GetAllLabelsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetMyPermissionsResult" = union(enum) {
+pub const GetMyPermissionsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Permissions",
+    _200: types.Permissions,
     /// Returned if `permissions` is empty, contains an invalid key, or does not equal BROWSE\_PROJECTS when commentId is provided.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the project or issue is not found or the user does not have permission to view the project or issue.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Get my permissions
-pub fn @"getMyPermissions"(
+pub fn getMyPermissions(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetMyPermissionsResult" {
+) !GetMyPermissionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/mypermissions");
     try url_buffer.append(0);
@@ -7997,37 +7825,33 @@ pub fn @"getMyPermissions"(
     // projectConfigurationUuid; location: query
     // commentId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Permissions", &token_stream, parseOptions(alloc));
+        const result = types.Permissions.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetMyPermissionsResult"{ ._200 = result };
+        return GetMyPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetMyPermissionsResult"{ ._400 = result };
+        return GetMyPermissionsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetMyPermissionsResult"{ ._401 = result };
+        return GetMyPermissionsResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetMyPermissionsResult"{ ._404 = result };
+        return GetMyPermissionsResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetMyPermissionsResult"{ ._400 = {} };
+        return GetMyPermissionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetPreferenceResult" = union(enum) {
+pub const GetPreferenceResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8038,10 +7862,10 @@ pub const @"GetPreferenceResult" = union(enum) {
 };
 
 /// Get preference
-pub fn @"getPreference"(
+pub fn getPreference(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetPreferenceResult" {
+) !GetPreferenceResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/mypreferences");
     try url_buffer.append(0);
@@ -8052,34 +7876,34 @@ pub fn @"getPreference"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetPreferenceResult"{ ._200 = {} };
+        return GetPreferenceResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetPreferenceResult"{ ._401 = {} };
+        return GetPreferenceResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetPreferenceResult"{ ._404 = {} };
+        return GetPreferenceResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetPreferenceResult"{ ._400 = {} };
+        return GetPreferenceResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetLocaleResult" = union(enum) {
+pub const GetLocaleResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Locale",
+    _200: types.Locale,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get locale
-pub fn @"getLocale"(
+pub fn getLocale(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetLocaleResult" {
+) !GetLocaleResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/mypreferences/locale");
     try url_buffer.append(0);
@@ -8089,34 +7913,33 @@ pub fn @"getLocale"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Locale"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Locale", &token_stream, parseOptions(alloc));
+        const result = types.Locale.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetLocaleResult"{ ._200 = result };
+        return GetLocaleResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetLocaleResult"{ ._401 = {} };
+        return GetLocaleResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetLocaleResult"{ ._400 = {} };
+        return GetLocaleResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetCurrentUserResult" = union(enum) {
+pub const GetCurrentUserResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"User",
+    _200: types.User,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get current user
-pub fn @"getCurrentUser"(
+pub fn getCurrentUser(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetCurrentUserResult" {
+) !GetCurrentUserResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/myself");
     try url_buffer.append(0);
@@ -8127,34 +7950,33 @@ pub fn @"getCurrentUser"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"User", &token_stream, parseOptions(alloc));
+        const result = types.User.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetCurrentUserResult"{ ._200 = result };
+        return GetCurrentUserResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetCurrentUserResult"{ ._401 = {} };
+        return GetCurrentUserResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetCurrentUserResult"{ ._400 = {} };
+        return GetCurrentUserResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetNotificationSchemesResult" = union(enum) {
+pub const GetNotificationSchemesResult = union(enum) {
     /// Returned if the request is successful. Only returns notification schemes that the user has permission to access. An empty list is returned if the user lacks permission to access all notification schemes.
-    _200: @"PageBeanNotificationScheme",
+    _200: types.PageBeanNotificationScheme,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get notification schemes paginated
-pub fn @"getNotificationSchemes"(
+pub fn getNotificationSchemes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetNotificationSchemesResult" {
+) !GetNotificationSchemesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/notificationscheme");
     try url_buffer.append(0);
@@ -8167,24 +7989,23 @@ pub fn @"getNotificationSchemes"(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanNotificationScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanNotificationScheme", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanNotificationScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetNotificationSchemesResult"{ ._200 = result };
+        return GetNotificationSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemesResult"{ ._401 = {} };
+        return GetNotificationSchemesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemesResult"{ ._400 = {} };
+        return GetNotificationSchemesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetNotificationSchemeResult" = union(enum) {
+pub const GetNotificationSchemeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"NotificationScheme",
+    _200: types.NotificationScheme,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8195,14 +8016,14 @@ pub const @"GetNotificationSchemeResult" = union(enum) {
 };
 
 /// Get notification scheme
-pub fn @"getNotificationScheme"(
+pub fn getNotificationScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetNotificationSchemeResult" {
+    id: []const u8,
+) !GetNotificationSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/notificationscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -8211,30 +8032,29 @@ pub fn @"getNotificationScheme"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"NotificationScheme", &token_stream, parseOptions(alloc));
+        const result = types.NotificationScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetNotificationSchemeResult"{ ._200 = result };
+        return GetNotificationSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemeResult"{ ._400 = {} };
+        return GetNotificationSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemeResult"{ ._401 = {} };
+        return GetNotificationSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemeResult"{ ._404 = {} };
+        return GetNotificationSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemeResult"{ ._400 = {} };
+        return GetNotificationSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllPermissionsResult" = union(enum) {
+pub const GetAllPermissionsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Permissions",
+    _200: types.Permissions,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -8243,10 +8063,10 @@ pub const @"GetAllPermissionsResult" = union(enum) {
 };
 
 /// Get all permissions
-pub fn @"getAllPermissions"(
+pub fn getAllPermissions(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllPermissionsResult" {
+) !GetAllPermissionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/permissions");
     try url_buffer.append(0);
@@ -8256,27 +8076,26 @@ pub fn @"getAllPermissions"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Permissions", &token_stream, parseOptions(alloc));
+        const result = types.Permissions.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllPermissionsResult"{ ._200 = result };
+        return GetAllPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllPermissionsResult"{ ._401 = {} };
+        return GetAllPermissionsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllPermissionsResult"{ ._403 = {} };
+        return GetAllPermissionsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllPermissionsResult"{ ._400 = {} };
+        return GetAllPermissionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetBulkPermissionsResult" = union(enum) {
+pub const GetBulkPermissionsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"BulkPermissionGrants",
+    _200: types.BulkPermissionGrants,
     /// Returned if:
     ///
     ///  *  `projectPermissions` is provided without at least one project permission being provided.
@@ -8284,17 +8103,17 @@ pub const @"GetBulkPermissionsResult" = union(enum) {
     ///  *  an invalid project permission is provided in the project permissions list.
     ///  *  more than 1000 valid project IDs or more than 1000 valid issue IDs are provided.
     ///  *  an invalid account ID is provided.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Get bulk permissions
-pub fn @"getBulkPermissions"(
+pub fn getBulkPermissions(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetBulkPermissionsResult" {
+) !GetBulkPermissionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/permissions/check");
     try url_buffer.append(0);
@@ -8304,33 +8123,30 @@ pub fn @"getBulkPermissions"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkPermissionGrants"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"BulkPermissionGrants", &token_stream, parseOptions(alloc));
+        const result = types.BulkPermissionGrants.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetBulkPermissionsResult"{ ._200 = result };
+        return GetBulkPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetBulkPermissionsResult"{ ._400 = result };
+        return GetBulkPermissionsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetBulkPermissionsResult"{ ._403 = result };
+        return GetBulkPermissionsResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetBulkPermissionsResult"{ ._400 = {} };
+        return GetBulkPermissionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetPermittedProjectsResult" = union(enum) {
+pub const GetPermittedProjectsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PermittedProjects",
+    _200: types.PermittedProjects,
     /// Returned if a project permission is not found.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8339,10 +8155,10 @@ pub const @"GetPermittedProjectsResult" = union(enum) {
 };
 
 /// Get permitted projects
-pub fn @"getPermittedProjects"(
+pub fn getPermittedProjects(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetPermittedProjectsResult" {
+) !GetPermittedProjectsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/permissions/project");
     try url_buffer.append(0);
@@ -8352,37 +8168,36 @@ pub fn @"getPermittedProjects"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermittedProjects"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PermittedProjects", &token_stream, parseOptions(alloc));
+        const result = types.PermittedProjects.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetPermittedProjectsResult"{ ._200 = result };
+        return GetPermittedProjectsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetPermittedProjectsResult"{ ._400 = {} };
+        return GetPermittedProjectsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetPermittedProjectsResult"{ ._401 = {} };
+        return GetPermittedProjectsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetPermittedProjectsResult"{ ._400 = {} };
+        return GetPermittedProjectsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllPermissionSchemesResult" = union(enum) {
+pub const GetAllPermissionSchemesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PermissionSchemes",
+    _200: types.PermissionSchemes,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get all permission schemes
-pub fn @"getAllPermissionSchemes"(
+pub fn getAllPermissionSchemes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllPermissionSchemesResult" {
+) !GetAllPermissionSchemesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/permissionscheme");
     try url_buffer.append(0);
@@ -8393,24 +8208,23 @@ pub fn @"getAllPermissionSchemes"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionSchemes"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PermissionSchemes", &token_stream, parseOptions(alloc));
+        const result = types.PermissionSchemes.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllPermissionSchemesResult"{ ._200 = result };
+        return GetAllPermissionSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllPermissionSchemesResult"{ ._401 = {} };
+        return GetAllPermissionSchemesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllPermissionSchemesResult"{ ._400 = {} };
+        return GetAllPermissionSchemesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetPermissionSchemeResult" = union(enum) {
+pub const GetPermissionSchemeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PermissionScheme",
+    _200: types.PermissionScheme,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission scheme is not found or the user does not have the necessary permission.
@@ -8419,14 +8233,14 @@ pub const @"GetPermissionSchemeResult" = union(enum) {
 };
 
 /// Get permission scheme
-pub fn @"getPermissionScheme"(
+pub fn getPermissionScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"schemeId": []const u8,
-) !@"GetPermissionSchemeResult" {
+    schemeId: []const u8,
+) !GetPermissionSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/permissionscheme/");
-    try url_buffer.appendSlice(@"schemeId");
+    try url_buffer.appendSlice(schemeId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -8435,27 +8249,26 @@ pub fn @"getPermissionScheme"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PermissionScheme", &token_stream, parseOptions(alloc));
+        const result = types.PermissionScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetPermissionSchemeResult"{ ._200 = result };
+        return GetPermissionSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetPermissionSchemeResult"{ ._401 = {} };
+        return GetPermissionSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetPermissionSchemeResult"{ ._404 = {} };
+        return GetPermissionSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetPermissionSchemeResult"{ ._400 = {} };
+        return GetPermissionSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetPermissionSchemeGrantsResult" = union(enum) {
+pub const GetPermissionSchemeGrantsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PermissionGrants",
+    _200: types.PermissionGrants,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission schemes is not found or the user does not have the necessary permission.
@@ -8464,14 +8277,14 @@ pub const @"GetPermissionSchemeGrantsResult" = union(enum) {
 };
 
 /// Get permission scheme grants
-pub fn @"getPermissionSchemeGrants"(
+pub fn getPermissionSchemeGrants(
     client: Client,
     alloc: mem.Allocator,
-    @"schemeId": []const u8,
-) !@"GetPermissionSchemeGrantsResult" {
+    schemeId: []const u8,
+) !GetPermissionSchemeGrantsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/permissionscheme/");
-    try url_buffer.appendSlice(@"schemeId");
+    try url_buffer.appendSlice(schemeId);
     try url_buffer.appendSlice("/permission");
     try url_buffer.append(0);
 
@@ -8481,27 +8294,26 @@ pub fn @"getPermissionSchemeGrants"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrants"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PermissionGrants", &token_stream, parseOptions(alloc));
+        const result = types.PermissionGrants.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetPermissionSchemeGrantsResult"{ ._200 = result };
+        return GetPermissionSchemeGrantsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetPermissionSchemeGrantsResult"{ ._401 = {} };
+        return GetPermissionSchemeGrantsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetPermissionSchemeGrantsResult"{ ._404 = {} };
+        return GetPermissionSchemeGrantsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetPermissionSchemeGrantsResult"{ ._400 = {} };
+        return GetPermissionSchemeGrantsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetPermissionSchemeGrantResult" = union(enum) {
+pub const GetPermissionSchemeGrantResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PermissionGrant",
+    _200: types.PermissionGrant,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission scheme or permission grant is not found or the user does not have the necessary permission.
@@ -8510,17 +8322,17 @@ pub const @"GetPermissionSchemeGrantResult" = union(enum) {
 };
 
 /// Get permission scheme grant
-pub fn @"getPermissionSchemeGrant"(
+pub fn getPermissionSchemeGrant(
     client: Client,
     alloc: mem.Allocator,
-    @"schemeId": []const u8,
-    @"permissionId": []const u8,
-) !@"GetPermissionSchemeGrantResult" {
+    schemeId: []const u8,
+    permissionId: []const u8,
+) !GetPermissionSchemeGrantResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/permissionscheme/");
-    try url_buffer.appendSlice(@"schemeId");
+    try url_buffer.appendSlice(schemeId);
     try url_buffer.appendSlice("/permission/");
-    try url_buffer.appendSlice(@"permissionId");
+    try url_buffer.appendSlice(permissionId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -8529,25 +8341,24 @@ pub fn @"getPermissionSchemeGrant"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrant"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PermissionGrant", &token_stream, parseOptions(alloc));
+        const result = types.PermissionGrant.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetPermissionSchemeGrantResult"{ ._200 = result };
+        return GetPermissionSchemeGrantResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetPermissionSchemeGrantResult"{ ._401 = {} };
+        return GetPermissionSchemeGrantResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetPermissionSchemeGrantResult"{ ._404 = {} };
+        return GetPermissionSchemeGrantResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetPermissionSchemeGrantResult"{ ._400 = {} };
+        return GetPermissionSchemeGrantResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetPrioritiesResult" = union(enum) {
+pub const GetPrioritiesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -8556,10 +8367,10 @@ pub const @"GetPrioritiesResult" = union(enum) {
 };
 
 /// Get priorities
-pub fn @"getPriorities"(
+pub fn getPriorities(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetPrioritiesResult" {
+) !GetPrioritiesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/priority");
     try url_buffer.append(0);
@@ -8569,37 +8380,37 @@ pub fn @"getPriorities"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetPrioritiesResult"{ ._200 = {} };
+        return GetPrioritiesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetPrioritiesResult"{ ._401 = {} };
+        return GetPrioritiesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetPrioritiesResult"{ ._400 = {} };
+        return GetPrioritiesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"SetDefaultPriorityResult" = union(enum) {
+pub const SetDefaultPriorityResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     /// Returned if the issue priority is not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Set default priority
-pub fn @"setDefaultPriority"(
+pub fn setDefaultPriority(
     client: Client,
     alloc: mem.Allocator,
-) !@"SetDefaultPriorityResult" {
+) !SetDefaultPriorityResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/priority/default");
     try url_buffer.append(0);
@@ -8609,52 +8420,48 @@ pub fn @"setDefaultPriority"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"SetDefaultPriorityResult"{ ._204 = {} };
+        return SetDefaultPriorityResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SetDefaultPriorityResult"{ ._400 = result };
+        return SetDefaultPriorityResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SetDefaultPriorityResult"{ ._401 = result };
+        return SetDefaultPriorityResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SetDefaultPriorityResult"{ ._403 = result };
+        return SetDefaultPriorityResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SetDefaultPriorityResult"{ ._404 = result };
+        return SetDefaultPriorityResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SetDefaultPriorityResult"{ ._400 = {} };
+        return SetDefaultPriorityResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"SearchPrioritiesResult" = union(enum) {
+pub const SearchPrioritiesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanPriority",
+    _200: types.PageBeanPriority,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     _400: void,
 };
 
 /// Search priorities
-pub fn @"searchPriorities"(
+pub fn searchPriorities(
     client: Client,
     alloc: mem.Allocator,
-) !@"SearchPrioritiesResult" {
+) !SearchPrioritiesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/priority/search");
     try url_buffer.append(0);
@@ -8668,27 +8475,25 @@ pub fn @"searchPriorities"(
     // id; location: query
     // onlyDefault; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanPriority"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanPriority", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanPriority.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SearchPrioritiesResult"{ ._200 = result };
+        return SearchPrioritiesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SearchPrioritiesResult"{ ._401 = result };
+        return SearchPrioritiesResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SearchPrioritiesResult"{ ._400 = {} };
+        return SearchPrioritiesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetPriorityResult" = union(enum) {
+pub const GetPriorityResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Priority",
+    _200: types.Priority,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the issue priority is not found.
@@ -8697,14 +8502,14 @@ pub const @"GetPriorityResult" = union(enum) {
 };
 
 /// Get priority
-pub fn @"getPriority"(
+pub fn getPriority(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetPriorityResult" {
+    id: []const u8,
+) !GetPriorityResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/priority/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -8712,25 +8517,24 @@ pub fn @"getPriority"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Priority"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Priority", &token_stream, parseOptions(alloc));
+        const result = types.Priority.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetPriorityResult"{ ._200 = result };
+        return GetPriorityResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetPriorityResult"{ ._401 = {} };
+        return GetPriorityResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetPriorityResult"{ ._404 = {} };
+        return GetPriorityResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetPriorityResult"{ ._400 = {} };
+        return GetPriorityResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllProjectsResult" = union(enum) {
+pub const GetAllProjectsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8739,10 +8543,10 @@ pub const @"GetAllProjectsResult" = union(enum) {
 };
 
 /// Get all projects
-pub fn @"getAllProjects"(
+pub fn getAllProjects(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllProjectsResult" {
+) !GetAllProjectsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project");
     try url_buffer.append(0);
@@ -8755,19 +8559,19 @@ pub fn @"getAllProjects"(
     // recent; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllProjectsResult"{ ._200 = {} };
+        return GetAllProjectsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllProjectsResult"{ ._401 = {} };
+        return GetAllProjectsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllProjectsResult"{ ._400 = {} };
+        return GetAllProjectsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetRecentResult" = union(enum) {
+pub const GetRecentResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -8778,10 +8582,10 @@ pub const @"GetRecentResult" = union(enum) {
 };
 
 /// Get recent projects
-pub fn @"getRecent"(
+pub fn getRecent(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetRecentResult" {
+) !GetRecentResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/recent");
     try url_buffer.append(0);
@@ -8793,24 +8597,24 @@ pub fn @"getRecent"(
     // expand; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetRecentResult"{ ._200 = {} };
+        return GetRecentResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetRecentResult"{ ._400 = {} };
+        return GetRecentResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetRecentResult"{ ._401 = {} };
+        return GetRecentResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetRecentResult"{ ._400 = {} };
+        return GetRecentResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"SearchProjectsResult" = union(enum) {
+pub const SearchProjectsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanProject",
+    _200: types.PageBeanProject,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8821,10 +8625,10 @@ pub const @"SearchProjectsResult" = union(enum) {
 };
 
 /// Get projects paginated
-pub fn @"searchProjects"(
+pub fn searchProjects(
     client: Client,
     alloc: mem.Allocator,
-) !@"SearchProjectsResult" {
+) !SearchProjectsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/search");
     try url_buffer.append(0);
@@ -8847,28 +8651,27 @@ pub fn @"searchProjects"(
     // properties; location: query
     // propertyQuery; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProject"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanProject", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanProject.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SearchProjectsResult"{ ._200 = result };
+        return SearchProjectsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SearchProjectsResult"{ ._400 = {} };
+        return SearchProjectsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"SearchProjectsResult"{ ._401 = {} };
+        return SearchProjectsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"SearchProjectsResult"{ ._404 = {} };
+        return SearchProjectsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SearchProjectsResult"{ ._400 = {} };
+        return SearchProjectsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllProjectTypesResult" = union(enum) {
+pub const GetAllProjectTypesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -8877,10 +8680,10 @@ pub const @"GetAllProjectTypesResult" = union(enum) {
 };
 
 /// Get all project types
-pub fn @"getAllProjectTypes"(
+pub fn getAllProjectTypes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllProjectTypesResult" {
+) !GetAllProjectTypesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/type");
     try url_buffer.append(0);
@@ -8890,29 +8693,29 @@ pub fn @"getAllProjectTypes"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllProjectTypesResult"{ ._200 = {} };
+        return GetAllProjectTypesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllProjectTypesResult"{ ._401 = {} };
+        return GetAllProjectTypesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllProjectTypesResult"{ ._400 = {} };
+        return GetAllProjectTypesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllAccessibleProjectTypesResult" = union(enum) {
+pub const GetAllAccessibleProjectTypesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     _400: void,
 };
 
 /// Get licensed project types
-pub fn @"getAllAccessibleProjectTypes"(
+pub fn getAllAccessibleProjectTypes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllAccessibleProjectTypesResult" {
+) !GetAllAccessibleProjectTypesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/type/accessible");
     try url_buffer.append(0);
@@ -8922,18 +8725,18 @@ pub fn @"getAllAccessibleProjectTypes"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllAccessibleProjectTypesResult"{ ._200 = {} };
+        return GetAllAccessibleProjectTypesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllAccessibleProjectTypesResult"{ ._400 = {} };
+        return GetAllAccessibleProjectTypesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectTypeByKeyResult" = union(enum) {
+pub const GetProjectTypeByKeyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectType",
+    _200: types.ProjectType,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the project type is not found.
@@ -8942,14 +8745,14 @@ pub const @"GetProjectTypeByKeyResult" = union(enum) {
 };
 
 /// Get project type by key
-pub fn @"getProjectTypeByKey"(
+pub fn getProjectTypeByKey(
     client: Client,
     alloc: mem.Allocator,
-    @"projectTypeKey": []const u8,
-) !@"GetProjectTypeByKeyResult" {
+    projectTypeKey: []const u8,
+) !GetProjectTypeByKeyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/type/");
-    try url_buffer.appendSlice(@"projectTypeKey");
+    try url_buffer.appendSlice(projectTypeKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -8957,27 +8760,26 @@ pub fn @"getProjectTypeByKey"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectType", &token_stream, parseOptions(alloc));
+        const result = types.ProjectType.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectTypeByKeyResult"{ ._200 = result };
+        return GetProjectTypeByKeyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectTypeByKeyResult"{ ._401 = {} };
+        return GetProjectTypeByKeyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectTypeByKeyResult"{ ._404 = {} };
+        return GetProjectTypeByKeyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectTypeByKeyResult"{ ._400 = {} };
+        return GetProjectTypeByKeyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAccessibleProjectTypeByKeyResult" = union(enum) {
+pub const GetAccessibleProjectTypeByKeyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectType",
+    _200: types.ProjectType,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project type is not accessible to the user.
@@ -8986,14 +8788,14 @@ pub const @"GetAccessibleProjectTypeByKeyResult" = union(enum) {
 };
 
 /// Get accessible project type by key
-pub fn @"getAccessibleProjectTypeByKey"(
+pub fn getAccessibleProjectTypeByKey(
     client: Client,
     alloc: mem.Allocator,
-    @"projectTypeKey": []const u8,
-) !@"GetAccessibleProjectTypeByKeyResult" {
+    projectTypeKey: []const u8,
+) !GetAccessibleProjectTypeByKeyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/type/");
-    try url_buffer.appendSlice(@"projectTypeKey");
+    try url_buffer.appendSlice(projectTypeKey);
     try url_buffer.appendSlice("/accessible");
     try url_buffer.append(0);
 
@@ -9002,27 +8804,26 @@ pub fn @"getAccessibleProjectTypeByKey"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectType", &token_stream, parseOptions(alloc));
+        const result = types.ProjectType.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAccessibleProjectTypeByKeyResult"{ ._200 = result };
+        return GetAccessibleProjectTypeByKeyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAccessibleProjectTypeByKeyResult"{ ._401 = {} };
+        return GetAccessibleProjectTypeByKeyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAccessibleProjectTypeByKeyResult"{ ._404 = {} };
+        return GetAccessibleProjectTypeByKeyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAccessibleProjectTypeByKeyResult"{ ._400 = {} };
+        return GetAccessibleProjectTypeByKeyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectResult" = union(enum) {
+pub const GetProjectResult = union(enum) {
     /// Returned if successful.
-    _200: @"Project",
+    _200: types.Project,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -9031,14 +8832,14 @@ pub const @"GetProjectResult" = union(enum) {
 };
 
 /// Get project
-pub fn @"getProject"(
+pub fn getProject(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetProjectResult" {
+    projectIdOrKey: []const u8,
+) !GetProjectResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -9048,25 +8849,24 @@ pub fn @"getProject"(
     // expand; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Project", &token_stream, parseOptions(alloc));
+        const result = types.Project.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectResult"{ ._200 = result };
+        return GetProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectResult"{ ._401 = {} };
+        return GetProjectResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectResult"{ ._404 = {} };
+        return GetProjectResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectResult"{ ._400 = {} };
+        return GetProjectResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ArchiveProjectResult" = union(enum) {
+pub const ArchiveProjectResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -9081,14 +8881,14 @@ pub const @"ArchiveProjectResult" = union(enum) {
 };
 
 /// Archive project
-pub fn @"archiveProject"(
+pub fn archiveProject(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"ArchiveProjectResult" {
+    projectIdOrKey: []const u8,
+) !ArchiveProjectResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/archive");
     try url_buffer.append(0);
 
@@ -9097,28 +8897,28 @@ pub fn @"archiveProject"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"ArchiveProjectResult"{ ._204 = {} };
+        return ArchiveProjectResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ArchiveProjectResult"{ ._400 = {} };
+        return ArchiveProjectResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"ArchiveProjectResult"{ ._401 = {} };
+        return ArchiveProjectResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"ArchiveProjectResult"{ ._403 = {} };
+        return ArchiveProjectResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"ArchiveProjectResult"{ ._404 = {} };
+        return ArchiveProjectResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ArchiveProjectResult"{ ._400 = {} };
+        return ArchiveProjectResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateProjectAvatarResult" = union(enum) {
+pub const UpdateProjectAvatarResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9131,14 +8931,14 @@ pub const @"UpdateProjectAvatarResult" = union(enum) {
 };
 
 /// Set project avatar
-pub fn @"updateProjectAvatar"(
+pub fn updateProjectAvatar(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"UpdateProjectAvatarResult" {
+    projectIdOrKey: []const u8,
+) !UpdateProjectAvatarResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/avatar");
     try url_buffer.append(0);
 
@@ -9147,25 +8947,25 @@ pub fn @"updateProjectAvatar"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateProjectAvatarResult"{ ._204 = {} };
+        return UpdateProjectAvatarResult{ ._204 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateProjectAvatarResult"{ ._401 = {} };
+        return UpdateProjectAvatarResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateProjectAvatarResult"{ ._403 = {} };
+        return UpdateProjectAvatarResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateProjectAvatarResult"{ ._404 = {} };
+        return UpdateProjectAvatarResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateProjectAvatarResult"{ ._400 = {} };
+        return UpdateProjectAvatarResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"DeleteProjectAvatarResult" = union(enum) {
+pub const DeleteProjectAvatarResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9178,17 +8978,17 @@ pub const @"DeleteProjectAvatarResult" = union(enum) {
 };
 
 /// Delete project avatar
-pub fn @"deleteProjectAvatar"(
+pub fn deleteProjectAvatar(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-    @"id": []const u8,
-) !@"DeleteProjectAvatarResult" {
+    projectIdOrKey: []const u8,
+    id: []const u8,
+) !DeleteProjectAvatarResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/avatar/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/avatar/{id}");
@@ -9196,27 +8996,27 @@ pub fn @"deleteProjectAvatar"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"DeleteProjectAvatarResult"{ ._204 = {} };
+        return DeleteProjectAvatarResult{ ._204 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"DeleteProjectAvatarResult"{ ._401 = {} };
+        return DeleteProjectAvatarResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"DeleteProjectAvatarResult"{ ._403 = {} };
+        return DeleteProjectAvatarResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"DeleteProjectAvatarResult"{ ._404 = {} };
+        return DeleteProjectAvatarResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteProjectAvatarResult"{ ._400 = {} };
+        return DeleteProjectAvatarResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"CreateProjectAvatarResult" = union(enum) {
+pub const CreateProjectAvatarResult = union(enum) {
     /// Returned if the request is successful.
-    _201: @"Avatar",
+    _201: types.Avatar,
     /// Returned if:
     ///
     ///  *  an image isn't included in the request.
@@ -9233,14 +9033,14 @@ pub const @"CreateProjectAvatarResult" = union(enum) {
 };
 
 /// Load project avatar
-pub fn @"createProjectAvatar"(
+pub fn createProjectAvatar(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"CreateProjectAvatarResult" {
+    projectIdOrKey: []const u8,
+) !CreateProjectAvatarResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/avatar2");
     try url_buffer.append(0);
 
@@ -9252,33 +9052,32 @@ pub fn @"createProjectAvatar"(
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Avatar", &token_stream, parseOptions(alloc));
+        const result = types.Avatar.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateProjectAvatarResult"{ ._201 = result };
+        return CreateProjectAvatarResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateProjectAvatarResult"{ ._400 = {} };
+        return CreateProjectAvatarResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"CreateProjectAvatarResult"{ ._401 = {} };
+        return CreateProjectAvatarResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"CreateProjectAvatarResult"{ ._403 = {} };
+        return CreateProjectAvatarResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"CreateProjectAvatarResult"{ ._404 = {} };
+        return CreateProjectAvatarResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateProjectAvatarResult"{ ._400 = {} };
+        return CreateProjectAvatarResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllProjectAvatarsResult" = union(enum) {
+pub const GetAllProjectAvatarsResult = union(enum) {
     /// Returned if request is successful.
-    _200: @"ProjectAvatars",
+    _200: types.ProjectAvatars,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view the project.
@@ -9287,14 +9086,14 @@ pub const @"GetAllProjectAvatarsResult" = union(enum) {
 };
 
 /// Get all project avatars
-pub fn @"getAllProjectAvatars"(
+pub fn getAllProjectAvatars(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetAllProjectAvatarsResult" {
+    projectIdOrKey: []const u8,
+) !GetAllProjectAvatarsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/avatars");
     try url_buffer.append(0);
 
@@ -9303,27 +9102,26 @@ pub fn @"getAllProjectAvatars"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectAvatars"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectAvatars", &token_stream, parseOptions(alloc));
+        const result = types.ProjectAvatars.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllProjectAvatarsResult"{ ._200 = result };
+        return GetAllProjectAvatarsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllProjectAvatarsResult"{ ._401 = {} };
+        return GetAllProjectAvatarsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAllProjectAvatarsResult"{ ._404 = {} };
+        return GetAllProjectAvatarsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllProjectAvatarsResult"{ ._400 = {} };
+        return GetAllProjectAvatarsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectComponentsPaginatedResult" = union(enum) {
+pub const GetProjectComponentsPaginatedResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanComponentWithIssueCount",
+    _200: types.PageBeanComponentWithIssueCount,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -9332,14 +9130,14 @@ pub const @"GetProjectComponentsPaginatedResult" = union(enum) {
 };
 
 /// Get project components paginated
-pub fn @"getProjectComponentsPaginated"(
+pub fn getProjectComponentsPaginated(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetProjectComponentsPaginatedResult" {
+    projectIdOrKey: []const u8,
+) !GetProjectComponentsPaginatedResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/component");
     try url_buffer.append(0);
 
@@ -9352,25 +9150,24 @@ pub fn @"getProjectComponentsPaginated"(
     // orderBy; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComponentWithIssueCount"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanComponentWithIssueCount", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanComponentWithIssueCount.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectComponentsPaginatedResult"{ ._200 = result };
+        return GetProjectComponentsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectComponentsPaginatedResult"{ ._401 = {} };
+        return GetProjectComponentsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectComponentsPaginatedResult"{ ._404 = {} };
+        return GetProjectComponentsPaginatedResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectComponentsPaginatedResult"{ ._400 = {} };
+        return GetProjectComponentsPaginatedResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectComponentsResult" = union(enum) {
+pub const GetProjectComponentsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9381,14 +9178,14 @@ pub const @"GetProjectComponentsResult" = union(enum) {
 };
 
 /// Get project components
-pub fn @"getProjectComponents"(
+pub fn getProjectComponents(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetProjectComponentsResult" {
+    projectIdOrKey: []const u8,
+) !GetProjectComponentsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/components");
     try url_buffer.append(0);
 
@@ -9397,24 +9194,24 @@ pub fn @"getProjectComponents"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetProjectComponentsResult"{ ._200 = {} };
+        return GetProjectComponentsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectComponentsResult"{ ._401 = {} };
+        return GetProjectComponentsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectComponentsResult"{ ._404 = {} };
+        return GetProjectComponentsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectComponentsResult"{ ._400 = {} };
+        return GetProjectComponentsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"DeleteProjectAsynchronouslyResult" = union(enum) {
+pub const DeleteProjectAsynchronouslyResult = union(enum) {
     /// Returned if the request is successful.
-    _303: @"TaskProgressBeanObject",
+    _303: types.TaskProgressBeanObject,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9425,14 +9222,14 @@ pub const @"DeleteProjectAsynchronouslyResult" = union(enum) {
 };
 
 /// Delete project asynchronously
-pub fn @"deleteProjectAsynchronously"(
+pub fn deleteProjectAsynchronously(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"DeleteProjectAsynchronouslyResult" {
+    projectIdOrKey: []const u8,
+) !DeleteProjectAsynchronouslyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/delete");
     try url_buffer.append(0);
 
@@ -9441,30 +9238,29 @@ pub fn @"deleteProjectAsynchronously"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
+        const result = types.TaskProgressBeanObject.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteProjectAsynchronouslyResult"{ ._303 = result };
+        return DeleteProjectAsynchronouslyResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteProjectAsynchronouslyResult"{ ._400 = {} };
+        return DeleteProjectAsynchronouslyResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"DeleteProjectAsynchronouslyResult"{ ._401 = {} };
+        return DeleteProjectAsynchronouslyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"DeleteProjectAsynchronouslyResult"{ ._404 = {} };
+        return DeleteProjectAsynchronouslyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteProjectAsynchronouslyResult"{ ._400 = {} };
+        return DeleteProjectAsynchronouslyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFeaturesForProjectResult" = union(enum) {
+pub const GetFeaturesForProjectResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ContainerForProjectFeatures",
+    _200: types.ContainerForProjectFeatures,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9477,14 +9273,14 @@ pub const @"GetFeaturesForProjectResult" = union(enum) {
 };
 
 /// Get project features
-pub fn @"getFeaturesForProject"(
+pub fn getFeaturesForProject(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetFeaturesForProjectResult" {
+    projectIdOrKey: []const u8,
+) !GetFeaturesForProjectResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/features");
     try url_buffer.append(0);
 
@@ -9493,33 +9289,32 @@ pub fn @"getFeaturesForProject"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ContainerForProjectFeatures", &token_stream, parseOptions(alloc));
+        const result = types.ContainerForProjectFeatures.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFeaturesForProjectResult"{ ._200 = result };
+        return GetFeaturesForProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFeaturesForProjectResult"{ ._400 = {} };
+        return GetFeaturesForProjectResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetFeaturesForProjectResult"{ ._401 = {} };
+        return GetFeaturesForProjectResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetFeaturesForProjectResult"{ ._403 = {} };
+        return GetFeaturesForProjectResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetFeaturesForProjectResult"{ ._404 = {} };
+        return GetFeaturesForProjectResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFeaturesForProjectResult"{ ._400 = {} };
+        return GetFeaturesForProjectResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ToggleFeatureForProjectResult" = union(enum) {
+pub const ToggleFeatureForProjectResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ContainerForProjectFeatures",
+    _200: types.ContainerForProjectFeatures,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9532,17 +9327,17 @@ pub const @"ToggleFeatureForProjectResult" = union(enum) {
 };
 
 /// Set project feature state
-pub fn @"toggleFeatureForProject"(
+pub fn toggleFeatureForProject(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-    @"featureKey": []const u8,
-) !@"ToggleFeatureForProjectResult" {
+    projectIdOrKey: []const u8,
+    featureKey: []const u8,
+) !ToggleFeatureForProjectResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/features/");
-    try url_buffer.appendSlice(@"featureKey");
+    try url_buffer.appendSlice(featureKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/features/{featureKey}");
@@ -9550,33 +9345,32 @@ pub fn @"toggleFeatureForProject"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ContainerForProjectFeatures", &token_stream, parseOptions(alloc));
+        const result = types.ContainerForProjectFeatures.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"ToggleFeatureForProjectResult"{ ._200 = result };
+        return ToggleFeatureForProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ToggleFeatureForProjectResult"{ ._400 = {} };
+        return ToggleFeatureForProjectResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"ToggleFeatureForProjectResult"{ ._401 = {} };
+        return ToggleFeatureForProjectResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"ToggleFeatureForProjectResult"{ ._403 = {} };
+        return ToggleFeatureForProjectResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"ToggleFeatureForProjectResult"{ ._404 = {} };
+        return ToggleFeatureForProjectResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ToggleFeatureForProjectResult"{ ._400 = {} };
+        return ToggleFeatureForProjectResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectPropertyKeysResult" = union(enum) {
+pub const GetProjectPropertyKeysResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PropertyKeys",
+    _200: types.PropertyKeys,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -9589,14 +9383,14 @@ pub const @"GetProjectPropertyKeysResult" = union(enum) {
 };
 
 /// Get project property keys
-pub fn @"getProjectPropertyKeys"(
+pub fn getProjectPropertyKeys(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetProjectPropertyKeysResult" {
+    projectIdOrKey: []const u8,
+) !GetProjectPropertyKeysResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/properties");
     try url_buffer.append(0);
 
@@ -9605,33 +9399,32 @@ pub fn @"getProjectPropertyKeys"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
+        const result = types.PropertyKeys.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectPropertyKeysResult"{ ._200 = result };
+        return GetProjectPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyKeysResult"{ ._400 = {} };
+        return GetProjectPropertyKeysResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyKeysResult"{ ._401 = {} };
+        return GetProjectPropertyKeysResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyKeysResult"{ ._403 = {} };
+        return GetProjectPropertyKeysResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyKeysResult"{ ._404 = {} };
+        return GetProjectPropertyKeysResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyKeysResult"{ ._400 = {} };
+        return GetProjectPropertyKeysResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectPropertyResult" = union(enum) {
+pub const GetProjectPropertyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"EntityProperty",
+    _200: types.EntityProperty,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -9644,17 +9437,17 @@ pub const @"GetProjectPropertyResult" = union(enum) {
 };
 
 /// Get project property
-pub fn @"getProjectProperty"(
+pub fn getProjectProperty(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-    @"propertyKey": []const u8,
-) !@"GetProjectPropertyResult" {
+    projectIdOrKey: []const u8,
+    propertyKey: []const u8,
+) !GetProjectPropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/properties/");
-    try url_buffer.appendSlice(@"propertyKey");
+    try url_buffer.appendSlice(propertyKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -9662,33 +9455,32 @@ pub fn @"getProjectProperty"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
+        const result = types.EntityProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectPropertyResult"{ ._200 = result };
+        return GetProjectPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyResult"{ ._400 = {} };
+        return GetProjectPropertyResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyResult"{ ._401 = {} };
+        return GetProjectPropertyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyResult"{ ._403 = {} };
+        return GetProjectPropertyResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyResult"{ ._404 = {} };
+        return GetProjectPropertyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectPropertyResult"{ ._400 = {} };
+        return GetProjectPropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RestoreResult" = union(enum) {
+pub const RestoreResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Project",
+    _200: types.Project,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9699,14 +9491,14 @@ pub const @"RestoreResult" = union(enum) {
 };
 
 /// Restore deleted project
-pub fn @"restore"(
+pub fn restore(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"RestoreResult" {
+    projectIdOrKey: []const u8,
+) !RestoreResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/restore");
     try url_buffer.append(0);
 
@@ -9715,28 +9507,27 @@ pub fn @"restore"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Project", &token_stream, parseOptions(alloc));
+        const result = types.Project.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RestoreResult"{ ._200 = result };
+        return RestoreResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RestoreResult"{ ._400 = {} };
+        return RestoreResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"RestoreResult"{ ._401 = {} };
+        return RestoreResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"RestoreResult"{ ._404 = {} };
+        return RestoreResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RestoreResult"{ ._400 = {} };
+        return RestoreResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectRolesResult" = union(enum) {
+pub const GetProjectRolesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing or if the user lacks administrative permissions for the project.
@@ -9747,14 +9538,14 @@ pub const @"GetProjectRolesResult" = union(enum) {
 };
 
 /// Get project roles for project
-pub fn @"getProjectRoles"(
+pub fn getProjectRoles(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetProjectRolesResult" {
+    projectIdOrKey: []const u8,
+) !GetProjectRolesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/role");
     try url_buffer.append(0);
 
@@ -9763,24 +9554,24 @@ pub fn @"getProjectRoles"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetProjectRolesResult"{ ._200 = {} };
+        return GetProjectRolesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectRolesResult"{ ._401 = {} };
+        return GetProjectRolesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectRolesResult"{ ._404 = {} };
+        return GetProjectRolesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectRolesResult"{ ._400 = {} };
+        return GetProjectRolesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectRoleResult" = union(enum) {
+pub const GetProjectRoleResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectRole",
+    _200: types.ProjectRole,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9794,17 +9585,17 @@ pub const @"GetProjectRoleResult" = union(enum) {
 };
 
 /// Get project role for project
-pub fn @"getProjectRole"(
+pub fn getProjectRole(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-    @"id": []const u8,
-) !@"GetProjectRoleResult" {
+    projectIdOrKey: []const u8,
+    id: []const u8,
+) !GetProjectRoleResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/role/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -9813,28 +9604,27 @@ pub fn @"getProjectRole"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // excludeInactiveUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectRole", &token_stream, parseOptions(alloc));
+        const result = types.ProjectRole.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectRoleResult"{ ._200 = result };
+        return GetProjectRoleResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectRoleResult"{ ._400 = {} };
+        return GetProjectRoleResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectRoleResult"{ ._401 = {} };
+        return GetProjectRoleResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectRoleResult"{ ._404 = {} };
+        return GetProjectRoleResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectRoleResult"{ ._400 = {} };
+        return GetProjectRoleResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectRoleDetailsResult" = union(enum) {
+pub const GetProjectRoleDetailsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9845,14 +9635,14 @@ pub const @"GetProjectRoleDetailsResult" = union(enum) {
 };
 
 /// Get project role details
-pub fn @"getProjectRoleDetails"(
+pub fn getProjectRoleDetails(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetProjectRoleDetailsResult" {
+    projectIdOrKey: []const u8,
+) !GetProjectRoleDetailsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/roledetails");
     try url_buffer.append(0);
 
@@ -9863,22 +9653,22 @@ pub fn @"getProjectRoleDetails"(
     // currentMember; location: query
     // excludeConnectAddons; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetProjectRoleDetailsResult"{ ._200 = {} };
+        return GetProjectRoleDetailsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectRoleDetailsResult"{ ._401 = {} };
+        return GetProjectRoleDetailsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectRoleDetailsResult"{ ._404 = {} };
+        return GetProjectRoleDetailsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectRoleDetailsResult"{ ._400 = {} };
+        return GetProjectRoleDetailsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllStatusesResult" = union(enum) {
+pub const GetAllStatusesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9889,14 +9679,14 @@ pub const @"GetAllStatusesResult" = union(enum) {
 };
 
 /// Get all statuses for project
-pub fn @"getAllStatuses"(
+pub fn getAllStatuses(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetAllStatusesResult" {
+    projectIdOrKey: []const u8,
+) !GetAllStatusesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/statuses");
     try url_buffer.append(0);
 
@@ -9905,24 +9695,24 @@ pub fn @"getAllStatuses"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllStatusesResult"{ ._200 = {} };
+        return GetAllStatusesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllStatusesResult"{ ._401 = {} };
+        return GetAllStatusesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAllStatusesResult"{ ._404 = {} };
+        return GetAllStatusesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllStatusesResult"{ ._400 = {} };
+        return GetAllStatusesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateProjectTypeResult" = union(enum) {
+pub const UpdateProjectTypeResult = union(enum) {
     /// Returned if the project type is updated.
-    _200: @"Project",
+    _200: types.Project,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9933,17 +9723,17 @@ pub const @"UpdateProjectTypeResult" = union(enum) {
 };
 
 /// Update project type
-pub fn @"updateProjectType"(
+pub fn updateProjectType(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-    @"newProjectTypeKey": []const u8,
-) !@"UpdateProjectTypeResult" {
+    projectIdOrKey: []const u8,
+    newProjectTypeKey: []const u8,
+) !UpdateProjectTypeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/type/");
-    try url_buffer.appendSlice(@"newProjectTypeKey");
+    try url_buffer.appendSlice(newProjectTypeKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/type/{newProjectTypeKey}");
@@ -9951,44 +9741,43 @@ pub fn @"updateProjectType"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Project", &token_stream, parseOptions(alloc));
+        const result = types.Project.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"UpdateProjectTypeResult"{ ._200 = result };
+        return UpdateProjectTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateProjectTypeResult"{ ._400 = {} };
+        return UpdateProjectTypeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateProjectTypeResult"{ ._401 = {} };
+        return UpdateProjectTypeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateProjectTypeResult"{ ._404 = {} };
+        return UpdateProjectTypeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateProjectTypeResult"{ ._400 = {} };
+        return UpdateProjectTypeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectVersionsPaginatedResult" = union(enum) {
+pub const GetProjectVersionsPaginatedResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanVersion",
+    _200: types.PageBeanVersion,
     /// Returned if the project is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
 };
 
 /// Get project versions paginated
-pub fn @"getProjectVersionsPaginated"(
+pub fn getProjectVersionsPaginated(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetProjectVersionsPaginatedResult" {
+    projectIdOrKey: []const u8,
+) !GetProjectVersionsPaginatedResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/version");
     try url_buffer.append(0);
 
@@ -10003,22 +9792,21 @@ pub fn @"getProjectVersionsPaginated"(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanVersion"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanVersion", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanVersion.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectVersionsPaginatedResult"{ ._200 = result };
+        return GetProjectVersionsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectVersionsPaginatedResult"{ ._404 = {} };
+        return GetProjectVersionsPaginatedResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectVersionsPaginatedResult"{ ._400 = {} };
+        return GetProjectVersionsPaginatedResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectVersionsResult" = union(enum) {
+pub const GetProjectVersionsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -10027,14 +9815,14 @@ pub const @"GetProjectVersionsResult" = union(enum) {
 };
 
 /// Get project versions
-pub fn @"getProjectVersions"(
+pub fn getProjectVersions(
     client: Client,
     alloc: mem.Allocator,
-    @"projectIdOrKey": []const u8,
-) !@"GetProjectVersionsResult" {
+    projectIdOrKey: []const u8,
+) !GetProjectVersionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectIdOrKey");
+    try url_buffer.appendSlice(projectIdOrKey);
     try url_buffer.appendSlice("/versions");
     try url_buffer.append(0);
 
@@ -10044,21 +9832,21 @@ pub fn @"getProjectVersions"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetProjectVersionsResult"{ ._200 = {} };
+        return GetProjectVersionsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectVersionsResult"{ ._404 = {} };
+        return GetProjectVersionsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectVersionsResult"{ ._400 = {} };
+        return GetProjectVersionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectEmailResult" = union(enum) {
+pub const GetProjectEmailResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectEmailAddress",
+    _200: types.ProjectEmailAddress,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have permission to read project.
@@ -10069,14 +9857,14 @@ pub const @"GetProjectEmailResult" = union(enum) {
 };
 
 /// Get project's sender email
-pub fn @"getProjectEmail"(
+pub fn getProjectEmail(
     client: Client,
     alloc: mem.Allocator,
-    @"projectId": []const u8,
-) !@"GetProjectEmailResult" {
+    projectId: []const u8,
+) !GetProjectEmailResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectId");
+    try url_buffer.appendSlice(projectId);
     try url_buffer.appendSlice("/email");
     try url_buffer.append(0);
 
@@ -10085,30 +9873,29 @@ pub fn @"getProjectEmail"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectEmailAddress"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectEmailAddress", &token_stream, parseOptions(alloc));
+        const result = types.ProjectEmailAddress.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectEmailResult"{ ._200 = result };
+        return GetProjectEmailResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectEmailResult"{ ._401 = {} };
+        return GetProjectEmailResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetProjectEmailResult"{ ._403 = {} };
+        return GetProjectEmailResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectEmailResult"{ ._404 = {} };
+        return GetProjectEmailResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectEmailResult"{ ._400 = {} };
+        return GetProjectEmailResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetHierarchyResult" = union(enum) {
+pub const GetHierarchyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectIssueTypeHierarchy",
+    _200: types.ProjectIssueTypeHierarchy,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10119,14 +9906,14 @@ pub const @"GetHierarchyResult" = union(enum) {
 };
 
 /// Get project issue type hierarchy
-pub fn @"getHierarchy"(
+pub fn getHierarchy(
     client: Client,
     alloc: mem.Allocator,
-    @"projectId": []const u8,
-) !@"GetHierarchyResult" {
+    projectId: []const u8,
+) !GetHierarchyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectId");
+    try url_buffer.appendSlice(projectId);
     try url_buffer.appendSlice("/hierarchy");
     try url_buffer.append(0);
 
@@ -10135,30 +9922,29 @@ pub fn @"getHierarchy"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueTypeHierarchy"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectIssueTypeHierarchy", &token_stream, parseOptions(alloc));
+        const result = types.ProjectIssueTypeHierarchy.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetHierarchyResult"{ ._200 = result };
+        return GetHierarchyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetHierarchyResult"{ ._400 = {} };
+        return GetHierarchyResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetHierarchyResult"{ ._401 = {} };
+        return GetHierarchyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetHierarchyResult"{ ._404 = {} };
+        return GetHierarchyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetHierarchyResult"{ ._400 = {} };
+        return GetHierarchyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectIssueSecuritySchemeResult" = union(enum) {
+pub const GetProjectIssueSecuritySchemeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"SecurityScheme",
+    _200: types.SecurityScheme,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10171,14 +9957,14 @@ pub const @"GetProjectIssueSecuritySchemeResult" = union(enum) {
 };
 
 /// Get project issue security scheme
-pub fn @"getProjectIssueSecurityScheme"(
+pub fn getProjectIssueSecurityScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"projectKeyOrId": []const u8,
-) !@"GetProjectIssueSecuritySchemeResult" {
+    projectKeyOrId: []const u8,
+) !GetProjectIssueSecuritySchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectKeyOrId");
+    try url_buffer.appendSlice(projectKeyOrId);
     try url_buffer.appendSlice("/issuesecuritylevelscheme");
     try url_buffer.append(0);
 
@@ -10187,33 +9973,32 @@ pub fn @"getProjectIssueSecurityScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"SecurityScheme", &token_stream, parseOptions(alloc));
+        const result = types.SecurityScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectIssueSecuritySchemeResult"{ ._200 = result };
+        return GetProjectIssueSecuritySchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectIssueSecuritySchemeResult"{ ._400 = {} };
+        return GetProjectIssueSecuritySchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectIssueSecuritySchemeResult"{ ._401 = {} };
+        return GetProjectIssueSecuritySchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetProjectIssueSecuritySchemeResult"{ ._403 = {} };
+        return GetProjectIssueSecuritySchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectIssueSecuritySchemeResult"{ ._404 = {} };
+        return GetProjectIssueSecuritySchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectIssueSecuritySchemeResult"{ ._400 = {} };
+        return GetProjectIssueSecuritySchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetNotificationSchemeForProjectResult" = union(enum) {
+pub const GetNotificationSchemeForProjectResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"NotificationScheme",
+    _200: types.NotificationScheme,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10224,14 +10009,14 @@ pub const @"GetNotificationSchemeForProjectResult" = union(enum) {
 };
 
 /// Get project notification scheme
-pub fn @"getNotificationSchemeForProject"(
+pub fn getNotificationSchemeForProject(
     client: Client,
     alloc: mem.Allocator,
-    @"projectKeyOrId": []const u8,
-) !@"GetNotificationSchemeForProjectResult" {
+    projectKeyOrId: []const u8,
+) !GetNotificationSchemeForProjectResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectKeyOrId");
+    try url_buffer.appendSlice(projectKeyOrId);
     try url_buffer.appendSlice("/notificationscheme");
     try url_buffer.append(0);
 
@@ -10241,30 +10026,29 @@ pub fn @"getNotificationSchemeForProject"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"NotificationScheme", &token_stream, parseOptions(alloc));
+        const result = types.NotificationScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetNotificationSchemeForProjectResult"{ ._200 = result };
+        return GetNotificationSchemeForProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemeForProjectResult"{ ._400 = {} };
+        return GetNotificationSchemeForProjectResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemeForProjectResult"{ ._401 = {} };
+        return GetNotificationSchemeForProjectResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemeForProjectResult"{ ._404 = {} };
+        return GetNotificationSchemeForProjectResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetNotificationSchemeForProjectResult"{ ._400 = {} };
+        return GetNotificationSchemeForProjectResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAssignedPermissionSchemeResult" = union(enum) {
+pub const GetAssignedPermissionSchemeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PermissionScheme",
+    _200: types.PermissionScheme,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have permission to view the project's configuration.
@@ -10275,14 +10059,14 @@ pub const @"GetAssignedPermissionSchemeResult" = union(enum) {
 };
 
 /// Get assigned permission scheme
-pub fn @"getAssignedPermissionScheme"(
+pub fn getAssignedPermissionScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"projectKeyOrId": []const u8,
-) !@"GetAssignedPermissionSchemeResult" {
+    projectKeyOrId: []const u8,
+) !GetAssignedPermissionSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectKeyOrId");
+    try url_buffer.appendSlice(projectKeyOrId);
     try url_buffer.appendSlice("/permissionscheme");
     try url_buffer.append(0);
 
@@ -10292,44 +10076,43 @@ pub fn @"getAssignedPermissionScheme"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PermissionScheme", &token_stream, parseOptions(alloc));
+        const result = types.PermissionScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAssignedPermissionSchemeResult"{ ._200 = result };
+        return GetAssignedPermissionSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAssignedPermissionSchemeResult"{ ._401 = {} };
+        return GetAssignedPermissionSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAssignedPermissionSchemeResult"{ ._403 = {} };
+        return GetAssignedPermissionSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAssignedPermissionSchemeResult"{ ._404 = {} };
+        return GetAssignedPermissionSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAssignedPermissionSchemeResult"{ ._400 = {} };
+        return GetAssignedPermissionSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetSecurityLevelsForProjectResult" = union(enum) {
+pub const GetSecurityLevelsForProjectResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectIssueSecurityLevels",
+    _200: types.ProjectIssueSecurityLevels,
     /// Returned if the project is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
 };
 
 /// Get project issue security levels
-pub fn @"getSecurityLevelsForProject"(
+pub fn getSecurityLevelsForProject(
     client: Client,
     alloc: mem.Allocator,
-    @"projectKeyOrId": []const u8,
-) !@"GetSecurityLevelsForProjectResult" {
+    projectKeyOrId: []const u8,
+) !GetSecurityLevelsForProjectResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/project/");
-    try url_buffer.appendSlice(@"projectKeyOrId");
+    try url_buffer.appendSlice(projectKeyOrId);
     try url_buffer.appendSlice("/securitylevel");
     try url_buffer.append(0);
 
@@ -10338,22 +10121,21 @@ pub fn @"getSecurityLevelsForProject"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueSecurityLevels"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectIssueSecurityLevels", &token_stream, parseOptions(alloc));
+        const result = types.ProjectIssueSecurityLevels.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetSecurityLevelsForProjectResult"{ ._200 = result };
+        return GetSecurityLevelsForProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetSecurityLevelsForProjectResult"{ ._404 = {} };
+        return GetSecurityLevelsForProjectResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetSecurityLevelsForProjectResult"{ ._400 = {} };
+        return GetSecurityLevelsForProjectResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllProjectCategoriesResult" = union(enum) {
+pub const GetAllProjectCategoriesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10362,10 +10144,10 @@ pub const @"GetAllProjectCategoriesResult" = union(enum) {
 };
 
 /// Get all project categories
-pub fn @"getAllProjectCategories"(
+pub fn getAllProjectCategories(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllProjectCategoriesResult" {
+) !GetAllProjectCategoriesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/projectCategory");
     try url_buffer.append(0);
@@ -10375,21 +10157,21 @@ pub fn @"getAllProjectCategories"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllProjectCategoriesResult"{ ._200 = {} };
+        return GetAllProjectCategoriesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllProjectCategoriesResult"{ ._401 = {} };
+        return GetAllProjectCategoriesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllProjectCategoriesResult"{ ._400 = {} };
+        return GetAllProjectCategoriesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectCategoryByIdResult" = union(enum) {
+pub const GetProjectCategoryByIdResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectCategory",
+    _200: types.ProjectCategory,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project category is not found.
@@ -10398,14 +10180,14 @@ pub const @"GetProjectCategoryByIdResult" = union(enum) {
 };
 
 /// Get project category by ID
-pub fn @"getProjectCategoryById"(
+pub fn getProjectCategoryById(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetProjectCategoryByIdResult" {
+    id: []const u8,
+) !GetProjectCategoryByIdResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/projectCategory/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -10413,37 +10195,36 @@ pub fn @"getProjectCategoryById"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectCategory"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectCategory", &token_stream, parseOptions(alloc));
+        const result = types.ProjectCategory.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectCategoryByIdResult"{ ._200 = result };
+        return GetProjectCategoryByIdResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectCategoryByIdResult"{ ._401 = {} };
+        return GetProjectCategoryByIdResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectCategoryByIdResult"{ ._404 = {} };
+        return GetProjectCategoryByIdResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectCategoryByIdResult"{ ._400 = {} };
+        return GetProjectCategoryByIdResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"ValidateProjectKeyResult" = union(enum) {
+pub const ValidateProjectKeyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ErrorCollection",
+    _200: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
 };
 
 /// Validate project key
-pub fn @"validateProjectKey"(
+pub fn validateProjectKey(
     client: Client,
     alloc: mem.Allocator,
-) !@"ValidateProjectKeyResult" {
+) !ValidateProjectKeyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/projectvalidate/key");
     try url_buffer.append(0);
@@ -10454,22 +10235,21 @@ pub fn @"validateProjectKey"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"ValidateProjectKeyResult"{ ._200 = result };
+        return ValidateProjectKeyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"ValidateProjectKeyResult"{ ._401 = {} };
+        return ValidateProjectKeyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"ValidateProjectKeyResult"{ ._400 = {} };
+        return ValidateProjectKeyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetValidProjectKeyResult" = union(enum) {
+pub const GetValidProjectKeyResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -10478,10 +10258,10 @@ pub const @"GetValidProjectKeyResult" = union(enum) {
 };
 
 /// Get valid project key
-pub fn @"getValidProjectKey"(
+pub fn getValidProjectKey(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetValidProjectKeyResult" {
+) !GetValidProjectKeyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/projectvalidate/validProjectKey");
     try url_buffer.append(0);
@@ -10492,19 +10272,19 @@ pub fn @"getValidProjectKey"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetValidProjectKeyResult"{ ._200 = {} };
+        return GetValidProjectKeyResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetValidProjectKeyResult"{ ._401 = {} };
+        return GetValidProjectKeyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetValidProjectKeyResult"{ ._400 = {} };
+        return GetValidProjectKeyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetValidProjectNameResult" = union(enum) {
+pub const GetValidProjectNameResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -10517,10 +10297,10 @@ pub const @"GetValidProjectNameResult" = union(enum) {
 };
 
 /// Get valid project name
-pub fn @"getValidProjectName"(
+pub fn getValidProjectName(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetValidProjectNameResult" {
+) !GetValidProjectNameResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/projectvalidate/validProjectName");
     try url_buffer.append(0);
@@ -10531,25 +10311,25 @@ pub fn @"getValidProjectName"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // name; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetValidProjectNameResult"{ ._200 = {} };
+        return GetValidProjectNameResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetValidProjectNameResult"{ ._400 = {} };
+        return GetValidProjectNameResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetValidProjectNameResult"{ ._401 = {} };
+        return GetValidProjectNameResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetValidProjectNameResult"{ ._404 = {} };
+        return GetValidProjectNameResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetValidProjectNameResult"{ ._400 = {} };
+        return GetValidProjectNameResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetResolutionsResult" = union(enum) {
+pub const GetResolutionsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10558,10 +10338,10 @@ pub const @"GetResolutionsResult" = union(enum) {
 };
 
 /// Get resolutions
-pub fn @"getResolutions"(
+pub fn getResolutions(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetResolutionsResult" {
+) !GetResolutionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/resolution");
     try url_buffer.append(0);
@@ -10571,21 +10351,21 @@ pub fn @"getResolutions"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetResolutionsResult"{ ._200 = {} };
+        return GetResolutionsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetResolutionsResult"{ ._401 = {} };
+        return GetResolutionsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetResolutionsResult"{ ._400 = {} };
+        return GetResolutionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetResolutionResult" = union(enum) {
+pub const GetResolutionResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Resolution",
+    _200: types.Resolution,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue resolution value is not found.
@@ -10594,14 +10374,14 @@ pub const @"GetResolutionResult" = union(enum) {
 };
 
 /// Get resolution
-pub fn @"getResolution"(
+pub fn getResolution(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetResolutionResult" {
+    id: []const u8,
+) !GetResolutionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/resolution/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -10609,25 +10389,24 @@ pub fn @"getResolution"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Resolution"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Resolution", &token_stream, parseOptions(alloc));
+        const result = types.Resolution.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetResolutionResult"{ ._200 = result };
+        return GetResolutionResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetResolutionResult"{ ._401 = {} };
+        return GetResolutionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetResolutionResult"{ ._404 = {} };
+        return GetResolutionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetResolutionResult"{ ._400 = {} };
+        return GetResolutionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllProjectRolesResult" = union(enum) {
+pub const GetAllProjectRolesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10638,10 +10417,10 @@ pub const @"GetAllProjectRolesResult" = union(enum) {
 };
 
 /// Get all project roles
-pub fn @"getAllProjectRoles"(
+pub fn getAllProjectRoles(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllProjectRolesResult" {
+) !GetAllProjectRolesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/role");
     try url_buffer.append(0);
@@ -10651,24 +10430,24 @@ pub fn @"getAllProjectRoles"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllProjectRolesResult"{ ._200 = {} };
+        return GetAllProjectRolesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllProjectRolesResult"{ ._401 = {} };
+        return GetAllProjectRolesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllProjectRolesResult"{ ._403 = {} };
+        return GetAllProjectRolesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllProjectRolesResult"{ ._400 = {} };
+        return GetAllProjectRolesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectRoleByIdResult" = union(enum) {
+pub const GetProjectRoleByIdResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectRole",
+    _200: types.ProjectRole,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have administrative permissions.
@@ -10679,14 +10458,14 @@ pub const @"GetProjectRoleByIdResult" = union(enum) {
 };
 
 /// Get project role by ID
-pub fn @"getProjectRoleById"(
+pub fn getProjectRoleById(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetProjectRoleByIdResult" {
+    id: []const u8,
+) !GetProjectRoleByIdResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/role/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -10694,30 +10473,29 @@ pub fn @"getProjectRoleById"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectRole", &token_stream, parseOptions(alloc));
+        const result = types.ProjectRole.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectRoleByIdResult"{ ._200 = result };
+        return GetProjectRoleByIdResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectRoleByIdResult"{ ._401 = {} };
+        return GetProjectRoleByIdResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetProjectRoleByIdResult"{ ._403 = {} };
+        return GetProjectRoleByIdResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectRoleByIdResult"{ ._404 = {} };
+        return GetProjectRoleByIdResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectRoleByIdResult"{ ._400 = {} };
+        return GetProjectRoleByIdResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetProjectRoleActorsForRoleResult" = union(enum) {
+pub const GetProjectRoleActorsForRoleResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ProjectRole",
+    _200: types.ProjectRole,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10730,14 +10508,14 @@ pub const @"GetProjectRoleActorsForRoleResult" = union(enum) {
 };
 
 /// Get default actors for project role
-pub fn @"getProjectRoleActorsForRole"(
+pub fn getProjectRoleActorsForRole(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetProjectRoleActorsForRoleResult" {
+    id: []const u8,
+) !GetProjectRoleActorsForRoleResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/role/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/actors");
     try url_buffer.append(0);
 
@@ -10746,33 +10524,32 @@ pub fn @"getProjectRoleActorsForRole"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ProjectRole", &token_stream, parseOptions(alloc));
+        const result = types.ProjectRole.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetProjectRoleActorsForRoleResult"{ ._200 = result };
+        return GetProjectRoleActorsForRoleResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectRoleActorsForRoleResult"{ ._400 = {} };
+        return GetProjectRoleActorsForRoleResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetProjectRoleActorsForRoleResult"{ ._401 = {} };
+        return GetProjectRoleActorsForRoleResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetProjectRoleActorsForRoleResult"{ ._403 = {} };
+        return GetProjectRoleActorsForRoleResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetProjectRoleActorsForRoleResult"{ ._404 = {} };
+        return GetProjectRoleActorsForRoleResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetProjectRoleActorsForRoleResult"{ ._400 = {} };
+        return GetProjectRoleActorsForRoleResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetScreensResult" = union(enum) {
+pub const GetScreensResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanScreen",
+    _200: types.PageBeanScreen,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -10781,10 +10558,10 @@ pub const @"GetScreensResult" = union(enum) {
 };
 
 /// Get screens
-pub fn @"getScreens"(
+pub fn getScreens(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetScreensResult" {
+) !GetScreensResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens");
     try url_buffer.append(0);
@@ -10800,25 +10577,24 @@ pub fn @"getScreens"(
     // scope; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreen"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanScreen", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanScreen.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetScreensResult"{ ._200 = result };
+        return GetScreensResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetScreensResult"{ ._401 = {} };
+        return GetScreensResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetScreensResult"{ ._403 = {} };
+        return GetScreensResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetScreensResult"{ ._400 = {} };
+        return GetScreensResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"AddFieldToDefaultScreenResult" = union(enum) {
+pub const AddFieldToDefaultScreenResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10831,14 +10607,14 @@ pub const @"AddFieldToDefaultScreenResult" = union(enum) {
 };
 
 /// Add field to default screen
-pub fn @"addFieldToDefaultScreen"(
+pub fn addFieldToDefaultScreen(
     client: Client,
     alloc: mem.Allocator,
-    @"fieldId": []const u8,
-) !@"AddFieldToDefaultScreenResult" {
+    fieldId: []const u8,
+) !AddFieldToDefaultScreenResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens/addToDefault/");
-    try url_buffer.appendSlice(@"fieldId");
+    try url_buffer.appendSlice(fieldId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/screens/addToDefault/{fieldId}");
@@ -10846,27 +10622,27 @@ pub fn @"addFieldToDefaultScreen"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"AddFieldToDefaultScreenResult"{ ._200 = {} };
+        return AddFieldToDefaultScreenResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"AddFieldToDefaultScreenResult"{ ._401 = {} };
+        return AddFieldToDefaultScreenResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"AddFieldToDefaultScreenResult"{ ._403 = {} };
+        return AddFieldToDefaultScreenResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"AddFieldToDefaultScreenResult"{ ._404 = {} };
+        return AddFieldToDefaultScreenResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"AddFieldToDefaultScreenResult"{ ._400 = {} };
+        return AddFieldToDefaultScreenResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateScreenResult" = union(enum) {
+pub const UpdateScreenResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Screen",
+    _200: types.Screen,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10879,14 +10655,14 @@ pub const @"UpdateScreenResult" = union(enum) {
 };
 
 /// Update screen
-pub fn @"updateScreen"(
+pub fn updateScreen(
     client: Client,
     alloc: mem.Allocator,
-    @"screenId": []const u8,
-) !@"UpdateScreenResult" {
+    screenId: []const u8,
+) !UpdateScreenResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens/");
-    try url_buffer.appendSlice(@"screenId");
+    try url_buffer.appendSlice(screenId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/screens/{screenId}");
@@ -10894,31 +10670,30 @@ pub fn @"updateScreen"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Screen"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Screen", &token_stream, parseOptions(alloc));
+        const result = types.Screen.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"UpdateScreenResult"{ ._200 = result };
+        return UpdateScreenResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateScreenResult"{ ._400 = {} };
+        return UpdateScreenResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateScreenResult"{ ._401 = {} };
+        return UpdateScreenResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateScreenResult"{ ._403 = {} };
+        return UpdateScreenResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateScreenResult"{ ._404 = {} };
+        return UpdateScreenResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateScreenResult"{ ._400 = {} };
+        return UpdateScreenResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAvailableScreenFieldsResult" = union(enum) {
+pub const GetAvailableScreenFieldsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10931,14 +10706,14 @@ pub const @"GetAvailableScreenFieldsResult" = union(enum) {
 };
 
 /// Get available screen fields
-pub fn @"getAvailableScreenFields"(
+pub fn getAvailableScreenFields(
     client: Client,
     alloc: mem.Allocator,
-    @"screenId": []const u8,
-) !@"GetAvailableScreenFieldsResult" {
+    screenId: []const u8,
+) !GetAvailableScreenFieldsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens/");
-    try url_buffer.appendSlice(@"screenId");
+    try url_buffer.appendSlice(screenId);
     try url_buffer.appendSlice("/availableFields");
     try url_buffer.append(0);
 
@@ -10947,25 +10722,25 @@ pub fn @"getAvailableScreenFields"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAvailableScreenFieldsResult"{ ._200 = {} };
+        return GetAvailableScreenFieldsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAvailableScreenFieldsResult"{ ._401 = {} };
+        return GetAvailableScreenFieldsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAvailableScreenFieldsResult"{ ._403 = {} };
+        return GetAvailableScreenFieldsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAvailableScreenFieldsResult"{ ._404 = {} };
+        return GetAvailableScreenFieldsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAvailableScreenFieldsResult"{ ._400 = {} };
+        return GetAvailableScreenFieldsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllScreenTabsResult" = union(enum) {
+pub const GetAllScreenTabsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the screen ID is invalid.
@@ -10980,14 +10755,14 @@ pub const @"GetAllScreenTabsResult" = union(enum) {
 };
 
 /// Get all screen tabs
-pub fn @"getAllScreenTabs"(
+pub fn getAllScreenTabs(
     client: Client,
     alloc: mem.Allocator,
-    @"screenId": []const u8,
-) !@"GetAllScreenTabsResult" {
+    screenId: []const u8,
+) !GetAllScreenTabsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens/");
-    try url_buffer.appendSlice(@"screenId");
+    try url_buffer.appendSlice(screenId);
     try url_buffer.appendSlice("/tabs");
     try url_buffer.append(0);
 
@@ -10997,30 +10772,30 @@ pub fn @"getAllScreenTabs"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // projectKey; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabsResult"{ ._200 = {} };
+        return GetAllScreenTabsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabsResult"{ ._400 = {} };
+        return GetAllScreenTabsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabsResult"{ ._401 = {} };
+        return GetAllScreenTabsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabsResult"{ ._403 = {} };
+        return GetAllScreenTabsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabsResult"{ ._404 = {} };
+        return GetAllScreenTabsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabsResult"{ ._400 = {} };
+        return GetAllScreenTabsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RenameScreenTabResult" = union(enum) {
+pub const RenameScreenTabResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ScreenableTab",
+    _200: types.ScreenableTab,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11033,17 +10808,17 @@ pub const @"RenameScreenTabResult" = union(enum) {
 };
 
 /// Update screen tab
-pub fn @"renameScreenTab"(
+pub fn renameScreenTab(
     client: Client,
     alloc: mem.Allocator,
-    @"screenId": []const u8,
-    @"tabId": []const u8,
-) !@"RenameScreenTabResult" {
+    screenId: []const u8,
+    tabId: []const u8,
+) !RenameScreenTabResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens/");
-    try url_buffer.appendSlice(@"screenId");
+    try url_buffer.appendSlice(screenId);
     try url_buffer.appendSlice("/tabs/");
-    try url_buffer.appendSlice(@"tabId");
+    try url_buffer.appendSlice(tabId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/screens/{screenId}/tabs/{tabId}");
@@ -11051,31 +10826,30 @@ pub fn @"renameScreenTab"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ScreenableTab"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ScreenableTab", &token_stream, parseOptions(alloc));
+        const result = types.ScreenableTab.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RenameScreenTabResult"{ ._200 = result };
+        return RenameScreenTabResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RenameScreenTabResult"{ ._400 = {} };
+        return RenameScreenTabResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"RenameScreenTabResult"{ ._401 = {} };
+        return RenameScreenTabResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"RenameScreenTabResult"{ ._403 = {} };
+        return RenameScreenTabResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"RenameScreenTabResult"{ ._404 = {} };
+        return RenameScreenTabResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RenameScreenTabResult"{ ._400 = {} };
+        return RenameScreenTabResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllScreenTabFieldsResult" = union(enum) {
+pub const GetAllScreenTabFieldsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11088,17 +10862,17 @@ pub const @"GetAllScreenTabFieldsResult" = union(enum) {
 };
 
 /// Get all screen tab fields
-pub fn @"getAllScreenTabFields"(
+pub fn getAllScreenTabFields(
     client: Client,
     alloc: mem.Allocator,
-    @"screenId": []const u8,
-    @"tabId": []const u8,
-) !@"GetAllScreenTabFieldsResult" {
+    screenId: []const u8,
+    tabId: []const u8,
+) !GetAllScreenTabFieldsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens/");
-    try url_buffer.appendSlice(@"screenId");
+    try url_buffer.appendSlice(screenId);
     try url_buffer.appendSlice("/tabs/");
-    try url_buffer.appendSlice(@"tabId");
+    try url_buffer.appendSlice(tabId);
     try url_buffer.appendSlice("/fields");
     try url_buffer.append(0);
 
@@ -11108,25 +10882,25 @@ pub fn @"getAllScreenTabFields"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // projectKey; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabFieldsResult"{ ._200 = {} };
+        return GetAllScreenTabFieldsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabFieldsResult"{ ._401 = {} };
+        return GetAllScreenTabFieldsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabFieldsResult"{ ._403 = {} };
+        return GetAllScreenTabFieldsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabFieldsResult"{ ._404 = {} };
+        return GetAllScreenTabFieldsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllScreenTabFieldsResult"{ ._400 = {} };
+        return GetAllScreenTabFieldsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RemoveScreenTabFieldResult" = union(enum) {
+pub const RemoveScreenTabFieldResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -11141,20 +10915,20 @@ pub const @"RemoveScreenTabFieldResult" = union(enum) {
 };
 
 /// Remove screen tab field
-pub fn @"removeScreenTabField"(
+pub fn removeScreenTabField(
     client: Client,
     alloc: mem.Allocator,
-    @"screenId": []const u8,
-    @"tabId": []const u8,
-    @"id": []const u8,
-) !@"RemoveScreenTabFieldResult" {
+    screenId: []const u8,
+    tabId: []const u8,
+    id: []const u8,
+) !RemoveScreenTabFieldResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens/");
-    try url_buffer.appendSlice(@"screenId");
+    try url_buffer.appendSlice(screenId);
     try url_buffer.appendSlice("/tabs/");
-    try url_buffer.appendSlice(@"tabId");
+    try url_buffer.appendSlice(tabId);
     try url_buffer.appendSlice("/fields/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/screens/{screenId}/tabs/{tabId}/fields/{id}");
@@ -11162,28 +10936,28 @@ pub fn @"removeScreenTabField"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"RemoveScreenTabFieldResult"{ ._204 = {} };
+        return RemoveScreenTabFieldResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveScreenTabFieldResult"{ ._400 = {} };
+        return RemoveScreenTabFieldResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"RemoveScreenTabFieldResult"{ ._401 = {} };
+        return RemoveScreenTabFieldResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"RemoveScreenTabFieldResult"{ ._403 = {} };
+        return RemoveScreenTabFieldResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"RemoveScreenTabFieldResult"{ ._404 = {} };
+        return RemoveScreenTabFieldResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RemoveScreenTabFieldResult"{ ._400 = {} };
+        return RemoveScreenTabFieldResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"MoveScreenTabFieldResult" = union(enum) {
+pub const MoveScreenTabFieldResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -11198,20 +10972,20 @@ pub const @"MoveScreenTabFieldResult" = union(enum) {
 };
 
 /// Move screen tab field
-pub fn @"moveScreenTabField"(
+pub fn moveScreenTabField(
     client: Client,
     alloc: mem.Allocator,
-    @"screenId": []const u8,
-    @"tabId": []const u8,
-    @"id": []const u8,
-) !@"MoveScreenTabFieldResult" {
+    screenId: []const u8,
+    tabId: []const u8,
+    id: []const u8,
+) !MoveScreenTabFieldResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens/");
-    try url_buffer.appendSlice(@"screenId");
+    try url_buffer.appendSlice(screenId);
     try url_buffer.appendSlice("/tabs/");
-    try url_buffer.appendSlice(@"tabId");
+    try url_buffer.appendSlice(tabId);
     try url_buffer.appendSlice("/fields/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/move");
     try url_buffer.append(0);
 
@@ -11220,28 +10994,28 @@ pub fn @"moveScreenTabField"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"MoveScreenTabFieldResult"{ ._204 = {} };
+        return MoveScreenTabFieldResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MoveScreenTabFieldResult"{ ._400 = {} };
+        return MoveScreenTabFieldResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"MoveScreenTabFieldResult"{ ._401 = {} };
+        return MoveScreenTabFieldResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"MoveScreenTabFieldResult"{ ._403 = {} };
+        return MoveScreenTabFieldResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"MoveScreenTabFieldResult"{ ._404 = {} };
+        return MoveScreenTabFieldResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MoveScreenTabFieldResult"{ ._400 = {} };
+        return MoveScreenTabFieldResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"MoveScreenTabResult" = union(enum) {
+pub const MoveScreenTabResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -11256,20 +11030,20 @@ pub const @"MoveScreenTabResult" = union(enum) {
 };
 
 /// Move screen tab
-pub fn @"moveScreenTab"(
+pub fn moveScreenTab(
     client: Client,
     alloc: mem.Allocator,
-    @"screenId": []const u8,
-    @"tabId": []const u8,
-    @"pos": []const u8,
-) !@"MoveScreenTabResult" {
+    screenId: []const u8,
+    tabId: []const u8,
+    pos: []const u8,
+) !MoveScreenTabResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screens/");
-    try url_buffer.appendSlice(@"screenId");
+    try url_buffer.appendSlice(screenId);
     try url_buffer.appendSlice("/tabs/");
-    try url_buffer.appendSlice(@"tabId");
+    try url_buffer.appendSlice(tabId);
     try url_buffer.appendSlice("/move/");
-    try url_buffer.appendSlice(@"pos");
+    try url_buffer.appendSlice(pos);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/screens/{screenId}/tabs/{tabId}/move/{pos}");
@@ -11277,30 +11051,30 @@ pub fn @"moveScreenTab"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"MoveScreenTabResult"{ ._204 = {} };
+        return MoveScreenTabResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MoveScreenTabResult"{ ._400 = {} };
+        return MoveScreenTabResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"MoveScreenTabResult"{ ._401 = {} };
+        return MoveScreenTabResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"MoveScreenTabResult"{ ._403 = {} };
+        return MoveScreenTabResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"MoveScreenTabResult"{ ._404 = {} };
+        return MoveScreenTabResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MoveScreenTabResult"{ ._400 = {} };
+        return MoveScreenTabResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetScreenSchemesResult" = union(enum) {
+pub const GetScreenSchemesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanScreenScheme",
+    _200: types.PageBeanScreenScheme,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -11309,10 +11083,10 @@ pub const @"GetScreenSchemesResult" = union(enum) {
 };
 
 /// Get screen schemes
-pub fn @"getScreenSchemes"(
+pub fn getScreenSchemes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetScreenSchemesResult" {
+) !GetScreenSchemesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screenscheme");
     try url_buffer.append(0);
@@ -11328,25 +11102,24 @@ pub fn @"getScreenSchemes"(
     // queryString; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanScreenScheme", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanScreenScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetScreenSchemesResult"{ ._200 = result };
+        return GetScreenSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetScreenSchemesResult"{ ._401 = {} };
+        return GetScreenSchemesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetScreenSchemesResult"{ ._403 = {} };
+        return GetScreenSchemesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetScreenSchemesResult"{ ._400 = {} };
+        return GetScreenSchemesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateScreenSchemeResult" = union(enum) {
+pub const UpdateScreenSchemeResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -11361,14 +11134,14 @@ pub const @"UpdateScreenSchemeResult" = union(enum) {
 };
 
 /// Update screen scheme
-pub fn @"updateScreenScheme"(
+pub fn updateScreenScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"screenSchemeId": []const u8,
-) !@"UpdateScreenSchemeResult" {
+    screenSchemeId: []const u8,
+) !UpdateScreenSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/screenscheme/");
-    try url_buffer.appendSlice(@"screenSchemeId");
+    try url_buffer.appendSlice(screenSchemeId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/screenscheme/{screenSchemeId}");
@@ -11376,30 +11149,30 @@ pub fn @"updateScreenScheme"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateScreenSchemeResult"{ ._204 = {} };
+        return UpdateScreenSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateScreenSchemeResult"{ ._400 = {} };
+        return UpdateScreenSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateScreenSchemeResult"{ ._401 = {} };
+        return UpdateScreenSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateScreenSchemeResult"{ ._403 = {} };
+        return UpdateScreenSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateScreenSchemeResult"{ ._404 = {} };
+        return UpdateScreenSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateScreenSchemeResult"{ ._400 = {} };
+        return UpdateScreenSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"SearchForIssuesUsingJqlResult" = union(enum) {
+pub const SearchForIssuesUsingJqlResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"SearchResults",
+    _200: types.SearchResults,
     /// Returned if the JQL query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11408,10 +11181,10 @@ pub const @"SearchForIssuesUsingJqlResult" = union(enum) {
 };
 
 /// Search for issues using JQL (GET)
-pub fn @"searchForIssuesUsingJql"(
+pub fn searchForIssuesUsingJql(
     client: Client,
     alloc: mem.Allocator,
-) !@"SearchForIssuesUsingJqlResult" {
+) !SearchForIssuesUsingJqlResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/search");
     try url_buffer.append(0);
@@ -11429,27 +11202,26 @@ pub fn @"searchForIssuesUsingJql"(
     // properties; location: query
     // fieldsByKeys; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SearchResults"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"SearchResults", &token_stream, parseOptions(alloc));
+        const result = types.SearchResults.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SearchForIssuesUsingJqlResult"{ ._200 = result };
+        return SearchForIssuesUsingJqlResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SearchForIssuesUsingJqlResult"{ ._400 = {} };
+        return SearchForIssuesUsingJqlResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"SearchForIssuesUsingJqlResult"{ ._401 = {} };
+        return SearchForIssuesUsingJqlResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SearchForIssuesUsingJqlResult"{ ._400 = {} };
+        return SearchForIssuesUsingJqlResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueSecurityLevelResult" = union(enum) {
+pub const GetIssueSecurityLevelResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"SecurityLevel",
+    _200: types.SecurityLevel,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the issue security level is not found.
@@ -11458,14 +11230,14 @@ pub const @"GetIssueSecurityLevelResult" = union(enum) {
 };
 
 /// Get issue security level
-pub fn @"getIssueSecurityLevel"(
+pub fn getIssueSecurityLevel(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetIssueSecurityLevelResult" {
+    id: []const u8,
+) !GetIssueSecurityLevelResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/securitylevel/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -11473,37 +11245,36 @@ pub fn @"getIssueSecurityLevel"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityLevel"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"SecurityLevel", &token_stream, parseOptions(alloc));
+        const result = types.SecurityLevel.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIssueSecurityLevelResult"{ ._200 = result };
+        return GetIssueSecurityLevelResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueSecurityLevelResult"{ ._401 = {} };
+        return GetIssueSecurityLevelResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetIssueSecurityLevelResult"{ ._404 = {} };
+        return GetIssueSecurityLevelResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueSecurityLevelResult"{ ._400 = {} };
+        return GetIssueSecurityLevelResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetServerInfoResult" = union(enum) {
+pub const GetServerInfoResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ServerInformation",
+    _200: types.ServerInformation,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
 };
 
 /// Get Jira instance info
-pub fn @"getServerInfo"(
+pub fn getServerInfo(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetServerInfoResult" {
+) !GetServerInfoResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/serverInfo");
     try url_buffer.append(0);
@@ -11513,22 +11284,21 @@ pub fn @"getServerInfo"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ServerInformation"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ServerInformation", &token_stream, parseOptions(alloc));
+        const result = types.ServerInformation.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetServerInfoResult"{ ._200 = result };
+        return GetServerInfoResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetServerInfoResult"{ ._401 = {} };
+        return GetServerInfoResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetServerInfoResult"{ ._400 = {} };
+        return GetServerInfoResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIssueNavigatorDefaultColumnsResult" = union(enum) {
+pub const GetIssueNavigatorDefaultColumnsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11539,10 +11309,10 @@ pub const @"GetIssueNavigatorDefaultColumnsResult" = union(enum) {
 };
 
 /// Get issue navigator default columns
-pub fn @"getIssueNavigatorDefaultColumns"(
+pub fn getIssueNavigatorDefaultColumns(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIssueNavigatorDefaultColumnsResult" {
+) !GetIssueNavigatorDefaultColumnsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/settings/columns");
     try url_buffer.append(0);
@@ -11552,22 +11322,22 @@ pub fn @"getIssueNavigatorDefaultColumns"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetIssueNavigatorDefaultColumnsResult"{ ._200 = {} };
+        return GetIssueNavigatorDefaultColumnsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIssueNavigatorDefaultColumnsResult"{ ._401 = {} };
+        return GetIssueNavigatorDefaultColumnsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetIssueNavigatorDefaultColumnsResult"{ ._403 = {} };
+        return GetIssueNavigatorDefaultColumnsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIssueNavigatorDefaultColumnsResult"{ ._400 = {} };
+        return GetIssueNavigatorDefaultColumnsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetStatusesResult" = union(enum) {
+pub const GetStatusesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11576,10 +11346,10 @@ pub const @"GetStatusesResult" = union(enum) {
 };
 
 /// Get all statuses
-pub fn @"getStatuses"(
+pub fn getStatuses(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetStatusesResult" {
+) !GetStatusesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/status");
     try url_buffer.append(0);
@@ -11589,21 +11359,21 @@ pub fn @"getStatuses"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetStatusesResult"{ ._200 = {} };
+        return GetStatusesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetStatusesResult"{ ._401 = {} };
+        return GetStatusesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetStatusesResult"{ ._400 = {} };
+        return GetStatusesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetStatusResult" = union(enum) {
+pub const GetStatusResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"StatusDetails",
+    _200: types.StatusDetails,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -11616,14 +11386,14 @@ pub const @"GetStatusResult" = union(enum) {
 };
 
 /// Get status
-pub fn @"getStatus"(
+pub fn getStatus(
     client: Client,
     alloc: mem.Allocator,
-    @"idOrName": []const u8,
-) !@"GetStatusResult" {
+    idOrName: []const u8,
+) !GetStatusResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/status/");
-    try url_buffer.appendSlice(@"idOrName");
+    try url_buffer.appendSlice(idOrName);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -11631,25 +11401,24 @@ pub fn @"getStatus"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusDetails"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"StatusDetails", &token_stream, parseOptions(alloc));
+        const result = types.StatusDetails.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetStatusResult"{ ._200 = result };
+        return GetStatusResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetStatusResult"{ ._401 = {} };
+        return GetStatusResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetStatusResult"{ ._404 = {} };
+        return GetStatusResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetStatusResult"{ ._400 = {} };
+        return GetStatusResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetStatusCategoriesResult" = union(enum) {
+pub const GetStatusCategoriesResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11658,10 +11427,10 @@ pub const @"GetStatusCategoriesResult" = union(enum) {
 };
 
 /// Get all status categories
-pub fn @"getStatusCategories"(
+pub fn getStatusCategories(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetStatusCategoriesResult" {
+) !GetStatusCategoriesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/statuscategory");
     try url_buffer.append(0);
@@ -11671,21 +11440,21 @@ pub fn @"getStatusCategories"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetStatusCategoriesResult"{ ._200 = {} };
+        return GetStatusCategoriesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetStatusCategoriesResult"{ ._401 = {} };
+        return GetStatusCategoriesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetStatusCategoriesResult"{ ._400 = {} };
+        return GetStatusCategoriesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetStatusCategoryResult" = union(enum) {
+pub const GetStatusCategoryResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"StatusCategory",
+    _200: types.StatusCategory,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the status category is not found.
@@ -11694,14 +11463,14 @@ pub const @"GetStatusCategoryResult" = union(enum) {
 };
 
 /// Get status category
-pub fn @"getStatusCategory"(
+pub fn getStatusCategory(
     client: Client,
     alloc: mem.Allocator,
-    @"idOrKey": []const u8,
-) !@"GetStatusCategoryResult" {
+    idOrKey: []const u8,
+) !GetStatusCategoryResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/statuscategory/");
-    try url_buffer.appendSlice(@"idOrKey");
+    try url_buffer.appendSlice(idOrKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -11709,25 +11478,24 @@ pub fn @"getStatusCategory"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusCategory"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"StatusCategory", &token_stream, parseOptions(alloc));
+        const result = types.StatusCategory.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetStatusCategoryResult"{ ._200 = result };
+        return GetStatusCategoryResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetStatusCategoryResult"{ ._401 = {} };
+        return GetStatusCategoryResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetStatusCategoryResult"{ ._404 = {} };
+        return GetStatusCategoryResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetStatusCategoryResult"{ ._400 = {} };
+        return GetStatusCategoryResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetStatusesByIdResult" = union(enum) {
+pub const GetStatusesByIdResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -11738,10 +11506,10 @@ pub const @"GetStatusesByIdResult" = union(enum) {
 };
 
 /// Bulk get statuses
-pub fn @"getStatusesById"(
+pub fn getStatusesById(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetStatusesByIdResult" {
+) !GetStatusesByIdResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/statuses");
     try url_buffer.append(0);
@@ -11753,24 +11521,24 @@ pub fn @"getStatusesById"(
     // expand; location: query
     // id; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetStatusesByIdResult"{ ._200 = {} };
+        return GetStatusesByIdResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetStatusesByIdResult"{ ._400 = {} };
+        return GetStatusesByIdResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetStatusesByIdResult"{ ._401 = {} };
+        return GetStatusesByIdResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetStatusesByIdResult"{ ._400 = {} };
+        return GetStatusesByIdResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"SearchResult" = union(enum) {
+pub const SearchResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageOfStatuses",
+    _200: types.PageOfStatuses,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing, or the caller doesn't have permissions to perform the operation.
@@ -11779,10 +11547,10 @@ pub const @"SearchResult" = union(enum) {
 };
 
 /// Search statuses paginated
-pub fn @"search"(
+pub fn search(
     client: Client,
     alloc: mem.Allocator,
-) !@"SearchResult" {
+) !SearchResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/statuses/search");
     try url_buffer.append(0);
@@ -11798,27 +11566,26 @@ pub fn @"search"(
     // searchString; location: query
     // statusCategory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfStatuses"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageOfStatuses", &token_stream, parseOptions(alloc));
+        const result = types.PageOfStatuses.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"SearchResult"{ ._200 = result };
+        return SearchResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SearchResult"{ ._400 = {} };
+        return SearchResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"SearchResult"{ ._401 = {} };
+        return SearchResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"SearchResult"{ ._400 = {} };
+        return SearchResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetTaskResult" = union(enum) {
+pub const GetTaskResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"TaskProgressBeanObject",
+    _200: types.TaskProgressBeanObject,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -11829,14 +11596,14 @@ pub const @"GetTaskResult" = union(enum) {
 };
 
 /// Get task
-pub fn @"getTask"(
+pub fn getTask(
     client: Client,
     alloc: mem.Allocator,
-    @"taskId": []const u8,
-) !@"GetTaskResult" {
+    taskId: []const u8,
+) !GetTaskResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/task/");
-    try url_buffer.appendSlice(@"taskId");
+    try url_buffer.appendSlice(taskId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -11844,28 +11611,27 @@ pub fn @"getTask"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
+        const result = types.TaskProgressBeanObject.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetTaskResult"{ ._200 = result };
+        return GetTaskResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetTaskResult"{ ._401 = {} };
+        return GetTaskResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetTaskResult"{ ._403 = {} };
+        return GetTaskResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetTaskResult"{ ._404 = {} };
+        return GetTaskResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetTaskResult"{ ._400 = {} };
+        return GetTaskResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"CancelTaskResult" = union(enum) {
+pub const CancelTaskResult = union(enum) {
     /// Returned if the request is successful.
     _202: void,
     /// Returned if cancellation of the task is not possible.
@@ -11880,14 +11646,14 @@ pub const @"CancelTaskResult" = union(enum) {
 };
 
 /// Cancel task
-pub fn @"cancelTask"(
+pub fn cancelTask(
     client: Client,
     alloc: mem.Allocator,
-    @"taskId": []const u8,
-) !@"CancelTaskResult" {
+    taskId: []const u8,
+) !CancelTaskResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/task/");
-    try url_buffer.appendSlice(@"taskId");
+    try url_buffer.appendSlice(taskId);
     try url_buffer.appendSlice("/cancel");
     try url_buffer.append(0);
 
@@ -11896,30 +11662,30 @@ pub fn @"cancelTask"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "202", http_response.status_code)) { // Make void
-        return @"CancelTaskResult"{ ._202 = {} };
+        return CancelTaskResult{ ._202 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CancelTaskResult"{ ._400 = {} };
+        return CancelTaskResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"CancelTaskResult"{ ._401 = {} };
+        return CancelTaskResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"CancelTaskResult"{ ._403 = {} };
+        return CancelTaskResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"CancelTaskResult"{ ._404 = {} };
+        return CancelTaskResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CancelTaskResult"{ ._400 = {} };
+        return CancelTaskResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetUiModificationsResult" = union(enum) {
+pub const GetUiModificationsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanUiModificationDetails",
+    _200: types.PageBeanUiModificationDetails,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11930,10 +11696,10 @@ pub const @"GetUiModificationsResult" = union(enum) {
 };
 
 /// Get UI modifications
-pub fn @"getUiModifications"(
+pub fn getUiModifications(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetUiModificationsResult" {
+) !GetUiModificationsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/uiModifications");
     try url_buffer.append(0);
@@ -11946,28 +11712,27 @@ pub fn @"getUiModifications"(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUiModificationDetails"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanUiModificationDetails", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanUiModificationDetails.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetUiModificationsResult"{ ._200 = result };
+        return GetUiModificationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUiModificationsResult"{ ._400 = {} };
+        return GetUiModificationsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetUiModificationsResult"{ ._401 = {} };
+        return GetUiModificationsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetUiModificationsResult"{ ._403 = {} };
+        return GetUiModificationsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUiModificationsResult"{ ._400 = {} };
+        return GetUiModificationsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"UpdateUiModificationResult" = union(enum) {
+pub const UpdateUiModificationResult = union(enum) {
     /// Returned if the UI modification is updated.
     _204: void,
     /// Returned if the request is not valid.
@@ -11982,14 +11747,14 @@ pub const @"UpdateUiModificationResult" = union(enum) {
 };
 
 /// Update UI modification
-pub fn @"updateUiModification"(
+pub fn updateUiModification(
     client: Client,
     alloc: mem.Allocator,
-    @"uiModificationId": []const u8,
-) !@"UpdateUiModificationResult" {
+    uiModificationId: []const u8,
+) !UpdateUiModificationResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/uiModifications/");
-    try url_buffer.appendSlice(@"uiModificationId");
+    try url_buffer.appendSlice(uiModificationId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/uiModifications/{uiModificationId}");
@@ -11997,30 +11762,30 @@ pub fn @"updateUiModification"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"UpdateUiModificationResult"{ ._204 = {} };
+        return UpdateUiModificationResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateUiModificationResult"{ ._400 = {} };
+        return UpdateUiModificationResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"UpdateUiModificationResult"{ ._401 = {} };
+        return UpdateUiModificationResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"UpdateUiModificationResult"{ ._403 = {} };
+        return UpdateUiModificationResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"UpdateUiModificationResult"{ ._404 = {} };
+        return UpdateUiModificationResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"UpdateUiModificationResult"{ ._400 = {} };
+        return UpdateUiModificationResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAvatarsResult" = union(enum) {
+pub const GetAvatarsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Avatars",
+    _200: types.Avatars,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the avatar type is invalid, the associated item ID is missing, or the item is not found.
@@ -12029,17 +11794,17 @@ pub const @"GetAvatarsResult" = union(enum) {
 };
 
 /// Get avatars
-pub fn @"getAvatars"(
+pub fn getAvatars(
     client: Client,
     alloc: mem.Allocator,
     @"type": []const u8,
-    @"entityId": []const u8,
-) !@"GetAvatarsResult" {
+    entityId: []const u8,
+) !GetAvatarsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/universal_avatar/type/");
     try url_buffer.appendSlice(@"type");
     try url_buffer.appendSlice("/owner/");
-    try url_buffer.appendSlice(@"entityId");
+    try url_buffer.appendSlice(entityId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -12047,25 +11812,24 @@ pub fn @"getAvatars"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Avatars"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Avatars", &token_stream, parseOptions(alloc));
+        const result = types.Avatars.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarsResult"{ ._200 = result };
+        return GetAvatarsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAvatarsResult"{ ._401 = {} };
+        return GetAvatarsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetAvatarsResult"{ ._404 = {} };
+        return GetAvatarsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAvatarsResult"{ ._400 = {} };
+        return GetAvatarsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"DeleteAvatarResult" = union(enum) {
+pub const DeleteAvatarResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -12078,20 +11842,20 @@ pub const @"DeleteAvatarResult" = union(enum) {
 };
 
 /// Delete avatar
-pub fn @"deleteAvatar"(
+pub fn deleteAvatar(
     client: Client,
     alloc: mem.Allocator,
     @"type": []const u8,
-    @"owningObjectId": []const u8,
-    @"id": []const u8,
-) !@"DeleteAvatarResult" {
+    owningObjectId: []const u8,
+    id: []const u8,
+) !DeleteAvatarResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/universal_avatar/type/");
     try url_buffer.appendSlice(@"type");
     try url_buffer.appendSlice("/owner/");
-    try url_buffer.appendSlice(@"owningObjectId");
+    try url_buffer.appendSlice(owningObjectId);
     try url_buffer.appendSlice("/avatar/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/universal_avatar/type/{type}/owner/{owningObjectId}/avatar/{id}");
@@ -12099,42 +11863,42 @@ pub fn @"deleteAvatar"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"DeleteAvatarResult"{ ._204 = {} };
+        return DeleteAvatarResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteAvatarResult"{ ._400 = {} };
+        return DeleteAvatarResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"DeleteAvatarResult"{ ._403 = {} };
+        return DeleteAvatarResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"DeleteAvatarResult"{ ._404 = {} };
+        return DeleteAvatarResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteAvatarResult"{ ._400 = {} };
+        return DeleteAvatarResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAvatarImageByTypeResult" = union(enum) {
+pub const GetAvatarImageByTypeResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Get avatar image by type
-pub fn @"getAvatarImageByType"(
+pub fn getAvatarImageByType(
     client: Client,
     alloc: mem.Allocator,
     @"type": []const u8,
-) !@"GetAvatarImageByTypeResult" {
+) !GetAvatarImageByTypeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/universal_avatar/view/type/");
     try url_buffer.appendSlice(@"type");
@@ -12147,59 +11911,56 @@ pub fn @"getAvatarImageByType"(
     // size; location: query
     // format; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAvatarImageByTypeResult"{ ._200 = {} };
+        return GetAvatarImageByTypeResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByTypeResult"{ ._401 = result };
+        return GetAvatarImageByTypeResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByTypeResult"{ ._403 = result };
+        return GetAvatarImageByTypeResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByTypeResult"{ ._404 = result };
+        return GetAvatarImageByTypeResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAvatarImageByTypeResult"{ ._400 = {} };
+        return GetAvatarImageByTypeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAvatarImageByIDResult" = union(enum) {
+pub const GetAvatarImageByIDResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Get avatar image by ID
-pub fn @"getAvatarImageByID"(
+pub fn getAvatarImageByID(
     client: Client,
     alloc: mem.Allocator,
     @"type": []const u8,
-    @"id": []const u8,
-) !@"GetAvatarImageByIDResult" {
+    id: []const u8,
+) !GetAvatarImageByIDResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/universal_avatar/view/type/");
     try url_buffer.appendSlice(@"type");
     try url_buffer.appendSlice("/avatar/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -12209,65 +11970,61 @@ pub fn @"getAvatarImageByID"(
     // size; location: query
     // format; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAvatarImageByIDResult"{ ._200 = {} };
+        return GetAvatarImageByIDResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByIDResult"{ ._400 = result };
+        return GetAvatarImageByIDResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByIDResult"{ ._401 = result };
+        return GetAvatarImageByIDResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByIDResult"{ ._403 = result };
+        return GetAvatarImageByIDResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByIDResult"{ ._404 = result };
+        return GetAvatarImageByIDResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAvatarImageByIDResult"{ ._400 = {} };
+        return GetAvatarImageByIDResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAvatarImageByOwnerResult" = union(enum) {
+pub const GetAvatarImageByOwnerResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the authentication credentials are incorrect.
-    _401: @"ErrorCollection",
+    _401: types.ErrorCollection,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: @"ErrorCollection",
+    _404: types.ErrorCollection,
     _400: void,
 };
 
 /// Get avatar image by owner
-pub fn @"getAvatarImageByOwner"(
+pub fn getAvatarImageByOwner(
     client: Client,
     alloc: mem.Allocator,
     @"type": []const u8,
-    @"entityId": []const u8,
-) !@"GetAvatarImageByOwnerResult" {
+    entityId: []const u8,
+) !GetAvatarImageByOwnerResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/universal_avatar/view/type/");
     try url_buffer.appendSlice(@"type");
     try url_buffer.appendSlice("/owner/");
-    try url_buffer.appendSlice(@"entityId");
+    try url_buffer.appendSlice(entityId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -12277,42 +12034,38 @@ pub fn @"getAvatarImageByOwner"(
     // size; location: query
     // format; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAvatarImageByOwnerResult"{ ._200 = {} };
+        return GetAvatarImageByOwnerResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByOwnerResult"{ ._400 = result };
+        return GetAvatarImageByOwnerResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByOwnerResult"{ ._401 = result };
+        return GetAvatarImageByOwnerResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByOwnerResult"{ ._403 = result };
+        return GetAvatarImageByOwnerResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAvatarImageByOwnerResult"{ ._404 = result };
+        return GetAvatarImageByOwnerResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAvatarImageByOwnerResult"{ ._400 = {} };
+        return GetAvatarImageByOwnerResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetUserResult" = union(enum) {
+pub const GetUserResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"User",
+    _200: types.User,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the calling user does not have the *Browse users and groups* global permission.
@@ -12323,10 +12076,10 @@ pub const @"GetUserResult" = union(enum) {
 };
 
 /// Get user
-pub fn @"getUser"(
+pub fn getUser(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetUserResult" {
+) !GetUserResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user");
     try url_buffer.append(0);
@@ -12340,28 +12093,27 @@ pub fn @"getUser"(
     // key; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"User", &token_stream, parseOptions(alloc));
+        const result = types.User.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetUserResult"{ ._200 = result };
+        return GetUserResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetUserResult"{ ._401 = {} };
+        return GetUserResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetUserResult"{ ._403 = {} };
+        return GetUserResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetUserResult"{ ._404 = {} };
+        return GetUserResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserResult"{ ._400 = {} };
+        return GetUserResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindBulkAssignableUsersResult" = union(enum) {
+pub const FindBulkAssignableUsersResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -12380,10 +12132,10 @@ pub const @"FindBulkAssignableUsersResult" = union(enum) {
 };
 
 /// Find users assignable to projects
-pub fn @"findBulkAssignableUsers"(
+pub fn findBulkAssignableUsers(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindBulkAssignableUsersResult" {
+) !FindBulkAssignableUsersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/assignable/multiProjectSearch");
     try url_buffer.append(0);
@@ -12399,28 +12151,28 @@ pub fn @"findBulkAssignableUsers"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"FindBulkAssignableUsersResult"{ ._200 = {} };
+        return FindBulkAssignableUsersResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindBulkAssignableUsersResult"{ ._400 = {} };
+        return FindBulkAssignableUsersResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"FindBulkAssignableUsersResult"{ ._401 = {} };
+        return FindBulkAssignableUsersResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"FindBulkAssignableUsersResult"{ ._404 = {} };
+        return FindBulkAssignableUsersResult{ ._404 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        return @"FindBulkAssignableUsersResult"{ ._429 = {} };
+        return FindBulkAssignableUsersResult{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindBulkAssignableUsersResult"{ ._400 = {} };
+        return FindBulkAssignableUsersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindAssignableUsersResult" = union(enum) {
+pub const FindAssignableUsersResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -12439,10 +12191,10 @@ pub const @"FindAssignableUsersResult" = union(enum) {
 };
 
 /// Find users assignable to issues
-pub fn @"findAssignableUsers"(
+pub fn findAssignableUsers(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindAssignableUsersResult" {
+) !FindAssignableUsersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/assignable/search");
     try url_buffer.append(0);
@@ -12462,30 +12214,30 @@ pub fn @"findAssignableUsers"(
     // actionDescriptorId; location: query
     // recommend; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"FindAssignableUsersResult"{ ._200 = {} };
+        return FindAssignableUsersResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindAssignableUsersResult"{ ._400 = {} };
+        return FindAssignableUsersResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"FindAssignableUsersResult"{ ._401 = {} };
+        return FindAssignableUsersResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"FindAssignableUsersResult"{ ._404 = {} };
+        return FindAssignableUsersResult{ ._404 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        return @"FindAssignableUsersResult"{ ._429 = {} };
+        return FindAssignableUsersResult{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindAssignableUsersResult"{ ._400 = {} };
+        return FindAssignableUsersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"BulkGetUsersResult" = union(enum) {
+pub const BulkGetUsersResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanUser",
+    _200: types.PageBeanUser,
     /// Returned if `accountID` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12494,10 +12246,10 @@ pub const @"BulkGetUsersResult" = union(enum) {
 };
 
 /// Bulk get users
-pub fn @"bulkGetUsers"(
+pub fn bulkGetUsers(
     client: Client,
     alloc: mem.Allocator,
-) !@"BulkGetUsersResult" {
+) !BulkGetUsersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/bulk");
     try url_buffer.append(0);
@@ -12512,25 +12264,24 @@ pub fn @"bulkGetUsers"(
     // key; location: query
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanUser", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanUser.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"BulkGetUsersResult"{ ._200 = result };
+        return BulkGetUsersResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"BulkGetUsersResult"{ ._400 = {} };
+        return BulkGetUsersResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"BulkGetUsersResult"{ ._401 = {} };
+        return BulkGetUsersResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"BulkGetUsersResult"{ ._400 = {} };
+        return BulkGetUsersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"BulkGetUsersMigrationResult" = union(enum) {
+pub const BulkGetUsersMigrationResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if `key` or `username`
@@ -12541,10 +12292,10 @@ pub const @"BulkGetUsersMigrationResult" = union(enum) {
 };
 
 /// Get account IDs for users
-pub fn @"bulkGetUsersMigration"(
+pub fn bulkGetUsersMigration(
     client: Client,
     alloc: mem.Allocator,
-) !@"BulkGetUsersMigrationResult" {
+) !BulkGetUsersMigrationResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/bulk/migration");
     try url_buffer.append(0);
@@ -12558,22 +12309,22 @@ pub fn @"bulkGetUsersMigration"(
     // username; location: query
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"BulkGetUsersMigrationResult"{ ._200 = {} };
+        return BulkGetUsersMigrationResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"BulkGetUsersMigrationResult"{ ._400 = {} };
+        return BulkGetUsersMigrationResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"BulkGetUsersMigrationResult"{ ._401 = {} };
+        return BulkGetUsersMigrationResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"BulkGetUsersMigrationResult"{ ._400 = {} };
+        return BulkGetUsersMigrationResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetUserDefaultColumnsResult" = union(enum) {
+pub const GetUserDefaultColumnsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12586,10 +12337,10 @@ pub const @"GetUserDefaultColumnsResult" = union(enum) {
 };
 
 /// Get user default columns
-pub fn @"getUserDefaultColumns"(
+pub fn getUserDefaultColumns(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetUserDefaultColumnsResult" {
+) !GetUserDefaultColumnsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/columns");
     try url_buffer.append(0);
@@ -12601,27 +12352,27 @@ pub fn @"getUserDefaultColumns"(
     // accountId; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetUserDefaultColumnsResult"{ ._200 = {} };
+        return GetUserDefaultColumnsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetUserDefaultColumnsResult"{ ._401 = {} };
+        return GetUserDefaultColumnsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetUserDefaultColumnsResult"{ ._403 = {} };
+        return GetUserDefaultColumnsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetUserDefaultColumnsResult"{ ._404 = {} };
+        return GetUserDefaultColumnsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserDefaultColumnsResult"{ ._400 = {} };
+        return GetUserDefaultColumnsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetUserEmailResult" = union(enum) {
+pub const GetUserEmailResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"UnrestrictedUserEmail",
+    _200: types.UnrestrictedUserEmail,
     /// Returned if the calling app is not approved to use this API.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing from the request (for example if a user is trying to access this API).
@@ -12634,10 +12385,10 @@ pub const @"GetUserEmailResult" = union(enum) {
 };
 
 /// Get user email
-pub fn @"getUserEmail"(
+pub fn getUserEmail(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetUserEmailResult" {
+) !GetUserEmailResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/email");
     try url_buffer.append(0);
@@ -12648,33 +12399,32 @@ pub fn @"getUserEmail"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"UnrestrictedUserEmail", &token_stream, parseOptions(alloc));
+        const result = types.UnrestrictedUserEmail.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetUserEmailResult"{ ._200 = result };
+        return GetUserEmailResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserEmailResult"{ ._400 = {} };
+        return GetUserEmailResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetUserEmailResult"{ ._401 = {} };
+        return GetUserEmailResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetUserEmailResult"{ ._404 = {} };
+        return GetUserEmailResult{ ._404 = {} };
     }
     if (mem.eql(u8, "503", http_response.status_code)) { // Make void
-        return @"GetUserEmailResult"{ ._503 = {} };
+        return GetUserEmailResult{ ._503 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserEmailResult"{ ._400 = {} };
+        return GetUserEmailResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetUserEmailBulkResult" = union(enum) {
+pub const GetUserEmailBulkResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"UnrestrictedUserEmail",
+    _200: types.UnrestrictedUserEmail,
     /// Returned if the calling app is not approved to use this API.
     _400: void,
     /// Returned if the authentication credentials are incorrect, or missing from the request (for example if a user is trying to access this API).
@@ -12685,10 +12435,10 @@ pub const @"GetUserEmailBulkResult" = union(enum) {
 };
 
 /// Get user email bulk
-pub fn @"getUserEmailBulk"(
+pub fn getUserEmailBulk(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetUserEmailBulkResult" {
+) !GetUserEmailBulkResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/email/bulk");
     try url_buffer.append(0);
@@ -12699,28 +12449,27 @@ pub fn @"getUserEmailBulk"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"UnrestrictedUserEmail", &token_stream, parseOptions(alloc));
+        const result = types.UnrestrictedUserEmail.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetUserEmailBulkResult"{ ._200 = result };
+        return GetUserEmailBulkResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserEmailBulkResult"{ ._400 = {} };
+        return GetUserEmailBulkResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetUserEmailBulkResult"{ ._401 = {} };
+        return GetUserEmailBulkResult{ ._401 = {} };
     }
     if (mem.eql(u8, "503", http_response.status_code)) { // Make void
-        return @"GetUserEmailBulkResult"{ ._503 = {} };
+        return GetUserEmailBulkResult{ ._503 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserEmailBulkResult"{ ._400 = {} };
+        return GetUserEmailBulkResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetUserGroupsResult" = union(enum) {
+pub const GetUserGroupsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12733,10 +12482,10 @@ pub const @"GetUserGroupsResult" = union(enum) {
 };
 
 /// Get user groups
-pub fn @"getUserGroups"(
+pub fn getUserGroups(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetUserGroupsResult" {
+) !GetUserGroupsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/groups");
     try url_buffer.append(0);
@@ -12749,25 +12498,25 @@ pub fn @"getUserGroups"(
     // username; location: query
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetUserGroupsResult"{ ._200 = {} };
+        return GetUserGroupsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetUserGroupsResult"{ ._401 = {} };
+        return GetUserGroupsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetUserGroupsResult"{ ._403 = {} };
+        return GetUserGroupsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetUserGroupsResult"{ ._404 = {} };
+        return GetUserGroupsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserGroupsResult"{ ._400 = {} };
+        return GetUserGroupsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindUsersWithAllPermissionsResult" = union(enum) {
+pub const FindUsersWithAllPermissionsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -12789,10 +12538,10 @@ pub const @"FindUsersWithAllPermissionsResult" = union(enum) {
 };
 
 /// Find users with permissions
-pub fn @"findUsersWithAllPermissions"(
+pub fn findUsersWithAllPermissions(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindUsersWithAllPermissionsResult" {
+) !FindUsersWithAllPermissionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/permission/search");
     try url_buffer.append(0);
@@ -12810,33 +12559,33 @@ pub fn @"findUsersWithAllPermissions"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"FindUsersWithAllPermissionsResult"{ ._200 = {} };
+        return FindUsersWithAllPermissionsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersWithAllPermissionsResult"{ ._400 = {} };
+        return FindUsersWithAllPermissionsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"FindUsersWithAllPermissionsResult"{ ._401 = {} };
+        return FindUsersWithAllPermissionsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"FindUsersWithAllPermissionsResult"{ ._403 = {} };
+        return FindUsersWithAllPermissionsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"FindUsersWithAllPermissionsResult"{ ._404 = {} };
+        return FindUsersWithAllPermissionsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        return @"FindUsersWithAllPermissionsResult"{ ._429 = {} };
+        return FindUsersWithAllPermissionsResult{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersWithAllPermissionsResult"{ ._400 = {} };
+        return FindUsersWithAllPermissionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindUsersForPickerResult" = union(enum) {
+pub const FindUsersForPickerResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"FoundUsers",
+    _200: types.FoundUsers,
     /// Returned if `exclude` and `excludeAccountIds` are provided.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12847,10 +12596,10 @@ pub const @"FindUsersForPickerResult" = union(enum) {
 };
 
 /// Find users for picker
-pub fn @"findUsersForPicker"(
+pub fn findUsersForPicker(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindUsersForPickerResult" {
+) !FindUsersForPickerResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/picker");
     try url_buffer.append(0);
@@ -12867,30 +12616,29 @@ pub fn @"findUsersForPicker"(
     // avatarSize; location: query
     // excludeConnectUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsers"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"FoundUsers", &token_stream, parseOptions(alloc));
+        const result = types.FoundUsers.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"FindUsersForPickerResult"{ ._200 = result };
+        return FindUsersForPickerResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersForPickerResult"{ ._400 = {} };
+        return FindUsersForPickerResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"FindUsersForPickerResult"{ ._401 = {} };
+        return FindUsersForPickerResult{ ._401 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        return @"FindUsersForPickerResult"{ ._429 = {} };
+        return FindUsersForPickerResult{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersForPickerResult"{ ._400 = {} };
+        return FindUsersForPickerResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetUserPropertyKeysResult" = union(enum) {
+pub const GetUserPropertyKeysResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PropertyKeys",
+    _200: types.PropertyKeys,
     /// Returned if `accountId` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12903,10 +12651,10 @@ pub const @"GetUserPropertyKeysResult" = union(enum) {
 };
 
 /// Get user property keys
-pub fn @"getUserPropertyKeys"(
+pub fn getUserPropertyKeys(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetUserPropertyKeysResult" {
+) !GetUserPropertyKeysResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/properties");
     try url_buffer.append(0);
@@ -12919,33 +12667,32 @@ pub fn @"getUserPropertyKeys"(
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
+        const result = types.PropertyKeys.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetUserPropertyKeysResult"{ ._200 = result };
+        return GetUserPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserPropertyKeysResult"{ ._400 = {} };
+        return GetUserPropertyKeysResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetUserPropertyKeysResult"{ ._401 = {} };
+        return GetUserPropertyKeysResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetUserPropertyKeysResult"{ ._403 = {} };
+        return GetUserPropertyKeysResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetUserPropertyKeysResult"{ ._404 = {} };
+        return GetUserPropertyKeysResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserPropertyKeysResult"{ ._400 = {} };
+        return GetUserPropertyKeysResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetUserPropertyResult" = union(enum) {
+pub const GetUserPropertyResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"EntityProperty",
+    _200: types.EntityProperty,
     /// Returned if `accountId` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12958,14 +12705,14 @@ pub const @"GetUserPropertyResult" = union(enum) {
 };
 
 /// Get user property
-pub fn @"getUserProperty"(
+pub fn getUserProperty(
     client: Client,
     alloc: mem.Allocator,
-    @"propertyKey": []const u8,
-) !@"GetUserPropertyResult" {
+    propertyKey: []const u8,
+) !GetUserPropertyResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/properties/");
-    try url_buffer.appendSlice(@"propertyKey");
+    try url_buffer.appendSlice(propertyKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -12976,31 +12723,30 @@ pub fn @"getUserProperty"(
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
+        const result = types.EntityProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetUserPropertyResult"{ ._200 = result };
+        return GetUserPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserPropertyResult"{ ._400 = {} };
+        return GetUserPropertyResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetUserPropertyResult"{ ._401 = {} };
+        return GetUserPropertyResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetUserPropertyResult"{ ._403 = {} };
+        return GetUserPropertyResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetUserPropertyResult"{ ._404 = {} };
+        return GetUserPropertyResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetUserPropertyResult"{ ._400 = {} };
+        return GetUserPropertyResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindUsersResult" = union(enum) {
+pub const FindUsersResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -13017,10 +12763,10 @@ pub const @"FindUsersResult" = union(enum) {
 };
 
 /// Find users
-pub fn @"findUsers"(
+pub fn findUsers(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindUsersResult" {
+) !FindUsersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/search");
     try url_buffer.append(0);
@@ -13036,27 +12782,27 @@ pub fn @"findUsers"(
     // maxResults; location: query
     // property; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"FindUsersResult"{ ._200 = {} };
+        return FindUsersResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersResult"{ ._400 = {} };
+        return FindUsersResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"FindUsersResult"{ ._401 = {} };
+        return FindUsersResult{ ._401 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        return @"FindUsersResult"{ ._429 = {} };
+        return FindUsersResult{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersResult"{ ._400 = {} };
+        return FindUsersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindUsersByQueryResult" = union(enum) {
+pub const FindUsersByQueryResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanUser",
+    _200: types.PageBeanUser,
     /// Returned if the query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13069,10 +12815,10 @@ pub const @"FindUsersByQueryResult" = union(enum) {
 };
 
 /// Find users by query
-pub fn @"findUsersByQuery"(
+pub fn findUsersByQuery(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindUsersByQueryResult" {
+) !FindUsersByQueryResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/search/query");
     try url_buffer.append(0);
@@ -13085,33 +12831,32 @@ pub fn @"findUsersByQuery"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanUser", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanUser.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"FindUsersByQueryResult"{ ._200 = result };
+        return FindUsersByQueryResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersByQueryResult"{ ._400 = {} };
+        return FindUsersByQueryResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"FindUsersByQueryResult"{ ._401 = {} };
+        return FindUsersByQueryResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"FindUsersByQueryResult"{ ._403 = {} };
+        return FindUsersByQueryResult{ ._403 = {} };
     }
     if (mem.eql(u8, "408", http_response.status_code)) { // Make void
-        return @"FindUsersByQueryResult"{ ._408 = {} };
+        return FindUsersByQueryResult{ ._408 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersByQueryResult"{ ._400 = {} };
+        return FindUsersByQueryResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindUserKeysByQueryResult" = union(enum) {
+pub const FindUserKeysByQueryResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanUserKey",
+    _200: types.PageBeanUserKey,
     /// Returned if the query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13124,10 +12869,10 @@ pub const @"FindUserKeysByQueryResult" = union(enum) {
 };
 
 /// Find user keys by query
-pub fn @"findUserKeysByQuery"(
+pub fn findUserKeysByQuery(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindUserKeysByQueryResult" {
+) !FindUserKeysByQueryResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/search/query/key");
     try url_buffer.append(0);
@@ -13140,31 +12885,30 @@ pub fn @"findUserKeysByQuery"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserKey"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanUserKey", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanUserKey.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"FindUserKeysByQueryResult"{ ._200 = result };
+        return FindUserKeysByQueryResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUserKeysByQueryResult"{ ._400 = {} };
+        return FindUserKeysByQueryResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"FindUserKeysByQueryResult"{ ._401 = {} };
+        return FindUserKeysByQueryResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"FindUserKeysByQueryResult"{ ._403 = {} };
+        return FindUserKeysByQueryResult{ ._403 = {} };
     }
     if (mem.eql(u8, "408", http_response.status_code)) { // Make void
-        return @"FindUserKeysByQueryResult"{ ._408 = {} };
+        return FindUserKeysByQueryResult{ ._408 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUserKeysByQueryResult"{ ._400 = {} };
+        return FindUserKeysByQueryResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"FindUsersWithBrowsePermissionResult" = union(enum) {
+pub const FindUsersWithBrowsePermissionResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -13183,10 +12927,10 @@ pub const @"FindUsersWithBrowsePermissionResult" = union(enum) {
 };
 
 /// Find users with browse permission
-pub fn @"findUsersWithBrowsePermission"(
+pub fn findUsersWithBrowsePermission(
     client: Client,
     alloc: mem.Allocator,
-) !@"FindUsersWithBrowsePermissionResult" {
+) !FindUsersWithBrowsePermissionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/user/viewissue/search");
     try url_buffer.append(0);
@@ -13203,28 +12947,28 @@ pub fn @"findUsersWithBrowsePermission"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"FindUsersWithBrowsePermissionResult"{ ._200 = {} };
+        return FindUsersWithBrowsePermissionResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersWithBrowsePermissionResult"{ ._400 = {} };
+        return FindUsersWithBrowsePermissionResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"FindUsersWithBrowsePermissionResult"{ ._401 = {} };
+        return FindUsersWithBrowsePermissionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"FindUsersWithBrowsePermissionResult"{ ._404 = {} };
+        return FindUsersWithBrowsePermissionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "429", http_response.status_code)) { // Make void
-        return @"FindUsersWithBrowsePermissionResult"{ ._429 = {} };
+        return FindUsersWithBrowsePermissionResult{ ._429 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"FindUsersWithBrowsePermissionResult"{ ._400 = {} };
+        return FindUsersWithBrowsePermissionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllUsersDefaultResult" = union(enum) {
+pub const GetAllUsersDefaultResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -13237,10 +12981,10 @@ pub const @"GetAllUsersDefaultResult" = union(enum) {
 };
 
 /// Get all users default
-pub fn @"getAllUsersDefault"(
+pub fn getAllUsersDefault(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllUsersDefaultResult" {
+) !GetAllUsersDefaultResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/users");
     try url_buffer.append(0);
@@ -13252,25 +12996,25 @@ pub fn @"getAllUsersDefault"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllUsersDefaultResult"{ ._200 = {} };
+        return GetAllUsersDefaultResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllUsersDefaultResult"{ ._400 = {} };
+        return GetAllUsersDefaultResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllUsersDefaultResult"{ ._403 = {} };
+        return GetAllUsersDefaultResult{ ._403 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        return @"GetAllUsersDefaultResult"{ ._409 = {} };
+        return GetAllUsersDefaultResult{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllUsersDefaultResult"{ ._400 = {} };
+        return GetAllUsersDefaultResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllUsersResult" = union(enum) {
+pub const GetAllUsersResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -13283,10 +13027,10 @@ pub const @"GetAllUsersResult" = union(enum) {
 };
 
 /// Get all users
-pub fn @"getAllUsers"(
+pub fn getAllUsers(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllUsersResult" {
+) !GetAllUsersResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/users/search");
     try url_buffer.append(0);
@@ -13298,27 +13042,27 @@ pub fn @"getAllUsers"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllUsersResult"{ ._200 = {} };
+        return GetAllUsersResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllUsersResult"{ ._400 = {} };
+        return GetAllUsersResult{ ._400 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllUsersResult"{ ._403 = {} };
+        return GetAllUsersResult{ ._403 = {} };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make void
-        return @"GetAllUsersResult"{ ._409 = {} };
+        return GetAllUsersResult{ ._409 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllUsersResult"{ ._400 = {} };
+        return GetAllUsersResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"CreateVersionResult" = union(enum) {
+pub const CreateVersionResult = union(enum) {
     /// Returned if the request is successful.
-    _201: @"Version",
+    _201: types.Version,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13332,10 +13076,10 @@ pub const @"CreateVersionResult" = union(enum) {
 };
 
 /// Create version
-pub fn @"createVersion"(
+pub fn createVersion(
     client: Client,
     alloc: mem.Allocator,
-) !@"CreateVersionResult" {
+) !CreateVersionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/version");
     try url_buffer.append(0);
@@ -13345,30 +13089,29 @@ pub fn @"createVersion"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Version"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Version", &token_stream, parseOptions(alloc));
+        const result = types.Version.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateVersionResult"{ ._201 = result };
+        return CreateVersionResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateVersionResult"{ ._400 = {} };
+        return CreateVersionResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"CreateVersionResult"{ ._401 = {} };
+        return CreateVersionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"CreateVersionResult"{ ._404 = {} };
+        return CreateVersionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateVersionResult"{ ._400 = {} };
+        return CreateVersionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetVersionResult" = union(enum) {
+pub const GetVersionResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Version",
+    _200: types.Version,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the version is not found or the user does not have the necessary permission.
@@ -13377,14 +13120,14 @@ pub const @"GetVersionResult" = union(enum) {
 };
 
 /// Get version
-pub fn @"getVersion"(
+pub fn getVersion(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetVersionResult" {
+    id: []const u8,
+) !GetVersionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/version/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -13393,25 +13136,24 @@ pub fn @"getVersion"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Version", &token_stream, parseOptions(alloc));
+        const result = types.Version.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetVersionResult"{ ._200 = result };
+        return GetVersionResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetVersionResult"{ ._401 = {} };
+        return GetVersionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetVersionResult"{ ._404 = {} };
+        return GetVersionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetVersionResult"{ ._400 = {} };
+        return GetVersionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"MergeVersionsResult" = union(enum) {
+pub const MergeVersionsResult = union(enum) {
     /// Returned if the version is deleted.
     _204: void,
     /// Returned if the request is invalid.
@@ -13427,17 +13169,17 @@ pub const @"MergeVersionsResult" = union(enum) {
 };
 
 /// Merge versions
-pub fn @"mergeVersions"(
+pub fn mergeVersions(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-    @"moveIssuesTo": []const u8,
-) !@"MergeVersionsResult" {
+    id: []const u8,
+    moveIssuesTo: []const u8,
+) !MergeVersionsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/version/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/mergeto/");
-    try url_buffer.appendSlice(@"moveIssuesTo");
+    try url_buffer.appendSlice(moveIssuesTo);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/version/{id}/mergeto/{moveIssuesTo}");
@@ -13445,27 +13187,27 @@ pub fn @"mergeVersions"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"MergeVersionsResult"{ ._204 = {} };
+        return MergeVersionsResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MergeVersionsResult"{ ._400 = {} };
+        return MergeVersionsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"MergeVersionsResult"{ ._401 = {} };
+        return MergeVersionsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"MergeVersionsResult"{ ._404 = {} };
+        return MergeVersionsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MergeVersionsResult"{ ._400 = {} };
+        return MergeVersionsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"MoveVersionResult" = union(enum) {
+pub const MoveVersionResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"Version",
+    _200: types.Version,
     /// Returned if:
     ///
     ///  *  no body parameters are provided.
@@ -13483,14 +13225,14 @@ pub const @"MoveVersionResult" = union(enum) {
 };
 
 /// Move version
-pub fn @"moveVersion"(
+pub fn moveVersion(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"MoveVersionResult" {
+    id: []const u8,
+) !MoveVersionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/version/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/move");
     try url_buffer.append(0);
 
@@ -13499,30 +13241,29 @@ pub fn @"moveVersion"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"Version", &token_stream, parseOptions(alloc));
+        const result = types.Version.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"MoveVersionResult"{ ._200 = result };
+        return MoveVersionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MoveVersionResult"{ ._400 = {} };
+        return MoveVersionResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"MoveVersionResult"{ ._401 = {} };
+        return MoveVersionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"MoveVersionResult"{ ._404 = {} };
+        return MoveVersionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"MoveVersionResult"{ ._400 = {} };
+        return MoveVersionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetVersionRelatedIssuesResult" = union(enum) {
+pub const GetVersionRelatedIssuesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"VersionIssueCounts",
+    _200: types.VersionIssueCounts,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if:
@@ -13534,14 +13275,14 @@ pub const @"GetVersionRelatedIssuesResult" = union(enum) {
 };
 
 /// Get version's related issues count
-pub fn @"getVersionRelatedIssues"(
+pub fn getVersionRelatedIssues(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetVersionRelatedIssuesResult" {
+    id: []const u8,
+) !GetVersionRelatedIssuesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/version/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/relatedIssueCounts");
     try url_buffer.append(0);
 
@@ -13550,25 +13291,24 @@ pub fn @"getVersionRelatedIssues"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionIssueCounts"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"VersionIssueCounts", &token_stream, parseOptions(alloc));
+        const result = types.VersionIssueCounts.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetVersionRelatedIssuesResult"{ ._200 = result };
+        return GetVersionRelatedIssuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetVersionRelatedIssuesResult"{ ._401 = {} };
+        return GetVersionRelatedIssuesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetVersionRelatedIssuesResult"{ ._404 = {} };
+        return GetVersionRelatedIssuesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetVersionRelatedIssuesResult"{ ._400 = {} };
+        return GetVersionRelatedIssuesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"DeleteAndReplaceVersionResult" = union(enum) {
+pub const DeleteAndReplaceVersionResult = union(enum) {
     /// Returned if the version is deleted.
     _204: void,
     /// Returned if the request is invalid.
@@ -13584,14 +13324,14 @@ pub const @"DeleteAndReplaceVersionResult" = union(enum) {
 };
 
 /// Delete and replace version
-pub fn @"deleteAndReplaceVersion"(
+pub fn deleteAndReplaceVersion(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"DeleteAndReplaceVersionResult" {
+    id: []const u8,
+) !DeleteAndReplaceVersionResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/version/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/removeAndSwap");
     try url_buffer.append(0);
 
@@ -13600,27 +13340,27 @@ pub fn @"deleteAndReplaceVersion"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"DeleteAndReplaceVersionResult"{ ._204 = {} };
+        return DeleteAndReplaceVersionResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteAndReplaceVersionResult"{ ._400 = {} };
+        return DeleteAndReplaceVersionResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"DeleteAndReplaceVersionResult"{ ._401 = {} };
+        return DeleteAndReplaceVersionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"DeleteAndReplaceVersionResult"{ ._404 = {} };
+        return DeleteAndReplaceVersionResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteAndReplaceVersionResult"{ ._400 = {} };
+        return DeleteAndReplaceVersionResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetVersionUnresolvedIssuesResult" = union(enum) {
+pub const GetVersionUnresolvedIssuesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"VersionUnresolvedIssuesCount",
+    _200: types.VersionUnresolvedIssuesCount,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -13632,14 +13372,14 @@ pub const @"GetVersionUnresolvedIssuesResult" = union(enum) {
 };
 
 /// Get version's unresolved issues count
-pub fn @"getVersionUnresolvedIssues"(
+pub fn getVersionUnresolvedIssues(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetVersionUnresolvedIssuesResult" {
+    id: []const u8,
+) !GetVersionUnresolvedIssuesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/version/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/unresolvedIssueCount");
     try url_buffer.append(0);
 
@@ -13648,39 +13388,38 @@ pub fn @"getVersionUnresolvedIssues"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionUnresolvedIssuesCount"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"VersionUnresolvedIssuesCount", &token_stream, parseOptions(alloc));
+        const result = types.VersionUnresolvedIssuesCount.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetVersionUnresolvedIssuesResult"{ ._200 = result };
+        return GetVersionUnresolvedIssuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetVersionUnresolvedIssuesResult"{ ._401 = {} };
+        return GetVersionUnresolvedIssuesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetVersionUnresolvedIssuesResult"{ ._404 = {} };
+        return GetVersionUnresolvedIssuesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetVersionUnresolvedIssuesResult"{ ._400 = {} };
+        return GetVersionUnresolvedIssuesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDynamicWebhooksForAppResult" = union(enum) {
+pub const GetDynamicWebhooksForAppResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanWebhook",
+    _200: types.PageBeanWebhook,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the caller is not an app.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Get dynamic webhooks for app
-pub fn @"getDynamicWebhooksForApp"(
+pub fn getDynamicWebhooksForApp(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetDynamicWebhooksForAppResult" {
+) !GetDynamicWebhooksForAppResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/webhook");
     try url_buffer.append(0);
@@ -13692,45 +13431,42 @@ pub fn @"getDynamicWebhooksForApp"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWebhook"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanWebhook", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanWebhook.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDynamicWebhooksForAppResult"{ ._200 = result };
+        return GetDynamicWebhooksForAppResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDynamicWebhooksForAppResult"{ ._400 = result };
+        return GetDynamicWebhooksForAppResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDynamicWebhooksForAppResult"{ ._403 = result };
+        return GetDynamicWebhooksForAppResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDynamicWebhooksForAppResult"{ ._400 = {} };
+        return GetDynamicWebhooksForAppResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetFailedWebhooksResult" = union(enum) {
+pub const GetFailedWebhooksResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"FailedWebhooks",
+    _200: types.FailedWebhooks,
     /// 400 response
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the caller is not a Connect app.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Get failed webhooks
-pub fn @"getFailedWebhooks"(
+pub fn getFailedWebhooks(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetFailedWebhooksResult" {
+) !GetFailedWebhooksResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/webhook/failed");
     try url_buffer.append(0);
@@ -13742,45 +13478,42 @@ pub fn @"getFailedWebhooks"(
     // maxResults; location: query
     // after; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FailedWebhooks"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"FailedWebhooks", &token_stream, parseOptions(alloc));
+        const result = types.FailedWebhooks.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFailedWebhooksResult"{ ._200 = result };
+        return GetFailedWebhooksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFailedWebhooksResult"{ ._400 = result };
+        return GetFailedWebhooksResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetFailedWebhooksResult"{ ._403 = result };
+        return GetFailedWebhooksResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetFailedWebhooksResult"{ ._400 = {} };
+        return GetFailedWebhooksResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"RefreshWebhooksResult" = union(enum) {
+pub const RefreshWebhooksResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"WebhooksExpirationDate",
+    _200: types.WebhooksExpirationDate,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the caller is not an app.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Extend webhook life
-pub fn @"refreshWebhooks"(
+pub fn refreshWebhooks(
     client: Client,
     alloc: mem.Allocator,
-) !@"RefreshWebhooksResult" {
+) !RefreshWebhooksResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/webhook/refresh");
     try url_buffer.append(0);
@@ -13790,31 +13523,28 @@ pub fn @"refreshWebhooks"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WebhooksExpirationDate"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"WebhooksExpirationDate", &token_stream, parseOptions(alloc));
+        const result = types.WebhooksExpirationDate.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RefreshWebhooksResult"{ ._200 = result };
+        return RefreshWebhooksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RefreshWebhooksResult"{ ._400 = result };
+        return RefreshWebhooksResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"RefreshWebhooksResult"{ ._403 = result };
+        return RefreshWebhooksResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"RefreshWebhooksResult"{ ._400 = {} };
+        return RefreshWebhooksResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllWorkflowsResult" = union(enum) {
+pub const GetAllWorkflowsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the user does not have the necessary permission.
@@ -13823,10 +13553,10 @@ pub const @"GetAllWorkflowsResult" = union(enum) {
 };
 
 /// Get all workflows
-pub fn @"getAllWorkflows"(
+pub fn getAllWorkflows(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllWorkflowsResult" {
+) !GetAllWorkflowsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflow");
     try url_buffer.append(0);
@@ -13837,35 +13567,35 @@ pub fn @"getAllWorkflows"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetAllWorkflowsResult"{ ._200 = {} };
+        return GetAllWorkflowsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllWorkflowsResult"{ ._401 = {} };
+        return GetAllWorkflowsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllWorkflowsResult"{ ._400 = {} };
+        return GetAllWorkflowsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorkflowTransitionRuleConfigurationsResult" = union(enum) {
+pub const GetWorkflowTransitionRuleConfigurationsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanWorkflowTransitionRules",
+    _200: types.PageBeanWorkflowTransitionRules,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the caller is not a Connect app.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     /// Returned if the any transition rule type is not supported.
     _404: void,
     _400: void,
 };
 
 /// Get workflow transition rule configurations
-pub fn @"getWorkflowTransitionRuleConfigurations"(
+pub fn getWorkflowTransitionRuleConfigurations(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetWorkflowTransitionRuleConfigurationsResult" {
+) !GetWorkflowTransitionRuleConfigurationsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflow/rule/config");
     try url_buffer.append(0);
@@ -13883,48 +13613,45 @@ pub fn @"getWorkflowTransitionRuleConfigurations"(
     // draft; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowTransitionRules"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanWorkflowTransitionRules", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanWorkflowTransitionRules.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._200 = result };
+        return GetWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._400 = result };
+        return GetWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._403 = result };
+        return GetWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._404 = {} };
+        return GetWorkflowTransitionRuleConfigurationsResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowTransitionRuleConfigurationsResult"{ ._400 = {} };
+        return GetWorkflowTransitionRuleConfigurationsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"DeleteWorkflowTransitionRuleConfigurationsResult" = union(enum) {
+pub const DeleteWorkflowTransitionRuleConfigurationsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"WorkflowTransitionRulesUpdateErrors",
+    _200: types.WorkflowTransitionRulesUpdateErrors,
     /// Returned if the request is invalid.
-    _400: @"ErrorCollection",
+    _400: types.ErrorCollection,
     /// Returned if the caller is not a Connect app.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Delete workflow transition rule configurations
-pub fn @"deleteWorkflowTransitionRuleConfigurations"(
+pub fn deleteWorkflowTransitionRuleConfigurations(
     client: Client,
     alloc: mem.Allocator,
-) !@"DeleteWorkflowTransitionRuleConfigurationsResult" {
+) !DeleteWorkflowTransitionRuleConfigurationsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflow/rule/config/delete");
     try url_buffer.append(0);
@@ -13934,45 +13661,42 @@ pub fn @"deleteWorkflowTransitionRuleConfigurations"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionRulesUpdateErrors"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"WorkflowTransitionRulesUpdateErrors", &token_stream, parseOptions(alloc));
+        const result = types.WorkflowTransitionRulesUpdateErrors.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._200 = result };
+        return DeleteWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._400 = result };
+        return DeleteWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._403 = result };
+        return DeleteWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteWorkflowTransitionRuleConfigurationsResult"{ ._400 = {} };
+        return DeleteWorkflowTransitionRuleConfigurationsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorkflowsPaginatedResult" = union(enum) {
+pub const GetWorkflowsPaginatedResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanWorkflow",
+    _200: types.PageBeanWorkflow,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: @"ErrorCollection",
+    _403: types.ErrorCollection,
     _400: void,
 };
 
 /// Get workflows paginated
-pub fn @"getWorkflowsPaginated"(
+pub fn getWorkflowsPaginated(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetWorkflowsPaginatedResult" {
+) !GetWorkflowsPaginatedResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflow/search");
     try url_buffer.append(0);
@@ -13989,30 +13713,28 @@ pub fn @"getWorkflowsPaginated"(
     // orderBy; location: query
     // isActive; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflow"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanWorkflow", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanWorkflow.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowsPaginatedResult"{ ._200 = result };
+        return GetWorkflowsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorkflowsPaginatedResult"{ ._401 = {} };
+        return GetWorkflowsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorCollection", &token_stream, parseOptions(alloc));
+        const result = types.ErrorCollection.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowsPaginatedResult"{ ._403 = result };
+        return GetWorkflowsPaginatedResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowsPaginatedResult"{ ._400 = {} };
+        return GetWorkflowsPaginatedResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorkflowTransitionPropertiesResult" = union(enum) {
+pub const GetWorkflowTransitionPropertiesResult = union(enum) {
     /// 200 response
-    _200: @"WorkflowTransitionProperty",
+    _200: types.WorkflowTransitionProperty,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14025,14 +13747,14 @@ pub const @"GetWorkflowTransitionPropertiesResult" = union(enum) {
 };
 
 /// Get workflow transition properties
-pub fn @"getWorkflowTransitionProperties"(
+pub fn getWorkflowTransitionProperties(
     client: Client,
     alloc: mem.Allocator,
-    @"transitionId": []const u8,
-) !@"GetWorkflowTransitionPropertiesResult" {
+    transitionId: []const u8,
+) !GetWorkflowTransitionPropertiesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflow/transitions/");
-    try url_buffer.appendSlice(@"transitionId");
+    try url_buffer.appendSlice(transitionId);
     try url_buffer.appendSlice("/properties");
     try url_buffer.append(0);
 
@@ -14045,31 +13767,30 @@ pub fn @"getWorkflowTransitionProperties"(
     // workflowName; location: query
     // workflowMode; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"WorkflowTransitionProperty", &token_stream, parseOptions(alloc));
+        const result = types.WorkflowTransitionProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowTransitionPropertiesResult"{ ._200 = result };
+        return GetWorkflowTransitionPropertiesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowTransitionPropertiesResult"{ ._400 = {} };
+        return GetWorkflowTransitionPropertiesResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorkflowTransitionPropertiesResult"{ ._401 = {} };
+        return GetWorkflowTransitionPropertiesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetWorkflowTransitionPropertiesResult"{ ._403 = {} };
+        return GetWorkflowTransitionPropertiesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorkflowTransitionPropertiesResult"{ ._404 = {} };
+        return GetWorkflowTransitionPropertiesResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowTransitionPropertiesResult"{ ._400 = {} };
+        return GetWorkflowTransitionPropertiesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"DeleteInactiveWorkflowResult" = union(enum) {
+pub const DeleteInactiveWorkflowResult = union(enum) {
     /// Returned if the workflow is deleted.
     _204: void,
     /// Returned if the request is not valid.
@@ -14084,14 +13805,14 @@ pub const @"DeleteInactiveWorkflowResult" = union(enum) {
 };
 
 /// Delete inactive workflow
-pub fn @"deleteInactiveWorkflow"(
+pub fn deleteInactiveWorkflow(
     client: Client,
     alloc: mem.Allocator,
-    @"entityId": []const u8,
-) !@"DeleteInactiveWorkflowResult" {
+    entityId: []const u8,
+) !DeleteInactiveWorkflowResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflow/");
-    try url_buffer.appendSlice(@"entityId");
+    try url_buffer.appendSlice(entityId);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/api/3/workflow/{entityId}");
@@ -14099,30 +13820,30 @@ pub fn @"deleteInactiveWorkflow"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"DeleteInactiveWorkflowResult"{ ._204 = {} };
+        return DeleteInactiveWorkflowResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteInactiveWorkflowResult"{ ._400 = {} };
+        return DeleteInactiveWorkflowResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"DeleteInactiveWorkflowResult"{ ._401 = {} };
+        return DeleteInactiveWorkflowResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"DeleteInactiveWorkflowResult"{ ._403 = {} };
+        return DeleteInactiveWorkflowResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"DeleteInactiveWorkflowResult"{ ._404 = {} };
+        return DeleteInactiveWorkflowResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"DeleteInactiveWorkflowResult"{ ._400 = {} };
+        return DeleteInactiveWorkflowResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetAllWorkflowSchemesResult" = union(enum) {
+pub const GetAllWorkflowSchemesResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PageBeanWorkflowScheme",
+    _200: types.PageBeanWorkflowScheme,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14131,10 +13852,10 @@ pub const @"GetAllWorkflowSchemesResult" = union(enum) {
 };
 
 /// Get all workflow schemes
-pub fn @"getAllWorkflowSchemes"(
+pub fn getAllWorkflowSchemes(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetAllWorkflowSchemesResult" {
+) !GetAllWorkflowSchemesResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme");
     try url_buffer.append(0);
@@ -14146,27 +13867,26 @@ pub fn @"getAllWorkflowSchemes"(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PageBeanWorkflowScheme", &token_stream, parseOptions(alloc));
+        const result = types.PageBeanWorkflowScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetAllWorkflowSchemesResult"{ ._200 = result };
+        return GetAllWorkflowSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetAllWorkflowSchemesResult"{ ._401 = {} };
+        return GetAllWorkflowSchemesResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetAllWorkflowSchemesResult"{ ._403 = {} };
+        return GetAllWorkflowSchemesResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetAllWorkflowSchemesResult"{ ._400 = {} };
+        return GetAllWorkflowSchemesResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorkflowSchemeProjectAssociationsResult" = union(enum) {
+pub const GetWorkflowSchemeProjectAssociationsResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ContainerOfWorkflowSchemeAssociations",
+    _200: types.ContainerOfWorkflowSchemeAssociations,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14177,10 +13897,10 @@ pub const @"GetWorkflowSchemeProjectAssociationsResult" = union(enum) {
 };
 
 /// Get workflow scheme project associations
-pub fn @"getWorkflowSchemeProjectAssociations"(
+pub fn getWorkflowSchemeProjectAssociations(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetWorkflowSchemeProjectAssociationsResult" {
+) !GetWorkflowSchemeProjectAssociationsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/project");
     try url_buffer.append(0);
@@ -14191,30 +13911,29 @@ pub fn @"getWorkflowSchemeProjectAssociations"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerOfWorkflowSchemeAssociations"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ContainerOfWorkflowSchemeAssociations", &token_stream, parseOptions(alloc));
+        const result = types.ContainerOfWorkflowSchemeAssociations.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowSchemeProjectAssociationsResult"{ ._200 = result };
+        return GetWorkflowSchemeProjectAssociationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeProjectAssociationsResult"{ ._400 = {} };
+        return GetWorkflowSchemeProjectAssociationsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeProjectAssociationsResult"{ ._401 = {} };
+        return GetWorkflowSchemeProjectAssociationsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeProjectAssociationsResult"{ ._403 = {} };
+        return GetWorkflowSchemeProjectAssociationsResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeProjectAssociationsResult"{ ._400 = {} };
+        return GetWorkflowSchemeProjectAssociationsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorkflowSchemeResult" = union(enum) {
+pub const GetWorkflowSchemeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"WorkflowScheme",
+    _200: types.WorkflowScheme,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14225,14 +13944,14 @@ pub const @"GetWorkflowSchemeResult" = union(enum) {
 };
 
 /// Get workflow scheme
-pub fn @"getWorkflowScheme"(
+pub fn getWorkflowScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetWorkflowSchemeResult" {
+    id: []const u8,
+) !GetWorkflowSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -14241,30 +13960,29 @@ pub fn @"getWorkflowScheme"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"WorkflowScheme", &token_stream, parseOptions(alloc));
+        const result = types.WorkflowScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowSchemeResult"{ ._200 = result };
+        return GetWorkflowSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeResult"{ ._401 = {} };
+        return GetWorkflowSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeResult"{ ._403 = {} };
+        return GetWorkflowSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeResult"{ ._404 = {} };
+        return GetWorkflowSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeResult"{ ._400 = {} };
+        return GetWorkflowSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"CreateWorkflowSchemeDraftFromParentResult" = union(enum) {
+pub const CreateWorkflowSchemeDraftFromParentResult = union(enum) {
     /// Returned if the request is successful.
-    _201: @"WorkflowScheme",
+    _201: types.WorkflowScheme,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14275,14 +13993,14 @@ pub const @"CreateWorkflowSchemeDraftFromParentResult" = union(enum) {
 };
 
 /// Create draft workflow scheme
-pub fn @"createWorkflowSchemeDraftFromParent"(
+pub fn createWorkflowSchemeDraftFromParent(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"CreateWorkflowSchemeDraftFromParentResult" {
+    id: []const u8,
+) !CreateWorkflowSchemeDraftFromParentResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/createdraft");
     try url_buffer.append(0);
 
@@ -14291,30 +14009,29 @@ pub fn @"createWorkflowSchemeDraftFromParent"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"WorkflowScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"WorkflowScheme", &token_stream, parseOptions(alloc));
+        const result = types.WorkflowScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"CreateWorkflowSchemeDraftFromParentResult"{ ._201 = result };
+        return CreateWorkflowSchemeDraftFromParentResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateWorkflowSchemeDraftFromParentResult"{ ._400 = {} };
+        return CreateWorkflowSchemeDraftFromParentResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"CreateWorkflowSchemeDraftFromParentResult"{ ._401 = {} };
+        return CreateWorkflowSchemeDraftFromParentResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"CreateWorkflowSchemeDraftFromParentResult"{ ._403 = {} };
+        return CreateWorkflowSchemeDraftFromParentResult{ ._403 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"CreateWorkflowSchemeDraftFromParentResult"{ ._400 = {} };
+        return CreateWorkflowSchemeDraftFromParentResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDefaultWorkflowResult" = union(enum) {
+pub const GetDefaultWorkflowResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"DefaultWorkflow",
+    _200: types.DefaultWorkflow,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14325,14 +14042,14 @@ pub const @"GetDefaultWorkflowResult" = union(enum) {
 };
 
 /// Get default workflow
-pub fn @"getDefaultWorkflow"(
+pub fn getDefaultWorkflow(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetDefaultWorkflowResult" {
+    id: []const u8,
+) !GetDefaultWorkflowResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/default");
     try url_buffer.append(0);
 
@@ -14342,30 +14059,29 @@ pub fn @"getDefaultWorkflow"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"DefaultWorkflow", &token_stream, parseOptions(alloc));
+        const result = types.DefaultWorkflow.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDefaultWorkflowResult"{ ._200 = result };
+        return GetDefaultWorkflowResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetDefaultWorkflowResult"{ ._401 = {} };
+        return GetDefaultWorkflowResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetDefaultWorkflowResult"{ ._403 = {} };
+        return GetDefaultWorkflowResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetDefaultWorkflowResult"{ ._404 = {} };
+        return GetDefaultWorkflowResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDefaultWorkflowResult"{ ._400 = {} };
+        return GetDefaultWorkflowResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorkflowSchemeDraftResult" = union(enum) {
+pub const GetWorkflowSchemeDraftResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"WorkflowScheme",
+    _200: types.WorkflowScheme,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14379,14 +14095,14 @@ pub const @"GetWorkflowSchemeDraftResult" = union(enum) {
 };
 
 /// Get draft workflow scheme
-pub fn @"getWorkflowSchemeDraft"(
+pub fn getWorkflowSchemeDraft(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetWorkflowSchemeDraftResult" {
+    id: []const u8,
+) !GetWorkflowSchemeDraftResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/draft");
     try url_buffer.append(0);
 
@@ -14395,30 +14111,29 @@ pub fn @"getWorkflowSchemeDraft"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"WorkflowScheme", &token_stream, parseOptions(alloc));
+        const result = types.WorkflowScheme.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowSchemeDraftResult"{ ._200 = result };
+        return GetWorkflowSchemeDraftResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeDraftResult"{ ._401 = {} };
+        return GetWorkflowSchemeDraftResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeDraftResult"{ ._403 = {} };
+        return GetWorkflowSchemeDraftResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeDraftResult"{ ._404 = {} };
+        return GetWorkflowSchemeDraftResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeDraftResult"{ ._400 = {} };
+        return GetWorkflowSchemeDraftResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDraftDefaultWorkflowResult" = union(enum) {
+pub const GetDraftDefaultWorkflowResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"DefaultWorkflow",
+    _200: types.DefaultWorkflow,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission..
@@ -14432,14 +14147,14 @@ pub const @"GetDraftDefaultWorkflowResult" = union(enum) {
 };
 
 /// Get draft default workflow
-pub fn @"getDraftDefaultWorkflow"(
+pub fn getDraftDefaultWorkflow(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetDraftDefaultWorkflowResult" {
+    id: []const u8,
+) !GetDraftDefaultWorkflowResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/draft/default");
     try url_buffer.append(0);
 
@@ -14448,30 +14163,29 @@ pub fn @"getDraftDefaultWorkflow"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"DefaultWorkflow", &token_stream, parseOptions(alloc));
+        const result = types.DefaultWorkflow.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDraftDefaultWorkflowResult"{ ._200 = result };
+        return GetDraftDefaultWorkflowResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetDraftDefaultWorkflowResult"{ ._401 = {} };
+        return GetDraftDefaultWorkflowResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetDraftDefaultWorkflowResult"{ ._403 = {} };
+        return GetDraftDefaultWorkflowResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetDraftDefaultWorkflowResult"{ ._404 = {} };
+        return GetDraftDefaultWorkflowResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDraftDefaultWorkflowResult"{ ._400 = {} };
+        return GetDraftDefaultWorkflowResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorkflowSchemeDraftIssueTypeResult" = union(enum) {
+pub const GetWorkflowSchemeDraftIssueTypeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueTypeWorkflowMapping",
+    _200: types.IssueTypeWorkflowMapping,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14482,17 +14196,17 @@ pub const @"GetWorkflowSchemeDraftIssueTypeResult" = union(enum) {
 };
 
 /// Get workflow for issue type in draft workflow scheme
-pub fn @"getWorkflowSchemeDraftIssueType"(
+pub fn getWorkflowSchemeDraftIssueType(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-    @"issueType": []const u8,
-) !@"GetWorkflowSchemeDraftIssueTypeResult" {
+    id: []const u8,
+    issueType: []const u8,
+) !GetWorkflowSchemeDraftIssueTypeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/draft/issuetype/");
-    try url_buffer.appendSlice(@"issueType");
+    try url_buffer.appendSlice(issueType);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -14500,32 +14214,31 @@ pub fn @"getWorkflowSchemeDraftIssueType"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueTypeWorkflowMapping", &token_stream, parseOptions(alloc));
+        const result = types.IssueTypeWorkflowMapping.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._200 = result };
+        return GetWorkflowSchemeDraftIssueTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._401 = {} };
+        return GetWorkflowSchemeDraftIssueTypeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._403 = {} };
+        return GetWorkflowSchemeDraftIssueTypeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._404 = {} };
+        return GetWorkflowSchemeDraftIssueTypeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeDraftIssueTypeResult"{ ._400 = {} };
+        return GetWorkflowSchemeDraftIssueTypeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"PublishDraftWorkflowSchemeResult" = union(enum) {
+pub const PublishDraftWorkflowSchemeResult = union(enum) {
     /// Returned if the request is only for validation and is successful.
     _204: void,
     /// Returned if the request is successful.
-    _303: @"TaskProgressBeanObject",
+    _303: types.TaskProgressBeanObject,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14542,14 +14255,14 @@ pub const @"PublishDraftWorkflowSchemeResult" = union(enum) {
 };
 
 /// Publish draft workflow scheme
-pub fn @"publishDraftWorkflowScheme"(
+pub fn publishDraftWorkflowScheme(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"PublishDraftWorkflowSchemeResult" {
+    id: []const u8,
+) !PublishDraftWorkflowSchemeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/draft/publish");
     try url_buffer.append(0);
 
@@ -14559,36 +14272,35 @@ pub fn @"publishDraftWorkflowScheme"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // validateOnly; location: query
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
-        return @"PublishDraftWorkflowSchemeResult"{ ._204 = {} };
+        return PublishDraftWorkflowSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"TaskProgressBeanObject", &token_stream, parseOptions(alloc));
+        const result = types.TaskProgressBeanObject.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"PublishDraftWorkflowSchemeResult"{ ._303 = result };
+        return PublishDraftWorkflowSchemeResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"PublishDraftWorkflowSchemeResult"{ ._400 = {} };
+        return PublishDraftWorkflowSchemeResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"PublishDraftWorkflowSchemeResult"{ ._401 = {} };
+        return PublishDraftWorkflowSchemeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"PublishDraftWorkflowSchemeResult"{ ._403 = {} };
+        return PublishDraftWorkflowSchemeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"PublishDraftWorkflowSchemeResult"{ ._404 = {} };
+        return PublishDraftWorkflowSchemeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"PublishDraftWorkflowSchemeResult"{ ._400 = {} };
+        return PublishDraftWorkflowSchemeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetDraftWorkflowResult" = union(enum) {
+pub const GetDraftWorkflowResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueTypesWorkflowMapping",
+    _200: types.IssueTypesWorkflowMapping,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14599,14 +14311,14 @@ pub const @"GetDraftWorkflowResult" = union(enum) {
 };
 
 /// Get issue types for workflows in draft workflow scheme
-pub fn @"getDraftWorkflow"(
+pub fn getDraftWorkflow(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetDraftWorkflowResult" {
+    id: []const u8,
+) !GetDraftWorkflowResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/draft/workflow");
     try url_buffer.append(0);
 
@@ -14616,30 +14328,29 @@ pub fn @"getDraftWorkflow"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueTypesWorkflowMapping", &token_stream, parseOptions(alloc));
+        const result = types.IssueTypesWorkflowMapping.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetDraftWorkflowResult"{ ._200 = result };
+        return GetDraftWorkflowResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetDraftWorkflowResult"{ ._401 = {} };
+        return GetDraftWorkflowResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetDraftWorkflowResult"{ ._403 = {} };
+        return GetDraftWorkflowResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetDraftWorkflowResult"{ ._404 = {} };
+        return GetDraftWorkflowResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetDraftWorkflowResult"{ ._400 = {} };
+        return GetDraftWorkflowResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorkflowSchemeIssueTypeResult" = union(enum) {
+pub const GetWorkflowSchemeIssueTypeResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueTypeWorkflowMapping",
+    _200: types.IssueTypeWorkflowMapping,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14650,17 +14361,17 @@ pub const @"GetWorkflowSchemeIssueTypeResult" = union(enum) {
 };
 
 /// Get workflow for issue type in workflow scheme
-pub fn @"getWorkflowSchemeIssueType"(
+pub fn getWorkflowSchemeIssueType(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-    @"issueType": []const u8,
-) !@"GetWorkflowSchemeIssueTypeResult" {
+    id: []const u8,
+    issueType: []const u8,
+) !GetWorkflowSchemeIssueTypeResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/issuetype/");
-    try url_buffer.appendSlice(@"issueType");
+    try url_buffer.appendSlice(issueType);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -14669,30 +14380,29 @@ pub fn @"getWorkflowSchemeIssueType"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueTypeWorkflowMapping", &token_stream, parseOptions(alloc));
+        const result = types.IssueTypeWorkflowMapping.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowSchemeIssueTypeResult"{ ._200 = result };
+        return GetWorkflowSchemeIssueTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeIssueTypeResult"{ ._401 = {} };
+        return GetWorkflowSchemeIssueTypeResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeIssueTypeResult"{ ._403 = {} };
+        return GetWorkflowSchemeIssueTypeResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeIssueTypeResult"{ ._404 = {} };
+        return GetWorkflowSchemeIssueTypeResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowSchemeIssueTypeResult"{ ._400 = {} };
+        return GetWorkflowSchemeIssueTypeResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorkflowResult" = union(enum) {
+pub const GetWorkflowResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"IssueTypesWorkflowMapping",
+    _200: types.IssueTypesWorkflowMapping,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14703,14 +14413,14 @@ pub const @"GetWorkflowResult" = union(enum) {
 };
 
 /// Get issue types for workflows in workflow scheme
-pub fn @"getWorkflow"(
+pub fn getWorkflow(
     client: Client,
     alloc: mem.Allocator,
-    @"id": []const u8,
-) !@"GetWorkflowResult" {
+    id: []const u8,
+) !GetWorkflowResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/workflowscheme/");
-    try url_buffer.appendSlice(@"id");
+    try url_buffer.appendSlice(id);
     try url_buffer.appendSlice("/workflow");
     try url_buffer.append(0);
 
@@ -14721,40 +14431,39 @@ pub fn @"getWorkflow"(
     // workflowName; location: query
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"IssueTypesWorkflowMapping", &token_stream, parseOptions(alloc));
+        const result = types.IssueTypesWorkflowMapping.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetWorkflowResult"{ ._200 = result };
+        return GetWorkflowResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorkflowResult"{ ._401 = {} };
+        return GetWorkflowResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make void
-        return @"GetWorkflowResult"{ ._403 = {} };
+        return GetWorkflowResult{ ._403 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
-        return @"GetWorkflowResult"{ ._404 = {} };
+        return GetWorkflowResult{ ._404 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorkflowResult"{ ._400 = {} };
+        return GetWorkflowResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIdsOfWorklogsDeletedSinceResult" = union(enum) {
+pub const GetIdsOfWorklogsDeletedSinceResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ChangedWorklogs",
+    _200: types.ChangedWorklogs,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get IDs of deleted worklogs
-pub fn @"getIdsOfWorklogsDeletedSince"(
+pub fn getIdsOfWorklogsDeletedSince(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIdsOfWorklogsDeletedSinceResult" {
+) !GetIdsOfWorklogsDeletedSinceResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/worklog/deleted");
     try url_buffer.append(0);
@@ -14765,22 +14474,21 @@ pub fn @"getIdsOfWorklogsDeletedSince"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // since; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ChangedWorklogs", &token_stream, parseOptions(alloc));
+        const result = types.ChangedWorklogs.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIdsOfWorklogsDeletedSinceResult"{ ._200 = result };
+        return GetIdsOfWorklogsDeletedSinceResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIdsOfWorklogsDeletedSinceResult"{ ._401 = {} };
+        return GetIdsOfWorklogsDeletedSinceResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIdsOfWorklogsDeletedSinceResult"{ ._400 = {} };
+        return GetIdsOfWorklogsDeletedSinceResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetWorklogsForIdsResult" = union(enum) {
+pub const GetWorklogsForIdsResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request contains more than 1000 worklog IDs or is empty.
@@ -14791,10 +14499,10 @@ pub const @"GetWorklogsForIdsResult" = union(enum) {
 };
 
 /// Get worklogs
-pub fn @"getWorklogsForIds"(
+pub fn getWorklogsForIds(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetWorklogsForIdsResult" {
+) !GetWorklogsForIdsResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/worklog/list");
     try url_buffer.append(0);
@@ -14805,34 +14513,34 @@ pub fn @"getWorklogsForIds"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
-        return @"GetWorklogsForIdsResult"{ ._200 = {} };
+        return GetWorklogsForIdsResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorklogsForIdsResult"{ ._400 = {} };
+        return GetWorklogsForIdsResult{ ._400 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetWorklogsForIdsResult"{ ._401 = {} };
+        return GetWorklogsForIdsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetWorklogsForIdsResult"{ ._400 = {} };
+        return GetWorklogsForIdsResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
 
-pub const @"GetIdsOfWorklogsModifiedSinceResult" = union(enum) {
+pub const GetIdsOfWorklogsModifiedSinceResult = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ChangedWorklogs",
+    _200: types.ChangedWorklogs,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
 };
 
 /// Get IDs of updated worklogs
-pub fn @"getIdsOfWorklogsModifiedSince"(
+pub fn getIdsOfWorklogsModifiedSince(
     client: Client,
     alloc: mem.Allocator,
-) !@"GetIdsOfWorklogsModifiedSinceResult" {
+) !GetIdsOfWorklogsModifiedSinceResult {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/api/3/worklog/updated");
     try url_buffer.append(0);
@@ -14844,16 +14552,15 @@ pub fn @"getIdsOfWorklogsModifiedSince"(
     // since; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ChangedWorklogs", &token_stream, parseOptions(alloc));
+        const result = types.ChangedWorklogs.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
-        return @"GetIdsOfWorklogsModifiedSinceResult"{ ._200 = result };
+        return GetIdsOfWorklogsModifiedSinceResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
-        return @"GetIdsOfWorklogsModifiedSinceResult"{ ._401 = {} };
+        return GetIdsOfWorklogsModifiedSinceResult{ ._401 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
-        return @"GetIdsOfWorklogsModifiedSinceResult"{ ._400 = {} };
+        return GetIdsOfWorklogsModifiedSinceResult{ ._400 = {} };
     }
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
@@ -14861,9 +14568,9 @@ pub fn @"getIdsOfWorklogsModifiedSince"(
 
 pub const @"AddonPropertiesResource.getAddonProperties_getResult" = union(enum) {
     /// Returned if the request is successful.
-    _200: @"PropertyKeys",
+    _200: types.PropertyKeys,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"OperationMessage",
+    _401: types.OperationMessage,
     _400: void,
 };
 
@@ -14871,11 +14578,11 @@ pub const @"AddonPropertiesResource.getAddonProperties_getResult" = union(enum) 
 pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     client: Client,
     alloc: mem.Allocator,
-    @"addonKey": []const u8,
+    addonKey: []const u8,
 ) !@"AddonPropertiesResource.getAddonProperties_getResult" {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/atlassian-connect/1/addons/");
-    try url_buffer.appendSlice(@"addonKey");
+    try url_buffer.appendSlice(addonKey);
     try url_buffer.appendSlice("/properties");
     try url_buffer.append(0);
 
@@ -14884,14 +14591,12 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"PropertyKeys", &token_stream, parseOptions(alloc));
+        const result = types.PropertyKeys.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
+        const result = types.OperationMessage.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._401 = result };
     }
@@ -14904,13 +14609,13 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
 
 pub const @"AddonPropertiesResource.getAddonProperty_getResult" = union(enum) {
     /// Returned if the request is successful.
-    _200: @"EntityProperty",
+    _200: types.EntityProperty,
     /// Returned if the property key is longer than 127 characters.
-    _400: @"OperationMessage",
+    _400: types.OperationMessage,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: @"OperationMessage",
+    _401: types.OperationMessage,
     /// Returned if the property is not found or doesn't belong to the app.
-    _404: @"OperationMessage",
+    _404: types.OperationMessage,
     _400: void,
 };
 
@@ -14918,14 +14623,14 @@ pub const @"AddonPropertiesResource.getAddonProperty_getResult" = union(enum) {
 pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     client: Client,
     alloc: mem.Allocator,
-    @"addonKey": []const u8,
-    @"propertyKey": []const u8,
+    addonKey: []const u8,
+    propertyKey: []const u8,
 ) !@"AddonPropertiesResource.getAddonProperty_getResult" {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/atlassian-connect/1/addons/");
-    try url_buffer.appendSlice(@"addonKey");
+    try url_buffer.appendSlice(addonKey);
     try url_buffer.appendSlice("/properties/");
-    try url_buffer.appendSlice(@"propertyKey");
+    try url_buffer.appendSlice(propertyKey);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
@@ -14933,26 +14638,22 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"EntityProperty", &token_stream, parseOptions(alloc));
+        const result = types.EntityProperty.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"OperationMessage"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
+        const result = types.OperationMessage.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
+        const result = types.OperationMessage.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"OperationMessage"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"OperationMessage", &token_stream, parseOptions(alloc));
+        const result = types.OperationMessage.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._404 = result };
     }
@@ -14965,9 +14666,9 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
 
 pub const @"DynamicModulesResource.getModules_getResult" = union(enum) {
     /// Returned if the request is successful.
-    _200: @"ConnectModules",
+    _200: types.ConnectModules,
     /// Returned if the call is not from a Connect app.
-    _401: @"ErrorMessage",
+    _401: types.ErrorMessage,
     _400: void,
 };
 
@@ -14985,14 +14686,12 @@ pub fn @"DynamicModulesResource.getModules_get"(
 
     errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConnectModules"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ConnectModules", &token_stream, parseOptions(alloc));
+        const result = types.ConnectModules.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
         return @"DynamicModulesResource.getModules_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorMessage"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"ErrorMessage", &token_stream, parseOptions(alloc));
+        const result = types.ErrorMessage.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
         return @"DynamicModulesResource.getModules_getResult"{ ._401 = result };
     }
@@ -15059,11 +14758,11 @@ pub const @"MigrationResource.updateEntityPropertiesValue_putResult" = union(enu
 pub fn @"MigrationResource.updateEntityPropertiesValue_put"(
     client: Client,
     alloc: mem.Allocator,
-    @"entityType": []const u8,
+    entityType: []const u8,
 ) !@"MigrationResource.updateEntityPropertiesValue_putResult" {
     var url_buffer = try std.BoundedArray(u8, 2048).init(0);
     try url_buffer.appendSlice("/rest/atlassian-connect/1/migration/properties/");
-    try url_buffer.appendSlice(@"entityType");
+    try url_buffer.appendSlice(entityType);
     try url_buffer.append(0);
 
     const http_response = try get(client, alloc, "/rest/atlassian-connect/1/migration/properties/{entityType}");
@@ -15089,7 +14788,7 @@ pub fn @"MigrationResource.updateEntityPropertiesValue_put"(
 
 pub const @"MigrationResource.workflowRuleSearch_postResult" = union(enum) {
     /// Returned if the request is successful.
-    _200: @"WorkflowRulesSearchDetails",
+    _200: types.WorkflowRulesSearchDetails,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authorisation credentials are incorrect or missing.
@@ -15112,8 +14811,7 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
     errdefer std.log.warn("{s}", .{http_response.body});
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowRulesSearchDetails"
-        var token_stream = json.TokenStream.init(http_response.body);
-        const result = try json.parse(@"WorkflowRulesSearchDetails", &token_stream, parseOptions(alloc));
+        const result = types.WorkflowRulesSearchDetails.parseFromString(alloc, http_response.body);
         errdefer result.deinit(alloc);
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._200 = result };
     }
@@ -15129,3137 +14827,6 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
     std.log.err("Unknown status code: {s}", .{http_response.status_code});
     return error.UnknownStatusCode;
 }
-
-pub const @"AnnouncementBannerConfiguration" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ErrorCollection" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AnnouncementBannerConfigurationUpdate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IdBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AvatarUrlsBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PermissionGrant" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PermissionHolder" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PermissionScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Scope" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdatedProjectCategory" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Permissions" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserPermission" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"BulkPermissionsRequestBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"BulkProjectPermissions" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"BulkPermissionGrants" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"BulkProjectPermissionGrants" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PermissionsKeysBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PermittedProjects" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIdentifierBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"EventNotification" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"GroupName" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JsonTypeBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"NotificationEvent" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"NotificationScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"NotificationSchemeEvent" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectRole" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectRoleGroup" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectRoleUser" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RoleActor" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanNotificationScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Locale" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"HealthCheckResult" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ServerInformation" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssuesAndJQLQueries" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueMatches" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueMatchesForJQL" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PropertyKey" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PropertyKeys" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"EntityProperty" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SimpleLink" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Version" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"VersionIssuesStatus" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldReplacement" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DeleteAndReplaceVersionBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"VersionIssueCounts" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"VersionUsageInCustomField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"VersionUnresolvedIssuesCount" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"VersionMoveBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ApplicationRole" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ListWrapperCallbackApplicationRole" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ListWrapperCallbackGroupName" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SimpleListWrapperApplicationRole" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SimpleListWrapperGroupName" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"User" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FoundUsers" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserPickerUser" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"NewUserDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ColumnItem" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Avatar" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Avatars" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"StatusCategory" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"StatusDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ScreenableTab" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanScreen" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Screen" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ScreenableField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"MoveFieldBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AddFieldBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ScreenDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdateScreenDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Resolution" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Hierarchy" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Project" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectCategory" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectComponent" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectInsight" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectLandingPageInfo" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectPermissions" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ServiceManagementNavigationInfo" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SimplifiedHierarchyLevel" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SoftwareNavigationInfo" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkManagementNavigationInfo" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateProjectDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIdentifiers" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdateProjectDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"TaskProgressBeanObject" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanVersion" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ComponentWithIssueCount" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanComponentWithIssueCount" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"StringList" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanProject" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectAvatars" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeWithStatus" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SecurityLevel" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SecurityScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ContainerForProjectFeatures" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectFeature" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectFeatureState" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Priority" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreatePriorityDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PriorityId" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdatePriorityDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanPriority" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SetDefaultPriorityRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Comment" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Fields" = struct {
-    summary: []const u8,
-
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueLinkType" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"LinkIssueRequestJsonBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"LinkedIssue" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RichText" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"TimeTrackingDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Visibility" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueLink" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageOfWorklogs" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Worklog" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeCreateBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeUpdateBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SecuritySchemes" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueSecurityLevelMember" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanIssueSecurityLevelMember" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldMetadata" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTransition" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Transitions" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssuePickerSuggestions" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssuePickerSuggestionsIssueType" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SuggestedIssue" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldUpdateOperation" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"HistoryMetadata" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"HistoryMetadataParticipant" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueUpdateDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Votes" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ChangeDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Changelog" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IncludedFields" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueBean" = struct {
-    fields: Fields,
-
-
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueUpdateMetadata" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"LinkGroup" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Operations" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageOfChangelogs" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueList" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"BulkIssueIsWatching" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Watchers" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreatedIssue" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"NestedResponse" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssuesUpdateBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"BulkOperationErrorResult" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreatedIssues" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueCreateMetadata" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeIssueCreateMetadata" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIssueCreateMetadata" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Application" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IconBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RemoteIssueLink" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RemoteObject" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Status" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Icon" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RemoteIssueLinkRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RemoteIssueLinkIdentifies" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Notification" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"NotificationRecipients" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"NotificationRecipientsRestrictions" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RestrictedPermission" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueLinkTypes" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageOfComments" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PaginatedResponseComment" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueCommentListRequestBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanComment" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanChangelog" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueChangelogIds" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Attachment" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Group" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PagedListUserDetailsApplicationUser" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanUserDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AddGroupBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdateUserToGroupBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FoundGroup" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FoundGroups" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"GroupLabel" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FoundUsersAndGroups" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldDefinitionJsonBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdateCustomFieldDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanScreenWithTab" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ScreenWithTab" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Context" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanContext" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextOption" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanCustomFieldContextOption" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"BulkCustomFieldOptionCreateRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldOptionCreate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldCreatedContextOptionsList" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"OrderOfCustomFieldOptions" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"BulkCustomFieldOptionUpdateRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldOptionUpdate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldUpdatedContextOptionsList" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ComponentIssuesCount" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SystemAvatars" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScreenScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanIssueTypeScreenScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanScreenScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ScreenScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ScreenTypes" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ScreenSchemeDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ScreenSchemeId" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdateScreenSchemeDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdateScreenTypes" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ChangedWorklog" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ChangedWorklogs" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorklogIdsRequestBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"GlobalScopeBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueFieldOption" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueFieldOptionConfiguration" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueFieldOptionScopeBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanIssueFieldOption" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectScopeBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueFieldOptionCreateBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RemoveOptionFromIssuesResult" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SimpleErrorCollection" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"TaskProgressBeanRemoveOptionFromIssuesResult" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Field" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldLastUsed" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldConfigurationScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanFieldConfigurationScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldConfigurationIssueTypeItem" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanFieldConfigurationIssueTypeItem" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AssociateFieldConfigurationsWithIssueTypesRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldConfigurationToIssueTypeMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldConfigurationSchemeProjects" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanFieldConfigurationSchemeProjects" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldConfigurationSchemeProjectAssociation" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdateFieldConfigurationSchemeDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeIdsToRemove" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldConfigurationDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanFieldConfigurationDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldConfigurationItem" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanFieldConfigurationItem" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldConfiguration" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldConfigurationItemsDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScreenSchemeItem" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanIssueTypeScreenSchemeItem" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScreenSchemesProjects" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanIssueTypeScreenSchemesProjects" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanProjectDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScreenSchemeProjectAssociation" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScreenSchemeDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScreenSchemeMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScreenSchemeId" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScreenSchemeUpdateDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScreenSchemeMappingDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdateDefaultScreenScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeIds" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateUpdateRoleRequestBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ActorInputBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectRoleActorsUpdateBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ActorsMap" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectRoleDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanIssueTypeScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeSchemeProjects" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanIssueTypeSchemeProjects" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeSchemeMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanIssueTypeSchemeMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeSchemeProjectAssociation" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeSchemeDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeSchemeID" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeSchemeUpdateDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"OrderOfIssueTypes" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AttachmentMetadata" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AttachmentSettings" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AttachmentArchiveEntry" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AttachmentArchiveImpl" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AttachmentArchive" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AttachmentArchiveItemReadable" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AttachmentArchiveMetadataReadable" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanUiModificationDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UiModificationContextDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UiModificationDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateUiModificationDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UiModificationIdentifiers" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UpdateUiModificationDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldOption" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextProjectMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanCustomFieldContextProjectMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContext" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanCustomFieldContext" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValue" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueCascadingOption" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueDate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueDateTime" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueFloat" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueForgeDateTimeField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueForgeGroupField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueForgeMultiGroupField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueForgeMultiStringField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueForgeMultiUserField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueForgeNumberField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueForgeObjectField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueForgeStringField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueForgeUserField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueLabels" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueMultiUserPicker" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueMultipleGroupPicker" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueMultipleOption" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueMultipleVersionPicker" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueProject" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueReadOnly" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueSingleGroupPicker" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueSingleOption" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueSingleVersionPicker" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueTextArea" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueTextField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueURL" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextSingleUserPickerDefaults" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanCustomFieldContextDefaultValue" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserFilter" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateCustomFieldContext" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIds" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextUpdateDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIssueTypeMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIssueTypeMappings" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ContextForProjectAndIssueType" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanContextForProjectAndIssueType" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldContextDefaultValueUpdate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeToContextMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanIssueTypeToContextMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldValueUpdate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldValueUpdateDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"MultipleCustomFieldValuesUpdate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"MultipleCustomFieldValuesUpdateDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ContextualConfiguration" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanContextualConfiguration" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomFieldConfigurations" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanUser" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserMigrationBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UnrestrictedUserEmail" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"License" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"LicensedApplication" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueEvent" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Configuration" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"TimeTrackingConfiguration" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ApplicationProperty" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SimpleApplicationPropertyBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AssociatedItemBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AuditRecordBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AuditRecords" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ChangedValueBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraStatus" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectId" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIssueTypes" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"StatusScope" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageOfStatuses" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"StatusCreate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"StatusCreateRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"StatusUpdate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"StatusUpdateRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"TimeTrackingProvider" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanWorkflowScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypesWorkflowMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeWorkflowMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DefaultWorkflow" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PublishDraftWorkflowScheme" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"StatusMapping" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ContainerOfWorkflowSchemeAssociations" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowSchemeAssociations" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowSchemeProjectAssociation" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PermissionSchemes" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PermissionGrants" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DeprecatedWorkflow" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateWorkflowCondition" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateWorkflowDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateWorkflowStatusDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateWorkflowTransitionDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateWorkflowTransitionRule" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateWorkflowTransitionRulesDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CreateWorkflowTransitionScreenDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowIDs" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowTransitionProperty" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanWorkflow" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PublishedWorkflowId" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Transition" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"TransitionScreenDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Workflow" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowCompoundCondition" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowCondition" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowOperations" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowRules" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowSchemeIdName" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowSimpleCondition" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowStatus" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowTransitionRule" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ConnectWorkflowTransitionRule" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanWorkflowTransitionRules" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RuleConfiguration" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowId" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowTransition" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowTransitionRules" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowTransitionRulesUpdate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowTransitionRulesUpdateErrorDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowTransitionRulesUpdateErrors" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowTransitionRulesDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowsWithTransitionRulesDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CustomContextVariable" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IdOrKeyBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueContextVariable" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JexpIssues" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JexpJqlIssues" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionEvalContextBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionEvalRequestBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JsonContextVariable" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserContextVariable" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssuesJqlMetaDataBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssuesMetaBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionEvaluationMetaDataBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionResult" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionsComplexityBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionsComplexityValueBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionForAnalysis" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionAnalysis" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionComplexity" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionValidationError" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JiraExpressionsAnalysis" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIssueSecurityLevels" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectEmailAddress" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectType" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Dashboard" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageOfDashboards" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SharePermission" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserBeanAvatarUrls" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanDashboard" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DashboardDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AvailableDashboardGadget" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AvailableDashboardGadgetsResponse" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DashboardGadget" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DashboardGadgetPosition" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DashboardGadgetResponse" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DashboardGadgetSettings" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DashboardGadgetUpdateRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueTypeInfo" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIssueTypeHierarchy" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ProjectIssueTypesHierarchyLevel" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanUserKey" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserKey" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SearchResults" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SearchRequestBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldReferenceData" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FunctionReferenceData" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JQLReferenceData" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SearchAutoCompleteFilter" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AutoCompleteSuggestion" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"AutoCompleteSuggestions" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JQLPersonalDataMigrationRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ConvertedJQLQueries" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JQLQueryWithUnknownUsers" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Filter" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FilterSubscription" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FilterSubscriptionsList" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"UserList" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FilterDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanFilterDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ChangeFilterOwner" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"DefaultShareScope" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SharePermissionInputBean" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"GroupDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanGroupDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueriesToSanitize" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueryToSanitize" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SanitizedJqlQueries" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"SanitizedJqlQuery" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueriesToParse" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"CompoundClause" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldChangedClause" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldValueClause" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FieldWasClause" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FunctionOperand" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQuery" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueryClause" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueryClauseOperand" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueryClauseTimePredicate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueryField" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueryFieldEntityProperty" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueryOrderByClause" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueryOrderByClauseElement" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JqlQueryUnitaryOperand" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"KeywordOperand" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ListOperand" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ParsedJqlQueries" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ParsedJqlQuery" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ValueOperand" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"BulkIssuePropertyUpdateRequest" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueFilterForBulkPropertySet" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueFilterForBulkPropertyDelete" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueEntityProperties" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"JsonNode" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"IssueEntityPropertiesForMultiUpdate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"MultiIssueEntityProperties" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FailedWebhook" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"FailedWebhooks" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WebhookDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WebhookRegistrationDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ContainerForRegisteredWebhooks" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"RegisteredWebhook" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanWebhook" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"Webhook" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ContainerForWebhookIDs" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WebhooksExpirationDate" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"PageBeanString" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"OperationMessage" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ErrorMessage" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ConnectModules" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ConnectModule" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowRulesSearch" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"WorkflowRulesSearchDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"EntityPropertyDetails" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ConnectCustomFieldValue" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
-
-pub const @"ConnectCustomFieldValues" = struct {
-    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-        json.parseFree(@This(), self, parseOptions(alloc));
-    }
-};
 
 const std = @import("std");
 const json = std.json;
@@ -18385,7 +14952,7 @@ fn get(client: Client, alloc: mem.Allocator, path: [:0]const u8) !HttpResponse {
     const perform_code = c.curl_easy_perform(client.curl);
     if (perform_code != c.CURLE_OK) return error.CurlError;
 
-    return parseHttpResponse(response_buffer.toOwnedSlice());
+    return parseHttpResponse(try response_buffer.toOwnedSlice());
 }
 
 fn post(client: Client, alloc: mem.Allocator, path: [:0]const u8, req: anytype) !HttpResponse {
@@ -18426,7 +14993,7 @@ fn post(client: Client, alloc: mem.Allocator, path: [:0]const u8, req: anytype) 
     const perform_code = c.curl_easy_perform(client.curl);
     if (perform_code != c.CURLE_OK) return error.CurlError;
 
-    return parseHttpResponse(response_buffer.toOwnedSlice());
+    return parseHttpResponse(try response_buffer.toOwnedSlice());
 }
 
 fn parseHttpResponse(buffer: []u8) !HttpResponse {
