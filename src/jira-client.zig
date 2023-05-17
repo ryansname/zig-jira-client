@@ -28,7 +28,7 @@ pub fn getBanner(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetBannerResult{ ._200 = result };
@@ -38,7 +38,7 @@ pub fn getBanner(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetBannerResult{ ._401 = result };
@@ -48,7 +48,7 @@ pub fn getBanner(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetBannerResult{ ._403 = result };
@@ -147,7 +147,7 @@ pub fn getCustomFieldConfiguration(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCustomFieldConfigurationResult{ ._200 = result };
@@ -334,7 +334,7 @@ pub fn setApplicationProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SetApplicationPropertyResult{ ._200 = result };
@@ -429,7 +429,7 @@ pub fn getApplicationRole(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetApplicationRoleResult{ ._200 = result };
@@ -546,7 +546,7 @@ pub fn getAttachmentMeta(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAttachmentMetaResult{ ._200 = result };
@@ -660,7 +660,7 @@ pub fn getAttachment(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAttachmentResult{ ._200 = result };
@@ -719,7 +719,7 @@ pub fn expandAttachmentForHumans(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return ExpandAttachmentForHumansResult{ ._200 = result };
@@ -781,7 +781,7 @@ pub fn expandAttachmentForMachines(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return ExpandAttachmentForMachinesResult{ ._200 = result };
@@ -841,7 +841,7 @@ pub fn getAuditRecords(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAuditRecordsResult{ ._200 = result };
@@ -890,7 +890,7 @@ pub fn getAllSystemAvatars(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllSystemAvatarsResult{ ._200 = result };
@@ -935,7 +935,7 @@ pub fn getCommentsByIds(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCommentsByIdsResult{ ._200 = result };
@@ -985,7 +985,7 @@ pub fn getCommentPropertyKeys(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCommentPropertyKeysResult{ ._200 = result };
@@ -1046,7 +1046,7 @@ pub fn getCommentProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCommentPropertyResult{ ._200 = result };
@@ -1108,7 +1108,7 @@ pub fn createComponent(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateComponentResult{ ._201 = result };
@@ -1162,7 +1162,7 @@ pub fn getComponent(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetComponentResult{ ._200 = result };
@@ -1211,7 +1211,7 @@ pub fn getComponentRelatedIssues(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetComponentRelatedIssuesResult{ ._200 = result };
@@ -1255,7 +1255,7 @@ pub fn getConfiguration(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetConfigurationResult{ ._200 = result };
@@ -1300,7 +1300,7 @@ pub fn getSelectedTimeTrackingImplementation(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetSelectedTimeTrackingImplementationResult{ ._200 = result };
@@ -1388,7 +1388,7 @@ pub fn getSharedTimeTrackingConfiguration(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetSharedTimeTrackingConfigurationResult{ ._200 = result };
@@ -1439,7 +1439,7 @@ pub fn getCustomFieldOption(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCustomFieldOptionResult{ ._200 = result };
@@ -1488,7 +1488,7 @@ pub fn getAllDashboards(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllDashboardsResult{ ._200 = result };
@@ -1498,7 +1498,7 @@ pub fn getAllDashboards(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllDashboardsResult{ ._400 = result };
@@ -1508,7 +1508,7 @@ pub fn getAllDashboards(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllDashboardsResult{ ._401 = result };
@@ -1548,7 +1548,7 @@ pub fn getAllAvailableDashboardGadgets(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllAvailableDashboardGadgetsResult{ ._200 = result };
@@ -1558,7 +1558,7 @@ pub fn getAllAvailableDashboardGadgets(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllAvailableDashboardGadgetsResult{ ._400 = result };
@@ -1568,7 +1568,7 @@ pub fn getAllAvailableDashboardGadgets(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllAvailableDashboardGadgetsResult{ ._401 = result };
@@ -1624,7 +1624,7 @@ pub fn getDashboardsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDashboardsPaginatedResult{ ._200 = result };
@@ -1634,7 +1634,7 @@ pub fn getDashboardsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDashboardsPaginatedResult{ ._400 = result };
@@ -1644,7 +1644,7 @@ pub fn getDashboardsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDashboardsPaginatedResult{ ._401 = result };
@@ -1690,7 +1690,7 @@ pub fn getAllGadgets(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllGadgetsResult{ ._200 = result };
@@ -1703,7 +1703,7 @@ pub fn getAllGadgets(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllGadgetsResult{ ._404 = result };
@@ -1753,7 +1753,7 @@ pub fn updateGadget(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return UpdateGadgetResult{ ._400 = result };
@@ -1766,7 +1766,7 @@ pub fn updateGadget(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return UpdateGadgetResult{ ._404 = result };
@@ -1812,7 +1812,7 @@ pub fn getDashboardItemPropertyKeys(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDashboardItemPropertyKeysResult{ ._200 = result };
@@ -1866,7 +1866,7 @@ pub fn getDashboardItemProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDashboardItemPropertyResult{ ._200 = result };
@@ -1916,7 +1916,7 @@ pub fn getDashboard(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDashboardResult{ ._200 = result };
@@ -1926,7 +1926,7 @@ pub fn getDashboard(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDashboardResult{ ._400 = result };
@@ -1936,7 +1936,7 @@ pub fn getDashboard(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDashboardResult{ ._401 = result };
@@ -1984,7 +1984,7 @@ pub fn copyDashboard(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CopyDashboardResult{ ._200 = result };
@@ -1994,7 +1994,7 @@ pub fn copyDashboard(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CopyDashboardResult{ ._400 = result };
@@ -2004,7 +2004,7 @@ pub fn copyDashboard(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CopyDashboardResult{ ._401 = result };
@@ -2014,7 +2014,7 @@ pub fn copyDashboard(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CopyDashboardResult{ ._404 = result };
@@ -2096,7 +2096,7 @@ pub fn analyseExpression(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return AnalyseExpressionResult{ ._200 = result };
@@ -2106,7 +2106,7 @@ pub fn analyseExpression(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return AnalyseExpressionResult{ ._400 = result };
@@ -2119,7 +2119,7 @@ pub fn analyseExpression(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return AnalyseExpressionResult{ ._404 = result };
@@ -2168,7 +2168,7 @@ pub fn evaluateJiraExpression(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return EvaluateJiraExpressionResult{ ._200 = result };
@@ -2178,7 +2178,7 @@ pub fn evaluateJiraExpression(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return EvaluateJiraExpressionResult{ ._400 = result };
@@ -2191,7 +2191,7 @@ pub fn evaluateJiraExpression(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return EvaluateJiraExpressionResult{ ._404 = result };
@@ -2274,7 +2274,7 @@ pub fn getFieldsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFieldsPaginatedResult{ ._200 = result };
@@ -2284,7 +2284,7 @@ pub fn getFieldsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFieldsPaginatedResult{ ._400 = result };
@@ -2297,7 +2297,7 @@ pub fn getFieldsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFieldsPaginatedResult{ ._403 = result };
@@ -2344,7 +2344,7 @@ pub fn getTrashedFieldsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetTrashedFieldsPaginatedResult{ ._200 = result };
@@ -2354,7 +2354,7 @@ pub fn getTrashedFieldsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetTrashedFieldsPaginatedResult{ ._400 = result };
@@ -2367,7 +2367,7 @@ pub fn getTrashedFieldsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetTrashedFieldsPaginatedResult{ ._403 = result };
@@ -2468,7 +2468,7 @@ pub fn getContextsForField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetContextsForFieldResult{ ._200 = result };
@@ -2525,7 +2525,7 @@ pub fn getDefaultValues(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDefaultValuesResult{ ._200 = result };
@@ -2580,7 +2580,7 @@ pub fn getIssueTypeMappingsForContexts(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueTypeMappingsForContextsResult{ ._200 = result };
@@ -2635,7 +2635,7 @@ pub fn getCustomFieldContextsForProjectsAndIssueTypes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._200 = result };
@@ -2695,7 +2695,7 @@ pub fn getProjectContextMapping(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectContextMappingResult{ ._200 = result };
@@ -2927,7 +2927,7 @@ pub fn getOptionsForContext(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetOptionsForContextResult{ ._200 = result };
@@ -3206,7 +3206,7 @@ pub fn getContextsForFieldDeprecated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetContextsForFieldDeprecatedResult{ ._200 = result };
@@ -3258,7 +3258,7 @@ pub fn getScreensForField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetScreensForFieldResult{ ._200 = result };
@@ -3309,7 +3309,7 @@ pub fn getAllIssueFieldOptions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllIssueFieldOptionsResult{ ._200 = result };
@@ -3361,7 +3361,7 @@ pub fn getSelectableIssueFieldOptions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetSelectableIssueFieldOptionsResult{ ._200 = result };
@@ -3413,7 +3413,7 @@ pub fn getVisibleIssueFieldOptions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetVisibleIssueFieldOptionsResult{ ._200 = result };
@@ -3466,7 +3466,7 @@ pub fn getIssueFieldOption(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueFieldOptionResult{ ._200 = result };
@@ -3527,7 +3527,7 @@ pub fn replaceIssueFieldOption(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return ReplaceIssueFieldOptionResult{ ._303 = result };
@@ -3588,7 +3588,7 @@ pub fn deleteCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteCustomFieldResult{ ._303 = result };
@@ -3598,7 +3598,7 @@ pub fn deleteCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteCustomFieldResult{ ._400 = result };
@@ -3608,7 +3608,7 @@ pub fn deleteCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteCustomFieldResult{ ._401 = result };
@@ -3618,7 +3618,7 @@ pub fn deleteCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteCustomFieldResult{ ._403 = result };
@@ -3628,7 +3628,7 @@ pub fn deleteCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteCustomFieldResult{ ._404 = result };
@@ -3638,7 +3638,7 @@ pub fn deleteCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteCustomFieldResult{ ._409 = result };
@@ -3688,7 +3688,7 @@ pub fn restoreCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RestoreCustomFieldResult{ ._400 = result };
@@ -3698,7 +3698,7 @@ pub fn restoreCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RestoreCustomFieldResult{ ._401 = result };
@@ -3708,7 +3708,7 @@ pub fn restoreCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RestoreCustomFieldResult{ ._403 = result };
@@ -3718,7 +3718,7 @@ pub fn restoreCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RestoreCustomFieldResult{ ._404 = result };
@@ -3768,7 +3768,7 @@ pub fn trashCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return TrashCustomFieldResult{ ._400 = result };
@@ -3778,7 +3778,7 @@ pub fn trashCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return TrashCustomFieldResult{ ._401 = result };
@@ -3788,7 +3788,7 @@ pub fn trashCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return TrashCustomFieldResult{ ._403 = result };
@@ -3798,7 +3798,7 @@ pub fn trashCustomField(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return TrashCustomFieldResult{ ._404 = result };
@@ -3843,7 +3843,7 @@ pub fn getAllFieldConfigurations(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllFieldConfigurationsResult{ ._200 = result };
@@ -3947,7 +3947,7 @@ pub fn getFieldConfigurationItems(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFieldConfigurationItemsResult{ ._200 = result };
@@ -4001,7 +4001,7 @@ pub fn getAllFieldConfigurationSchemes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllFieldConfigurationSchemesResult{ ._200 = result };
@@ -4057,7 +4057,7 @@ pub fn getFieldConfigurationSchemeMappings(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFieldConfigurationSchemeMappingsResult{ ._200 = result };
@@ -4114,7 +4114,7 @@ pub fn getFieldConfigurationSchemeProjectMapping(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFieldConfigurationSchemeProjectMappingResult{ ._200 = result };
@@ -4276,7 +4276,7 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._400 = result };
@@ -4286,7 +4286,7 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._401 = result };
@@ -4296,7 +4296,7 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._403 = result };
@@ -4306,7 +4306,7 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._404 = result };
@@ -4374,7 +4374,7 @@ pub fn getDefaultShareScope(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDefaultShareScopeResult{ ._200 = result };
@@ -4504,7 +4504,7 @@ pub fn getFiltersPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFiltersPaginatedResult{ ._200 = result };
@@ -4514,7 +4514,7 @@ pub fn getFiltersPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFiltersPaginatedResult{ ._400 = result };
@@ -4561,7 +4561,7 @@ pub fn getFilter(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFilterResult{ ._200 = result };
@@ -4659,7 +4659,7 @@ pub fn setFavouriteForFilter(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SetFavouriteForFilterResult{ ._200 = result };
@@ -4806,7 +4806,7 @@ pub fn getSharePermission(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetSharePermissionResult{ ._200 = result };
@@ -4859,7 +4859,7 @@ pub fn getGroup(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetGroupResult{ ._200 = result };
@@ -4917,7 +4917,7 @@ pub fn bulkGetGroups(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return BulkGetGroupsResult{ ._200 = result };
@@ -4975,7 +4975,7 @@ pub fn getUsersFromGroup(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetUsersFromGroupResult{ ._200 = result };
@@ -5036,7 +5036,7 @@ pub fn addUserToGroup(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return AddUserToGroupResult{ ._201 = result };
@@ -5090,7 +5090,7 @@ pub fn findGroups(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return FindGroupsResult{ ._200 = result };
@@ -5143,7 +5143,7 @@ pub fn findUsersAndGroups(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return FindUsersAndGroupsResult{ ._200 = result };
@@ -5193,7 +5193,7 @@ pub fn getLicense(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetLicenseResult{ ._200 = result };
@@ -5247,7 +5247,7 @@ pub fn createIssue(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateIssueResult{ ._201 = result };
@@ -5257,7 +5257,7 @@ pub fn createIssue(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateIssueResult{ ._400 = result };
@@ -5267,7 +5267,7 @@ pub fn createIssue(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateIssueResult{ ._401 = result };
@@ -5277,7 +5277,7 @@ pub fn createIssue(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateIssueResult{ ._403 = result };
@@ -5333,7 +5333,7 @@ pub fn createIssues(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateIssuesResult{ ._201 = result };
@@ -5343,7 +5343,7 @@ pub fn createIssues(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateIssuesResult{ ._400 = result };
@@ -5389,7 +5389,7 @@ pub fn getCreateIssueMeta(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCreateIssueMetaResult{ ._200 = result };
@@ -5436,7 +5436,7 @@ pub fn getIssuePickerResource(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssuePickerResourceResult{ ._200 = result };
@@ -5482,7 +5482,7 @@ pub fn bulkSetIssuesPropertiesList(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return BulkSetIssuesPropertiesListResult{ ._400 = result };
@@ -5492,7 +5492,7 @@ pub fn bulkSetIssuesPropertiesList(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return BulkSetIssuesPropertiesListResult{ ._401 = result };
@@ -5537,7 +5537,7 @@ pub fn bulkSetIssuePropertiesByIssue(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return BulkSetIssuePropertiesByIssueResult{ ._400 = result };
@@ -5547,7 +5547,7 @@ pub fn bulkSetIssuePropertiesByIssue(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return BulkSetIssuePropertiesByIssueResult{ ._401 = result };
@@ -5557,7 +5557,7 @@ pub fn bulkSetIssuePropertiesByIssue(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return BulkSetIssuePropertiesByIssueResult{ ._403 = result };
@@ -5602,7 +5602,7 @@ pub fn bulkSetIssueProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return BulkSetIssuePropertyResult{ ._400 = result };
@@ -5612,7 +5612,7 @@ pub fn bulkSetIssueProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return BulkSetIssuePropertyResult{ ._401 = result };
@@ -5650,7 +5650,7 @@ pub fn getIsWatchingIssueBulk(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIsWatchingIssueBulkResult{ ._200 = result };
@@ -5700,7 +5700,7 @@ pub fn getIssue(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueResult{ ._200 = result };
@@ -5850,7 +5850,7 @@ pub fn getChangeLogs(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetChangeLogsResult{ ._200 = result };
@@ -5896,7 +5896,7 @@ pub fn getChangeLogsByIds(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetChangeLogsByIdsResult{ ._200 = result };
@@ -5951,7 +5951,7 @@ pub fn getComments(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCommentsResult{ ._200 = result };
@@ -6006,7 +6006,7 @@ pub fn getComment(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCommentResult{ ._200 = result };
@@ -6059,7 +6059,7 @@ pub fn getEditIssueMeta(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetEditIssueMetaResult{ ._200 = result };
@@ -6163,7 +6163,7 @@ pub fn getIssuePropertyKeys(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssuePropertyKeysResult{ ._200 = result };
@@ -6211,7 +6211,7 @@ pub fn getIssueProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssuePropertyResult{ ._200 = result };
@@ -6265,7 +6265,7 @@ pub fn getRemoteIssueLinks(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetRemoteIssueLinksResult{ ._200 = result };
@@ -6326,7 +6326,7 @@ pub fn getRemoteIssueLinkById(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetRemoteIssueLinkByIdResult{ ._200 = result };
@@ -6386,7 +6386,7 @@ pub fn getTransitions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetTransitionsResult{ ._200 = result };
@@ -6439,7 +6439,7 @@ pub fn getVotes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetVotesResult{ ._200 = result };
@@ -6488,7 +6488,7 @@ pub fn getIssueWatchers(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueWatchersResult{ ._200 = result };
@@ -6546,7 +6546,7 @@ pub fn getIssueWorklog(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueWorklogResult{ ._200 = result };
@@ -6604,7 +6604,7 @@ pub fn getWorklog(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorklogResult{ ._200 = result };
@@ -6661,7 +6661,7 @@ pub fn getWorklogPropertyKeys(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorklogPropertyKeysResult{ ._200 = result };
@@ -6723,7 +6723,7 @@ pub fn getWorklogProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorklogPropertyResult{ ._200 = result };
@@ -6830,7 +6830,7 @@ pub fn getIssueLink(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueLinkResult{ ._200 = result };
@@ -6879,7 +6879,7 @@ pub fn getIssueLinkTypes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueLinkTypesResult{ ._200 = result };
@@ -6933,7 +6933,7 @@ pub fn getIssueLinkType(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueLinkTypeResult{ ._200 = result };
@@ -6982,7 +6982,7 @@ pub fn getIssueSecuritySchemes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueSecuritySchemesResult{ ._200 = result };
@@ -7030,7 +7030,7 @@ pub fn getIssueSecurityScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueSecuritySchemeResult{ ._200 = result };
@@ -7087,7 +7087,7 @@ pub fn getIssueSecurityLevelMembers(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueSecurityLevelMembersResult{ ._200 = result };
@@ -7229,7 +7229,7 @@ pub fn getIssueType(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueTypeResult{ ._200 = result };
@@ -7339,7 +7339,7 @@ pub fn createIssueTypeAvatar(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateIssueTypeAvatarResult{ ._201 = result };
@@ -7397,7 +7397,7 @@ pub fn getIssueTypePropertyKeys(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueTypePropertyKeysResult{ ._200 = result };
@@ -7450,7 +7450,7 @@ pub fn getIssueTypeProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueTypePropertyResult{ ._200 = result };
@@ -7507,7 +7507,7 @@ pub fn getAllIssueTypeSchemes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllIssueTypeSchemesResult{ ._200 = result };
@@ -7561,7 +7561,7 @@ pub fn getIssueTypeSchemesMapping(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueTypeSchemesMappingResult{ ._200 = result };
@@ -7615,7 +7615,7 @@ pub fn getIssueTypeSchemeForProjects(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueTypeSchemeForProjectsResult{ ._200 = result };
@@ -7881,7 +7881,7 @@ pub fn getIssueTypeScreenSchemes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueTypeScreenSchemesResult{ ._200 = result };
@@ -7935,7 +7935,7 @@ pub fn getIssueTypeScreenSchemeMappings(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueTypeScreenSchemeMappingsResult{ ._200 = result };
@@ -7989,7 +7989,7 @@ pub fn getIssueTypeScreenSchemeProjectAssociations(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._200 = result };
@@ -8258,7 +8258,7 @@ pub fn getProjectsForIssueTypeScreenScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectsForIssueTypeScreenSchemeResult{ ._200 = result };
@@ -8305,7 +8305,7 @@ pub fn getAutoComplete(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAutoCompleteResult{ ._200 = result };
@@ -8352,7 +8352,7 @@ pub fn getFieldAutoCompleteForQueryString(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFieldAutoCompleteForQueryStringResult{ ._200 = result };
@@ -8396,7 +8396,7 @@ pub fn matchIssues(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return MatchIssuesResult{ ._200 = result };
@@ -8440,7 +8440,7 @@ pub fn parseJqlQueries(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return ParseJqlQueriesResult{ ._200 = result };
@@ -8450,7 +8450,7 @@ pub fn parseJqlQueries(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return ParseJqlQueriesResult{ ._400 = result };
@@ -8493,7 +8493,7 @@ pub fn migrateQueries(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return MigrateQueriesResult{ ._200 = result };
@@ -8541,7 +8541,7 @@ pub fn sanitiseJqlQueries(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SanitiseJqlQueriesResult{ ._200 = result };
@@ -8551,7 +8551,7 @@ pub fn sanitiseJqlQueries(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SanitiseJqlQueriesResult{ ._400 = result };
@@ -8561,7 +8561,7 @@ pub fn sanitiseJqlQueries(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SanitiseJqlQueriesResult{ ._401 = result };
@@ -8571,7 +8571,7 @@ pub fn sanitiseJqlQueries(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SanitiseJqlQueriesResult{ ._403 = result };
@@ -8609,7 +8609,7 @@ pub fn getAllLabels(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllLabelsResult{ ._200 = result };
@@ -8659,7 +8659,7 @@ pub fn getMyPermissions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetMyPermissionsResult{ ._200 = result };
@@ -8669,7 +8669,7 @@ pub fn getMyPermissions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetMyPermissionsResult{ ._400 = result };
@@ -8679,7 +8679,7 @@ pub fn getMyPermissions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetMyPermissionsResult{ ._401 = result };
@@ -8689,7 +8689,7 @@ pub fn getMyPermissions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetMyPermissionsResult{ ._404 = result };
@@ -8767,7 +8767,7 @@ pub fn getLocale(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetLocaleResult{ ._200 = result };
@@ -8809,7 +8809,7 @@ pub fn getCurrentUser(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetCurrentUserResult{ ._200 = result };
@@ -8853,7 +8853,7 @@ pub fn getNotificationSchemes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetNotificationSchemesResult{ ._200 = result };
@@ -8901,7 +8901,7 @@ pub fn getNotificationScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetNotificationSchemeResult{ ._200 = result };
@@ -8950,7 +8950,7 @@ pub fn getAllPermissions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllPermissionsResult{ ._200 = result };
@@ -9002,7 +9002,7 @@ pub fn getBulkPermissions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetBulkPermissionsResult{ ._200 = result };
@@ -9012,7 +9012,7 @@ pub fn getBulkPermissions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetBulkPermissionsResult{ ._400 = result };
@@ -9022,7 +9022,7 @@ pub fn getBulkPermissions(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetBulkPermissionsResult{ ._403 = result };
@@ -9062,7 +9062,7 @@ pub fn getPermittedProjects(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetPermittedProjectsResult{ ._200 = result };
@@ -9107,7 +9107,7 @@ pub fn getAllPermissionSchemes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllPermissionSchemesResult{ ._200 = result };
@@ -9153,7 +9153,7 @@ pub fn getPermissionScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetPermissionSchemeResult{ ._200 = result };
@@ -9203,7 +9203,7 @@ pub fn getPermissionSchemeGrants(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetPermissionSchemeGrantsResult{ ._200 = result };
@@ -9255,7 +9255,7 @@ pub fn getPermissionSchemeGrant(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetPermissionSchemeGrantResult{ ._200 = result };
@@ -9342,7 +9342,7 @@ pub fn setDefaultPriority(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SetDefaultPriorityResult{ ._400 = result };
@@ -9352,7 +9352,7 @@ pub fn setDefaultPriority(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SetDefaultPriorityResult{ ._401 = result };
@@ -9362,7 +9362,7 @@ pub fn setDefaultPriority(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SetDefaultPriorityResult{ ._403 = result };
@@ -9372,7 +9372,7 @@ pub fn setDefaultPriority(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SetDefaultPriorityResult{ ._404 = result };
@@ -9414,7 +9414,7 @@ pub fn searchPriorities(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SearchPrioritiesResult{ ._200 = result };
@@ -9424,7 +9424,7 @@ pub fn searchPriorities(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SearchPrioritiesResult{ ._401 = result };
@@ -9466,7 +9466,7 @@ pub fn getPriority(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetPriorityResult{ ._200 = result };
@@ -9605,7 +9605,7 @@ pub fn searchProjects(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SearchProjectsResult{ ._200 = result };
@@ -9719,7 +9719,7 @@ pub fn getProjectTypeByKey(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectTypeByKeyResult{ ._200 = result };
@@ -9768,7 +9768,7 @@ pub fn getAccessibleProjectTypeByKey(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAccessibleProjectTypeByKeyResult{ ._200 = result };
@@ -9818,7 +9818,7 @@ pub fn getProject(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectResult{ ._200 = result };
@@ -10026,7 +10026,7 @@ pub fn createProjectAvatar(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateProjectAvatarResult{ ._201 = result };
@@ -10081,7 +10081,7 @@ pub fn getAllProjectAvatars(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllProjectAvatarsResult{ ._200 = result };
@@ -10134,7 +10134,7 @@ pub fn getProjectComponentsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectComponentsPaginatedResult{ ._200 = result };
@@ -10227,7 +10227,7 @@ pub fn deleteProjectAsynchronously(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteProjectAsynchronouslyResult{ ._303 = result };
@@ -10283,7 +10283,7 @@ pub fn getFeaturesForProject(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFeaturesForProjectResult{ ._200 = result };
@@ -10344,7 +10344,7 @@ pub fn toggleFeatureForProject(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return ToggleFeatureForProjectResult{ ._200 = result };
@@ -10403,7 +10403,7 @@ pub fn getProjectPropertyKeys(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectPropertyKeysResult{ ._200 = result };
@@ -10464,7 +10464,7 @@ pub fn getProjectProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectPropertyResult{ ._200 = result };
@@ -10521,7 +10521,7 @@ pub fn restore(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RestoreResult{ ._200 = result };
@@ -10623,7 +10623,7 @@ pub fn getProjectRole(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectRoleResult{ ._200 = result };
@@ -10765,7 +10765,7 @@ pub fn updateProjectType(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return UpdateProjectTypeResult{ ._200 = result };
@@ -10821,7 +10821,7 @@ pub fn getProjectVersionsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectVersionsPaginatedResult{ ._200 = result };
@@ -10907,7 +10907,7 @@ pub fn getProjectEmail(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectEmailResult{ ._200 = result };
@@ -10961,7 +10961,7 @@ pub fn getHierarchy(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetHierarchyResult{ ._200 = result };
@@ -11017,7 +11017,7 @@ pub fn getProjectIssueSecurityScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectIssueSecuritySchemeResult{ ._200 = result };
@@ -11075,7 +11075,7 @@ pub fn getNotificationSchemeForProject(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetNotificationSchemeForProjectResult{ ._200 = result };
@@ -11130,7 +11130,7 @@ pub fn getAssignedPermissionScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAssignedPermissionSchemeResult{ ._200 = result };
@@ -11180,7 +11180,7 @@ pub fn getSecurityLevelsForProject(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetSecurityLevelsForProjectResult{ ._200 = result };
@@ -11259,7 +11259,7 @@ pub fn getProjectCategoryById(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectCategoryByIdResult{ ._200 = result };
@@ -11304,7 +11304,7 @@ pub fn validateProjectKey(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return ValidateProjectKeyResult{ ._200 = result };
@@ -11463,7 +11463,7 @@ pub fn getResolution(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetResolutionResult{ ._200 = result };
@@ -11552,7 +11552,7 @@ pub fn getProjectRoleById(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectRoleByIdResult{ ._200 = result };
@@ -11608,7 +11608,7 @@ pub fn getProjectRoleActorsForRole(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetProjectRoleActorsForRoleResult{ ._200 = result };
@@ -11666,7 +11666,7 @@ pub fn getScreens(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetScreensResult{ ._200 = result };
@@ -11764,7 +11764,7 @@ pub fn updateScreen(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return UpdateScreenResult{ ._200 = result };
@@ -11925,7 +11925,7 @@ pub fn renameScreenTab(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RenameScreenTabResult{ ._200 = result };
@@ -12206,7 +12206,7 @@ pub fn getScreenSchemes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetScreenSchemesResult{ ._200 = result };
@@ -12311,7 +12311,7 @@ pub fn searchForIssuesUsingJql(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SearchForIssuesUsingJqlResult{ ._200 = result };
@@ -12359,7 +12359,7 @@ pub fn getIssueSecurityLevel(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIssueSecurityLevelResult{ ._200 = result };
@@ -12403,7 +12403,7 @@ pub fn getServerInfo(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetServerInfoResult{ ._200 = result };
@@ -12525,7 +12525,7 @@ pub fn getStatus(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetStatusResult{ ._200 = result };
@@ -12607,7 +12607,7 @@ pub fn getStatusCategory(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetStatusCategoryResult{ ._200 = result };
@@ -12700,7 +12700,7 @@ pub fn search(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return SearchResult{ ._200 = result };
@@ -12750,7 +12750,7 @@ pub fn getTask(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetTaskResult{ ._200 = result };
@@ -12856,7 +12856,7 @@ pub fn getUiModifications(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetUiModificationsResult{ ._200 = result };
@@ -12961,7 +12961,7 @@ pub fn getAvatars(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarsResult{ ._200 = result };
@@ -13068,7 +13068,7 @@ pub fn getAvatarImageByType(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByTypeResult{ ._401 = result };
@@ -13078,7 +13078,7 @@ pub fn getAvatarImageByType(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByTypeResult{ ._403 = result };
@@ -13088,7 +13088,7 @@ pub fn getAvatarImageByType(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByTypeResult{ ._404 = result };
@@ -13142,7 +13142,7 @@ pub fn getAvatarImageByID(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByIDResult{ ._400 = result };
@@ -13152,7 +13152,7 @@ pub fn getAvatarImageByID(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByIDResult{ ._401 = result };
@@ -13162,7 +13162,7 @@ pub fn getAvatarImageByID(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByIDResult{ ._403 = result };
@@ -13172,7 +13172,7 @@ pub fn getAvatarImageByID(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByIDResult{ ._404 = result };
@@ -13226,7 +13226,7 @@ pub fn getAvatarImageByOwner(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByOwnerResult{ ._400 = result };
@@ -13236,7 +13236,7 @@ pub fn getAvatarImageByOwner(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByOwnerResult{ ._401 = result };
@@ -13246,7 +13246,7 @@ pub fn getAvatarImageByOwner(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByOwnerResult{ ._403 = result };
@@ -13256,7 +13256,7 @@ pub fn getAvatarImageByOwner(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAvatarImageByOwnerResult{ ._404 = result };
@@ -13302,7 +13302,7 @@ pub fn getUser(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetUserResult{ ._200 = result };
@@ -13478,7 +13478,7 @@ pub fn bulkGetUsers(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return BulkGetUsersResult{ ._200 = result };
@@ -13618,7 +13618,7 @@ pub fn getUserEmail(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetUserEmailResult{ ._200 = result };
@@ -13673,7 +13673,7 @@ pub fn getUserEmailBulk(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetUserEmailBulkResult{ ._200 = result };
@@ -13845,7 +13845,7 @@ pub fn findUsersForPicker(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return FindUsersForPickerResult{ ._200 = result };
@@ -13901,7 +13901,7 @@ pub fn getUserPropertyKeys(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetUserPropertyKeysResult{ ._200 = result };
@@ -13962,7 +13962,7 @@ pub fn getUserProperty(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetUserPropertyResult{ ._200 = result };
@@ -14075,7 +14075,7 @@ pub fn findUsersByQuery(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return FindUsersByQueryResult{ ._200 = result };
@@ -14134,7 +14134,7 @@ pub fn findUserKeysByQuery(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return FindUserKeysByQueryResult{ ._200 = result };
@@ -14343,7 +14343,7 @@ pub fn createVersion(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateVersionResult{ ._201 = result };
@@ -14395,7 +14395,7 @@ pub fn getVersion(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetVersionResult{ ._200 = result };
@@ -14505,7 +14505,7 @@ pub fn moveVersion(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return MoveVersionResult{ ._200 = result };
@@ -14560,7 +14560,7 @@ pub fn getVersionRelatedIssues(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetVersionRelatedIssuesResult{ ._200 = result };
@@ -14662,7 +14662,7 @@ pub fn getVersionUnresolvedIssues(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetVersionUnresolvedIssuesResult{ ._200 = result };
@@ -14710,7 +14710,7 @@ pub fn getDynamicWebhooksForApp(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDynamicWebhooksForAppResult{ ._200 = result };
@@ -14720,7 +14720,7 @@ pub fn getDynamicWebhooksForApp(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDynamicWebhooksForAppResult{ ._400 = result };
@@ -14730,7 +14730,7 @@ pub fn getDynamicWebhooksForApp(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDynamicWebhooksForAppResult{ ._403 = result };
@@ -14772,7 +14772,7 @@ pub fn getFailedWebhooks(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFailedWebhooksResult{ ._200 = result };
@@ -14782,7 +14782,7 @@ pub fn getFailedWebhooks(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFailedWebhooksResult{ ._400 = result };
@@ -14792,7 +14792,7 @@ pub fn getFailedWebhooks(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetFailedWebhooksResult{ ._403 = result };
@@ -14832,7 +14832,7 @@ pub fn refreshWebhooks(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RefreshWebhooksResult{ ._200 = result };
@@ -14842,7 +14842,7 @@ pub fn refreshWebhooks(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RefreshWebhooksResult{ ._400 = result };
@@ -14852,7 +14852,7 @@ pub fn refreshWebhooks(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return RefreshWebhooksResult{ ._403 = result };
@@ -14937,7 +14937,7 @@ pub fn getWorkflowTransitionRuleConfigurations(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
@@ -14947,7 +14947,7 @@ pub fn getWorkflowTransitionRuleConfigurations(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
@@ -14957,7 +14957,7 @@ pub fn getWorkflowTransitionRuleConfigurations(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
@@ -15000,7 +15000,7 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
@@ -15010,7 +15010,7 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
@@ -15020,7 +15020,7 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
@@ -15067,7 +15067,7 @@ pub fn getWorkflowsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowsPaginatedResult{ ._200 = result };
@@ -15080,7 +15080,7 @@ pub fn getWorkflowsPaginated(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowsPaginatedResult{ ._403 = result };
@@ -15131,7 +15131,7 @@ pub fn getWorkflowTransitionProperties(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowTransitionPropertiesResult{ ._200 = result };
@@ -15236,7 +15236,7 @@ pub fn getAllWorkflowSchemes(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetAllWorkflowSchemesResult{ ._200 = result };
@@ -15285,7 +15285,7 @@ pub fn getWorkflowSchemeProjectAssociations(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowSchemeProjectAssociationsResult{ ._200 = result };
@@ -15339,7 +15339,7 @@ pub fn getWorkflowScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowSchemeResult{ ._200 = result };
@@ -15393,7 +15393,7 @@ pub fn createWorkflowSchemeDraftFromParent(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return CreateWorkflowSchemeDraftFromParentResult{ ._201 = result };
@@ -15448,7 +15448,7 @@ pub fn getDefaultWorkflow(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDefaultWorkflowResult{ ._200 = result };
@@ -15505,7 +15505,7 @@ pub fn getWorkflowSchemeDraft(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowSchemeDraftResult{ ._200 = result };
@@ -15562,7 +15562,7 @@ pub fn getDraftDefaultWorkflow(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDraftDefaultWorkflowResult{ ._200 = result };
@@ -15618,7 +15618,7 @@ pub fn getWorkflowSchemeDraftIssueType(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowSchemeDraftIssueTypeResult{ ._200 = result };
@@ -15684,7 +15684,7 @@ pub fn publishDraftWorkflowScheme(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return PublishDraftWorkflowSchemeResult{ ._303 = result };
@@ -15742,7 +15742,7 @@ pub fn getDraftWorkflow(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetDraftWorkflowResult{ ._200 = result };
@@ -15799,7 +15799,7 @@ pub fn getWorkflowSchemeIssueType(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowSchemeIssueTypeResult{ ._200 = result };
@@ -15855,7 +15855,7 @@ pub fn getWorkflow(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetWorkflowResult{ ._200 = result };
@@ -15903,7 +15903,7 @@ pub fn getIdsOfWorklogsDeletedSince(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIdsOfWorklogsDeletedSinceResult{ ._200 = result };
@@ -15986,7 +15986,7 @@ pub fn getIdsOfWorklogsModifiedSince(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return GetIdsOfWorklogsModifiedSinceResult{ ._200 = result };
@@ -16030,7 +16030,7 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._200 = result };
@@ -16040,7 +16040,7 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._401 = result };
@@ -16087,7 +16087,7 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._200 = result };
@@ -16097,7 +16097,7 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._400 = result };
@@ -16107,7 +16107,7 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._401 = result };
@@ -16117,7 +16117,7 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._404 = result };
@@ -16155,7 +16155,7 @@ pub fn @"DynamicModulesResource.getModules_get"(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return @"DynamicModulesResource.getModules_getResult"{ ._200 = result };
@@ -16165,7 +16165,7 @@ pub fn @"DynamicModulesResource.getModules_get"(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return @"DynamicModulesResource.getModules_getResult"{ ._401 = result };
@@ -16290,7 +16290,7 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
             break :blk try ty.parseFromString(alloc, http_response.body);
         } else blk: {
-            break :blk try types.parseTypeFromString(alloc, http_response.body, ty);
+            break :blk try types.parseFromString(alloc, http_response.body, ty);
         };
         errdefer result.deinit(alloc);
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._200 = result };
@@ -16527,3 +16527,4 @@ const HttpResponse = struct {
         alloc.free(self.raw_response);
     }
 };
+

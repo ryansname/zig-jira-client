@@ -3,17 +3,12 @@ const json = std.json;
 const mem = std.mem;
 const testing = std.testing;
 
-pub fn parseOptions(alloc: mem.Allocator) json.ParseOptions {
-    return .{
-        .allocator = alloc,
-        .ignore_unknown_fields = true,
-        .allow_trailing_data = true,
-    };
-}
+pub const PARSE_OPTIONS = json.ParseOptions{
+    .ignore_unknown_fields = true,
+};
 
-pub fn parseTypeFromString(alloc: mem.Allocator, comptime Type: type, string: []const u8) !Type {
-    var token_stream = json.TokenStream.init(string);
-    return json.parse(Type, &token_stream, parseOptions(alloc));
+pub fn parseFromString(alloc: mem.Allocator, string: []const u8, comptime Type: type) !Type {
+    return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
 }
 
 comptime {
@@ -22,6252 +17,5210 @@ comptime {
 
 pub const AnnouncementBannerConfiguration = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AnnouncementBannerConfiguration" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ErrorCollection = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ErrorCollection" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AnnouncementBannerConfigurationUpdate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AnnouncementBannerConfigurationUpdate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IdBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IdBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AvatarUrlsBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AvatarUrlsBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PermissionGrant = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PermissionGrant" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PermissionHolder = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PermissionHolder" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PermissionScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PermissionScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Scope = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Scope" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdatedProjectCategory = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdatedProjectCategory" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Permissions = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Permissions" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserPermission = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserPermission" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const BulkPermissionsRequestBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"BulkPermissionsRequestBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const BulkProjectPermissions = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"BulkProjectPermissions" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const BulkPermissionGrants = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"BulkPermissionGrants" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const BulkProjectPermissionGrants = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"BulkProjectPermissionGrants" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PermissionsKeysBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PermissionsKeysBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PermittedProjects = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PermittedProjects" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIdentifierBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIdentifierBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const EventNotification = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"EventNotification" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const GroupName = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"GroupName" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JsonTypeBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JsonTypeBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const NotificationEvent = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"NotificationEvent" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const NotificationScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"NotificationScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const NotificationSchemeEvent = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"NotificationSchemeEvent" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectRole = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectRole" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectRoleGroup = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectRoleGroup" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectRoleUser = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectRoleUser" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RoleActor = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RoleActor" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanNotificationScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanNotificationScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Locale = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Locale" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const HealthCheckResult = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"HealthCheckResult" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ServerInformation = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ServerInformation" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssuesAndJQLQueries = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssuesAndJQLQueries" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueMatches = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueMatches" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueMatchesForJQL = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueMatchesForJQL" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PropertyKey = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PropertyKey" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PropertyKeys = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PropertyKeys" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const EntityProperty = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"EntityProperty" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SimpleLink = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SimpleLink" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Version = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Version" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const VersionIssuesStatus = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"VersionIssuesStatus" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldReplacement = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldReplacement" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DeleteAndReplaceVersionBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DeleteAndReplaceVersionBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const VersionIssueCounts = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"VersionIssueCounts" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const VersionUsageInCustomField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"VersionUsageInCustomField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const VersionUnresolvedIssuesCount = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"VersionUnresolvedIssuesCount" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const VersionMoveBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"VersionMoveBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ApplicationRole = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ApplicationRole" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ListWrapperCallbackApplicationRole = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ListWrapperCallbackApplicationRole" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ListWrapperCallbackGroupName = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ListWrapperCallbackGroupName" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SimpleListWrapperApplicationRole = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SimpleListWrapperApplicationRole" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SimpleListWrapperGroupName = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SimpleListWrapperGroupName" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const User = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"User" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FoundUsers = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FoundUsers" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserPickerUser = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserPickerUser" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const NewUserDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"NewUserDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ColumnItem = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ColumnItem" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Avatar = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Avatar" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Avatars = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Avatars" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const StatusCategory = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"StatusCategory" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const StatusDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"StatusDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ScreenableTab = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ScreenableTab" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanScreen = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanScreen" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Screen = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Screen" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ScreenableField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ScreenableField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const MoveFieldBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"MoveFieldBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AddFieldBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AddFieldBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ScreenDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ScreenDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdateScreenDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdateScreenDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Resolution = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Resolution" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Hierarchy = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Hierarchy" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Project = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Project" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectCategory = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectCategory" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectComponent = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectComponent" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectInsight = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectInsight" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectLandingPageInfo = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectLandingPageInfo" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectPermissions = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectPermissions" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ServiceManagementNavigationInfo = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ServiceManagementNavigationInfo" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SimplifiedHierarchyLevel = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SimplifiedHierarchyLevel" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SoftwareNavigationInfo = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SoftwareNavigationInfo" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkManagementNavigationInfo = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkManagementNavigationInfo" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateProjectDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateProjectDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIdentifiers = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIdentifiers" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdateProjectDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdateProjectDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const TaskProgressBeanObject = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"TaskProgressBeanObject" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanVersion = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanVersion" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ComponentWithIssueCount = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ComponentWithIssueCount" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanComponentWithIssueCount = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanComponentWithIssueCount" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const StringList = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"StringList" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanProject = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanProject" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectAvatars = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectAvatars" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeWithStatus = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeWithStatus" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SecurityLevel = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SecurityLevel" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SecurityScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SecurityScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ContainerForProjectFeatures = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ContainerForProjectFeatures" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectFeature = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectFeature" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectFeatureState = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectFeatureState" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Priority = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Priority" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreatePriorityDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreatePriorityDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PriorityId = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PriorityId" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdatePriorityDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdatePriorityDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanPriority = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanPriority" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SetDefaultPriorityRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SetDefaultPriorityRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Comment = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Comment" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Fields = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Fields" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueLinkType = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueLinkType" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const LinkIssueRequestJsonBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"LinkIssueRequestJsonBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const LinkedIssue = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"LinkedIssue" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RichText = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RichText" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const TimeTrackingDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"TimeTrackingDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Visibility = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Visibility" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueLink = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueLink" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageOfWorklogs = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageOfWorklogs" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Worklog = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Worklog" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeCreateBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeCreateBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeUpdateBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeUpdateBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SecuritySchemes = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SecuritySchemes" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueSecurityLevelMember = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueSecurityLevelMember" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanIssueSecurityLevelMember = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanIssueSecurityLevelMember" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldMetadata = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldMetadata" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTransition = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTransition" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Transitions = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Transitions" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssuePickerSuggestions = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssuePickerSuggestions" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssuePickerSuggestionsIssueType = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssuePickerSuggestionsIssueType" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SuggestedIssue = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SuggestedIssue" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldUpdateOperation = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldUpdateOperation" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const HistoryMetadata = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"HistoryMetadata" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const HistoryMetadataParticipant = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"HistoryMetadataParticipant" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueUpdateDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueUpdateDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Votes = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Votes" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ChangeDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ChangeDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Changelog = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Changelog" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IncludedFields = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IncludedFields" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueUpdateMetadata = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueUpdateMetadata" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const LinkGroup = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"LinkGroup" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Operations = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Operations" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageOfChangelogs = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageOfChangelogs" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueList = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueList" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const BulkIssueIsWatching = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"BulkIssueIsWatching" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Watchers = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Watchers" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreatedIssue = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreatedIssue" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const NestedResponse = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"NestedResponse" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssuesUpdateBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssuesUpdateBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const BulkOperationErrorResult = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"BulkOperationErrorResult" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreatedIssues = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreatedIssues" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueCreateMetadata = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueCreateMetadata" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeIssueCreateMetadata = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeIssueCreateMetadata" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIssueCreateMetadata = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIssueCreateMetadata" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Application = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Application" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IconBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IconBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RemoteIssueLink = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RemoteIssueLink" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RemoteObject = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RemoteObject" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Status = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Status" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Icon = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Icon" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RemoteIssueLinkRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RemoteIssueLinkRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RemoteIssueLinkIdentifies = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RemoteIssueLinkIdentifies" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Notification = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Notification" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const NotificationRecipients = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"NotificationRecipients" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const NotificationRecipientsRestrictions = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"NotificationRecipientsRestrictions" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RestrictedPermission = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RestrictedPermission" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueLinkTypes = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueLinkTypes" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageOfComments = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageOfComments" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PaginatedResponseComment = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PaginatedResponseComment" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueCommentListRequestBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueCommentListRequestBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanComment = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanComment" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanChangelog = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanChangelog" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueChangelogIds = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueChangelogIds" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Attachment = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Attachment" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Group = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Group" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PagedListUserDetailsApplicationUser = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PagedListUserDetailsApplicationUser" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanUserDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanUserDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AddGroupBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AddGroupBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdateUserToGroupBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdateUserToGroupBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FoundGroup = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FoundGroup" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FoundGroups = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FoundGroups" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const GroupLabel = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"GroupLabel" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FoundUsersAndGroups = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FoundUsersAndGroups" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldDefinitionJsonBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldDefinitionJsonBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdateCustomFieldDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdateCustomFieldDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanScreenWithTab = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanScreenWithTab" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ScreenWithTab = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ScreenWithTab" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Context = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Context" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanContext = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanContext" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextOption = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextOption" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanCustomFieldContextOption = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanCustomFieldContextOption" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const BulkCustomFieldOptionCreateRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"BulkCustomFieldOptionCreateRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldOptionCreate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldOptionCreate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldCreatedContextOptionsList = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldCreatedContextOptionsList" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const OrderOfCustomFieldOptions = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"OrderOfCustomFieldOptions" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const BulkCustomFieldOptionUpdateRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"BulkCustomFieldOptionUpdateRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldOptionUpdate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldOptionUpdate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldUpdatedContextOptionsList = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldUpdatedContextOptionsList" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ComponentIssuesCount = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ComponentIssuesCount" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SystemAvatars = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SystemAvatars" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScreenScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScreenScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanIssueTypeScreenScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanIssueTypeScreenScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanScreenScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanScreenScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ScreenScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ScreenScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ScreenTypes = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ScreenTypes" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ScreenSchemeDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ScreenSchemeDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ScreenSchemeId = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ScreenSchemeId" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdateScreenSchemeDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdateScreenSchemeDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdateScreenTypes = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdateScreenTypes" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ChangedWorklog = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ChangedWorklog" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ChangedWorklogs = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ChangedWorklogs" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorklogIdsRequestBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorklogIdsRequestBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const GlobalScopeBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"GlobalScopeBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueFieldOption = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueFieldOption" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueFieldOptionConfiguration = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueFieldOptionConfiguration" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueFieldOptionScopeBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueFieldOptionScopeBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanIssueFieldOption = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanIssueFieldOption" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectScopeBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectScopeBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueFieldOptionCreateBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueFieldOptionCreateBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RemoveOptionFromIssuesResult = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RemoveOptionFromIssuesResult" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SimpleErrorCollection = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SimpleErrorCollection" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const TaskProgressBeanRemoveOptionFromIssuesResult = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"TaskProgressBeanRemoveOptionFromIssuesResult" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Field = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Field" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldLastUsed = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldLastUsed" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldConfigurationScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldConfigurationScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanFieldConfigurationScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanFieldConfigurationScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldConfigurationIssueTypeItem = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldConfigurationIssueTypeItem" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanFieldConfigurationIssueTypeItem = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanFieldConfigurationIssueTypeItem" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AssociateFieldConfigurationsWithIssueTypesRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AssociateFieldConfigurationsWithIssueTypesRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldConfigurationToIssueTypeMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldConfigurationToIssueTypeMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldConfigurationSchemeProjects = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldConfigurationSchemeProjects" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanFieldConfigurationSchemeProjects = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanFieldConfigurationSchemeProjects" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldConfigurationSchemeProjectAssociation = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldConfigurationSchemeProjectAssociation" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdateFieldConfigurationSchemeDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdateFieldConfigurationSchemeDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeIdsToRemove = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeIdsToRemove" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldConfigurationDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldConfigurationDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanFieldConfigurationDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanFieldConfigurationDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldConfigurationItem = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldConfigurationItem" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanFieldConfigurationItem = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanFieldConfigurationItem" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldConfiguration = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldConfiguration" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldConfigurationItemsDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldConfigurationItemsDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScreenSchemeItem = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScreenSchemeItem" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanIssueTypeScreenSchemeItem = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanIssueTypeScreenSchemeItem" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScreenSchemesProjects = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScreenSchemesProjects" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanIssueTypeScreenSchemesProjects = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanIssueTypeScreenSchemesProjects" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanProjectDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanProjectDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScreenSchemeProjectAssociation = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScreenSchemeProjectAssociation" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScreenSchemeDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScreenSchemeDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScreenSchemeMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScreenSchemeMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScreenSchemeId = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScreenSchemeId" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScreenSchemeUpdateDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScreenSchemeUpdateDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScreenSchemeMappingDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScreenSchemeMappingDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdateDefaultScreenScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdateDefaultScreenScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeIds = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeIds" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateUpdateRoleRequestBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateUpdateRoleRequestBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ActorInputBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ActorInputBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectRoleActorsUpdateBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectRoleActorsUpdateBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ActorsMap = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ActorsMap" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectRoleDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectRoleDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanIssueTypeScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanIssueTypeScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeSchemeProjects = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeSchemeProjects" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanIssueTypeSchemeProjects = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanIssueTypeSchemeProjects" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeSchemeMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeSchemeMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanIssueTypeSchemeMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanIssueTypeSchemeMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeSchemeProjectAssociation = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeSchemeProjectAssociation" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeSchemeDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeSchemeDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeSchemeID = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeSchemeID" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeSchemeUpdateDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeSchemeUpdateDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const OrderOfIssueTypes = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"OrderOfIssueTypes" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AttachmentMetadata = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AttachmentMetadata" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AttachmentSettings = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AttachmentSettings" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AttachmentArchiveEntry = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AttachmentArchiveEntry" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AttachmentArchiveImpl = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AttachmentArchiveImpl" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AttachmentArchive = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AttachmentArchive" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AttachmentArchiveItemReadable = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AttachmentArchiveItemReadable" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AttachmentArchiveMetadataReadable = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AttachmentArchiveMetadataReadable" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanUiModificationDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanUiModificationDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UiModificationContextDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UiModificationContextDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UiModificationDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UiModificationDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateUiModificationDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateUiModificationDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UiModificationIdentifiers = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UiModificationIdentifiers" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UpdateUiModificationDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UpdateUiModificationDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldOption = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldOption" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextProjectMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextProjectMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanCustomFieldContextProjectMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanCustomFieldContextProjectMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContext = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContext" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanCustomFieldContext = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanCustomFieldContext" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValue = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValue" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueCascadingOption = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueCascadingOption" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueDate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueDate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueDateTime = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueDateTime" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueFloat = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueFloat" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueForgeDateTimeField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueForgeDateTimeField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueForgeGroupField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueForgeGroupField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueForgeMultiGroupField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueForgeMultiGroupField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueForgeMultiStringField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueForgeMultiStringField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueForgeMultiUserField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueForgeMultiUserField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueForgeNumberField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueForgeNumberField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueForgeObjectField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueForgeObjectField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueForgeStringField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueForgeStringField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueForgeUserField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueForgeUserField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueLabels = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueLabels" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueMultiUserPicker = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueMultiUserPicker" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueMultipleGroupPicker = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueMultipleGroupPicker" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueMultipleOption = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueMultipleOption" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueMultipleVersionPicker = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueMultipleVersionPicker" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueProject = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueProject" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueReadOnly = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueReadOnly" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueSingleGroupPicker = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueSingleGroupPicker" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueSingleOption = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueSingleOption" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueSingleVersionPicker = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueSingleVersionPicker" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueTextArea = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueTextArea" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueTextField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueTextField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueURL = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueURL" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextSingleUserPickerDefaults = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextSingleUserPickerDefaults" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanCustomFieldContextDefaultValue = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanCustomFieldContextDefaultValue" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserFilter = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserFilter" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateCustomFieldContext = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateCustomFieldContext" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIds = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIds" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextUpdateDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextUpdateDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIssueTypeMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIssueTypeMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIssueTypeMappings = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIssueTypeMappings" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ContextForProjectAndIssueType = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ContextForProjectAndIssueType" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanContextForProjectAndIssueType = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanContextForProjectAndIssueType" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldContextDefaultValueUpdate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldContextDefaultValueUpdate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeToContextMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeToContextMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanIssueTypeToContextMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanIssueTypeToContextMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldValueUpdate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldValueUpdate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldValueUpdateDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldValueUpdateDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const MultipleCustomFieldValuesUpdate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"MultipleCustomFieldValuesUpdate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const MultipleCustomFieldValuesUpdateDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"MultipleCustomFieldValuesUpdateDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ContextualConfiguration = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ContextualConfiguration" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanContextualConfiguration = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanContextualConfiguration" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomFieldConfigurations = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomFieldConfigurations" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanUser = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanUser" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserMigrationBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserMigrationBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UnrestrictedUserEmail = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UnrestrictedUserEmail" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const License = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"License" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const LicensedApplication = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"LicensedApplication" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueEvent = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueEvent" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Configuration = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Configuration" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const TimeTrackingConfiguration = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"TimeTrackingConfiguration" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ApplicationProperty = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ApplicationProperty" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SimpleApplicationPropertyBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SimpleApplicationPropertyBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AssociatedItemBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AssociatedItemBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AuditRecordBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AuditRecordBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AuditRecords = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AuditRecords" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ChangedValueBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ChangedValueBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraStatus = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraStatus" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectId = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectId" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIssueTypes = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIssueTypes" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const StatusScope = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"StatusScope" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageOfStatuses = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageOfStatuses" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const StatusCreate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"StatusCreate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const StatusCreateRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"StatusCreateRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const StatusUpdate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"StatusUpdate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const StatusUpdateRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"StatusUpdateRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const TimeTrackingProvider = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"TimeTrackingProvider" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanWorkflowScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanWorkflowScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypesWorkflowMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypesWorkflowMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeWorkflowMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeWorkflowMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DefaultWorkflow = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DefaultWorkflow" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PublishDraftWorkflowScheme = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PublishDraftWorkflowScheme" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const StatusMapping = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"StatusMapping" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ContainerOfWorkflowSchemeAssociations = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ContainerOfWorkflowSchemeAssociations" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowSchemeAssociations = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowSchemeAssociations" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowSchemeProjectAssociation = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowSchemeProjectAssociation" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PermissionSchemes = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PermissionSchemes" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PermissionGrants = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PermissionGrants" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DeprecatedWorkflow = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DeprecatedWorkflow" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateWorkflowCondition = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateWorkflowCondition" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateWorkflowDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateWorkflowDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateWorkflowStatusDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateWorkflowStatusDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateWorkflowTransitionDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateWorkflowTransitionDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateWorkflowTransitionRule = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateWorkflowTransitionRule" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateWorkflowTransitionRulesDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateWorkflowTransitionRulesDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CreateWorkflowTransitionScreenDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CreateWorkflowTransitionScreenDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowIDs = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowIDs" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowTransitionProperty = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowTransitionProperty" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanWorkflow = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanWorkflow" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PublishedWorkflowId = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PublishedWorkflowId" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Transition = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Transition" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const TransitionScreenDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"TransitionScreenDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Workflow = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Workflow" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowCompoundCondition = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowCompoundCondition" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowCondition = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowCondition" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowOperations = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowOperations" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowRules = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowRules" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowSchemeIdName = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowSchemeIdName" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowSimpleCondition = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowSimpleCondition" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowStatus = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowStatus" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowTransitionRule = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowTransitionRule" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ConnectWorkflowTransitionRule = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ConnectWorkflowTransitionRule" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanWorkflowTransitionRules = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanWorkflowTransitionRules" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RuleConfiguration = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RuleConfiguration" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowId = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowId" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowTransition = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowTransition" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowTransitionRules = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowTransitionRules" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowTransitionRulesUpdate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowTransitionRulesUpdate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowTransitionRulesUpdateErrorDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowTransitionRulesUpdateErrorDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowTransitionRulesUpdateErrors = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowTransitionRulesUpdateErrors" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowTransitionRulesDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowTransitionRulesDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowsWithTransitionRulesDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowsWithTransitionRulesDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CustomContextVariable = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CustomContextVariable" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IdOrKeyBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IdOrKeyBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueContextVariable = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueContextVariable" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JexpIssues = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JexpIssues" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JexpJqlIssues = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JexpJqlIssues" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionEvalContextBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionEvalContextBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionEvalRequestBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionEvalRequestBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JsonContextVariable = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JsonContextVariable" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserContextVariable = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserContextVariable" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssuesJqlMetaDataBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssuesJqlMetaDataBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssuesMetaBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssuesMetaBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionEvaluationMetaDataBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionEvaluationMetaDataBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionResult = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionResult" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionsComplexityBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionsComplexityBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionsComplexityValueBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionsComplexityValueBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionForAnalysis = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionForAnalysis" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionAnalysis = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionAnalysis" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionComplexity = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionComplexity" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionValidationError = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionValidationError" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JiraExpressionsAnalysis = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JiraExpressionsAnalysis" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIssueSecurityLevels = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIssueSecurityLevels" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectEmailAddress = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectEmailAddress" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectType = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectType" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Dashboard = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Dashboard" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageOfDashboards = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageOfDashboards" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SharePermission = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SharePermission" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserBeanAvatarUrls = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserBeanAvatarUrls" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanDashboard = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanDashboard" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DashboardDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DashboardDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AvailableDashboardGadget = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AvailableDashboardGadget" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AvailableDashboardGadgetsResponse = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AvailableDashboardGadgetsResponse" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DashboardGadget = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DashboardGadget" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DashboardGadgetPosition = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DashboardGadgetPosition" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DashboardGadgetResponse = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DashboardGadgetResponse" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DashboardGadgetSettings = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DashboardGadgetSettings" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DashboardGadgetUpdateRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DashboardGadgetUpdateRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueTypeInfo = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueTypeInfo" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIssueTypeHierarchy = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIssueTypeHierarchy" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ProjectIssueTypesHierarchyLevel = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ProjectIssueTypesHierarchyLevel" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanUserKey = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanUserKey" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserKey = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserKey" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SearchResults = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SearchResults" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SearchRequestBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SearchRequestBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldReferenceData = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldReferenceData" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FunctionReferenceData = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FunctionReferenceData" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JQLReferenceData = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JQLReferenceData" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SearchAutoCompleteFilter = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SearchAutoCompleteFilter" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AutoCompleteSuggestion = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AutoCompleteSuggestion" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const AutoCompleteSuggestions = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"AutoCompleteSuggestions" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JQLPersonalDataMigrationRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JQLPersonalDataMigrationRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ConvertedJQLQueries = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ConvertedJQLQueries" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JQLQueryWithUnknownUsers = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JQLQueryWithUnknownUsers" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Filter = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Filter" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FilterSubscription = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FilterSubscription" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FilterSubscriptionsList = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FilterSubscriptionsList" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const UserList = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"UserList" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FilterDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FilterDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanFilterDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanFilterDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ChangeFilterOwner = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ChangeFilterOwner" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const DefaultShareScope = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"DefaultShareScope" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SharePermissionInputBean = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SharePermissionInputBean" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const GroupDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"GroupDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanGroupDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanGroupDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueriesToSanitize = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueriesToSanitize" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueryToSanitize = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueryToSanitize" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SanitizedJqlQueries = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SanitizedJqlQueries" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const SanitizedJqlQuery = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"SanitizedJqlQuery" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueriesToParse = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueriesToParse" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const CompoundClause = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"CompoundClause" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldChangedClause = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldChangedClause" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldValueClause = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldValueClause" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FieldWasClause = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FieldWasClause" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FunctionOperand = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FunctionOperand" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQuery = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQuery" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueryClause = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueryClause" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueryClauseOperand = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueryClauseOperand" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueryClauseTimePredicate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueryClauseTimePredicate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueryField = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueryField" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueryFieldEntityProperty = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueryFieldEntityProperty" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueryOrderByClause = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueryOrderByClause" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueryOrderByClauseElement = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueryOrderByClauseElement" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JqlQueryUnitaryOperand = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JqlQueryUnitaryOperand" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const KeywordOperand = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"KeywordOperand" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ListOperand = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ListOperand" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ParsedJqlQueries = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ParsedJqlQueries" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ParsedJqlQuery = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ParsedJqlQuery" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ValueOperand = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ValueOperand" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const BulkIssuePropertyUpdateRequest = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"BulkIssuePropertyUpdateRequest" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueFilterForBulkPropertySet = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueFilterForBulkPropertySet" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueFilterForBulkPropertyDelete = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueFilterForBulkPropertyDelete" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueEntityProperties = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueEntityProperties" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const JsonNode = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"JsonNode" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const IssueEntityPropertiesForMultiUpdate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueEntityPropertiesForMultiUpdate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const MultiIssueEntityProperties = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"MultiIssueEntityProperties" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FailedWebhook = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FailedWebhook" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const FailedWebhooks = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"FailedWebhooks" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WebhookDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WebhookDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WebhookRegistrationDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WebhookRegistrationDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ContainerForRegisteredWebhooks = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ContainerForRegisteredWebhooks" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const RegisteredWebhook = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"RegisteredWebhook" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanWebhook = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanWebhook" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const Webhook = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"Webhook" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ContainerForWebhookIDs = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ContainerForWebhookIDs" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WebhooksExpirationDate = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WebhooksExpirationDate" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const PageBeanString = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"PageBeanString" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const OperationMessage = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"OperationMessage" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ErrorMessage = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ErrorMessage" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ConnectModules = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ConnectModules" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ConnectModule = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ConnectModule" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowRulesSearch = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowRulesSearch" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const WorkflowRulesSearchDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"WorkflowRulesSearchDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const EntityPropertyDetails = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"EntityPropertyDetails" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ConnectCustomFieldValue = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ConnectCustomFieldValue" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
 
 pub const ConnectCustomFieldValues = struct {
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"ConnectCustomFieldValues" {
-    //     var token_stream = json.TokenStream.init(string);
-    //     return json.parse(@This(), &token_stream, parseOptions(alloc));
+    //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
 
-    // pub fn deinit(self: @This(), alloc: mem.Allocator) void {
-    //     json.parseFree(@This(), self, parseOptions(alloc));
-    // }
-
+    pub fn deinit(self: @This(), alloc: mem.Allocator) void {
+        json.parseFree(@This(), alloc, self);
+    }
 };
