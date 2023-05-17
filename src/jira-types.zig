@@ -1386,6 +1386,8 @@ pub const Changelog = struct {
 };
 
 pub const IncludedFields = struct {
+    summary: []const u8,
+
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IncludedFields" {
     //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
@@ -1396,6 +1398,8 @@ pub const IncludedFields = struct {
 };
 
 pub const IssueBean = struct {
+    fields: IncludedFields,
+
     // pub fn parseFromString(alloc: mem.Allocator, string: []const u8) !@"IssueBean" {
     //     return json.parseFromSlice(Type, alloc, string, PARSE_OPTIONS);
     // }
