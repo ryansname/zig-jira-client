@@ -3,12 +3,17 @@ const json = std.json;
 const mem = std.mem;
 const testing = std.testing;
 
-fn parseOptions(alloc: mem.Allocator) json.ParseOptions {
+pub fn parseOptions(alloc: mem.Allocator) json.ParseOptions {
     return .{
         .allocator = alloc,
         .ignore_unknown_fields = true,
         .allow_trailing_data = true,
     };
+}
+
+pub fn parseFromString(alloc: mem.Allocator, comptime Type: type, string: []const u8) !Type {
+    var token_stream = json.TokenStream.init(string);
+    return json.parse(Type, &token_stream, parseOptions(alloc));
 }
 
 comptime {
