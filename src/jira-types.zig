@@ -11,7 +11,7 @@ pub fn parseOptions(alloc: mem.Allocator) json.ParseOptions {
     };
 }
 
-pub fn parseFromString(alloc: mem.Allocator, comptime Type: type, string: []const u8) !Type {
+pub fn parseTypeFromString(alloc: mem.Allocator, comptime Type: type, string: []const u8) !Type {
     var token_stream = json.TokenStream.init(string);
     return json.parse(Type, &token_stream, parseOptions(alloc));
 }
