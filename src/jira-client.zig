@@ -1,12 +1,13 @@
 const types = @import("jira-types.zig");
 pub usingnamespace types;
 pub const GetBannerResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.AnnouncementBannerConfiguration,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -22,7 +23,6 @@ pub fn getBanner(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AnnouncementBannerConfiguration"
         const ty = types.AnnouncementBannerConfiguration;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -56,11 +56,13 @@ pub fn getBanner(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetBannerResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetBannerResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateMultipleCustomFieldValuesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -84,7 +86,6 @@ pub fn updateMultipleCustomFieldValues(
     const http_response = try get(client, alloc, "/rest/api/3/app/field/value");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // generateChangelog; location: query
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateMultipleCustomFieldValuesResult{ ._204 = {} };
@@ -101,13 +102,15 @@ pub fn updateMultipleCustomFieldValues(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateMultipleCustomFieldValuesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateMultipleCustomFieldValuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCustomFieldConfigurationResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanContextualConfiguration,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -134,7 +137,6 @@ pub fn getCustomFieldConfiguration(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // id; location: query
     // fieldContextId; location: query
     // issueId; location: query
@@ -167,11 +169,13 @@ pub fn getCustomFieldConfiguration(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCustomFieldConfigurationResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCustomFieldConfigurationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateCustomFieldValueResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -198,7 +202,6 @@ pub fn updateCustomFieldValue(
     const http_response = try get(client, alloc, "/rest/api/3/app/field/{fieldIdOrKey}/value");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // generateChangelog; location: query
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateCustomFieldValueResult{ ._204 = {} };
@@ -215,11 +218,13 @@ pub fn updateCustomFieldValue(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateCustomFieldValueResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateCustomFieldValueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetApplicationPropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -241,7 +246,6 @@ pub fn getApplicationProperty(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // key; location: query
     // permissionLevel; location: query
     // keyFilter; location: query
@@ -257,11 +261,13 @@ pub fn getApplicationProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetApplicationPropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetApplicationPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAdvancedSettingsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -283,7 +289,6 @@ pub fn getAdvancedSettings(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAdvancedSettingsResult{ ._200 = {} };
     }
@@ -296,13 +301,15 @@ pub fn getAdvancedSettings(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAdvancedSettingsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAdvancedSettingsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const SetApplicationPropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ApplicationProperty,
+    _200: json.ValueTree,
     /// Returned if the data type of the `value` does not match the application property's data type. For example, a string is provided instead of an integer.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -328,7 +335,6 @@ pub fn setApplicationProperty(
     const http_response = try get(client, alloc, "/rest/api/3/application-properties/{id}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationProperty"
         const ty = types.ApplicationProperty;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -354,11 +360,13 @@ pub fn setApplicationProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return SetApplicationPropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return SetApplicationPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllApplicationRolesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -380,7 +388,6 @@ pub fn getAllApplicationRoles(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAllApplicationRolesResult{ ._200 = {} };
     }
@@ -393,13 +400,15 @@ pub fn getAllApplicationRoles(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllApplicationRolesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllApplicationRolesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetApplicationRoleResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ApplicationRole,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user is not an administrator.
@@ -423,7 +432,6 @@ pub fn getApplicationRole(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationRole"
         const ty = types.ApplicationRole;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -446,11 +454,13 @@ pub fn getApplicationRole(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetApplicationRoleResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetApplicationRoleResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAttachmentContentResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful when `redirect` is set to `false`.
     _200: void,
     /// Returned if the request is successful when a `Range` header is provided and `redirect` is set to `false`.
@@ -487,7 +497,6 @@ pub fn getAttachmentContent(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // redirect; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAttachmentContentResult{ ._200 = {} };
@@ -516,13 +525,15 @@ pub fn getAttachmentContent(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAttachmentContentResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAttachmentContentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAttachmentMetaResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.AttachmentSettings,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -540,7 +551,6 @@ pub fn getAttachmentMeta(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentSettings"
         const ty = types.AttachmentSettings;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -557,11 +567,13 @@ pub fn getAttachmentMeta(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAttachmentMetaResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAttachmentMetaResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAttachmentThumbnailResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful when `redirect` is set to `false`.
     _200: void,
     /// Returned if the request is successful. See the `Location` header for the download URL.
@@ -595,7 +607,6 @@ pub fn getAttachmentThumbnail(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // redirect; location: query
     // fallbackToDefault; location: query
     // width; location: query
@@ -621,13 +632,15 @@ pub fn getAttachmentThumbnail(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAttachmentThumbnailResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAttachmentThumbnailResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAttachmentResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.AttachmentMetadata,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -654,7 +667,6 @@ pub fn getAttachment(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentMetadata"
         const ty = types.AttachmentMetadata;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -677,13 +689,15 @@ pub fn getAttachment(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAttachmentResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAttachmentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ExpandAttachmentForHumansResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
-    _200: types.AttachmentArchiveMetadataReadable,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// The user does not have the necessary permission.
@@ -713,7 +727,6 @@ pub fn expandAttachmentForHumans(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveMetadataReadable"
         const ty = types.AttachmentArchiveMetadataReadable;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -739,13 +752,15 @@ pub fn expandAttachmentForHumans(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ExpandAttachmentForHumansResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ExpandAttachmentForHumansResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ExpandAttachmentForMachinesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
-    _200: types.AttachmentArchiveImpl,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// The user does not have the necessary permission.
@@ -775,7 +790,6 @@ pub fn expandAttachmentForMachines(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveImpl"
         const ty = types.AttachmentArchiveImpl;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -801,13 +815,15 @@ pub fn expandAttachmentForMachines(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ExpandAttachmentForMachinesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ExpandAttachmentForMachinesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAuditRecordsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.AuditRecords,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -830,7 +846,6 @@ pub fn getAuditRecords(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // offset; location: query
     // limit; location: query
     // filter; location: query
@@ -855,13 +870,15 @@ pub fn getAuditRecords(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAuditRecordsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAuditRecordsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllSystemAvatarsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.SystemAvatars,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if an error occurs while retrieving the list of avatars.
@@ -884,7 +901,6 @@ pub fn getAllSystemAvatars(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SystemAvatars"
         const ty = types.SystemAvatars;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -904,13 +920,15 @@ pub fn getAllSystemAvatars(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllSystemAvatarsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllSystemAvatarsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCommentsByIdsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanComment,
+    _200: json.ValueTree,
     /// Returned if the request contains more than 1000 IDs or is empty.
     _400: void,
     _400: void,
@@ -928,7 +946,6 @@ pub fn getCommentsByIds(
     const http_response = try get(client, alloc, "/rest/api/3/comment/list");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComment"
         const ty = types.PageBeanComment;
@@ -946,13 +963,15 @@ pub fn getCommentsByIds(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCommentsByIdsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCommentsByIdsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCommentPropertyKeysResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PropertyKeys,
+    _200: json.ValueTree,
     /// Returned if the comment ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -979,7 +998,6 @@ pub fn getCommentPropertyKeys(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const ty = types.PropertyKeys;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1005,13 +1023,15 @@ pub fn getCommentPropertyKeys(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCommentPropertyKeysResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCommentPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCommentPropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.EntityProperty,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1040,7 +1060,6 @@ pub fn getCommentProperty(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const ty = types.EntityProperty;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1066,13 +1085,15 @@ pub fn getCommentProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCommentPropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCommentPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const CreateComponentResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: types.ProjectComponent,
+    _201: json.ValueTree,
     /// Returned if:
     ///
     ///  *  the user is not found.
@@ -1102,7 +1123,6 @@ pub fn createComponent(
     const http_response = try get(client, alloc, "/rest/api/3/component");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"ProjectComponent"
         const ty = types.ProjectComponent;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1128,13 +1148,15 @@ pub fn createComponent(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return CreateComponentResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return CreateComponentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetComponentResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectComponent,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the component is not found or the user does not have permission to browse the project containing the component.
@@ -1156,7 +1178,6 @@ pub fn getComponent(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectComponent"
         const ty = types.ProjectComponent;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1176,13 +1197,15 @@ pub fn getComponent(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetComponentResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetComponentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetComponentRelatedIssuesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ComponentIssuesCount,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the component is not found.
@@ -1205,7 +1228,6 @@ pub fn getComponentRelatedIssues(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ComponentIssuesCount"
         const ty = types.ComponentIssuesCount;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1225,13 +1247,15 @@ pub fn getComponentRelatedIssues(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetComponentRelatedIssuesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetComponentRelatedIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetConfigurationResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Configuration,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -1249,7 +1273,6 @@ pub fn getConfiguration(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Configuration"
         const ty = types.Configuration;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1266,13 +1289,15 @@ pub fn getConfiguration(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetConfigurationResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetConfigurationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetSelectedTimeTrackingImplementationResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful and time tracking is enabled.
-    _200: types.TimeTrackingProvider,
+    _200: json.ValueTree,
     /// Returned if the request is successful but time tracking is disabled.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1294,7 +1319,6 @@ pub fn getSelectedTimeTrackingImplementation(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingProvider"
         const ty = types.TimeTrackingProvider;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1317,11 +1341,13 @@ pub fn getSelectedTimeTrackingImplementation(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetSelectedTimeTrackingImplementationResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetSelectedTimeTrackingImplementationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAvailableTimeTrackingImplementationsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1343,7 +1369,6 @@ pub fn getAvailableTimeTrackingImplementations(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAvailableTimeTrackingImplementationsResult{ ._200 = {} };
     }
@@ -1356,13 +1381,15 @@ pub fn getAvailableTimeTrackingImplementations(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAvailableTimeTrackingImplementationsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAvailableTimeTrackingImplementationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetSharedTimeTrackingConfigurationResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.TimeTrackingConfiguration,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -1382,7 +1409,6 @@ pub fn getSharedTimeTrackingConfiguration(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingConfiguration"
         const ty = types.TimeTrackingConfiguration;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1402,13 +1428,15 @@ pub fn getSharedTimeTrackingConfiguration(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetSharedTimeTrackingConfigurationResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetSharedTimeTrackingConfigurationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCustomFieldOptionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.CustomFieldOption,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -1433,7 +1461,6 @@ pub fn getCustomFieldOption(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"CustomFieldOption"
         const ty = types.CustomFieldOption;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1453,17 +1480,19 @@ pub fn getCustomFieldOption(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCustomFieldOptionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCustomFieldOptionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllDashboardsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageOfDashboards,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     _400: void,
 };
 
@@ -1479,7 +1508,6 @@ pub fn getAllDashboards(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // filter; location: query
     // startAt; location: query
     // maxResults; location: query
@@ -1516,17 +1544,19 @@ pub fn getAllDashboards(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllDashboardsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllDashboardsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllAvailableDashboardGadgetsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.AvailableDashboardGadgetsResponse,
+    _200: json.ValueTree,
     /// 400 response
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     _400: void,
 };
 
@@ -1542,7 +1572,6 @@ pub fn getAllAvailableDashboardGadgets(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AvailableDashboardGadgetsResponse"
         const ty = types.AvailableDashboardGadgetsResponse;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1576,22 +1605,24 @@ pub fn getAllAvailableDashboardGadgets(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllAvailableDashboardGadgetsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllAvailableDashboardGadgetsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDashboardsPaginatedResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanDashboard,
+    _200: json.ValueTree,
     /// Returned if:
     ///
     ///  *  `orderBy` is invalid.
     ///  *  `expand` includes an invalid value.
     ///  *  `accountId` and `owner` are provided.
     ///  *  `groupname` and `groupId` are provided.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// 401 response
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     _400: void,
 };
 
@@ -1607,7 +1638,6 @@ pub fn getDashboardsPaginated(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // dashboardName; location: query
     // accountId; location: query
     // owner; location: query
@@ -1652,17 +1682,19 @@ pub fn getDashboardsPaginated(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDashboardsPaginatedResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDashboardsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllGadgetsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.DashboardGadgetResponse,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the dashboard is not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -1681,7 +1713,6 @@ pub fn getAllGadgets(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // moduleKey; location: query
     // uri; location: query
     // gadgetId; location: query
@@ -1711,19 +1742,21 @@ pub fn getAllGadgets(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllGadgetsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllGadgetsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateGadgetResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the gadget or the dashboard is not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -1744,7 +1777,6 @@ pub fn updateGadget(
     const http_response = try get(client, alloc, "/rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateGadgetResult{ ._204 = {} };
     }
@@ -1774,13 +1806,15 @@ pub fn updateGadget(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateGadgetResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateGadgetResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDashboardItemPropertyKeysResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PropertyKeys,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the dashboard or dashboard item is not found, or the dashboard is not owned by or shared with the user.
@@ -1806,7 +1840,6 @@ pub fn getDashboardItemPropertyKeys(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const ty = types.PropertyKeys;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1826,13 +1859,15 @@ pub fn getDashboardItemPropertyKeys(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDashboardItemPropertyKeysResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDashboardItemPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDashboardItemPropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.EntityProperty,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the dashboard, the dashboard item, or dashboard item property is not found, or the dashboard is not owned by or shared with the user.
@@ -1860,7 +1895,6 @@ pub fn getDashboardItemProperty(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const ty = types.EntityProperty;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1880,17 +1914,19 @@ pub fn getDashboardItemProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDashboardItemPropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDashboardItemPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDashboardResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Dashboard,
+    _200: json.ValueTree,
     /// 400 response
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the dashboard is not found or the dashboard is not owned by or shared with the user.
     _404: void,
     _400: void,
@@ -1910,7 +1946,6 @@ pub fn getDashboard(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
         const ty = types.Dashboard;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -1947,19 +1982,21 @@ pub fn getDashboard(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDashboardResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDashboardResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const CopyDashboardResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Dashboard,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the dashboard is not found or the dashboard is not owned by or shared with the user.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -1978,7 +2015,6 @@ pub fn copyDashboard(
     const http_response = try get(client, alloc, "/rest/api/3/dashboard/{id}/copy");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
         const ty = types.Dashboard;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -2022,11 +2058,13 @@ pub fn copyDashboard(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return CopyDashboardResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return CopyDashboardResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetEventsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2048,7 +2086,6 @@ pub fn getEvents(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetEventsResult{ ._200 = {} };
     }
@@ -2061,19 +2098,21 @@ pub fn getEvents(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetEventsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetEventsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const AnalyseExpressionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.JiraExpressionsAnalysis,
+    _200: json.ValueTree,
     /// 400 response
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// 404 response
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -2089,7 +2128,6 @@ pub fn analyseExpression(
     const http_response = try get(client, alloc, "/rest/api/3/expression/analyse");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // check; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionsAnalysis"
         const ty = types.JiraExpressionsAnalysis;
@@ -2127,13 +2165,15 @@ pub fn analyseExpression(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return AnalyseExpressionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return AnalyseExpressionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const EvaluateJiraExpressionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the evaluation results in a value. The result is a JSON primitive value, list, or object.
-    _200: types.JiraExpressionResult,
+    _200: json.ValueTree,
     /// Returned if:
     ///
     ///  *  the request is invalid, that is:
@@ -2141,11 +2181,11 @@ pub const EvaluateJiraExpressionResult = union(enum) {
     ///      *  invalid data is provided, such as a request including issue ID and key.
     ///      *  the expression is invalid and can not be parsed.
     ///  *  evaluation fails at runtime. This may happen for various reasons. For example, accessing a property on a null object (such as the expression `issue.id` where `issue` is `null`). In this case an error message is provided.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if any object provided in the request context is not found or the user does not have permission to view it.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -2161,7 +2201,6 @@ pub fn evaluateJiraExpression(
     const http_response = try get(client, alloc, "/rest/api/3/expression/eval");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionResult"
         const ty = types.JiraExpressionResult;
@@ -2199,11 +2238,13 @@ pub fn evaluateJiraExpression(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return EvaluateJiraExpressionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return EvaluateJiraExpressionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFieldsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2223,7 +2264,6 @@ pub fn getFields(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetFieldsResult{ ._200 = {} };
     }
@@ -2233,19 +2273,21 @@ pub fn getFields(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFieldsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFieldsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFieldsPaginatedResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanField,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -2261,7 +2303,6 @@ pub fn getFieldsPaginated(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // type; location: query
@@ -2305,19 +2346,21 @@ pub fn getFieldsPaginated(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFieldsPaginatedResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFieldsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetTrashedFieldsPaginatedResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanField,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -2333,7 +2376,6 @@ pub fn getTrashedFieldsPaginated(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -2375,11 +2417,13 @@ pub fn getTrashedFieldsPaginated(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetTrashedFieldsPaginatedResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetTrashedFieldsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateCustomFieldResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2407,7 +2451,6 @@ pub fn updateCustomField(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateCustomFieldResult{ ._204 = {} };
     }
@@ -2426,13 +2469,15 @@ pub fn updateCustomField(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateCustomFieldResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateCustomFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetContextsForFieldResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanCustomFieldContext,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2457,7 +2502,6 @@ pub fn getContextsForField(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // isAnyIssueType; location: query
     // isGlobalContext; location: query
     // contextId; location: query
@@ -2485,13 +2529,15 @@ pub fn getContextsForField(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetContextsForFieldResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetContextsForFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDefaultValuesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanCustomFieldContextDefaultValue,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2516,7 +2562,6 @@ pub fn getDefaultValues(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // contextId; location: query
     // startAt; location: query
     // maxResults; location: query
@@ -2542,13 +2587,15 @@ pub fn getDefaultValues(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDefaultValuesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDefaultValuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypeMappingsForContextsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if operation is successful.
-    _200: types.PageBeanIssueTypeToContextMapping,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2571,7 +2618,6 @@ pub fn getIssueTypeMappingsForContexts(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // contextId; location: query
     // startAt; location: query
     // maxResults; location: query
@@ -2594,13 +2640,15 @@ pub fn getIssueTypeMappingsForContexts(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypeMappingsForContextsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypeMappingsForContextsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCustomFieldContextsForProjectsAndIssueTypesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanContextForProjectAndIssueType,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2627,7 +2675,6 @@ pub fn getCustomFieldContextsForProjectsAndIssueTypes(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/mapping");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextForProjectAndIssueType"
@@ -2655,13 +2702,15 @@ pub fn getCustomFieldContextsForProjectsAndIssueTypes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCustomFieldContextsForProjectsAndIssueTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectContextMappingResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanCustomFieldContextProjectMapping,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2686,7 +2735,6 @@ pub fn getProjectContextMapping(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // contextId; location: query
     // startAt; location: query
     // maxResults; location: query
@@ -2712,11 +2760,13 @@ pub fn getProjectContextMapping(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectContextMappingResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectContextMappingResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateCustomFieldContextResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the context is updated.
     _204: void,
     /// Returned if the request is not valid.
@@ -2747,7 +2797,6 @@ pub fn updateCustomFieldContext(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/{contextId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateCustomFieldContextResult{ ._204 = {} };
     }
@@ -2766,11 +2815,13 @@ pub fn updateCustomFieldContext(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateCustomFieldContextResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateCustomFieldContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const AddIssueTypesToContextResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if operation is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2804,7 +2855,6 @@ pub fn addIssueTypesToContext(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/{contextId}/issuetype");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return AddIssueTypesToContextResult{ ._204 = {} };
     }
@@ -2826,11 +2876,13 @@ pub fn addIssueTypesToContext(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return AddIssueTypesToContextResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return AddIssueTypesToContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RemoveIssueTypesFromContextResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if operation is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -2862,7 +2914,6 @@ pub fn removeIssueTypesFromContext(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/{contextId}/issuetype/remove");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return RemoveIssueTypesFromContextResult{ ._204 = {} };
     }
@@ -2881,13 +2932,15 @@ pub fn removeIssueTypesFromContext(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RemoveIssueTypesFromContextResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RemoveIssueTypesFromContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetOptionsForContextResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanCustomFieldContextOption,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2917,7 +2970,6 @@ pub fn getOptionsForContext(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // optionId; location: query
     // onlyOptions; location: query
     // startAt; location: query
@@ -2947,11 +2999,13 @@ pub fn getOptionsForContext(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetOptionsForContextResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetOptionsForContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ReorderCustomFieldOptionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if options are reordered.
     _204: void,
     /// Returned if the request is not valid.
@@ -2983,7 +3037,6 @@ pub fn reorderCustomFieldOptions(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/{contextId}/option/move");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return ReorderCustomFieldOptionsResult{ ._204 = {} };
     }
@@ -3002,11 +3055,13 @@ pub fn reorderCustomFieldOptions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ReorderCustomFieldOptionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ReorderCustomFieldOptionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const DeleteCustomFieldOptionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the option is deleted.
     _204: void,
     /// Returned if the request is not valid.
@@ -3040,7 +3095,6 @@ pub fn deleteCustomFieldOption(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/{contextId}/option/{optionId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return DeleteCustomFieldOptionResult{ ._204 = {} };
     }
@@ -3059,11 +3113,13 @@ pub fn deleteCustomFieldOption(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return DeleteCustomFieldOptionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return DeleteCustomFieldOptionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const AssignProjectsToCustomFieldContextResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if operation is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -3095,7 +3151,6 @@ pub fn assignProjectsToCustomFieldContext(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/{contextId}/project");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return AssignProjectsToCustomFieldContextResult{ ._204 = {} };
     }
@@ -3114,11 +3169,13 @@ pub fn assignProjectsToCustomFieldContext(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return AssignProjectsToCustomFieldContextResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return AssignProjectsToCustomFieldContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RemoveCustomFieldContextFromProjectsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the custom field context is removed from the projects.
     _204: void,
     /// Returned if the request is not valid.
@@ -3150,7 +3207,6 @@ pub fn removeCustomFieldContextFromProjects(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldId}/context/{contextId}/project/remove");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return RemoveCustomFieldContextFromProjectsResult{ ._204 = {} };
     }
@@ -3169,13 +3225,15 @@ pub fn removeCustomFieldContextFromProjects(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RemoveCustomFieldContextFromProjectsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RemoveCustomFieldContextFromProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetContextsForFieldDeprecatedResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanContext,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3198,7 +3256,6 @@ pub fn getContextsForFieldDeprecated(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContext"
@@ -3220,13 +3277,15 @@ pub fn getContextsForFieldDeprecated(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetContextsForFieldDeprecatedResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetContextsForFieldDeprecatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetScreensForFieldResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanScreenWithTab,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3249,7 +3308,6 @@ pub fn getScreensForField(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // expand; location: query
@@ -3272,13 +3330,15 @@ pub fn getScreensForField(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetScreensForFieldResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetScreensForFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllIssueFieldOptionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueFieldOption,
+    _200: json.ValueTree,
     /// Returned if the field is not found or does not support options.
     _400: void,
     /// Returned if the request is not authenticated as a Jira administrator or the app that provided the field.
@@ -3301,7 +3361,6 @@ pub fn getAllIssueFieldOptions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
@@ -3323,13 +3382,15 @@ pub fn getAllIssueFieldOptions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllIssueFieldOptionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllIssueFieldOptionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetSelectableIssueFieldOptionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueFieldOption,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the field is not found or does not support options.
@@ -3352,7 +3413,6 @@ pub fn getSelectableIssueFieldOptions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
@@ -3375,13 +3435,15 @@ pub fn getSelectableIssueFieldOptions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetSelectableIssueFieldOptionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetSelectableIssueFieldOptionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetVisibleIssueFieldOptionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueFieldOption,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the field is not found or does not support options.
@@ -3404,7 +3466,6 @@ pub fn getVisibleIssueFieldOptions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
@@ -3427,13 +3488,15 @@ pub fn getVisibleIssueFieldOptions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetVisibleIssueFieldOptionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetVisibleIssueFieldOptionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueFieldOptionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the requested option is returned.
-    _200: types.IssueFieldOption,
+    _200: json.ValueTree,
     /// Returned if the field is not found or does not support options.
     _400: void,
     /// Returned if the request is not authenticated as a Jira administrator or the app that provided the field.
@@ -3460,7 +3523,6 @@ pub fn getIssueFieldOption(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueFieldOption"
         const ty = types.IssueFieldOption;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -3483,13 +3545,15 @@ pub fn getIssueFieldOption(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueFieldOptionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueFieldOptionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ReplaceIssueFieldOptionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the long-running task to deselect the option is started.
-    _303: types.TaskProgressBeanRemoveOptionFromIssuesResult,
+    _303: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the user does not have the necessary permission.
@@ -3517,7 +3581,6 @@ pub fn replaceIssueFieldOption(
     const http_response = try get(client, alloc, "/rest/api/3/field/{fieldKey}/option/{optionId}/issue");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // replaceWith; location: query
     // jql; location: query
     // overrideScreenSecurity; location: query
@@ -3544,27 +3607,29 @@ pub fn replaceIssueFieldOption(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ReplaceIssueFieldOptionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ReplaceIssueFieldOptionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const DeleteCustomFieldResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _303: types.TaskProgressBeanObject,
+    _303: json.ValueTree,
     /// Returned if any of these are true:
     ///
     ///  *  The custom field is locked.
     ///  *  The custom field is used in a issue security scheme or a permission scheme.
     ///  *  The custom field ID format is incorrect.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     /// Returned if the custom field is not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     /// Returned if a task to delete the custom field is running.
-    _409: types.ErrorCollection,
+    _409: json.ValueTree,
     _400: void,
 };
 
@@ -3582,7 +3647,6 @@ pub fn deleteCustomField(
     const http_response = try get(client, alloc, "/rest/api/3/field/{id}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
         const ty = types.TaskProgressBeanObject;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -3646,21 +3710,23 @@ pub fn deleteCustomField(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return DeleteCustomFieldResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return DeleteCustomFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RestoreCustomFieldResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     /// Returned if the custom field is not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -3679,7 +3745,6 @@ pub fn restoreCustomField(
     const http_response = try get(client, alloc, "/rest/api/3/field/{id}/restore");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return RestoreCustomFieldResult{ ._200 = {} };
     }
@@ -3726,21 +3791,23 @@ pub fn restoreCustomField(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RestoreCustomFieldResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RestoreCustomFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const TrashCustomFieldResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     /// Returned if the custom field is not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -3759,7 +3826,6 @@ pub fn trashCustomField(
     const http_response = try get(client, alloc, "/rest/api/3/field/{id}/trash");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return TrashCustomFieldResult{ ._200 = {} };
     }
@@ -3806,13 +3872,15 @@ pub fn trashCustomField(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return TrashCustomFieldResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return TrashCustomFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllFieldConfigurationsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanFieldConfigurationDetails,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3832,7 +3900,6 @@ pub fn getAllFieldConfigurations(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -3857,11 +3924,13 @@ pub fn getAllFieldConfigurations(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllFieldConfigurationsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllFieldConfigurationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateFieldConfigurationResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -3889,7 +3958,6 @@ pub fn updateFieldConfiguration(
     const http_response = try get(client, alloc, "/rest/api/3/fieldconfiguration/{id}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateFieldConfigurationResult{ ._204 = {} };
     }
@@ -3908,13 +3976,15 @@ pub fn updateFieldConfiguration(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateFieldConfigurationResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateFieldConfigurationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFieldConfigurationItemsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanFieldConfigurationItem,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3939,7 +4009,6 @@ pub fn getFieldConfigurationItems(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationItem"
@@ -3964,13 +4033,15 @@ pub fn getFieldConfigurationItems(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFieldConfigurationItemsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFieldConfigurationItemsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllFieldConfigurationSchemesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanFieldConfigurationScheme,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3992,7 +4063,6 @@ pub fn getAllFieldConfigurationSchemes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -4018,13 +4088,15 @@ pub fn getAllFieldConfigurationSchemes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllFieldConfigurationSchemesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllFieldConfigurationSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFieldConfigurationSchemeMappingsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanFieldConfigurationIssueTypeItem,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4048,7 +4120,6 @@ pub fn getFieldConfigurationSchemeMappings(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // fieldConfigurationSchemeId; location: query
@@ -4077,13 +4148,15 @@ pub fn getFieldConfigurationSchemeMappings(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFieldConfigurationSchemeMappingsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFieldConfigurationSchemeMappingsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFieldConfigurationSchemeProjectMappingResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanFieldConfigurationSchemeProjects,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4105,7 +4178,6 @@ pub fn getFieldConfigurationSchemeProjectMapping(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
@@ -4131,11 +4203,13 @@ pub fn getFieldConfigurationSchemeProjectMapping(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFieldConfigurationSchemeProjectMappingResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFieldConfigurationSchemeProjectMappingResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateFieldConfigurationSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -4163,7 +4237,6 @@ pub fn updateFieldConfigurationScheme(
     const http_response = try get(client, alloc, "/rest/api/3/fieldconfigurationscheme/{id}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateFieldConfigurationSchemeResult{ ._204 = {} };
     }
@@ -4182,11 +4255,13 @@ pub fn updateFieldConfigurationScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateFieldConfigurationSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateFieldConfigurationSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const SetFieldConfigurationSchemeMappingResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -4215,7 +4290,6 @@ pub fn setFieldConfigurationSchemeMapping(
     const http_response = try get(client, alloc, "/rest/api/3/fieldconfigurationscheme/{id}/mapping");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return SetFieldConfigurationSchemeMappingResult{ ._204 = {} };
     }
@@ -4234,21 +4308,23 @@ pub fn setFieldConfigurationSchemeMapping(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return SetFieldConfigurationSchemeMappingResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return SetFieldConfigurationSchemeMappingResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     /// Returned if the field configuration scheme or the issue types are not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -4267,7 +4343,6 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
     const http_response = try get(client, alloc, "/rest/api/3/fieldconfigurationscheme/{id}/mapping/delete");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._204 = {} };
     }
@@ -4314,11 +4389,13 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFiltersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// 200 response
     _200: void,
     _400: void,
@@ -4336,7 +4413,6 @@ pub fn getFilters(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetFiltersResult{ ._200 = {} };
@@ -4344,13 +4420,15 @@ pub fn getFilters(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFiltersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFiltersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDefaultShareScopeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.DefaultShareScope,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4368,7 +4446,6 @@ pub fn getDefaultShareScope(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultShareScope"
         const ty = types.DefaultShareScope;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -4385,11 +4462,13 @@ pub fn getDefaultShareScope(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDefaultShareScopeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDefaultShareScopeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFavouriteFiltersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4409,7 +4488,6 @@ pub fn getFavouriteFilters(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetFavouriteFiltersResult{ ._200 = {} };
@@ -4420,11 +4498,13 @@ pub fn getFavouriteFilters(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFavouriteFiltersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFavouriteFiltersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetMyFiltersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4444,7 +4524,6 @@ pub fn getMyFilters(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     // includeFavourites; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -4456,19 +4535,21 @@ pub fn getMyFilters(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetMyFiltersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetMyFiltersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFiltersPaginatedResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanFilterDetails,
+    _200: json.ValueTree,
     /// Returned if:
     ///
     ///  *  `owner` and `accountId` are provided.
     ///  *  `expand` includes an invalid value.
     ///  *  `orderBy` is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4486,7 +4567,6 @@ pub fn getFiltersPaginated(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // filterName; location: query
     // accountId; location: query
     // owner; location: query
@@ -4525,13 +4605,15 @@ pub fn getFiltersPaginated(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFiltersPaginatedResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFiltersPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFilterResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Filter,
+    _200: json.ValueTree,
     /// Returned if the filter is not found or the user does not have permission to view it.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4553,7 +4635,6 @@ pub fn getFilter(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
@@ -4575,11 +4656,13 @@ pub fn getFilter(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFilterResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFilterResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetColumnsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the user does not have permission to view the filter.
@@ -4606,7 +4689,6 @@ pub fn getColumns(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetColumnsResult{ ._200 = {} };
     }
@@ -4622,13 +4704,15 @@ pub fn getColumns(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetColumnsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetColumnsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const SetFavouriteForFilterResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Filter,
+    _200: json.ValueTree,
     /// Returned if:
     ///
     ///  *  the filter is not found.
@@ -4652,7 +4736,6 @@ pub fn setFavouriteForFilter(
     const http_response = try get(client, alloc, "/rest/api/3/filter/{id}/favourite");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
         const ty = types.Filter;
@@ -4670,11 +4753,13 @@ pub fn setFavouriteForFilter(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return SetFavouriteForFilterResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return SetFavouriteForFilterResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ChangeFilterOwnerResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned when:
@@ -4704,7 +4789,6 @@ pub fn changeFilterOwner(
     const http_response = try get(client, alloc, "/rest/api/3/filter/{id}/owner");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return ChangeFilterOwnerResult{ ._204 = {} };
     }
@@ -4720,11 +4804,13 @@ pub fn changeFilterOwner(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ChangeFilterOwnerResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ChangeFilterOwnerResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetSharePermissionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4752,7 +4838,6 @@ pub fn getSharePermissions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetSharePermissionsResult{ ._200 = {} };
     }
@@ -4765,13 +4850,15 @@ pub fn getSharePermissions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetSharePermissionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetSharePermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetSharePermissionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.SharePermission,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -4800,7 +4887,6 @@ pub fn getSharePermission(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SharePermission"
         const ty = types.SharePermission;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -4820,13 +4906,15 @@ pub fn getSharePermission(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetSharePermissionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetSharePermissionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetGroupResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Group,
+    _200: json.ValueTree,
     /// Returned if the group name is not specified.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4850,7 +4938,6 @@ pub fn getGroup(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // groupname; location: query
     // groupId; location: query
     // expand; location: query
@@ -4879,13 +4966,15 @@ pub fn getGroup(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetGroupResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetGroupResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const BulkGetGroupsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanGroupDetails,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4907,7 +4996,6 @@ pub fn bulkGetGroups(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // groupId; location: query
@@ -4934,13 +5022,15 @@ pub fn bulkGetGroups(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return BulkGetGroupsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return BulkGetGroupsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetUsersFromGroupResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanUserDetails,
+    _200: json.ValueTree,
     /// Returned if the group name is not specified.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4964,7 +5054,6 @@ pub fn getUsersFromGroup(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // groupname; location: query
     // groupId; location: query
     // includeInactiveUsers; location: query
@@ -4995,13 +5084,15 @@ pub fn getUsersFromGroup(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetUsersFromGroupResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetUsersFromGroupResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const AddUserToGroupResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: types.Group,
+    _201: json.ValueTree,
     /// Returned if:
     ///
     ///  *  `groupname` is not provided.
@@ -5028,7 +5119,6 @@ pub fn addUserToGroup(
     const http_response = try get(client, alloc, "/rest/api/3/group/user");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // groupname; location: query
     // groupId; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Group"
@@ -5056,13 +5146,15 @@ pub fn addUserToGroup(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return AddUserToGroupResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return AddUserToGroupResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindGroupsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.FoundGroups,
+    _200: json.ValueTree,
     _400: void,
 };
 
@@ -5078,7 +5170,6 @@ pub fn findGroups(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     // query; location: query
     // exclude; location: query
@@ -5098,13 +5189,15 @@ pub fn findGroups(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindGroupsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindGroupsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindUsersAndGroupsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.FoundUsersAndGroups,
+    _200: json.ValueTree,
     /// Returned if the query parameter is not provided.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5128,7 +5221,6 @@ pub fn findUsersAndGroups(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // maxResults; location: query
     // showAvatar; location: query
@@ -5163,13 +5255,15 @@ pub fn findUsersAndGroups(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindUsersAndGroupsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindUsersAndGroupsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetLicenseResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.License,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5187,7 +5281,6 @@ pub fn getLicense(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"License"
         const ty = types.License;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -5204,13 +5297,15 @@ pub fn getLicense(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetLicenseResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetLicenseResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const CreateIssueResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: types.CreatedIssue,
+    _201: json.ValueTree,
     /// Returned if the request:
     ///
     ///  *  is missing required fields.
@@ -5220,11 +5315,11 @@ pub const CreateIssueResult = union(enum) {
     ///  *  is to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  is invalid for any other reason.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -5240,7 +5335,6 @@ pub fn createIssue(
     const http_response = try get(client, alloc, "/rest/api/3/issue");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // updateHistory; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssue"
         const ty = types.CreatedIssue;
@@ -5285,11 +5379,13 @@ pub fn createIssue(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return CreateIssueResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return CreateIssueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const CreateIssuesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if any of the issue or subtask creation requests were successful. A request may be unsuccessful when it:
     ///
     ///  *  is missing required fields.
@@ -5299,7 +5395,7 @@ pub const CreateIssuesResult = union(enum) {
     ///  *  is to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  is invalid for any other reason.
-    _201: types.CreatedIssues,
+    _201: json.ValueTree,
     /// Returned if all requests are invalid. Requests may be unsuccessful when they:
     ///
     ///  *  are missing required fields.
@@ -5309,7 +5405,7 @@ pub const CreateIssuesResult = union(enum) {
     ///  *  are to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  are invalid for any other reason.
-    _400: types.CreatedIssues,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5327,7 +5423,6 @@ pub fn createIssues(
     const http_response = try get(client, alloc, "/rest/api/3/issue/bulk");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssues"
         const ty = types.CreatedIssues;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -5354,13 +5449,15 @@ pub fn createIssues(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return CreateIssuesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return CreateIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCreateIssueMetaResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueCreateMetadata,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5378,7 +5475,6 @@ pub fn getCreateIssueMeta(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // projectIds; location: query
     // projectKeys; location: query
     // issuetypeIds; location: query
@@ -5400,13 +5496,15 @@ pub fn getCreateIssueMeta(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCreateIssueMetaResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCreateIssueMetaResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssuePickerResourceResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssuePickerSuggestions,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5424,7 +5522,6 @@ pub fn getIssuePickerResource(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // currentJQL; location: query
     // currentIssueKey; location: query
@@ -5447,17 +5544,19 @@ pub fn getIssuePickerResource(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssuePickerResourceResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssuePickerResourceResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const BulkSetIssuesPropertiesListResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid or the user does not have the necessary permission.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     _400: void,
 };
 
@@ -5473,7 +5572,6 @@ pub fn bulkSetIssuesPropertiesList(
     const http_response = try get(client, alloc, "/rest/api/3/issue/properties");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
         return BulkSetIssuesPropertiesListResult{ ._303 = {} };
     }
@@ -5500,19 +5598,21 @@ pub fn bulkSetIssuesPropertiesList(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return BulkSetIssuesPropertiesListResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return BulkSetIssuesPropertiesListResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const BulkSetIssuePropertiesByIssueResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Return if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -5528,7 +5628,6 @@ pub fn bulkSetIssuePropertiesByIssue(
     const http_response = try get(client, alloc, "/rest/api/3/issue/properties/multi");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
         return BulkSetIssuePropertiesByIssueResult{ ._303 = {} };
     }
@@ -5565,17 +5664,19 @@ pub fn bulkSetIssuePropertiesByIssue(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return BulkSetIssuePropertiesByIssueResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return BulkSetIssuePropertiesByIssueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const BulkSetIssuePropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _303: void,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     _400: void,
 };
 
@@ -5593,7 +5694,6 @@ pub fn bulkSetIssueProperty(
     const http_response = try get(client, alloc, "/rest/api/3/issue/properties/{propertyKey}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make void
         return BulkSetIssuePropertyResult{ ._303 = {} };
     }
@@ -5620,13 +5720,15 @@ pub fn bulkSetIssueProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return BulkSetIssuePropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return BulkSetIssuePropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIsWatchingIssueBulkResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful
-    _200: types.BulkIssueIsWatching,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5644,7 +5746,6 @@ pub fn getIsWatchingIssueBulk(
     const http_response = try get(client, alloc, "/rest/api/3/issue/watching");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkIssueIsWatching"
         const ty = types.BulkIssueIsWatching;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -5661,13 +5762,15 @@ pub fn getIsWatchingIssueBulk(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIsWatchingIssueBulkResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIsWatchingIssueBulkResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueBean,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -5689,7 +5792,6 @@ pub fn getIssue(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // fields; location: query
     // fieldsByKeys; location: query
     // expand; location: query
@@ -5714,11 +5816,13 @@ pub fn getIssue(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const AssignIssueResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if:
@@ -5749,7 +5853,6 @@ pub fn assignIssue(
     const http_response = try get(client, alloc, "/rest/api/3/issue/{issueIdOrKey}/assignee");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return AssignIssueResult{ ._204 = {} };
     }
@@ -5765,11 +5868,13 @@ pub fn assignIssue(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return AssignIssueResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return AssignIssueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const AddAttachmentResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the user does not have the necessary permission.
@@ -5799,7 +5904,6 @@ pub fn addAttachment(
     const http_response = try get(client, alloc, "/rest/api/3/issue/{issueIdOrKey}/attachments");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return AddAttachmentResult{ ._200 = {} };
     }
@@ -5815,13 +5919,15 @@ pub fn addAttachment(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return AddAttachmentResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return AddAttachmentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetChangeLogsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanChangelog,
+    _200: json.ValueTree,
     /// Returned if the issue is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
@@ -5842,7 +5948,6 @@ pub fn getChangeLogs(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanChangelog"
@@ -5861,13 +5966,15 @@ pub fn getChangeLogs(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetChangeLogsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetChangeLogsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetChangeLogsByIdsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageOfChangelogs,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the issue is not found or the user does not have the necessary permission.
@@ -5890,7 +5997,6 @@ pub fn getChangeLogsByIds(
     const http_response = try get(client, alloc, "/rest/api/3/issue/{issueIdOrKey}/changelog/list");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfChangelogs"
         const ty = types.PageOfChangelogs;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -5910,13 +6016,15 @@ pub fn getChangeLogsByIds(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetChangeLogsByIdsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetChangeLogsByIdsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCommentsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageOfComments,
+    _200: json.ValueTree,
     /// Returned if `orderBy` is set to a value other than *created*.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5941,7 +6049,6 @@ pub fn getComments(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // orderBy; location: query
@@ -5968,13 +6075,15 @@ pub fn getComments(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCommentsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCommentsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCommentResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Comment,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue or comment is not found or the user does not have permission to view the issue or comment.
@@ -5999,7 +6108,6 @@ pub fn getComment(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Comment"
         const ty = types.Comment;
@@ -6020,13 +6128,15 @@ pub fn getComment(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCommentResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCommentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetEditIssueMetaResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueUpdateMetadata,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user uses an override parameter but doesn't have permission to do so.
@@ -6051,7 +6161,6 @@ pub fn getEditIssueMeta(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueUpdateMetadata"
@@ -6076,11 +6185,13 @@ pub fn getEditIssueMeta(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetEditIssueMetaResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetEditIssueMetaResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const NotifyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the email is queued for sending.
     _204: void,
     /// Returned if:
@@ -6114,7 +6225,6 @@ pub fn notify(
     const http_response = try get(client, alloc, "/rest/api/3/issue/{issueIdOrKey}/notify");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return NotifyResult{ ._204 = {} };
     }
@@ -6130,13 +6240,15 @@ pub fn notify(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return NotifyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return NotifyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssuePropertyKeysResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PropertyKeys,
+    _200: json.ValueTree,
     /// Returned if the issue is not found or the user does not have permissions to view the issue.
     _404: void,
     _400: void,
@@ -6157,7 +6269,6 @@ pub fn getIssuePropertyKeys(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const ty = types.PropertyKeys;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6174,13 +6285,15 @@ pub fn getIssuePropertyKeys(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssuePropertyKeysResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssuePropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssuePropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.EntityProperty,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue or property is not found or the user does not have permission to see the issue.
@@ -6205,7 +6318,6 @@ pub fn getIssueProperty(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const ty = types.EntityProperty;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6225,13 +6337,15 @@ pub fn getIssueProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssuePropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssuePropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetRemoteIssueLinksResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.RemoteIssueLink,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6258,7 +6372,6 @@ pub fn getRemoteIssueLinks(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // globalId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
         const ty = types.RemoteIssueLink;
@@ -6285,13 +6398,15 @@ pub fn getRemoteIssueLinks(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetRemoteIssueLinksResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetRemoteIssueLinksResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetRemoteIssueLinkByIdResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.RemoteIssueLink,
+    _200: json.ValueTree,
     /// Returned if the link ID is invalid or the remote issue link does not belong to the issue.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6320,7 +6435,6 @@ pub fn getRemoteIssueLinkById(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
         const ty = types.RemoteIssueLink;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6346,13 +6460,15 @@ pub fn getRemoteIssueLinkById(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetRemoteIssueLinkByIdResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetRemoteIssueLinkByIdResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetTransitionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Transitions,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -6375,7 +6491,6 @@ pub fn getTransitions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     // transitionId; location: query
     // skipRemoteOnlyCondition; location: query
@@ -6400,13 +6515,15 @@ pub fn getTransitions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetTransitionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetTransitionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetVotesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Votes,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -6433,7 +6550,6 @@ pub fn getVotes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Votes"
         const ty = types.Votes;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6453,13 +6569,15 @@ pub fn getVotes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetVotesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetVotesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueWatchersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful
-    _200: types.Watchers,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -6482,7 +6600,6 @@ pub fn getIssueWatchers(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Watchers"
         const ty = types.Watchers;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6502,13 +6619,15 @@ pub fn getIssueWatchers(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueWatchersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueWatchersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueWorklogResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful
-    _200: types.PageOfWorklogs,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -6535,7 +6654,6 @@ pub fn getIssueWorklog(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // startedAfter; location: query
@@ -6560,13 +6678,15 @@ pub fn getIssueWorklog(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueWorklogResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueWorklogResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorklogResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Worklog,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if:
@@ -6597,7 +6717,6 @@ pub fn getWorklog(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Worklog"
         const ty = types.Worklog;
@@ -6618,13 +6737,15 @@ pub fn getWorklog(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorklogResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorklogResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorklogPropertyKeysResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PropertyKeys,
+    _200: json.ValueTree,
     /// Returned if the worklog ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6655,7 +6776,6 @@ pub fn getWorklogPropertyKeys(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const ty = types.PropertyKeys;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6678,13 +6798,15 @@ pub fn getWorklogPropertyKeys(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorklogPropertyKeysResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorklogPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorklogPropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.EntityProperty,
+    _200: json.ValueTree,
     /// Returned if the worklog ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6717,7 +6839,6 @@ pub fn getWorklogProperty(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const ty = types.EntityProperty;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6740,11 +6861,13 @@ pub fn getWorklogProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorklogPropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorklogPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const LinkIssuesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _201: void,
     /// Returned if the comment is not created. The response contains an error message indicating why the comment wasn't created. The issue link is also not created.
@@ -6774,7 +6897,6 @@ pub fn linkIssues(
     const http_response = try get(client, alloc, "/rest/api/3/issueLink");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make void
         return LinkIssuesResult{ ._201 = {} };
     }
@@ -6790,13 +6912,15 @@ pub fn linkIssues(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return LinkIssuesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return LinkIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueLinkResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueLink,
+    _200: json.ValueTree,
     /// Returned if the issue link ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6824,7 +6948,6 @@ pub fn getIssueLink(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLink"
         const ty = types.IssueLink;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6847,13 +6970,15 @@ pub fn getIssueLink(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueLinkResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueLinkResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueLinkTypesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueLinkTypes,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if issue linking is disabled.
@@ -6873,7 +6998,6 @@ pub fn getIssueLinkTypes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkTypes"
         const ty = types.IssueLinkTypes;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6893,13 +7017,15 @@ pub fn getIssueLinkTypes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueLinkTypesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueLinkTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueLinkTypeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueLinkType,
+    _200: json.ValueTree,
     /// Returned if the issue link type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6927,7 +7053,6 @@ pub fn getIssueLinkType(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkType"
         const ty = types.IssueLinkType;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6950,13 +7075,15 @@ pub fn getIssueLinkType(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueLinkTypeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueLinkTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueSecuritySchemesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.SecuritySchemes,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the user does not have permission to administer issue security schemes.
@@ -6976,7 +7103,6 @@ pub fn getIssueSecuritySchemes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecuritySchemes"
         const ty = types.SecuritySchemes;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -6996,13 +7122,15 @@ pub fn getIssueSecuritySchemes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueSecuritySchemesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueSecuritySchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueSecuritySchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.SecurityScheme,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the administrator permission and the scheme is not used in any project where the user has administrative permission.
@@ -7024,7 +7152,6 @@ pub fn getIssueSecurityScheme(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
         const ty = types.SecurityScheme;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -7044,13 +7171,15 @@ pub fn getIssueSecurityScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueSecuritySchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueSecuritySchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueSecurityLevelMembersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueSecurityLevelMember,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7077,7 +7206,6 @@ pub fn getIssueSecurityLevelMembers(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // issueSecurityLevelId; location: query
@@ -7107,11 +7235,13 @@ pub fn getIssueSecurityLevelMembers(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueSecurityLevelMembersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueSecurityLevelMembersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueAllTypesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7131,7 +7261,6 @@ pub fn getIssueAllTypes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetIssueAllTypesResult{ ._200 = {} };
     }
@@ -7141,11 +7270,13 @@ pub fn getIssueAllTypes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueAllTypesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueAllTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypesForProjectResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -7172,7 +7303,6 @@ pub fn getIssueTypesForProject(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // projectId; location: query
     // level; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -7190,13 +7320,15 @@ pub fn getIssueTypesForProject(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypesForProjectResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypesForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueTypeDetails,
+    _200: json.ValueTree,
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7223,7 +7355,6 @@ pub fn getIssueType(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeDetails"
         const ty = types.IssueTypeDetails;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -7246,11 +7377,13 @@ pub fn getIssueType(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAlternativeIssueTypesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7278,7 +7411,6 @@ pub fn getAlternativeIssueTypes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAlternativeIssueTypesResult{ ._200 = {} };
     }
@@ -7291,13 +7423,15 @@ pub fn getAlternativeIssueTypes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAlternativeIssueTypesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAlternativeIssueTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const CreateIssueTypeAvatarResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: types.Avatar,
+    _201: json.ValueTree,
     /// Returned if:
     ///
     ///  *  an image isn't included in the request.
@@ -7330,7 +7464,6 @@ pub fn createIssueTypeAvatar(
     const http_response = try get(client, alloc, "/rest/api/3/issuetype/{id}/avatar2");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // x; location: query
     // y; location: query
     // size; location: query
@@ -7359,13 +7492,15 @@ pub fn createIssueTypeAvatar(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return CreateIssueTypeAvatarResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return CreateIssueTypeAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypePropertyKeysResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PropertyKeys,
+    _200: json.ValueTree,
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if:
@@ -7391,7 +7526,6 @@ pub fn getIssueTypePropertyKeys(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const ty = types.PropertyKeys;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -7411,13 +7545,15 @@ pub fn getIssueTypePropertyKeys(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypePropertyKeysResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypePropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypePropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.EntityProperty,
+    _200: json.ValueTree,
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7444,7 +7580,6 @@ pub fn getIssueTypeProperty(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const ty = types.EntityProperty;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -7467,13 +7602,15 @@ pub fn getIssueTypeProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypePropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypePropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllIssueTypeSchemesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueTypeScheme,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7495,7 +7632,6 @@ pub fn getAllIssueTypeSchemes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -7524,13 +7660,15 @@ pub fn getAllIssueTypeSchemes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllIssueTypeSchemesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllIssueTypeSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypeSchemesMappingResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueTypeSchemeMapping,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7552,7 +7690,6 @@ pub fn getIssueTypeSchemesMapping(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // issueTypeSchemeId; location: query
@@ -7578,13 +7715,15 @@ pub fn getIssueTypeSchemesMapping(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypeSchemesMappingResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypeSchemesMappingResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypeSchemeForProjectsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueTypeSchemeProjects,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7606,7 +7745,6 @@ pub fn getIssueTypeSchemeForProjects(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
@@ -7632,11 +7770,13 @@ pub fn getIssueTypeSchemeForProjects(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypeSchemeForProjectsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypeSchemeForProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateIssueTypeSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7664,7 +7804,6 @@ pub fn updateIssueTypeScheme(
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescheme/{issueTypeSchemeId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateIssueTypeSchemeResult{ ._204 = {} };
     }
@@ -7683,11 +7822,13 @@ pub fn updateIssueTypeScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateIssueTypeSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateIssueTypeSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const AddIssueTypesToIssueTypeSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7716,7 +7857,6 @@ pub fn addIssueTypesToIssueTypeScheme(
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return AddIssueTypesToIssueTypeSchemeResult{ ._204 = {} };
     }
@@ -7735,11 +7875,13 @@ pub fn addIssueTypesToIssueTypeScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return AddIssueTypesToIssueTypeSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return AddIssueTypesToIssueTypeSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ReorderIssueTypesInIssueTypeSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7768,7 +7910,6 @@ pub fn reorderIssueTypesInIssueTypeScheme(
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype/move");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return ReorderIssueTypesInIssueTypeSchemeResult{ ._204 = {} };
     }
@@ -7787,11 +7928,13 @@ pub fn reorderIssueTypesInIssueTypeScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ReorderIssueTypesInIssueTypeSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ReorderIssueTypesInIssueTypeSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RemoveIssueTypeFromIssueTypeSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -7822,7 +7965,6 @@ pub fn removeIssueTypeFromIssueTypeScheme(
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return RemoveIssueTypeFromIssueTypeSchemeResult{ ._204 = {} };
     }
@@ -7841,13 +7983,15 @@ pub fn removeIssueTypeFromIssueTypeScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RemoveIssueTypeFromIssueTypeSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RemoveIssueTypeFromIssueTypeSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypeScreenSchemesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueTypeScreenScheme,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7869,7 +8013,6 @@ pub fn getIssueTypeScreenSchemes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -7898,13 +8041,15 @@ pub fn getIssueTypeScreenSchemes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypeScreenSchemesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypeScreenSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypeScreenSchemeMappingsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueTypeScreenSchemeItem,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7926,7 +8071,6 @@ pub fn getIssueTypeScreenSchemeMappings(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // issueTypeScreenSchemeId; location: query
@@ -7952,13 +8096,15 @@ pub fn getIssueTypeScreenSchemeMappings(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypeScreenSchemeMappingsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypeScreenSchemeMappingsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueTypeScreenSchemeProjectAssociationsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanIssueTypeScreenSchemesProjects,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7980,7 +8126,6 @@ pub fn getIssueTypeScreenSchemeProjectAssociations(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // projectId; location: query
@@ -8006,11 +8151,13 @@ pub fn getIssueTypeScreenSchemeProjectAssociations(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueTypeScreenSchemeProjectAssociationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateIssueTypeScreenSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -8038,7 +8185,6 @@ pub fn updateIssueTypeScreenScheme(
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateIssueTypeScreenSchemeResult{ ._204 = {} };
     }
@@ -8057,11 +8203,13 @@ pub fn updateIssueTypeScreenScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateIssueTypeScreenSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const AppendMappingsForIssueTypeScreenSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -8092,7 +8240,6 @@ pub fn appendMappingsForIssueTypeScreenScheme(
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return AppendMappingsForIssueTypeScreenSchemeResult{ ._204 = {} };
     }
@@ -8114,11 +8261,13 @@ pub fn appendMappingsForIssueTypeScreenScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return AppendMappingsForIssueTypeScreenSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return AppendMappingsForIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateDefaultScreenSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -8147,7 +8296,6 @@ pub fn updateDefaultScreenScheme(
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/default");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateDefaultScreenSchemeResult{ ._204 = {} };
     }
@@ -8166,11 +8314,13 @@ pub fn updateDefaultScreenScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateDefaultScreenSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateDefaultScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RemoveMappingsFromIssueTypeScreenSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the screen scheme mappings are removed from the issue type screen scheme.
     _204: void,
     /// Returned if the request is not valid.
@@ -8199,7 +8349,6 @@ pub fn removeMappingsFromIssueTypeScreenScheme(
     const http_response = try get(client, alloc, "/rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/remove");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return RemoveMappingsFromIssueTypeScreenSchemeResult{ ._204 = {} };
     }
@@ -8218,13 +8367,15 @@ pub fn removeMappingsFromIssueTypeScreenScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RemoveMappingsFromIssueTypeScreenSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RemoveMappingsFromIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectsForIssueTypeScreenSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanProjectDetails,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8249,7 +8400,6 @@ pub fn getProjectsForIssueTypeScreenScheme(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // query; location: query
@@ -8275,13 +8425,15 @@ pub fn getProjectsForIssueTypeScreenScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectsForIssueTypeScreenSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectsForIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAutoCompleteResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.JQLReferenceData,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -8299,7 +8451,6 @@ pub fn getAutoComplete(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JQLReferenceData"
         const ty = types.JQLReferenceData;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -8316,13 +8467,15 @@ pub fn getAutoComplete(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAutoCompleteResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAutoCompleteResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFieldAutoCompleteForQueryStringResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.AutoCompleteSuggestions,
+    _200: json.ValueTree,
     /// Returned if an invalid combination of parameters is passed.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -8342,7 +8495,6 @@ pub fn getFieldAutoCompleteForQueryString(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // fieldName; location: query
     // fieldValue; location: query
     // predicateName; location: query
@@ -8366,13 +8518,15 @@ pub fn getFieldAutoCompleteForQueryString(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFieldAutoCompleteForQueryStringResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFieldAutoCompleteForQueryStringResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const MatchIssuesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueMatches,
+    _200: json.ValueTree,
     /// Returned if `jqls` exceeds the maximum number of JQL queries or `issueIds` exceeds the maximum number of issue IDs.
     _400: void,
     _400: void,
@@ -8390,7 +8544,6 @@ pub fn matchIssues(
     const http_response = try get(client, alloc, "/rest/api/3/jql/match");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueMatches"
         const ty = types.IssueMatches;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -8407,15 +8560,17 @@ pub fn matchIssues(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return MatchIssuesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return MatchIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ParseJqlQueriesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ParsedJqlQueries,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -8433,7 +8588,6 @@ pub fn parseJqlQueries(
     const http_response = try get(client, alloc, "/rest/api/3/jql/parse");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // validation; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ParsedJqlQueries"
         const ty = types.ParsedJqlQueries;
@@ -8461,13 +8615,15 @@ pub fn parseJqlQueries(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ParseJqlQueriesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ParseJqlQueriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const MigrateQueriesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. Note that the JQL queries are returned in the same order that they were passed.
-    _200: types.ConvertedJQLQueries,
+    _200: json.ValueTree,
     /// Returned if at least one of the queries cannot be converted. For example, the JQL has invalid operators or invalid keywords, or the users in the query cannot be found.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8487,7 +8643,6 @@ pub fn migrateQueries(
     const http_response = try get(client, alloc, "/rest/api/3/jql/pdcleaner");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConvertedJQLQueries"
         const ty = types.ConvertedJQLQueries;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -8507,19 +8662,21 @@ pub fn migrateQueries(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return MigrateQueriesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return MigrateQueriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const SanitiseJqlQueriesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.SanitizedJqlQueries,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -8535,7 +8692,6 @@ pub fn sanitiseJqlQueries(
     const http_response = try get(client, alloc, "/rest/api/3/jql/sanitize");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SanitizedJqlQueries"
         const ty = types.SanitizedJqlQueries;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -8579,13 +8735,15 @@ pub fn sanitiseJqlQueries(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return SanitiseJqlQueriesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return SanitiseJqlQueriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllLabelsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanString,
+    _200: json.ValueTree,
     _400: void,
 };
 
@@ -8601,7 +8759,6 @@ pub fn getAllLabels(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanString"
@@ -8617,19 +8774,21 @@ pub fn getAllLabels(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllLabelsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllLabelsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetMyPermissionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Permissions,
+    _200: json.ValueTree,
     /// Returned if `permissions` is empty, contains an invalid key, or does not equal BROWSE\_PROJECTS when commentId is provided.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the project or issue is not found or the user does not have permission to view the project or issue.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -8645,7 +8804,6 @@ pub fn getMyPermissions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // projectKey; location: query
     // projectId; location: query
     // issueKey; location: query
@@ -8697,11 +8855,13 @@ pub fn getMyPermissions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetMyPermissionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetMyPermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetPreferenceResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8723,7 +8883,6 @@ pub fn getPreference(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetPreferenceResult{ ._200 = {} };
@@ -8737,13 +8896,15 @@ pub fn getPreference(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetPreferenceResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetPreferenceResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetLocaleResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Locale,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8761,7 +8922,6 @@ pub fn getLocale(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Locale"
         const ty = types.Locale;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -8778,13 +8938,15 @@ pub fn getLocale(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetLocaleResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetLocaleResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetCurrentUserResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.User,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8802,7 +8964,6 @@ pub fn getCurrentUser(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
         const ty = types.User;
@@ -8820,13 +8981,15 @@ pub fn getCurrentUser(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetCurrentUserResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetCurrentUserResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetNotificationSchemesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. Only returns notification schemes that the user has permission to access. An empty list is returned if the user lacks permission to access all notification schemes.
-    _200: types.PageBeanNotificationScheme,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8844,7 +9007,6 @@ pub fn getNotificationSchemes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // expand; location: query
@@ -8864,13 +9026,15 @@ pub fn getNotificationSchemes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetNotificationSchemesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetNotificationSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetNotificationSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.NotificationScheme,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8894,7 +9058,6 @@ pub fn getNotificationScheme(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
         const ty = types.NotificationScheme;
@@ -8918,13 +9081,15 @@ pub fn getNotificationScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetNotificationSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetNotificationSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllPermissionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Permissions,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -8944,7 +9109,6 @@ pub fn getAllPermissions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
         const ty = types.Permissions;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -8964,13 +9128,15 @@ pub fn getAllPermissions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllPermissionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllPermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetBulkPermissionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.BulkPermissionGrants,
+    _200: json.ValueTree,
     /// Returned if:
     ///
     ///  *  `projectPermissions` is provided without at least one project permission being provided.
@@ -8978,9 +9144,9 @@ pub const GetBulkPermissionsResult = union(enum) {
     ///  *  an invalid project permission is provided in the project permissions list.
     ///  *  more than 1000 valid project IDs or more than 1000 valid issue IDs are provided.
     ///  *  an invalid account ID is provided.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -8996,7 +9162,6 @@ pub fn getBulkPermissions(
     const http_response = try get(client, alloc, "/rest/api/3/permissions/check");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkPermissionGrants"
         const ty = types.BulkPermissionGrants;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -9030,13 +9195,15 @@ pub fn getBulkPermissions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetBulkPermissionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetBulkPermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetPermittedProjectsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PermittedProjects,
+    _200: json.ValueTree,
     /// Returned if a project permission is not found.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9056,7 +9223,6 @@ pub fn getPermittedProjects(
     const http_response = try get(client, alloc, "/rest/api/3/permissions/project");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermittedProjects"
         const ty = types.PermittedProjects;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -9076,13 +9242,15 @@ pub fn getPermittedProjects(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetPermittedProjectsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetPermittedProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllPermissionSchemesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PermissionSchemes,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -9100,7 +9268,6 @@ pub fn getAllPermissionSchemes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionSchemes"
         const ty = types.PermissionSchemes;
@@ -9118,13 +9285,15 @@ pub fn getAllPermissionSchemes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllPermissionSchemesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllPermissionSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetPermissionSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PermissionScheme,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission scheme is not found or the user does not have the necessary permission.
@@ -9146,7 +9315,6 @@ pub fn getPermissionScheme(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
         const ty = types.PermissionScheme;
@@ -9167,13 +9335,15 @@ pub fn getPermissionScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetPermissionSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetPermissionSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetPermissionSchemeGrantsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PermissionGrants,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission schemes is not found or the user does not have the necessary permission.
@@ -9196,7 +9366,6 @@ pub fn getPermissionSchemeGrants(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrants"
         const ty = types.PermissionGrants;
@@ -9217,13 +9386,15 @@ pub fn getPermissionSchemeGrants(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetPermissionSchemeGrantsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetPermissionSchemeGrantsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetPermissionSchemeGrantResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PermissionGrant,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission scheme or permission grant is not found or the user does not have the necessary permission.
@@ -9248,7 +9419,6 @@ pub fn getPermissionSchemeGrant(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrant"
         const ty = types.PermissionGrant;
@@ -9269,11 +9439,13 @@ pub fn getPermissionSchemeGrant(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetPermissionSchemeGrantResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetPermissionSchemeGrantResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetPrioritiesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -9293,7 +9465,6 @@ pub fn getPriorities(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetPrioritiesResult{ ._200 = {} };
     }
@@ -9303,21 +9474,23 @@ pub fn getPriorities(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetPrioritiesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetPrioritiesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const SetDefaultPriorityResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     /// Returned if the issue priority is not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -9333,7 +9506,6 @@ pub fn setDefaultPriority(
     const http_response = try get(client, alloc, "/rest/api/3/priority/default");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return SetDefaultPriorityResult{ ._204 = {} };
     }
@@ -9380,15 +9552,17 @@ pub fn setDefaultPriority(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return SetDefaultPriorityResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return SetDefaultPriorityResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const SearchPrioritiesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanPriority,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     _400: void,
 };
 
@@ -9404,7 +9578,6 @@ pub fn searchPriorities(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -9432,13 +9605,15 @@ pub fn searchPriorities(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return SearchPrioritiesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return SearchPrioritiesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetPriorityResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Priority,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the issue priority is not found.
@@ -9460,7 +9635,6 @@ pub fn getPriority(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Priority"
         const ty = types.Priority;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -9480,11 +9654,13 @@ pub fn getPriority(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetPriorityResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetPriorityResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllProjectsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9504,7 +9680,6 @@ pub fn getAllProjects(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     // recent; location: query
     // properties; location: query
@@ -9517,11 +9692,13 @@ pub fn getAllProjects(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllProjectsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetRecentResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -9543,7 +9720,6 @@ pub fn getRecent(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -9558,13 +9734,15 @@ pub fn getRecent(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetRecentResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetRecentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const SearchProjectsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanProject,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9586,7 +9764,6 @@ pub fn searchProjects(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // orderBy; location: query
@@ -9622,11 +9799,13 @@ pub fn searchProjects(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return SearchProjectsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return SearchProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllProjectTypesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -9646,7 +9825,6 @@ pub fn getAllProjectTypes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAllProjectTypesResult{ ._200 = {} };
     }
@@ -9656,11 +9834,13 @@ pub fn getAllProjectTypes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllProjectTypesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllProjectTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllAccessibleProjectTypesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     _400: void,
@@ -9678,20 +9858,21 @@ pub fn getAllAccessibleProjectTypes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAllAccessibleProjectTypesResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllAccessibleProjectTypesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllAccessibleProjectTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectTypeByKeyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectType,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the project type is not found.
@@ -9713,7 +9894,6 @@ pub fn getProjectTypeByKey(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
         const ty = types.ProjectType;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -9733,13 +9913,15 @@ pub fn getProjectTypeByKey(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectTypeByKeyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectTypeByKeyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAccessibleProjectTypeByKeyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectType,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project type is not accessible to the user.
@@ -9762,7 +9944,6 @@ pub fn getAccessibleProjectTypeByKey(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
         const ty = types.ProjectType;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -9782,13 +9963,15 @@ pub fn getAccessibleProjectTypeByKey(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAccessibleProjectTypeByKeyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAccessibleProjectTypeByKeyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if successful.
-    _200: types.Project,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -9810,7 +9993,6 @@ pub fn getProject(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
@@ -9832,11 +10014,13 @@ pub fn getProject(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ArchiveProjectResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -9865,7 +10049,6 @@ pub fn archiveProject(
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/archive");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return ArchiveProjectResult{ ._204 = {} };
     }
@@ -9884,11 +10067,13 @@ pub fn archiveProject(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ArchiveProjectResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ArchiveProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateProjectAvatarResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9915,7 +10100,6 @@ pub fn updateProjectAvatar(
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/avatar");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateProjectAvatarResult{ ._204 = {} };
     }
@@ -9931,11 +10115,13 @@ pub fn updateProjectAvatar(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateProjectAvatarResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateProjectAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const DeleteProjectAvatarResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9964,7 +10150,6 @@ pub fn deleteProjectAvatar(
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/avatar/{id}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return DeleteProjectAvatarResult{ ._204 = {} };
     }
@@ -9980,13 +10165,15 @@ pub fn deleteProjectAvatar(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return DeleteProjectAvatarResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return DeleteProjectAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const CreateProjectAvatarResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: types.Avatar,
+    _201: json.ValueTree,
     /// Returned if:
     ///
     ///  *  an image isn't included in the request.
@@ -10017,7 +10204,6 @@ pub fn createProjectAvatar(
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/avatar2");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // x; location: query
     // y; location: query
     // size; location: query
@@ -10046,13 +10232,15 @@ pub fn createProjectAvatar(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return CreateProjectAvatarResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return CreateProjectAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllProjectAvatarsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if request is successful.
-    _200: types.ProjectAvatars,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view the project.
@@ -10075,7 +10263,6 @@ pub fn getAllProjectAvatars(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectAvatars"
         const ty = types.ProjectAvatars;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10095,13 +10282,15 @@ pub fn getAllProjectAvatars(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllProjectAvatarsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllProjectAvatarsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectComponentsPaginatedResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanComponentWithIssueCount,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -10124,7 +10313,6 @@ pub fn getProjectComponentsPaginated(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // orderBy; location: query
@@ -10148,11 +10336,13 @@ pub fn getProjectComponentsPaginated(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectComponentsPaginatedResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectComponentsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectComponentsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10177,7 +10367,6 @@ pub fn getProjectComponents(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetProjectComponentsResult{ ._200 = {} };
     }
@@ -10190,13 +10379,15 @@ pub fn getProjectComponents(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectComponentsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectComponentsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const DeleteProjectAsynchronouslyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _303: types.TaskProgressBeanObject,
+    _303: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10221,7 +10412,6 @@ pub fn deleteProjectAsynchronously(
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/delete");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
         const ty = types.TaskProgressBeanObject;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10244,13 +10434,15 @@ pub fn deleteProjectAsynchronously(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return DeleteProjectAsynchronouslyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return DeleteProjectAsynchronouslyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFeaturesForProjectResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ContainerForProjectFeatures,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10277,7 +10469,6 @@ pub fn getFeaturesForProject(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
         const ty = types.ContainerForProjectFeatures;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10303,13 +10494,15 @@ pub fn getFeaturesForProject(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFeaturesForProjectResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFeaturesForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ToggleFeatureForProjectResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ContainerForProjectFeatures,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10338,7 +10531,6 @@ pub fn toggleFeatureForProject(
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/features/{featureKey}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
         const ty = types.ContainerForProjectFeatures;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10364,13 +10556,15 @@ pub fn toggleFeatureForProject(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ToggleFeatureForProjectResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ToggleFeatureForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectPropertyKeysResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PropertyKeys,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -10397,7 +10591,6 @@ pub fn getProjectPropertyKeys(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const ty = types.PropertyKeys;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10423,13 +10616,15 @@ pub fn getProjectPropertyKeys(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectPropertyKeysResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectPropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.EntityProperty,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -10458,7 +10653,6 @@ pub fn getProjectProperty(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const ty = types.EntityProperty;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10484,13 +10678,15 @@ pub fn getProjectProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectPropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RestoreResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Project,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10515,7 +10711,6 @@ pub fn restore(
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/restore");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
         const ty = types.Project;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10538,11 +10733,13 @@ pub fn restore(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RestoreResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RestoreResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectRolesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing or if the user lacks administrative permissions for the project.
@@ -10567,7 +10764,6 @@ pub fn getProjectRoles(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetProjectRolesResult{ ._200 = {} };
     }
@@ -10580,13 +10776,15 @@ pub fn getProjectRoles(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectRolesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectRolesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectRoleResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectRole,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10616,7 +10814,6 @@ pub fn getProjectRole(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // excludeInactiveUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
         const ty = types.ProjectRole;
@@ -10640,11 +10837,13 @@ pub fn getProjectRole(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectRoleResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectRoleResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectRoleDetailsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10669,7 +10868,6 @@ pub fn getProjectRoleDetails(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // currentMember; location: query
     // excludeConnectAddons; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -10684,11 +10882,13 @@ pub fn getProjectRoleDetails(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectRoleDetailsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectRoleDetailsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllStatusesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10713,7 +10913,6 @@ pub fn getAllStatuses(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAllStatusesResult{ ._200 = {} };
     }
@@ -10726,13 +10925,15 @@ pub fn getAllStatuses(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllStatusesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllStatusesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateProjectTypeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the project type is updated.
-    _200: types.Project,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10759,7 +10960,6 @@ pub fn updateProjectType(
     const http_response = try get(client, alloc, "/rest/api/3/project/{projectIdOrKey}/type/{newProjectTypeKey}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
         const ty = types.Project;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10782,13 +10982,15 @@ pub fn updateProjectType(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateProjectTypeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateProjectTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectVersionsPaginatedResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanVersion,
+    _200: json.ValueTree,
     /// Returned if the project is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
@@ -10809,7 +11011,6 @@ pub fn getProjectVersionsPaginated(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // orderBy; location: query
@@ -10832,11 +11033,13 @@ pub fn getProjectVersionsPaginated(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectVersionsPaginatedResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectVersionsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectVersionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -10859,7 +11062,6 @@ pub fn getProjectVersions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetProjectVersionsResult{ ._200 = {} };
@@ -10870,13 +11072,15 @@ pub fn getProjectVersions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectVersionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectVersionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectEmailResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectEmailAddress,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have permission to read project.
@@ -10901,7 +11105,6 @@ pub fn getProjectEmail(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectEmailAddress"
         const ty = types.ProjectEmailAddress;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10924,13 +11127,15 @@ pub fn getProjectEmail(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectEmailResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectEmailResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetHierarchyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectIssueTypeHierarchy,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10955,7 +11160,6 @@ pub fn getHierarchy(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueTypeHierarchy"
         const ty = types.ProjectIssueTypeHierarchy;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -10978,13 +11182,15 @@ pub fn getHierarchy(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetHierarchyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetHierarchyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectIssueSecuritySchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.SecurityScheme,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11011,7 +11217,6 @@ pub fn getProjectIssueSecurityScheme(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
         const ty = types.SecurityScheme;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -11037,13 +11242,15 @@ pub fn getProjectIssueSecurityScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectIssueSecuritySchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectIssueSecuritySchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetNotificationSchemeForProjectResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.NotificationScheme,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11068,7 +11275,6 @@ pub fn getNotificationSchemeForProject(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
         const ty = types.NotificationScheme;
@@ -11092,13 +11298,15 @@ pub fn getNotificationSchemeForProject(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetNotificationSchemeForProjectResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetNotificationSchemeForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAssignedPermissionSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PermissionScheme,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have permission to view the project's configuration.
@@ -11123,7 +11331,6 @@ pub fn getAssignedPermissionScheme(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
         const ty = types.PermissionScheme;
@@ -11147,13 +11354,15 @@ pub fn getAssignedPermissionScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAssignedPermissionSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAssignedPermissionSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetSecurityLevelsForProjectResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectIssueSecurityLevels,
+    _200: json.ValueTree,
     /// Returned if the project is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
@@ -11174,7 +11383,6 @@ pub fn getSecurityLevelsForProject(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueSecurityLevels"
         const ty = types.ProjectIssueSecurityLevels;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -11191,11 +11399,13 @@ pub fn getSecurityLevelsForProject(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetSecurityLevelsForProjectResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetSecurityLevelsForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllProjectCategoriesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11215,7 +11425,6 @@ pub fn getAllProjectCategories(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAllProjectCategoriesResult{ ._200 = {} };
     }
@@ -11225,13 +11434,15 @@ pub fn getAllProjectCategories(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllProjectCategoriesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllProjectCategoriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectCategoryByIdResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectCategory,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project category is not found.
@@ -11253,7 +11464,6 @@ pub fn getProjectCategoryById(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectCategory"
         const ty = types.ProjectCategory;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -11273,13 +11483,15 @@ pub fn getProjectCategoryById(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectCategoryByIdResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectCategoryByIdResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const ValidateProjectKeyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ErrorCollection,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -11297,7 +11509,6 @@ pub fn validateProjectKey(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ErrorCollection"
         const ty = types.ErrorCollection;
@@ -11315,11 +11526,13 @@ pub fn validateProjectKey(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return ValidateProjectKeyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return ValidateProjectKeyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetValidProjectKeyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
@@ -11339,7 +11552,6 @@ pub fn getValidProjectKey(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetValidProjectKeyResult{ ._200 = {} };
@@ -11350,11 +11562,13 @@ pub fn getValidProjectKey(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetValidProjectKeyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetValidProjectKeyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetValidProjectNameResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -11378,7 +11592,6 @@ pub fn getValidProjectName(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // name; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetValidProjectNameResult{ ._200 = {} };
@@ -11395,11 +11608,13 @@ pub fn getValidProjectName(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetValidProjectNameResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetValidProjectNameResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetResolutionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11419,7 +11634,6 @@ pub fn getResolutions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetResolutionsResult{ ._200 = {} };
     }
@@ -11429,13 +11643,15 @@ pub fn getResolutions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetResolutionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetResolutionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetResolutionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Resolution,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue resolution value is not found.
@@ -11457,7 +11673,6 @@ pub fn getResolution(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Resolution"
         const ty = types.Resolution;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -11477,11 +11692,13 @@ pub fn getResolution(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetResolutionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetResolutionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllProjectRolesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11503,7 +11720,6 @@ pub fn getAllProjectRoles(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAllProjectRolesResult{ ._200 = {} };
     }
@@ -11516,13 +11732,15 @@ pub fn getAllProjectRoles(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllProjectRolesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllProjectRolesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectRoleByIdResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectRole,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have administrative permissions.
@@ -11546,7 +11764,6 @@ pub fn getProjectRoleById(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
         const ty = types.ProjectRole;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -11569,13 +11786,15 @@ pub fn getProjectRoleById(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectRoleByIdResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectRoleByIdResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetProjectRoleActorsForRoleResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ProjectRole,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11602,7 +11821,6 @@ pub fn getProjectRoleActorsForRole(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
         const ty = types.ProjectRole;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -11628,13 +11846,15 @@ pub fn getProjectRoleActorsForRole(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetProjectRoleActorsForRoleResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetProjectRoleActorsForRoleResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetScreensResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanScreen,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -11654,7 +11874,6 @@ pub fn getScreens(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -11680,11 +11899,13 @@ pub fn getScreens(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetScreensResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetScreensResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const AddFieldToDefaultScreenResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11710,7 +11931,6 @@ pub fn addFieldToDefaultScreen(
     const http_response = try get(client, alloc, "/rest/api/3/screens/addToDefault/{fieldId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return AddFieldToDefaultScreenResult{ ._200 = {} };
     }
@@ -11726,13 +11946,15 @@ pub fn addFieldToDefaultScreen(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return AddFieldToDefaultScreenResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return AddFieldToDefaultScreenResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateScreenResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Screen,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11758,7 +11980,6 @@ pub fn updateScreen(
     const http_response = try get(client, alloc, "/rest/api/3/screens/{screenId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Screen"
         const ty = types.Screen;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -11784,11 +12005,13 @@ pub fn updateScreen(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateScreenResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateScreenResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAvailableScreenFieldsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11815,7 +12038,6 @@ pub fn getAvailableScreenFields(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAvailableScreenFieldsResult{ ._200 = {} };
     }
@@ -11831,11 +12053,13 @@ pub fn getAvailableScreenFields(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAvailableScreenFieldsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAvailableScreenFieldsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllScreenTabsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the screen ID is invalid.
@@ -11864,7 +12088,6 @@ pub fn getAllScreenTabs(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // projectKey; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAllScreenTabsResult{ ._200 = {} };
@@ -11884,13 +12107,15 @@ pub fn getAllScreenTabs(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllScreenTabsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllScreenTabsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RenameScreenTabResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ScreenableTab,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11919,7 +12144,6 @@ pub fn renameScreenTab(
     const http_response = try get(client, alloc, "/rest/api/3/screens/{screenId}/tabs/{tabId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ScreenableTab"
         const ty = types.ScreenableTab;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -11945,11 +12169,13 @@ pub fn renameScreenTab(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RenameScreenTabResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RenameScreenTabResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllScreenTabFieldsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11979,7 +12205,6 @@ pub fn getAllScreenTabFields(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // projectKey; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAllScreenTabFieldsResult{ ._200 = {} };
@@ -11996,11 +12221,13 @@ pub fn getAllScreenTabFields(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllScreenTabFieldsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllScreenTabFieldsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RemoveScreenTabFieldResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -12034,7 +12261,6 @@ pub fn removeScreenTabField(
     const http_response = try get(client, alloc, "/rest/api/3/screens/{screenId}/tabs/{tabId}/fields/{id}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return RemoveScreenTabFieldResult{ ._204 = {} };
     }
@@ -12053,11 +12279,13 @@ pub fn removeScreenTabField(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RemoveScreenTabFieldResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RemoveScreenTabFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const MoveScreenTabFieldResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -12092,7 +12320,6 @@ pub fn moveScreenTabField(
     const http_response = try get(client, alloc, "/rest/api/3/screens/{screenId}/tabs/{tabId}/fields/{id}/move");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return MoveScreenTabFieldResult{ ._204 = {} };
     }
@@ -12111,11 +12338,13 @@ pub fn moveScreenTabField(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return MoveScreenTabFieldResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return MoveScreenTabFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const MoveScreenTabResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -12149,7 +12378,6 @@ pub fn moveScreenTab(
     const http_response = try get(client, alloc, "/rest/api/3/screens/{screenId}/tabs/{tabId}/move/{pos}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return MoveScreenTabResult{ ._204 = {} };
     }
@@ -12168,13 +12396,15 @@ pub fn moveScreenTab(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return MoveScreenTabResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return MoveScreenTabResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetScreenSchemesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanScreenScheme,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -12194,7 +12424,6 @@ pub fn getScreenSchemes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // id; location: query
@@ -12220,11 +12449,13 @@ pub fn getScreenSchemes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetScreenSchemesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetScreenSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateScreenSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
@@ -12252,7 +12483,6 @@ pub fn updateScreenScheme(
     const http_response = try get(client, alloc, "/rest/api/3/screenscheme/{screenSchemeId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateScreenSchemeResult{ ._204 = {} };
     }
@@ -12271,13 +12501,15 @@ pub fn updateScreenScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateScreenSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const SearchForIssuesUsingJqlResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.SearchResults,
+    _200: json.ValueTree,
     /// Returned if the JQL query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12297,7 +12529,6 @@ pub fn searchForIssuesUsingJql(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // jql; location: query
     // startAt; location: query
     // maxResults; location: query
@@ -12325,13 +12556,15 @@ pub fn searchForIssuesUsingJql(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return SearchForIssuesUsingJqlResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return SearchForIssuesUsingJqlResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueSecurityLevelResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.SecurityLevel,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the issue security level is not found.
@@ -12353,7 +12586,6 @@ pub fn getIssueSecurityLevel(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityLevel"
         const ty = types.SecurityLevel;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -12373,13 +12605,15 @@ pub fn getIssueSecurityLevel(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueSecurityLevelResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueSecurityLevelResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetServerInfoResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ServerInformation,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -12397,7 +12631,6 @@ pub fn getServerInfo(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ServerInformation"
         const ty = types.ServerInformation;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -12414,11 +12647,13 @@ pub fn getServerInfo(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetServerInfoResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetServerInfoResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIssueNavigatorDefaultColumnsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12440,7 +12675,6 @@ pub fn getIssueNavigatorDefaultColumns(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetIssueNavigatorDefaultColumnsResult{ ._200 = {} };
     }
@@ -12453,11 +12687,13 @@ pub fn getIssueNavigatorDefaultColumns(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIssueNavigatorDefaultColumnsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIssueNavigatorDefaultColumnsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetStatusesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12477,7 +12713,6 @@ pub fn getStatuses(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetStatusesResult{ ._200 = {} };
     }
@@ -12487,13 +12722,15 @@ pub fn getStatuses(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetStatusesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetStatusesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetStatusResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.StatusDetails,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -12519,7 +12756,6 @@ pub fn getStatus(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusDetails"
         const ty = types.StatusDetails;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -12539,11 +12775,13 @@ pub fn getStatus(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetStatusResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetStatusResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetStatusCategoriesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12563,7 +12801,6 @@ pub fn getStatusCategories(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetStatusCategoriesResult{ ._200 = {} };
     }
@@ -12573,13 +12810,15 @@ pub fn getStatusCategories(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetStatusCategoriesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetStatusCategoriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetStatusCategoryResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.StatusCategory,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the status category is not found.
@@ -12601,7 +12840,6 @@ pub fn getStatusCategory(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusCategory"
         const ty = types.StatusCategory;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -12621,11 +12859,13 @@ pub fn getStatusCategory(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetStatusCategoryResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetStatusCategoryResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetStatusesByIdResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -12647,7 +12887,6 @@ pub fn getStatusesById(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     // id; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -12662,13 +12901,15 @@ pub fn getStatusesById(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetStatusesByIdResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetStatusesByIdResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const SearchResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageOfStatuses,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing, or the caller doesn't have permissions to perform the operation.
@@ -12688,7 +12929,6 @@ pub fn search(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     // projectId; location: query
     // startAt; location: query
@@ -12714,13 +12954,15 @@ pub fn search(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return SearchResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return SearchResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetTaskResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.TaskProgressBeanObject,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -12744,7 +12986,6 @@ pub fn getTask(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TaskProgressBeanObject"
         const ty = types.TaskProgressBeanObject;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -12767,11 +13008,13 @@ pub fn getTask(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetTaskResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetTaskResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const CancelTaskResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _202: void,
     /// Returned if cancellation of the task is not possible.
@@ -12800,7 +13043,6 @@ pub fn cancelTask(
     const http_response = try get(client, alloc, "/rest/api/3/task/{taskId}/cancel");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "202", http_response.status_code)) { // Make void
         return CancelTaskResult{ ._202 = {} };
     }
@@ -12819,13 +13061,15 @@ pub fn cancelTask(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return CancelTaskResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return CancelTaskResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetUiModificationsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanUiModificationDetails,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12847,7 +13091,6 @@ pub fn getUiModifications(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // expand; location: query
@@ -12873,11 +13116,13 @@ pub fn getUiModifications(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetUiModificationsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetUiModificationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const UpdateUiModificationResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the UI modification is updated.
     _204: void,
     /// Returned if the request is not valid.
@@ -12905,7 +13150,6 @@ pub fn updateUiModification(
     const http_response = try get(client, alloc, "/rest/api/3/uiModifications/{uiModificationId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return UpdateUiModificationResult{ ._204 = {} };
     }
@@ -12924,13 +13168,15 @@ pub fn updateUiModification(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return UpdateUiModificationResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return UpdateUiModificationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAvatarsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Avatars,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the avatar type is invalid, the associated item ID is missing, or the item is not found.
@@ -12955,7 +13201,6 @@ pub fn getAvatars(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Avatars"
         const ty = types.Avatars;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -12975,11 +13220,13 @@ pub fn getAvatars(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAvatarsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAvatarsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const DeleteAvatarResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
@@ -13011,7 +13258,6 @@ pub fn deleteAvatar(
     const http_response = try get(client, alloc, "/rest/api/3/universal_avatar/type/{type}/owner/{owningObjectId}/avatar/{id}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return DeleteAvatarResult{ ._204 = {} };
     }
@@ -13027,19 +13273,21 @@ pub fn deleteAvatar(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return DeleteAvatarResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return DeleteAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAvatarImageByTypeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -13057,7 +13305,6 @@ pub fn getAvatarImageByType(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // size; location: query
     // format; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -13096,21 +13343,23 @@ pub fn getAvatarImageByType(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAvatarImageByTypeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAvatarImageByTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAvatarImageByIDResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -13131,7 +13380,6 @@ pub fn getAvatarImageByID(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // size; location: query
     // format; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -13180,21 +13428,23 @@ pub fn getAvatarImageByID(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAvatarImageByIDResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAvatarImageByIDResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAvatarImageByOwnerResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
-    _401: types.ErrorCollection,
+    _401: json.ValueTree,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: types.ErrorCollection,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -13215,7 +13465,6 @@ pub fn getAvatarImageByOwner(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // size; location: query
     // format; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -13264,13 +13513,15 @@ pub fn getAvatarImageByOwner(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAvatarImageByOwnerResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAvatarImageByOwnerResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetUserResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.User,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the calling user does not have the *Browse users and groups* global permission.
@@ -13292,7 +13543,6 @@ pub fn getUser(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     // username; location: query
     // key; location: query
@@ -13319,11 +13569,13 @@ pub fn getUser(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetUserResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetUserResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindBulkAssignableUsersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -13353,7 +13605,6 @@ pub fn findBulkAssignableUsers(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // username; location: query
     // accountId; location: query
@@ -13378,11 +13629,13 @@ pub fn findBulkAssignableUsers(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindBulkAssignableUsersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindBulkAssignableUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindAssignableUsersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -13412,7 +13665,6 @@ pub fn findAssignableUsers(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // sessionId; location: query
     // username; location: query
@@ -13441,13 +13693,15 @@ pub fn findAssignableUsers(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindAssignableUsersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindAssignableUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const BulkGetUsersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanUser,
+    _200: json.ValueTree,
     /// Returned if `accountID` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13467,7 +13721,6 @@ pub fn bulkGetUsers(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // username; location: query
@@ -13492,11 +13745,13 @@ pub fn bulkGetUsers(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return BulkGetUsersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return BulkGetUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const BulkGetUsersMigrationResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if `key` or `username`
@@ -13518,7 +13773,6 @@ pub fn bulkGetUsersMigration(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // username; location: query
@@ -13535,11 +13789,13 @@ pub fn bulkGetUsersMigration(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return BulkGetUsersMigrationResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return BulkGetUsersMigrationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetUserDefaultColumnsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13563,7 +13819,6 @@ pub fn getUserDefaultColumns(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -13581,13 +13836,15 @@ pub fn getUserDefaultColumns(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetUserDefaultColumnsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetUserDefaultColumnsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetUserEmailResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.UnrestrictedUserEmail,
+    _200: json.ValueTree,
     /// Returned if the calling app is not approved to use this API.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing from the request (for example if a user is trying to access this API).
@@ -13611,7 +13868,6 @@ pub fn getUserEmail(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
         const ty = types.UnrestrictedUserEmail;
@@ -13638,13 +13894,15 @@ pub fn getUserEmail(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetUserEmailResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetUserEmailResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetUserEmailBulkResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.UnrestrictedUserEmail,
+    _200: json.ValueTree,
     /// Returned if the calling app is not approved to use this API.
     _400: void,
     /// Returned if the authentication credentials are incorrect, or missing from the request (for example if a user is trying to access this API).
@@ -13666,7 +13924,6 @@ pub fn getUserEmailBulk(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
         const ty = types.UnrestrictedUserEmail;
@@ -13690,11 +13947,13 @@ pub fn getUserEmailBulk(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetUserEmailBulkResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetUserEmailBulkResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetUserGroupsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13718,7 +13977,6 @@ pub fn getUserGroups(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     // username; location: query
     // key; location: query
@@ -13737,11 +13995,13 @@ pub fn getUserGroups(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetUserGroupsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetUserGroupsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindUsersWithAllPermissionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -13774,7 +14034,6 @@ pub fn findUsersWithAllPermissions(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // username; location: query
     // accountId; location: query
@@ -13804,13 +14063,15 @@ pub fn findUsersWithAllPermissions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindUsersWithAllPermissionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindUsersWithAllPermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindUsersForPickerResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.FoundUsers,
+    _200: json.ValueTree,
     /// Returned if `exclude` and `excludeAccountIds` are provided.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13832,7 +14093,6 @@ pub fn findUsersForPicker(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // maxResults; location: query
     // showAvatar; location: query
@@ -13862,13 +14122,15 @@ pub fn findUsersForPicker(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindUsersForPickerResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindUsersForPickerResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetUserPropertyKeysResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PropertyKeys,
+    _200: json.ValueTree,
     /// Returned if `accountId` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13892,7 +14154,6 @@ pub fn getUserPropertyKeys(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     // userKey; location: query
     // username; location: query
@@ -13921,13 +14182,15 @@ pub fn getUserPropertyKeys(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetUserPropertyKeysResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetUserPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetUserPropertyResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.EntityProperty,
+    _200: json.ValueTree,
     /// Returned if `accountId` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13953,7 +14216,6 @@ pub fn getUserProperty(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // accountId; location: query
     // userKey; location: query
     // username; location: query
@@ -13982,11 +14244,13 @@ pub fn getUserProperty(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetUserPropertyResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetUserPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindUsersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -14014,7 +14278,6 @@ pub fn findUsers(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // username; location: query
     // accountId; location: query
@@ -14036,13 +14299,15 @@ pub fn findUsers(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindUsersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindUsersByQueryResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanUser,
+    _200: json.ValueTree,
     /// Returned if the query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14066,7 +14331,6 @@ pub fn findUsersByQuery(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // startAt; location: query
     // maxResults; location: query
@@ -14095,13 +14359,15 @@ pub fn findUsersByQuery(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindUsersByQueryResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindUsersByQueryResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindUserKeysByQueryResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanUserKey,
+    _200: json.ValueTree,
     /// Returned if the query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14125,7 +14391,6 @@ pub fn findUserKeysByQuery(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // startAt; location: query
     // maxResults; location: query
@@ -14154,11 +14419,13 @@ pub fn findUserKeysByQuery(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindUserKeysByQueryResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindUserKeysByQueryResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const FindUsersWithBrowsePermissionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if:
@@ -14188,7 +14455,6 @@ pub fn findUsersWithBrowsePermission(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // query; location: query
     // username; location: query
     // accountId; location: query
@@ -14214,11 +14480,13 @@ pub fn findUsersWithBrowsePermission(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return FindUsersWithBrowsePermissionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return FindUsersWithBrowsePermissionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllUsersDefaultResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -14242,7 +14510,6 @@ pub fn getAllUsersDefault(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -14260,11 +14527,13 @@ pub fn getAllUsersDefault(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllUsersDefaultResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllUsersDefaultResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllUsersResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -14288,7 +14557,6 @@ pub fn getAllUsers(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
@@ -14306,13 +14574,15 @@ pub fn getAllUsers(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllUsersResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const CreateVersionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: types.Version,
+    _201: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14337,7 +14607,6 @@ pub fn createVersion(
     const http_response = try get(client, alloc, "/rest/api/3/version");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Version"
         const ty = types.Version;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -14360,13 +14629,15 @@ pub fn createVersion(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return CreateVersionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return CreateVersionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetVersionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Version,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the version is not found or the user does not have the necessary permission.
@@ -14388,7 +14659,6 @@ pub fn getVersion(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
         const ty = types.Version;
@@ -14409,11 +14679,13 @@ pub fn getVersion(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetVersionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetVersionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const MergeVersionsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the version is deleted.
     _204: void,
     /// Returned if the request is invalid.
@@ -14445,7 +14717,6 @@ pub fn mergeVersions(
     const http_response = try get(client, alloc, "/rest/api/3/version/{id}/mergeto/{moveIssuesTo}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return MergeVersionsResult{ ._204 = {} };
     }
@@ -14461,13 +14732,15 @@ pub fn mergeVersions(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return MergeVersionsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return MergeVersionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const MoveVersionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.Version,
+    _200: json.ValueTree,
     /// Returned if:
     ///
     ///  *  no body parameters are provided.
@@ -14499,7 +14772,6 @@ pub fn moveVersion(
     const http_response = try get(client, alloc, "/rest/api/3/version/{id}/move");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
         const ty = types.Version;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -14522,13 +14794,15 @@ pub fn moveVersion(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return MoveVersionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return MoveVersionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetVersionRelatedIssuesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.VersionIssueCounts,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if:
@@ -14554,7 +14828,6 @@ pub fn getVersionRelatedIssues(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionIssueCounts"
         const ty = types.VersionIssueCounts;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -14574,11 +14847,13 @@ pub fn getVersionRelatedIssues(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetVersionRelatedIssuesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetVersionRelatedIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const DeleteAndReplaceVersionResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the version is deleted.
     _204: void,
     /// Returned if the request is invalid.
@@ -14608,7 +14883,6 @@ pub fn deleteAndReplaceVersion(
     const http_response = try get(client, alloc, "/rest/api/3/version/{id}/removeAndSwap");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return DeleteAndReplaceVersionResult{ ._204 = {} };
     }
@@ -14624,13 +14898,15 @@ pub fn deleteAndReplaceVersion(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return DeleteAndReplaceVersionResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return DeleteAndReplaceVersionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetVersionUnresolvedIssuesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.VersionUnresolvedIssuesCount,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -14656,7 +14932,6 @@ pub fn getVersionUnresolvedIssues(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionUnresolvedIssuesCount"
         const ty = types.VersionUnresolvedIssuesCount;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -14676,17 +14951,19 @@ pub fn getVersionUnresolvedIssues(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetVersionUnresolvedIssuesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetVersionUnresolvedIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDynamicWebhooksForAppResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanWebhook,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the caller is not an app.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -14702,7 +14979,6 @@ pub fn getDynamicWebhooksForApp(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWebhook"
@@ -14738,17 +15014,19 @@ pub fn getDynamicWebhooksForApp(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDynamicWebhooksForAppResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDynamicWebhooksForAppResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetFailedWebhooksResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.FailedWebhooks,
+    _200: json.ValueTree,
     /// 400 response
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the caller is not a Connect app.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -14764,7 +15042,6 @@ pub fn getFailedWebhooks(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // maxResults; location: query
     // after; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FailedWebhooks"
@@ -14800,17 +15077,19 @@ pub fn getFailedWebhooks(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetFailedWebhooksResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetFailedWebhooksResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const RefreshWebhooksResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.WebhooksExpirationDate,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the caller is not an app.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -14826,7 +15105,6 @@ pub fn refreshWebhooks(
     const http_response = try get(client, alloc, "/rest/api/3/webhook/refresh");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WebhooksExpirationDate"
         const ty = types.WebhooksExpirationDate;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -14860,11 +15138,13 @@ pub fn refreshWebhooks(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return RefreshWebhooksResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return RefreshWebhooksResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllWorkflowsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the user does not have the necessary permission.
@@ -14884,7 +15164,6 @@ pub fn getAllWorkflows(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetAllWorkflowsResult{ ._200 = {} };
@@ -14895,17 +15174,19 @@ pub fn getAllWorkflows(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllWorkflowsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllWorkflowsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorkflowTransitionRuleConfigurationsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanWorkflowTransitionRules,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the caller is not a Connect app.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     /// Returned if the any transition rule type is not supported.
     _404: void,
     _400: void,
@@ -14923,7 +15204,6 @@ pub fn getWorkflowTransitionRuleConfigurations(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // types; location: query
@@ -14968,17 +15248,19 @@ pub fn getWorkflowTransitionRuleConfigurations(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorkflowTransitionRuleConfigurationsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorkflowTransitionRuleConfigurationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const DeleteWorkflowTransitionRuleConfigurationsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.WorkflowTransitionRulesUpdateErrors,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
-    _400: types.ErrorCollection,
+    _400: json.ValueTree,
     /// Returned if the caller is not a Connect app.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -14994,7 +15276,6 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
     const http_response = try get(client, alloc, "/rest/api/3/workflow/rule/config/delete");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionRulesUpdateErrors"
         const ty = types.WorkflowTransitionRulesUpdateErrors;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -15028,17 +15309,19 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return DeleteWorkflowTransitionRuleConfigurationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorkflowsPaginatedResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanWorkflow,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: types.ErrorCollection,
+    _403: json.ValueTree,
     _400: void,
 };
 
@@ -15054,7 +15337,6 @@ pub fn getWorkflowsPaginated(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     // workflowName; location: query
@@ -15088,13 +15370,15 @@ pub fn getWorkflowsPaginated(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorkflowsPaginatedResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorkflowsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorkflowTransitionPropertiesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// 200 response
-    _200: types.WorkflowTransitionProperty,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15121,7 +15405,6 @@ pub fn getWorkflowTransitionProperties(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // includeReservedKeys; location: query
     // key; location: query
     // workflowName; location: query
@@ -15151,11 +15434,13 @@ pub fn getWorkflowTransitionProperties(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorkflowTransitionPropertiesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorkflowTransitionPropertiesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const DeleteInactiveWorkflowResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the workflow is deleted.
     _204: void,
     /// Returned if the request is not valid.
@@ -15183,7 +15468,6 @@ pub fn deleteInactiveWorkflow(
     const http_response = try get(client, alloc, "/rest/api/3/workflow/{entityId}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return DeleteInactiveWorkflowResult{ ._204 = {} };
     }
@@ -15202,13 +15486,15 @@ pub fn deleteInactiveWorkflow(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return DeleteInactiveWorkflowResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return DeleteInactiveWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetAllWorkflowSchemesResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PageBeanWorkflowScheme,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15228,7 +15514,6 @@ pub fn getAllWorkflowSchemes(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowScheme"
@@ -15250,13 +15535,15 @@ pub fn getAllWorkflowSchemes(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetAllWorkflowSchemesResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetAllWorkflowSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeProjectAssociationsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ContainerOfWorkflowSchemeAssociations,
+    _200: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15278,7 +15565,6 @@ pub fn getWorkflowSchemeProjectAssociations(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerOfWorkflowSchemeAssociations"
         const ty = types.ContainerOfWorkflowSchemeAssociations;
@@ -15302,13 +15588,15 @@ pub fn getWorkflowSchemeProjectAssociations(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorkflowSchemeProjectAssociationsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorkflowSchemeProjectAssociationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.WorkflowScheme,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15332,7 +15620,6 @@ pub fn getWorkflowScheme(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
         const ty = types.WorkflowScheme;
@@ -15356,13 +15643,15 @@ pub fn getWorkflowScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorkflowSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorkflowSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const CreateWorkflowSchemeDraftFromParentResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: types.WorkflowScheme,
+    _201: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15387,7 +15676,6 @@ pub fn createWorkflowSchemeDraftFromParent(
     const http_response = try get(client, alloc, "/rest/api/3/workflowscheme/{id}/createdraft");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"WorkflowScheme"
         const ty = types.WorkflowScheme;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -15410,13 +15698,15 @@ pub fn createWorkflowSchemeDraftFromParent(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return CreateWorkflowSchemeDraftFromParentResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return CreateWorkflowSchemeDraftFromParentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDefaultWorkflowResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.DefaultWorkflow,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15441,7 +15731,6 @@ pub fn getDefaultWorkflow(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
         const ty = types.DefaultWorkflow;
@@ -15465,13 +15754,15 @@ pub fn getDefaultWorkflow(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDefaultWorkflowResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDefaultWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeDraftResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.WorkflowScheme,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15499,7 +15790,6 @@ pub fn getWorkflowSchemeDraft(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
         const ty = types.WorkflowScheme;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -15522,13 +15812,15 @@ pub fn getWorkflowSchemeDraft(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorkflowSchemeDraftResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorkflowSchemeDraftResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDraftDefaultWorkflowResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.DefaultWorkflow,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission..
@@ -15556,7 +15848,6 @@ pub fn getDraftDefaultWorkflow(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
         const ty = types.DefaultWorkflow;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -15579,13 +15870,15 @@ pub fn getDraftDefaultWorkflow(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDraftDefaultWorkflowResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDraftDefaultWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeDraftIssueTypeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueTypeWorkflowMapping,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15612,7 +15905,6 @@ pub fn getWorkflowSchemeDraftIssueType(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
         const ty = types.IssueTypeWorkflowMapping;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -15635,15 +15927,17 @@ pub fn getWorkflowSchemeDraftIssueType(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorkflowSchemeDraftIssueTypeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorkflowSchemeDraftIssueTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const PublishDraftWorkflowSchemeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is only for validation and is successful.
     _204: void,
     /// Returned if the request is successful.
-    _303: types.TaskProgressBeanObject,
+    _303: json.ValueTree,
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15674,7 +15968,6 @@ pub fn publishDraftWorkflowScheme(
     const http_response = try get(client, alloc, "/rest/api/3/workflowscheme/{id}/draft/publish");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // validateOnly; location: query
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
         return PublishDraftWorkflowSchemeResult{ ._204 = {} };
@@ -15704,13 +15997,15 @@ pub fn publishDraftWorkflowScheme(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return PublishDraftWorkflowSchemeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return PublishDraftWorkflowSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetDraftWorkflowResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueTypesWorkflowMapping,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15735,7 +16030,6 @@ pub fn getDraftWorkflow(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
         const ty = types.IssueTypesWorkflowMapping;
@@ -15759,13 +16053,15 @@ pub fn getDraftWorkflow(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetDraftWorkflowResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetDraftWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeIssueTypeResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueTypeWorkflowMapping,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15792,7 +16088,6 @@ pub fn getWorkflowSchemeIssueType(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
         const ty = types.IssueTypeWorkflowMapping;
@@ -15816,13 +16111,15 @@ pub fn getWorkflowSchemeIssueType(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorkflowSchemeIssueTypeResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorkflowSchemeIssueTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorkflowResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.IssueTypesWorkflowMapping,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15847,7 +16144,6 @@ pub fn getWorkflow(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // workflowName; location: query
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
@@ -15872,13 +16168,15 @@ pub fn getWorkflow(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorkflowResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIdsOfWorklogsDeletedSinceResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ChangedWorklogs,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -15896,7 +16194,6 @@ pub fn getIdsOfWorklogsDeletedSince(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // since; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
         const ty = types.ChangedWorklogs;
@@ -15914,11 +16211,13 @@ pub fn getIdsOfWorklogsDeletedSince(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIdsOfWorklogsDeletedSinceResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIdsOfWorklogsDeletedSinceResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetWorklogsForIdsResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request contains more than 1000 worklog IDs or is empty.
@@ -15940,7 +16239,6 @@ pub fn getWorklogsForIds(
     const http_response = try get(client, alloc, "/rest/api/3/worklog/list");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return GetWorklogsForIdsResult{ ._200 = {} };
@@ -15954,13 +16252,15 @@ pub fn getWorklogsForIds(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetWorklogsForIdsResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetWorklogsForIdsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const GetIdsOfWorklogsModifiedSinceResult = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ChangedWorklogs,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -15978,7 +16278,6 @@ pub fn getIdsOfWorklogsModifiedSince(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // since; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
@@ -15997,15 +16296,17 @@ pub fn getIdsOfWorklogsModifiedSince(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return GetIdsOfWorklogsModifiedSinceResult{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return GetIdsOfWorklogsModifiedSinceResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const @"AddonPropertiesResource.getAddonProperties_getResult" = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.PropertyKeys,
+    _200: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.OperationMessage,
+    _401: json.ValueTree,
     _400: void,
 };
 
@@ -16024,7 +16325,6 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
         const ty = types.PropertyKeys;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -16048,19 +16348,21 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return @"AddonPropertiesResource.getAddonProperties_getResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const @"AddonPropertiesResource.getAddonProperty_getResult" = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.EntityProperty,
+    _200: json.ValueTree,
     /// Returned if the property key is longer than 127 characters.
-    _400: types.OperationMessage,
+    _400: json.ValueTree,
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: types.OperationMessage,
+    _401: json.ValueTree,
     /// Returned if the property is not found or doesn't belong to the app.
-    _404: types.OperationMessage,
+    _404: json.ValueTree,
     _400: void,
 };
 
@@ -16081,7 +16383,6 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
         const ty = types.EntityProperty;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -16125,15 +16426,17 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return @"AddonPropertiesResource.getAddonProperty_getResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const @"DynamicModulesResource.getModules_getResult" = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.ConnectModules,
+    _200: json.ValueTree,
     /// Returned if the call is not from a Connect app.
-    _401: types.ErrorMessage,
+    _401: json.ValueTree,
     _400: void,
 };
 
@@ -16149,7 +16452,6 @@ pub fn @"DynamicModulesResource.getModules_get"(
     const http_response = try get(client, alloc, url_buffer.slice()[0 .. url_buffer.len - 1 :0]);
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConnectModules"
         const ty = types.ConnectModules;
         const result = if (@hasDecl(ty, "parseFromString")) blk: {
@@ -16173,11 +16475,13 @@ pub fn @"DynamicModulesResource.getModules_get"(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return @"DynamicModulesResource.getModules_getResult"{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return @"DynamicModulesResource.getModules_getResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult" = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
@@ -16201,7 +16505,6 @@ pub fn @"AppIssueFieldValueUpdateResource.updateIssueFields_put"(
     const http_response = try get(client, alloc, "/rest/atlassian-connect/1/migration/field");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult"{ ._200 = {} };
@@ -16215,11 +16518,13 @@ pub fn @"AppIssueFieldValueUpdateResource.updateIssueFields_put"(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult"{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const @"MigrationResource.updateEntityPropertiesValue_putResult" = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
@@ -16243,7 +16548,6 @@ pub fn @"MigrationResource.updateEntityPropertiesValue_put"(
     const http_response = try get(client, alloc, "/rest/atlassian-connect/1/migration/properties/{entityType}");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make void
         return @"MigrationResource.updateEntityPropertiesValue_putResult"{ ._200 = {} };
@@ -16257,13 +16561,15 @@ pub fn @"MigrationResource.updateEntityPropertiesValue_put"(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return @"MigrationResource.updateEntityPropertiesValue_putResult"{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return @"MigrationResource.updateEntityPropertiesValue_putResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 pub const @"MigrationResource.workflowRuleSearch_postResult" = union(enum) {
+    unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: types.WorkflowRulesSearchDetails,
+    _200: json.ValueTree,
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authorisation credentials are incorrect or missing.
@@ -16283,7 +16589,6 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
     const http_response = try get(client, alloc, "/rest/atlassian-connect/1/migration/workflow/rule/search");
     defer http_response.deinit(alloc);
 
-    errdefer std.log.warn("{s}", .{http_response.body});
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowRulesSearchDetails"
         const ty = types.WorkflowRulesSearchDetails;
@@ -16304,8 +16609,9 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._400 = {} };
     }
-    std.log.err("Unknown status code: {s}", .{http_response.status_code});
-    return error.UnknownStatusCode;
+    const body_copy = try alloc.dupe(u8, http_response.body);
+    errdefer alloc.free(body_copy);
+    return @"MigrationResource.workflowRuleSearch_postResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
 }
 
 const std = @import("std");
@@ -16527,4 +16833,3 @@ const HttpResponse = struct {
         alloc.free(self.raw_response);
     }
 };
-
