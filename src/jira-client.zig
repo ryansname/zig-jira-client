@@ -24,33 +24,24 @@ pub fn getBanner(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AnnouncementBannerConfiguration"
-        const ty = types.AnnouncementBannerConfiguration;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetBannerResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetBannerResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetBannerResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -145,13 +136,10 @@ pub fn getCustomFieldConfiguration(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextualConfiguration"
-        const ty = types.PageBeanContextualConfiguration;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCustomFieldConfigurationResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -336,13 +324,10 @@ pub fn setApplicationProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationProperty"
-        const ty = types.ApplicationProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SetApplicationPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -433,13 +418,10 @@ pub fn getApplicationRole(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationRole"
-        const ty = types.ApplicationRole;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetApplicationRoleResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -552,13 +534,10 @@ pub fn getAttachmentMeta(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentSettings"
-        const ty = types.AttachmentSettings;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAttachmentMetaResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -668,13 +647,10 @@ pub fn getAttachment(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentMetadata"
-        const ty = types.AttachmentMetadata;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAttachmentResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -728,13 +704,10 @@ pub fn expandAttachmentForHumans(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveMetadataReadable"
-        const ty = types.AttachmentArchiveMetadataReadable;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return ExpandAttachmentForHumansResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -791,13 +764,10 @@ pub fn expandAttachmentForMachines(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveImpl"
-        const ty = types.AttachmentArchiveImpl;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return ExpandAttachmentForMachinesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -852,13 +822,10 @@ pub fn getAuditRecords(
     // from; location: query
     // to; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AuditRecords"
-        const ty = types.AuditRecords;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAuditRecordsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -902,13 +869,10 @@ pub fn getAllSystemAvatars(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SystemAvatars"
-        const ty = types.SystemAvatars;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllSystemAvatarsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -948,13 +912,10 @@ pub fn getCommentsByIds(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComment"
-        const ty = types.PageBeanComment;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCommentsByIdsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -999,13 +960,10 @@ pub fn getCommentPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        const ty = types.PropertyKeys;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCommentPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1061,13 +1019,10 @@ pub fn getCommentProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        const ty = types.EntityProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCommentPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1124,13 +1079,10 @@ pub fn createComponent(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"ProjectComponent"
-        const ty = types.ProjectComponent;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateComponentResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1179,13 +1131,10 @@ pub fn getComponent(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectComponent"
-        const ty = types.ProjectComponent;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetComponentResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1229,13 +1178,10 @@ pub fn getComponentRelatedIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ComponentIssuesCount"
-        const ty = types.ComponentIssuesCount;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetComponentRelatedIssuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1274,13 +1220,10 @@ pub fn getConfiguration(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Configuration"
-        const ty = types.Configuration;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetConfigurationResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1320,13 +1263,10 @@ pub fn getSelectedTimeTrackingImplementation(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingProvider"
-        const ty = types.TimeTrackingProvider;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetSelectedTimeTrackingImplementationResult{ ._200 = result };
     }
     if (mem.eql(u8, "204", http_response.status_code)) { // Make void
@@ -1410,13 +1350,10 @@ pub fn getSharedTimeTrackingConfiguration(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingConfiguration"
-        const ty = types.TimeTrackingConfiguration;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetSharedTimeTrackingConfigurationResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1462,13 +1399,10 @@ pub fn getCustomFieldOption(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"CustomFieldOption"
-        const ty = types.CustomFieldOption;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCustomFieldOptionResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1512,33 +1446,24 @@ pub fn getAllDashboards(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfDashboards"
-        const ty = types.PageOfDashboards;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllDashboardsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllDashboardsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllDashboardsResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1573,33 +1498,24 @@ pub fn getAllAvailableDashboardGadgets(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AvailableDashboardGadgetsResponse"
-        const ty = types.AvailableDashboardGadgetsResponse;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllAvailableDashboardGadgetsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllAvailableDashboardGadgetsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllAvailableDashboardGadgetsResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1650,33 +1566,24 @@ pub fn getDashboardsPaginated(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanDashboard"
-        const ty = types.PageBeanDashboard;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDashboardsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDashboardsPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDashboardsPaginatedResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1717,26 +1624,20 @@ pub fn getAllGadgets(
     // uri; location: query
     // gadgetId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DashboardGadgetResponse"
-        const ty = types.DashboardGadgetResponse;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllGadgetsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
         return GetAllGadgetsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllGadgetsResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1781,26 +1682,20 @@ pub fn updateGadget(
         return UpdateGadgetResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return UpdateGadgetResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
         return UpdateGadgetResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return UpdateGadgetResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -1841,13 +1736,10 @@ pub fn getDashboardItemPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        const ty = types.PropertyKeys;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDashboardItemPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1896,13 +1788,10 @@ pub fn getDashboardItemProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        const ty = types.EntityProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDashboardItemPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -1947,33 +1836,24 @@ pub fn getDashboard(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
-        const ty = types.Dashboard;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDashboardResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDashboardResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDashboardResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -2016,43 +1896,31 @@ pub fn copyDashboard(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
-        const ty = types.Dashboard;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CopyDashboardResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CopyDashboardResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CopyDashboardResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CopyDashboardResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2130,36 +1998,27 @@ pub fn analyseExpression(
 
     // check; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionsAnalysis"
-        const ty = types.JiraExpressionsAnalysis;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return AnalyseExpressionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return AnalyseExpressionResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
         return AnalyseExpressionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return AnalyseExpressionResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2203,36 +2062,27 @@ pub fn evaluateJiraExpression(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionResult"
-        const ty = types.JiraExpressionResult;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return EvaluateJiraExpressionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return EvaluateJiraExpressionResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
         return EvaluateJiraExpressionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return EvaluateJiraExpressionResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2311,36 +2161,27 @@ pub fn getFieldsPaginated(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
-        const ty = types.PageBeanField;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFieldsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFieldsPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
         return GetFieldsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFieldsPaginatedResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2382,36 +2223,27 @@ pub fn getTrashedFieldsPaginated(
     // query; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
-        const ty = types.PageBeanField;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetTrashedFieldsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetTrashedFieldsPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
         return GetTrashedFieldsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetTrashedFieldsPaginatedResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2508,13 +2340,10 @@ pub fn getContextsForField(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContext"
-        const ty = types.PageBeanCustomFieldContext;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetContextsForFieldResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2566,13 +2395,10 @@ pub fn getDefaultValues(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextDefaultValue"
-        const ty = types.PageBeanCustomFieldContextDefaultValue;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDefaultValuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2622,13 +2448,10 @@ pub fn getIssueTypeMappingsForContexts(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeToContextMapping"
-        const ty = types.PageBeanIssueTypeToContextMapping;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueTypeMappingsForContextsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2678,13 +2501,10 @@ pub fn getCustomFieldContextsForProjectsAndIssueTypes(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextForProjectAndIssueType"
-        const ty = types.PageBeanContextForProjectAndIssueType;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -2739,13 +2559,10 @@ pub fn getProjectContextMapping(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextProjectMapping"
-        const ty = types.PageBeanCustomFieldContextProjectMapping;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectContextMappingResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -2975,13 +2792,10 @@ pub fn getOptionsForContext(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextOption"
-        const ty = types.PageBeanCustomFieldContextOption;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetOptionsForContextResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3259,13 +3073,10 @@ pub fn getContextsForFieldDeprecated(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContext"
-        const ty = types.PageBeanContext;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetContextsForFieldDeprecatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3312,13 +3123,10 @@ pub fn getScreensForField(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenWithTab"
-        const ty = types.PageBeanScreenWithTab;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetScreensForFieldResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3364,13 +3172,10 @@ pub fn getAllIssueFieldOptions(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        const ty = types.PageBeanIssueFieldOption;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllIssueFieldOptionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3417,13 +3222,10 @@ pub fn getSelectableIssueFieldOptions(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        const ty = types.PageBeanIssueFieldOption;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetSelectableIssueFieldOptionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3470,13 +3272,10 @@ pub fn getVisibleIssueFieldOptions(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        const ty = types.PageBeanIssueFieldOption;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetVisibleIssueFieldOptionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -3524,13 +3323,10 @@ pub fn getIssueFieldOption(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueFieldOption"
-        const ty = types.IssueFieldOption;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueFieldOptionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3586,13 +3382,10 @@ pub fn replaceIssueFieldOption(
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanRemoveOptionFromIssuesResult"
-        const ty = types.TaskProgressBeanRemoveOptionFromIssuesResult;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return ReplaceIssueFieldOptionResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3648,63 +3441,45 @@ pub fn deleteCustomField(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        const ty = types.TaskProgressBeanObject;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteCustomFieldResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteCustomFieldResult{ ._404 = result };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteCustomFieldResult{ ._409 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3749,43 +3524,31 @@ pub fn restoreCustomField(
         return RestoreCustomFieldResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RestoreCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RestoreCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RestoreCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RestoreCustomFieldResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3830,43 +3593,31 @@ pub fn trashCustomField(
         return TrashCustomFieldResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return TrashCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return TrashCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return TrashCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return TrashCustomFieldResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -3906,13 +3657,10 @@ pub fn getAllFieldConfigurations(
     // isDefault; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationDetails"
-        const ty = types.PageBeanFieldConfigurationDetails;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllFieldConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -4012,13 +3760,10 @@ pub fn getFieldConfigurationItems(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationItem"
-        const ty = types.PageBeanFieldConfigurationItem;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFieldConfigurationItemsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -4067,13 +3812,10 @@ pub fn getAllFieldConfigurationSchemes(
     // maxResults; location: query
     // id; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationScheme"
-        const ty = types.PageBeanFieldConfigurationScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllFieldConfigurationSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4124,13 +3866,10 @@ pub fn getFieldConfigurationSchemeMappings(
     // maxResults; location: query
     // fieldConfigurationSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationIssueTypeItem"
-        const ty = types.PageBeanFieldConfigurationIssueTypeItem;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFieldConfigurationSchemeMappingsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4182,13 +3921,10 @@ pub fn getFieldConfigurationSchemeProjectMapping(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationSchemeProjects"
-        const ty = types.PageBeanFieldConfigurationSchemeProjects;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFieldConfigurationSchemeProjectMappingResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4347,43 +4083,31 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4447,13 +4171,10 @@ pub fn getDefaultShareScope(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultShareScope"
-        const ty = types.DefaultShareScope;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDefaultShareScopeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -4580,23 +4301,17 @@ pub fn getFiltersPaginated(
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFilterDetails"
-        const ty = types.PageBeanFilterDetails;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFiltersPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFiltersPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -4638,13 +4353,10 @@ pub fn getFilter(
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
-        const ty = types.Filter;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFilterResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4738,13 +4450,10 @@ pub fn setFavouriteForFilter(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
-        const ty = types.Filter;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SetFavouriteForFilterResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -4888,13 +4597,10 @@ pub fn getSharePermission(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SharePermission"
-        const ty = types.SharePermission;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetSharePermissionResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -4942,13 +4648,10 @@ pub fn getGroup(
     // groupId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Group"
-        const ty = types.Group;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetGroupResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5001,13 +4704,10 @@ pub fn bulkGetGroups(
     // groupId; location: query
     // groupName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanGroupDetails"
-        const ty = types.PageBeanGroupDetails;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return BulkGetGroupsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5060,13 +4760,10 @@ pub fn getUsersFromGroup(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserDetails"
-        const ty = types.PageBeanUserDetails;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetUsersFromGroupResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5122,13 +4819,10 @@ pub fn addUserToGroup(
     // groupname; location: query
     // groupId; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Group"
-        const ty = types.Group;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return AddUserToGroupResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5177,13 +4871,10 @@ pub fn findGroups(
     // maxResults; location: query
     // userName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundGroups"
-        const ty = types.FoundGroups;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return FindGroupsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5231,13 +4922,10 @@ pub fn findUsersAndGroups(
     // caseInsensitive; location: query
     // excludeConnectAddons; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsersAndGroups"
-        const ty = types.FoundUsersAndGroups;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return FindUsersAndGroupsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5282,13 +4970,10 @@ pub fn getLicense(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"License"
-        const ty = types.License;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetLicenseResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5337,43 +5022,31 @@ pub fn createIssue(
 
     // updateHistory; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssue"
-        const ty = types.CreatedIssue;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateIssueResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateIssueResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateIssueResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateIssueResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5424,23 +5097,17 @@ pub fn createIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssues"
-        const ty = types.CreatedIssues;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateIssuesResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"CreatedIssues"
-        const ty = types.CreatedIssues;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateIssuesResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5481,13 +5148,10 @@ pub fn getCreateIssueMeta(
     // issuetypeNames; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueCreateMetadata"
-        const ty = types.IssueCreateMetadata;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCreateIssueMetaResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5529,13 +5193,10 @@ pub fn getIssuePickerResource(
     // showSubTasks; location: query
     // showSubTaskParent; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssuePickerSuggestions"
-        const ty = types.IssuePickerSuggestions;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssuePickerResourceResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5576,23 +5237,17 @@ pub fn bulkSetIssuesPropertiesList(
         return BulkSetIssuesPropertiesListResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return BulkSetIssuesPropertiesListResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return BulkSetIssuesPropertiesListResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5632,33 +5287,24 @@ pub fn bulkSetIssuePropertiesByIssue(
         return BulkSetIssuePropertiesByIssueResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return BulkSetIssuePropertiesByIssueResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return BulkSetIssuePropertiesByIssueResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return BulkSetIssuePropertiesByIssueResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5698,23 +5344,17 @@ pub fn bulkSetIssueProperty(
         return BulkSetIssuePropertyResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return BulkSetIssuePropertyResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return BulkSetIssuePropertyResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -5747,13 +5387,10 @@ pub fn getIsWatchingIssueBulk(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkIssueIsWatching"
-        const ty = types.BulkIssueIsWatching;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIsWatchingIssueBulkResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5798,13 +5435,10 @@ pub fn getIssue(
     // properties; location: query
     // updateHistory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueBean"
-        const ty = types.IssueBean;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -5951,13 +5585,10 @@ pub fn getChangeLogs(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanChangelog"
-        const ty = types.PageBeanChangelog;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetChangeLogsResult{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -5998,13 +5629,10 @@ pub fn getChangeLogsByIds(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfChangelogs"
-        const ty = types.PageOfChangelogs;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetChangeLogsByIdsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6054,13 +5682,10 @@ pub fn getComments(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfComments"
-        const ty = types.PageOfComments;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCommentsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6110,13 +5735,10 @@ pub fn getComment(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Comment"
-        const ty = types.Comment;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCommentResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6164,13 +5786,10 @@ pub fn getEditIssueMeta(
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueUpdateMetadata"
-        const ty = types.IssueUpdateMetadata;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetEditIssueMetaResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6270,13 +5889,10 @@ pub fn getIssuePropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        const ty = types.PropertyKeys;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssuePropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -6319,13 +5935,10 @@ pub fn getIssueProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        const ty = types.EntityProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssuePropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6374,13 +5987,10 @@ pub fn getRemoteIssueLinks(
 
     // globalId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
-        const ty = types.RemoteIssueLink;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetRemoteIssueLinksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6436,13 +6046,10 @@ pub fn getRemoteIssueLinkById(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
-        const ty = types.RemoteIssueLink;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetRemoteIssueLinkByIdResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6497,13 +6104,10 @@ pub fn getTransitions(
     // includeUnavailableTransitions; location: query
     // sortByOpsBarAndStatus; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Transitions"
-        const ty = types.Transitions;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetTransitionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6551,13 +6155,10 @@ pub fn getVotes(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Votes"
-        const ty = types.Votes;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetVotesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6601,13 +6202,10 @@ pub fn getIssueWatchers(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Watchers"
-        const ty = types.Watchers;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueWatchersResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6660,13 +6258,10 @@ pub fn getIssueWorklog(
     // startedBefore; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfWorklogs"
-        const ty = types.PageOfWorklogs;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueWorklogResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6719,13 +6314,10 @@ pub fn getWorklog(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Worklog"
-        const ty = types.Worklog;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorklogResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -6777,13 +6369,10 @@ pub fn getWorklogPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        const ty = types.PropertyKeys;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorklogPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6840,13 +6429,10 @@ pub fn getWorklogProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        const ty = types.EntityProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorklogPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6949,13 +6535,10 @@ pub fn getIssueLink(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLink"
-        const ty = types.IssueLink;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueLinkResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -6999,13 +6582,10 @@ pub fn getIssueLinkTypes(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkTypes"
-        const ty = types.IssueLinkTypes;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueLinkTypesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -7054,13 +6634,10 @@ pub fn getIssueLinkType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkType"
-        const ty = types.IssueLinkType;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueLinkTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7104,13 +6681,10 @@ pub fn getIssueSecuritySchemes(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecuritySchemes"
-        const ty = types.SecuritySchemes;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueSecuritySchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -7153,13 +6727,10 @@ pub fn getIssueSecurityScheme(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
-        const ty = types.SecurityScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueSecuritySchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -7211,13 +6782,10 @@ pub fn getIssueSecurityLevelMembers(
     // issueSecurityLevelId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueSecurityLevelMember"
-        const ty = types.PageBeanIssueSecurityLevelMember;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueSecurityLevelMembersResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7356,13 +6924,10 @@ pub fn getIssueType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeDetails"
-        const ty = types.IssueTypeDetails;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7468,13 +7033,10 @@ pub fn createIssueTypeAvatar(
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
-        const ty = types.Avatar;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateIssueTypeAvatarResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7527,13 +7089,10 @@ pub fn getIssueTypePropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        const ty = types.PropertyKeys;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueTypePropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7581,13 +7140,10 @@ pub fn getIssueTypeProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        const ty = types.EntityProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueTypePropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7639,13 +7195,10 @@ pub fn getAllIssueTypeSchemes(
     // expand; location: query
     // queryString; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScheme"
-        const ty = types.PageBeanIssueTypeScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllIssueTypeSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7694,13 +7247,10 @@ pub fn getIssueTypeSchemesMapping(
     // maxResults; location: query
     // issueTypeSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeMapping"
-        const ty = types.PageBeanIssueTypeSchemeMapping;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueTypeSchemesMappingResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -7749,13 +7299,10 @@ pub fn getIssueTypeSchemeForProjects(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeProjects"
-        const ty = types.PageBeanIssueTypeSchemeProjects;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueTypeSchemeForProjectsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8020,13 +7567,10 @@ pub fn getIssueTypeScreenSchemes(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenScheme"
-        const ty = types.PageBeanIssueTypeScreenScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueTypeScreenSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8075,13 +7619,10 @@ pub fn getIssueTypeScreenSchemeMappings(
     // maxResults; location: query
     // issueTypeScreenSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemeItem"
-        const ty = types.PageBeanIssueTypeScreenSchemeItem;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueTypeScreenSchemeMappingsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8130,13 +7671,10 @@ pub fn getIssueTypeScreenSchemeProjectAssociations(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemesProjects"
-        const ty = types.PageBeanIssueTypeScreenSchemesProjects;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8404,13 +7942,10 @@ pub fn getProjectsForIssueTypeScreenScheme(
     // maxResults; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProjectDetails"
-        const ty = types.PageBeanProjectDetails;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectsForIssueTypeScreenSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8452,13 +7987,10 @@ pub fn getAutoComplete(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JQLReferenceData"
-        const ty = types.JQLReferenceData;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAutoCompleteResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -8500,13 +8032,10 @@ pub fn getFieldAutoCompleteForQueryString(
     // predicateName; location: query
     // predicateValue; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AutoCompleteSuggestions"
-        const ty = types.AutoCompleteSuggestions;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFieldAutoCompleteForQueryStringResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8545,13 +8074,10 @@ pub fn matchIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueMatches"
-        const ty = types.IssueMatches;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return MatchIssuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8590,23 +8116,17 @@ pub fn parseJqlQueries(
 
     // validation; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ParsedJqlQueries"
-        const ty = types.ParsedJqlQueries;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return ParseJqlQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return ParseJqlQueriesResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -8644,13 +8164,10 @@ pub fn migrateQueries(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConvertedJQLQueries"
-        const ty = types.ConvertedJQLQueries;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return MigrateQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8693,43 +8210,31 @@ pub fn sanitiseJqlQueries(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SanitizedJqlQueries"
-        const ty = types.SanitizedJqlQueries;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8762,13 +8267,10 @@ pub fn getAllLabels(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanString"
-        const ty = types.PageBeanString;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllLabelsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8813,43 +8315,31 @@ pub fn getMyPermissions(
     // projectConfigurationUuid; location: query
     // commentId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
-        const ty = types.Permissions;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetMyPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetMyPermissionsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetMyPermissionsResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetMyPermissionsResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -8923,13 +8413,10 @@ pub fn getLocale(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Locale"
-        const ty = types.Locale;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetLocaleResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -8966,13 +8453,10 @@ pub fn getCurrentUser(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
-        const ty = types.User;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetCurrentUserResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9011,13 +8495,10 @@ pub fn getNotificationSchemes(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanNotificationScheme"
-        const ty = types.PageBeanNotificationScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetNotificationSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9060,13 +8541,10 @@ pub fn getNotificationScheme(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
-        const ty = types.NotificationScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetNotificationSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9110,13 +8588,10 @@ pub fn getAllPermissions(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
-        const ty = types.Permissions;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9163,33 +8638,24 @@ pub fn getBulkPermissions(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkPermissionGrants"
-        const ty = types.BulkPermissionGrants;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetBulkPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetBulkPermissionsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetBulkPermissionsResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9224,13 +8690,10 @@ pub fn getPermittedProjects(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermittedProjects"
-        const ty = types.PermittedProjects;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetPermittedProjectsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9270,13 +8733,10 @@ pub fn getAllPermissionSchemes(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionSchemes"
-        const ty = types.PermissionSchemes;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllPermissionSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9317,13 +8777,10 @@ pub fn getPermissionScheme(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
-        const ty = types.PermissionScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetPermissionSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9368,13 +8825,10 @@ pub fn getPermissionSchemeGrants(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrants"
-        const ty = types.PermissionGrants;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetPermissionSchemeGrantsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9421,13 +8875,10 @@ pub fn getPermissionSchemeGrant(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrant"
-        const ty = types.PermissionGrant;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetPermissionSchemeGrantResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9510,43 +8961,31 @@ pub fn setDefaultPriority(
         return SetDefaultPriorityResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SetDefaultPriorityResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SetDefaultPriorityResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SetDefaultPriorityResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SetDefaultPriorityResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9583,23 +9022,17 @@ pub fn searchPriorities(
     // id; location: query
     // onlyDefault; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanPriority"
-        const ty = types.PageBeanPriority;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SearchPrioritiesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SearchPrioritiesResult{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9636,13 +9069,10 @@ pub fn getPriority(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Priority"
-        const ty = types.Priority;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetPriorityResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9778,13 +9208,10 @@ pub fn searchProjects(
     // properties; location: query
     // propertyQuery; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProject"
-        const ty = types.PageBeanProject;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SearchProjectsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -9895,13 +9322,10 @@ pub fn getProjectTypeByKey(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
-        const ty = types.ProjectType;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectTypeByKeyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9945,13 +9369,10 @@ pub fn getAccessibleProjectTypeByKey(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
-        const ty = types.ProjectType;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAccessibleProjectTypeByKeyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -9996,13 +9417,10 @@ pub fn getProject(
     // expand; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        const ty = types.Project;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -10208,13 +9626,10 @@ pub fn createProjectAvatar(
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
-        const ty = types.Avatar;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateProjectAvatarResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10264,13 +9679,10 @@ pub fn getAllProjectAvatars(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectAvatars"
-        const ty = types.ProjectAvatars;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllProjectAvatarsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -10318,13 +9730,10 @@ pub fn getProjectComponentsPaginated(
     // orderBy; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComponentWithIssueCount"
-        const ty = types.PageBeanComponentWithIssueCount;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectComponentsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -10413,13 +9822,10 @@ pub fn deleteProjectAsynchronously(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        const ty = types.TaskProgressBeanObject;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteProjectAsynchronouslyResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10470,13 +9876,10 @@ pub fn getFeaturesForProject(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
-        const ty = types.ContainerForProjectFeatures;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFeaturesForProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10532,13 +9935,10 @@ pub fn toggleFeatureForProject(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
-        const ty = types.ContainerForProjectFeatures;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return ToggleFeatureForProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10592,13 +9992,10 @@ pub fn getProjectPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        const ty = types.PropertyKeys;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10654,13 +10051,10 @@ pub fn getProjectProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        const ty = types.EntityProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10712,13 +10106,10 @@ pub fn restore(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        const ty = types.Project;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RestoreResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10816,13 +10207,10 @@ pub fn getProjectRole(
 
     // excludeInactiveUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        const ty = types.ProjectRole;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectRoleResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -10961,13 +10349,10 @@ pub fn updateProjectType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        const ty = types.Project;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return UpdateProjectTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -11018,13 +10403,10 @@ pub fn getProjectVersionsPaginated(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanVersion"
-        const ty = types.PageBeanVersion;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectVersionsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -11106,13 +10488,10 @@ pub fn getProjectEmail(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectEmailAddress"
-        const ty = types.ProjectEmailAddress;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectEmailResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11161,13 +10540,10 @@ pub fn getHierarchy(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueTypeHierarchy"
-        const ty = types.ProjectIssueTypeHierarchy;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetHierarchyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -11218,13 +10594,10 @@ pub fn getProjectIssueSecurityScheme(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
-        const ty = types.SecurityScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectIssueSecuritySchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -11277,13 +10650,10 @@ pub fn getNotificationSchemeForProject(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
-        const ty = types.NotificationScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetNotificationSchemeForProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -11333,13 +10703,10 @@ pub fn getAssignedPermissionScheme(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
-        const ty = types.PermissionScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAssignedPermissionSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11384,13 +10751,10 @@ pub fn getSecurityLevelsForProject(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueSecurityLevels"
-        const ty = types.ProjectIssueSecurityLevels;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetSecurityLevelsForProjectResult{ ._200 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -11465,13 +10829,10 @@ pub fn getProjectCategoryById(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectCategory"
-        const ty = types.ProjectCategory;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectCategoryByIdResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11511,13 +10872,10 @@ pub fn validateProjectKey(
 
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return ValidateProjectKeyResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11674,13 +11032,10 @@ pub fn getResolution(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Resolution"
-        const ty = types.Resolution;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetResolutionResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11765,13 +11120,10 @@ pub fn getProjectRoleById(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        const ty = types.ProjectRole;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectRoleByIdResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11822,13 +11174,10 @@ pub fn getProjectRoleActorsForRole(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        const ty = types.ProjectRole;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetProjectRoleActorsForRoleResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -11881,13 +11230,10 @@ pub fn getScreens(
     // scope; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreen"
-        const ty = types.PageBeanScreen;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetScreensResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -11981,13 +11327,10 @@ pub fn updateScreen(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Screen"
-        const ty = types.Screen;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return UpdateScreenResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -12145,13 +11488,10 @@ pub fn renameScreenTab(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ScreenableTab"
-        const ty = types.ScreenableTab;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RenameScreenTabResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -12431,13 +11771,10 @@ pub fn getScreenSchemes(
     // queryString; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenScheme"
-        const ty = types.PageBeanScreenScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetScreenSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12538,13 +11875,10 @@ pub fn searchForIssuesUsingJql(
     // properties; location: query
     // fieldsByKeys; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SearchResults"
-        const ty = types.SearchResults;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SearchForIssuesUsingJqlResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -12587,13 +11921,10 @@ pub fn getIssueSecurityLevel(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityLevel"
-        const ty = types.SecurityLevel;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIssueSecurityLevelResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12632,13 +11963,10 @@ pub fn getServerInfo(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ServerInformation"
-        const ty = types.ServerInformation;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetServerInfoResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12757,13 +12085,10 @@ pub fn getStatus(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusDetails"
-        const ty = types.StatusDetails;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetStatusResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12841,13 +12166,10 @@ pub fn getStatusCategory(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusCategory"
-        const ty = types.StatusCategory;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetStatusCategoryResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -12936,13 +12258,10 @@ pub fn search(
     // searchString; location: query
     // statusCategory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfStatuses"
-        const ty = types.PageOfStatuses;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return SearchResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -12987,13 +12306,10 @@ pub fn getTask(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        const ty = types.TaskProgressBeanObject;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetTaskResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -13095,13 +12411,10 @@ pub fn getUiModifications(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUiModificationDetails"
-        const ty = types.PageBeanUiModificationDetails;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetUiModificationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13202,13 +12515,10 @@ pub fn getAvatars(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Avatars"
-        const ty = types.Avatars;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarsResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -13311,33 +12621,24 @@ pub fn getAvatarImageByType(
         return GetAvatarImageByTypeResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByTypeResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByTypeResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByTypeResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13386,43 +12687,31 @@ pub fn getAvatarImageByID(
         return GetAvatarImageByIDResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13471,43 +12760,31 @@ pub fn getAvatarImageByOwner(
         return GetAvatarImageByOwnerResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13548,13 +12825,10 @@ pub fn getUser(
     // key; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
-        const ty = types.User;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetUserResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -13727,13 +13001,10 @@ pub fn bulkGetUsers(
     // key; location: query
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
-        const ty = types.PageBeanUser;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return BulkGetUsersResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13870,13 +13141,10 @@ pub fn getUserEmail(
 
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
-        const ty = types.UnrestrictedUserEmail;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetUserEmailResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -13926,13 +13194,10 @@ pub fn getUserEmailBulk(
 
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
-        const ty = types.UnrestrictedUserEmail;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetUserEmailBulkResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14101,13 +13366,10 @@ pub fn findUsersForPicker(
     // avatarSize; location: query
     // excludeConnectUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsers"
-        const ty = types.FoundUsers;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return FindUsersForPickerResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14158,13 +13420,10 @@ pub fn getUserPropertyKeys(
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        const ty = types.PropertyKeys;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetUserPropertyKeysResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14220,13 +13479,10 @@ pub fn getUserProperty(
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        const ty = types.EntityProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetUserPropertyResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14335,13 +13591,10 @@ pub fn findUsersByQuery(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
-        const ty = types.PageBeanUser;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return FindUsersByQueryResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14395,13 +13648,10 @@ pub fn findUserKeysByQuery(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserKey"
-        const ty = types.PageBeanUserKey;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return FindUserKeysByQueryResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14608,13 +13858,10 @@ pub fn createVersion(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Version"
-        const ty = types.Version;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateVersionResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14661,13 +13908,10 @@ pub fn getVersion(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
-        const ty = types.Version;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetVersionResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -14773,13 +14017,10 @@ pub fn moveVersion(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
-        const ty = types.Version;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return MoveVersionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -14829,13 +14070,10 @@ pub fn getVersionRelatedIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionIssueCounts"
-        const ty = types.VersionIssueCounts;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetVersionRelatedIssuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -14933,13 +14171,10 @@ pub fn getVersionUnresolvedIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionUnresolvedIssuesCount"
-        const ty = types.VersionUnresolvedIssuesCount;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetVersionUnresolvedIssuesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -14982,33 +14217,24 @@ pub fn getDynamicWebhooksForApp(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWebhook"
-        const ty = types.PageBeanWebhook;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDynamicWebhooksForAppResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDynamicWebhooksForAppResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDynamicWebhooksForAppResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15045,33 +14271,24 @@ pub fn getFailedWebhooks(
     // maxResults; location: query
     // after; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FailedWebhooks"
-        const ty = types.FailedWebhooks;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFailedWebhooksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFailedWebhooksResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetFailedWebhooksResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15106,33 +14323,24 @@ pub fn refreshWebhooks(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WebhooksExpirationDate"
-        const ty = types.WebhooksExpirationDate;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RefreshWebhooksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RefreshWebhooksResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return RefreshWebhooksResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15213,33 +14421,24 @@ pub fn getWorkflowTransitionRuleConfigurations(
     // draft; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowTransitionRules"
-        const ty = types.PageBeanWorkflowTransitionRules;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make void
@@ -15277,33 +14476,24 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionRulesUpdateErrors"
-        const ty = types.WorkflowTransitionRulesUpdateErrors;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15345,26 +14535,20 @@ pub fn getWorkflowsPaginated(
     // orderBy; location: query
     // isActive; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflow"
-        const ty = types.PageBeanWorkflow;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
         return GetWorkflowsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        const ty = types.ErrorCollection;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowsPaginatedResult{ ._403 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15410,13 +14594,10 @@ pub fn getWorkflowTransitionProperties(
     // workflowName; location: query
     // workflowMode; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionProperty"
-        const ty = types.WorkflowTransitionProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowTransitionPropertiesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15517,13 +14698,10 @@ pub fn getAllWorkflowSchemes(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowScheme"
-        const ty = types.PageBeanWorkflowScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetAllWorkflowSchemesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15567,13 +14745,10 @@ pub fn getWorkflowSchemeProjectAssociations(
 
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerOfWorkflowSchemeAssociations"
-        const ty = types.ContainerOfWorkflowSchemeAssociations;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowSchemeProjectAssociationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15622,13 +14797,10 @@ pub fn getWorkflowScheme(
 
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
-        const ty = types.WorkflowScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowSchemeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15677,13 +14849,10 @@ pub fn createWorkflowSchemeDraftFromParent(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"WorkflowScheme"
-        const ty = types.WorkflowScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return CreateWorkflowSchemeDraftFromParentResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -15733,13 +14902,10 @@ pub fn getDefaultWorkflow(
 
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
-        const ty = types.DefaultWorkflow;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDefaultWorkflowResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15791,13 +14957,10 @@ pub fn getWorkflowSchemeDraft(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
-        const ty = types.WorkflowScheme;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowSchemeDraftResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15849,13 +15012,10 @@ pub fn getDraftDefaultWorkflow(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
-        const ty = types.DefaultWorkflow;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDraftDefaultWorkflowResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15906,13 +15066,10 @@ pub fn getWorkflowSchemeDraftIssueType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
-        const ty = types.IssueTypeWorkflowMapping;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowSchemeDraftIssueTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -15973,13 +15130,10 @@ pub fn publishDraftWorkflowScheme(
         return PublishDraftWorkflowSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        const ty = types.TaskProgressBeanObject;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return PublishDraftWorkflowSchemeResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -16032,13 +15186,10 @@ pub fn getDraftWorkflow(
 
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
-        const ty = types.IssueTypesWorkflowMapping;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetDraftWorkflowResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -16090,13 +15241,10 @@ pub fn getWorkflowSchemeIssueType(
 
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
-        const ty = types.IssueTypeWorkflowMapping;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowSchemeIssueTypeResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -16147,13 +15295,10 @@ pub fn getWorkflow(
     // workflowName; location: query
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
-        const ty = types.IssueTypesWorkflowMapping;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetWorkflowResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -16196,13 +15341,10 @@ pub fn getIdsOfWorklogsDeletedSince(
 
     // since; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
-        const ty = types.ChangedWorklogs;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIdsOfWorklogsDeletedSinceResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -16281,13 +15423,10 @@ pub fn getIdsOfWorklogsModifiedSince(
     // since; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
-        const ty = types.ChangedWorklogs;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return GetIdsOfWorklogsModifiedSinceResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make void
@@ -16326,23 +15465,17 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        const ty = types.PropertyKeys;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
-        const ty = types.OperationMessage;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -16384,43 +15517,31 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        const ty = types.EntityProperty;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"OperationMessage"
-        const ty = types.OperationMessage;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
-        const ty = types.OperationMessage;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"OperationMessage"
-        const ty = types.OperationMessage;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._404 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -16453,23 +15574,17 @@ pub fn @"DynamicModulesResource.getModules_get"(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConnectModules"
-        const ty = types.ConnectModules;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return @"DynamicModulesResource.getModules_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorMessage"
-        const ty = types.ErrorMessage;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return @"DynamicModulesResource.getModules_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
@@ -16591,13 +15706,10 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
 
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowRulesSearchDetails"
-        const ty = types.WorkflowRulesSearchDetails;
-        const result = if (@hasDecl(ty, "parseFromString")) blk: {
-            break :blk try ty.parseFromString(alloc, http_response.body);
-        } else blk: {
-            break :blk try types.parseFromString(alloc, http_response.body, ty);
-        };
-        errdefer result.deinit(alloc);
+        var parser = json.Parser.init(alloc, .alloc_always);
+        defer parser.deinit(alloc);
+        const result = try parser.parse(http_response.body);
+        errdefer result.deinit();
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make void
