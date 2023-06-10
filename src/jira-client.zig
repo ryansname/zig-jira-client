@@ -1,4 +1,5 @@
 const types = @import("jira-types.zig");
+const fmt = std.fmt;
 pub usingnamespace types;
 pub const GetBannerResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
@@ -49,7 +50,7 @@ pub fn getBanner(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetBannerResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetBannerResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateMultipleCustomFieldValuesResult = union(enum) {
@@ -95,7 +96,7 @@ pub fn updateMultipleCustomFieldValues(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateMultipleCustomFieldValuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateMultipleCustomFieldValuesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCustomFieldConfigurationResult = union(enum) {
@@ -159,7 +160,7 @@ pub fn getCustomFieldConfiguration(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCustomFieldConfigurationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCustomFieldConfigurationResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateCustomFieldValueResult = union(enum) {
@@ -208,7 +209,7 @@ pub fn updateCustomFieldValue(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateCustomFieldValueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateCustomFieldValueResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetApplicationPropertyResult = union(enum) {
@@ -251,7 +252,7 @@ pub fn getApplicationProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetApplicationPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetApplicationPropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAdvancedSettingsResult = union(enum) {
@@ -291,7 +292,7 @@ pub fn getAdvancedSettings(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAdvancedSettingsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAdvancedSettingsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const SetApplicationPropertyResult = union(enum) {
@@ -347,7 +348,7 @@ pub fn setApplicationProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return SetApplicationPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return SetApplicationPropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllApplicationRolesResult = union(enum) {
@@ -387,7 +388,7 @@ pub fn getAllApplicationRoles(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllApplicationRolesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllApplicationRolesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetApplicationRoleResult = union(enum) {
@@ -438,7 +439,7 @@ pub fn getApplicationRole(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetApplicationRoleResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetApplicationRoleResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAttachmentContentResult = union(enum) {
@@ -509,7 +510,7 @@ pub fn getAttachmentContent(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAttachmentContentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAttachmentContentResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAttachmentMetaResult = union(enum) {
@@ -548,7 +549,7 @@ pub fn getAttachmentMeta(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAttachmentMetaResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAttachmentMetaResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAttachmentThumbnailResult = union(enum) {
@@ -613,7 +614,7 @@ pub fn getAttachmentThumbnail(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAttachmentThumbnailResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAttachmentThumbnailResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAttachmentResult = union(enum) {
@@ -667,7 +668,7 @@ pub fn getAttachment(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAttachmentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAttachmentResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ExpandAttachmentForHumansResult = union(enum) {
@@ -727,7 +728,7 @@ pub fn expandAttachmentForHumans(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ExpandAttachmentForHumansResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ExpandAttachmentForHumansResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ExpandAttachmentForMachinesResult = union(enum) {
@@ -787,7 +788,7 @@ pub fn expandAttachmentForMachines(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ExpandAttachmentForMachinesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ExpandAttachmentForMachinesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAuditRecordsResult = union(enum) {
@@ -839,7 +840,7 @@ pub fn getAuditRecords(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAuditRecordsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAuditRecordsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllSystemAvatarsResult = union(enum) {
@@ -886,7 +887,7 @@ pub fn getAllSystemAvatars(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllSystemAvatarsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllSystemAvatarsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCommentsByIdsResult = union(enum) {
@@ -926,7 +927,7 @@ pub fn getCommentsByIds(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCommentsByIdsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCommentsByIdsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCommentPropertyKeysResult = union(enum) {
@@ -983,7 +984,7 @@ pub fn getCommentPropertyKeys(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCommentPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCommentPropertyKeysResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCommentPropertyResult = union(enum) {
@@ -1042,7 +1043,7 @@ pub fn getCommentProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCommentPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCommentPropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const CreateComponentResult = union(enum) {
@@ -1102,7 +1103,7 @@ pub fn createComponent(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return CreateComponentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return CreateComponentResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetComponentResult = union(enum) {
@@ -1148,7 +1149,7 @@ pub fn getComponent(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetComponentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetComponentResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetComponentRelatedIssuesResult = union(enum) {
@@ -1195,7 +1196,7 @@ pub fn getComponentRelatedIssues(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetComponentRelatedIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetComponentRelatedIssuesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetConfigurationResult = union(enum) {
@@ -1234,7 +1235,7 @@ pub fn getConfiguration(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetConfigurationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetConfigurationResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetSelectedTimeTrackingImplementationResult = union(enum) {
@@ -1283,7 +1284,7 @@ pub fn getSelectedTimeTrackingImplementation(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetSelectedTimeTrackingImplementationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetSelectedTimeTrackingImplementationResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAvailableTimeTrackingImplementationsResult = union(enum) {
@@ -1323,7 +1324,7 @@ pub fn getAvailableTimeTrackingImplementations(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAvailableTimeTrackingImplementationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAvailableTimeTrackingImplementationsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetSharedTimeTrackingConfigurationResult = union(enum) {
@@ -1367,7 +1368,7 @@ pub fn getSharedTimeTrackingConfiguration(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetSharedTimeTrackingConfigurationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetSharedTimeTrackingConfigurationResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCustomFieldOptionResult = union(enum) {
@@ -1416,7 +1417,7 @@ pub fn getCustomFieldOption(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCustomFieldOptionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCustomFieldOptionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllDashboardsResult = union(enum) {
@@ -1471,7 +1472,7 @@ pub fn getAllDashboards(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllDashboardsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllDashboardsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllAvailableDashboardGadgetsResult = union(enum) {
@@ -1523,7 +1524,7 @@ pub fn getAllAvailableDashboardGadgets(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllAvailableDashboardGadgetsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllAvailableDashboardGadgetsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDashboardsPaginatedResult = union(enum) {
@@ -1591,7 +1592,7 @@ pub fn getDashboardsPaginated(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDashboardsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDashboardsPaginatedResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllGadgetsResult = union(enum) {
@@ -1645,7 +1646,7 @@ pub fn getAllGadgets(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllGadgetsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllGadgetsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateGadgetResult = union(enum) {
@@ -1703,7 +1704,7 @@ pub fn updateGadget(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateGadgetResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateGadgetResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDashboardItemPropertyKeysResult = union(enum) {
@@ -1753,7 +1754,7 @@ pub fn getDashboardItemPropertyKeys(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDashboardItemPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDashboardItemPropertyKeysResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDashboardItemPropertyResult = union(enum) {
@@ -1805,7 +1806,7 @@ pub fn getDashboardItemProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDashboardItemPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDashboardItemPropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDashboardResult = union(enum) {
@@ -1864,7 +1865,7 @@ pub fn getDashboard(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDashboardResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDashboardResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const CopyDashboardResult = union(enum) {
@@ -1928,7 +1929,7 @@ pub fn copyDashboard(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return CopyDashboardResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return CopyDashboardResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetEventsResult = union(enum) {
@@ -1968,7 +1969,7 @@ pub fn getEvents(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetEventsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetEventsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const AnalyseExpressionResult = union(enum) {
@@ -2026,7 +2027,7 @@ pub fn analyseExpression(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return AnalyseExpressionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return AnalyseExpressionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const EvaluateJiraExpressionResult = union(enum) {
@@ -2090,7 +2091,7 @@ pub fn evaluateJiraExpression(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return EvaluateJiraExpressionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return EvaluateJiraExpressionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFieldsResult = union(enum) {
@@ -2125,7 +2126,7 @@ pub fn getFields(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFieldsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFieldsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFieldsPaginatedResult = union(enum) {
@@ -2189,7 +2190,7 @@ pub fn getFieldsPaginated(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFieldsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFieldsPaginatedResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetTrashedFieldsPaginatedResult = union(enum) {
@@ -2251,7 +2252,7 @@ pub fn getTrashedFieldsPaginated(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetTrashedFieldsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetTrashedFieldsPaginatedResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateCustomFieldResult = union(enum) {
@@ -2303,7 +2304,7 @@ pub fn updateCustomField(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateCustomFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateCustomFieldResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetContextsForFieldResult = union(enum) {
@@ -2360,7 +2361,7 @@ pub fn getContextsForField(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetContextsForFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetContextsForFieldResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDefaultValuesResult = union(enum) {
@@ -2415,7 +2416,7 @@ pub fn getDefaultValues(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDefaultValuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDefaultValuesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypeMappingsForContextsResult = union(enum) {
@@ -2465,7 +2466,7 @@ pub fn getIssueTypeMappingsForContexts(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypeMappingsForContextsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypeMappingsForContextsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCustomFieldContextsForProjectsAndIssueTypesResult = union(enum) {
@@ -2524,7 +2525,7 @@ pub fn getCustomFieldContextsForProjectsAndIssueTypes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCustomFieldContextsForProjectsAndIssueTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCustomFieldContextsForProjectsAndIssueTypesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectContextMappingResult = union(enum) {
@@ -2579,7 +2580,7 @@ pub fn getProjectContextMapping(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectContextMappingResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectContextMappingResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateCustomFieldContextResult = union(enum) {
@@ -2634,7 +2635,7 @@ pub fn updateCustomFieldContext(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateCustomFieldContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateCustomFieldContextResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const AddIssueTypesToContextResult = union(enum) {
@@ -2695,7 +2696,7 @@ pub fn addIssueTypesToContext(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return AddIssueTypesToContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return AddIssueTypesToContextResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RemoveIssueTypesFromContextResult = union(enum) {
@@ -2751,7 +2752,7 @@ pub fn removeIssueTypesFromContext(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RemoveIssueTypesFromContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RemoveIssueTypesFromContextResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetOptionsForContextResult = union(enum) {
@@ -2815,7 +2816,7 @@ pub fn getOptionsForContext(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetOptionsForContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetOptionsForContextResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ReorderCustomFieldOptionsResult = union(enum) {
@@ -2871,7 +2872,7 @@ pub fn reorderCustomFieldOptions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ReorderCustomFieldOptionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ReorderCustomFieldOptionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const DeleteCustomFieldOptionResult = union(enum) {
@@ -2929,7 +2930,7 @@ pub fn deleteCustomFieldOption(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return DeleteCustomFieldOptionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return DeleteCustomFieldOptionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const AssignProjectsToCustomFieldContextResult = union(enum) {
@@ -2985,7 +2986,7 @@ pub fn assignProjectsToCustomFieldContext(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return AssignProjectsToCustomFieldContextResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return AssignProjectsToCustomFieldContextResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RemoveCustomFieldContextFromProjectsResult = union(enum) {
@@ -3041,7 +3042,7 @@ pub fn removeCustomFieldContextFromProjects(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RemoveCustomFieldContextFromProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RemoveCustomFieldContextFromProjectsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetContextsForFieldDeprecatedResult = union(enum) {
@@ -3090,7 +3091,7 @@ pub fn getContextsForFieldDeprecated(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetContextsForFieldDeprecatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetContextsForFieldDeprecatedResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetScreensForFieldResult = union(enum) {
@@ -3140,7 +3141,7 @@ pub fn getScreensForField(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetScreensForFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetScreensForFieldResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllIssueFieldOptionsResult = union(enum) {
@@ -3189,7 +3190,7 @@ pub fn getAllIssueFieldOptions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllIssueFieldOptionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllIssueFieldOptionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetSelectableIssueFieldOptionsResult = union(enum) {
@@ -3239,7 +3240,7 @@ pub fn getSelectableIssueFieldOptions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetSelectableIssueFieldOptionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetSelectableIssueFieldOptionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetVisibleIssueFieldOptionsResult = union(enum) {
@@ -3289,7 +3290,7 @@ pub fn getVisibleIssueFieldOptions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetVisibleIssueFieldOptionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetVisibleIssueFieldOptionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueFieldOptionResult = union(enum) {
@@ -3343,7 +3344,7 @@ pub fn getIssueFieldOption(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueFieldOptionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueFieldOptionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ReplaceIssueFieldOptionResult = union(enum) {
@@ -3402,7 +3403,7 @@ pub fn replaceIssueFieldOption(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ReplaceIssueFieldOptionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ReplaceIssueFieldOptionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const DeleteCustomFieldResult = union(enum) {
@@ -3487,7 +3488,7 @@ pub fn deleteCustomField(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return DeleteCustomFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return DeleteCustomFieldResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RestoreCustomFieldResult = union(enum) {
@@ -3556,7 +3557,7 @@ pub fn restoreCustomField(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RestoreCustomFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RestoreCustomFieldResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const TrashCustomFieldResult = union(enum) {
@@ -3625,7 +3626,7 @@ pub fn trashCustomField(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return TrashCustomFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return TrashCustomFieldResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllFieldConfigurationsResult = union(enum) {
@@ -3674,7 +3675,7 @@ pub fn getAllFieldConfigurations(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllFieldConfigurationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllFieldConfigurationsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateFieldConfigurationResult = union(enum) {
@@ -3726,7 +3727,7 @@ pub fn updateFieldConfiguration(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateFieldConfigurationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateFieldConfigurationResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFieldConfigurationItemsResult = union(enum) {
@@ -3780,7 +3781,7 @@ pub fn getFieldConfigurationItems(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFieldConfigurationItemsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFieldConfigurationItemsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllFieldConfigurationSchemesResult = union(enum) {
@@ -3832,7 +3833,7 @@ pub fn getAllFieldConfigurationSchemes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllFieldConfigurationSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllFieldConfigurationSchemesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFieldConfigurationSchemeMappingsResult = union(enum) {
@@ -3889,7 +3890,7 @@ pub fn getFieldConfigurationSchemeMappings(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFieldConfigurationSchemeMappingsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFieldConfigurationSchemeMappingsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFieldConfigurationSchemeProjectMappingResult = union(enum) {
@@ -3941,7 +3942,7 @@ pub fn getFieldConfigurationSchemeProjectMapping(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFieldConfigurationSchemeProjectMappingResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFieldConfigurationSchemeProjectMappingResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateFieldConfigurationSchemeResult = union(enum) {
@@ -3993,7 +3994,7 @@ pub fn updateFieldConfigurationScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateFieldConfigurationSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateFieldConfigurationSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const SetFieldConfigurationSchemeMappingResult = union(enum) {
@@ -4046,7 +4047,7 @@ pub fn setFieldConfigurationSchemeMapping(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return SetFieldConfigurationSchemeMappingResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return SetFieldConfigurationSchemeMappingResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult = union(enum) {
@@ -4115,7 +4116,7 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFiltersResult = union(enum) {
@@ -4146,7 +4147,7 @@ pub fn getFilters(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFiltersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFiltersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDefaultShareScopeResult = union(enum) {
@@ -4185,7 +4186,7 @@ pub fn getDefaultShareScope(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDefaultShareScopeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDefaultShareScopeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFavouriteFiltersResult = union(enum) {
@@ -4221,7 +4222,7 @@ pub fn getFavouriteFilters(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFavouriteFiltersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFavouriteFiltersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetMyFiltersResult = union(enum) {
@@ -4258,7 +4259,7 @@ pub fn getMyFilters(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetMyFiltersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetMyFiltersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFiltersPaginatedResult = union(enum) {
@@ -4322,7 +4323,7 @@ pub fn getFiltersPaginated(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFiltersPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFiltersPaginatedResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFilterResult = union(enum) {
@@ -4370,7 +4371,7 @@ pub fn getFilter(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFilterResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFilterResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetColumnsResult = union(enum) {
@@ -4418,7 +4419,7 @@ pub fn getColumns(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetColumnsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetColumnsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const SetFavouriteForFilterResult = union(enum) {
@@ -4464,7 +4465,7 @@ pub fn setFavouriteForFilter(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return SetFavouriteForFilterResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return SetFavouriteForFilterResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ChangeFilterOwnerResult = union(enum) {
@@ -4515,7 +4516,7 @@ pub fn changeFilterOwner(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ChangeFilterOwnerResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ChangeFilterOwnerResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetSharePermissionsResult = union(enum) {
@@ -4561,7 +4562,7 @@ pub fn getSharePermissions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetSharePermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetSharePermissionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetSharePermissionResult = union(enum) {
@@ -4614,7 +4615,7 @@ pub fn getSharePermission(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetSharePermissionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetSharePermissionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetGroupResult = union(enum) {
@@ -4671,7 +4672,7 @@ pub fn getGroup(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetGroupResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetGroupResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const BulkGetGroupsResult = union(enum) {
@@ -4724,7 +4725,7 @@ pub fn bulkGetGroups(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return BulkGetGroupsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return BulkGetGroupsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetUsersFromGroupResult = union(enum) {
@@ -4783,7 +4784,7 @@ pub fn getUsersFromGroup(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetUsersFromGroupResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetUsersFromGroupResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const AddUserToGroupResult = union(enum) {
@@ -4842,7 +4843,7 @@ pub fn addUserToGroup(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return AddUserToGroupResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return AddUserToGroupResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindGroupsResult = union(enum) {
@@ -4882,7 +4883,7 @@ pub fn findGroups(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindGroupsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindGroupsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindUsersAndGroupsResult = union(enum) {
@@ -4945,7 +4946,7 @@ pub fn findUsersAndGroups(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindUsersAndGroupsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindUsersAndGroupsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetLicenseResult = union(enum) {
@@ -4984,7 +4985,7 @@ pub fn getLicense(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetLicenseResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetLicenseResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const CreateIssueResult = union(enum) {
@@ -5054,7 +5055,7 @@ pub fn createIssue(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return CreateIssueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return CreateIssueResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const CreateIssuesResult = union(enum) {
@@ -5118,7 +5119,7 @@ pub fn createIssues(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return CreateIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return CreateIssuesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCreateIssueMetaResult = union(enum) {
@@ -5162,7 +5163,7 @@ pub fn getCreateIssueMeta(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCreateIssueMetaResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCreateIssueMetaResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssuePickerResourceResult = union(enum) {
@@ -5207,7 +5208,7 @@ pub fn getIssuePickerResource(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssuePickerResourceResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssuePickerResourceResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const BulkSetIssuesPropertiesListResult = union(enum) {
@@ -5255,7 +5256,7 @@ pub fn bulkSetIssuesPropertiesList(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return BulkSetIssuesPropertiesListResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return BulkSetIssuesPropertiesListResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const BulkSetIssuePropertiesByIssueResult = union(enum) {
@@ -5312,7 +5313,7 @@ pub fn bulkSetIssuePropertiesByIssue(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return BulkSetIssuePropertiesByIssueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return BulkSetIssuePropertiesByIssueResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const BulkSetIssuePropertyResult = union(enum) {
@@ -5362,7 +5363,7 @@ pub fn bulkSetIssueProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return BulkSetIssuePropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return BulkSetIssuePropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIsWatchingIssueBulkResult = union(enum) {
@@ -5401,7 +5402,7 @@ pub fn getIsWatchingIssueBulk(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIsWatchingIssueBulkResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIsWatchingIssueBulkResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueResult = union(enum) {
@@ -5452,7 +5453,7 @@ pub fn getIssue(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const AssignIssueResult = union(enum) {
@@ -5504,7 +5505,7 @@ pub fn assignIssue(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return AssignIssueResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return AssignIssueResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const AddAttachmentResult = union(enum) {
@@ -5555,7 +5556,7 @@ pub fn addAttachment(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return AddAttachmentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return AddAttachmentResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetChangeLogsResult = union(enum) {
@@ -5599,7 +5600,7 @@ pub fn getChangeLogs(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetChangeLogsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetChangeLogsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetChangeLogsByIdsResult = union(enum) {
@@ -5646,7 +5647,7 @@ pub fn getChangeLogsByIds(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetChangeLogsByIdsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetChangeLogsByIdsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCommentsResult = union(enum) {
@@ -5702,7 +5703,7 @@ pub fn getComments(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCommentsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCommentsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCommentResult = union(enum) {
@@ -5752,7 +5753,7 @@ pub fn getComment(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCommentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCommentResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetEditIssueMetaResult = union(enum) {
@@ -5806,7 +5807,7 @@ pub fn getEditIssueMeta(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetEditIssueMetaResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetEditIssueMetaResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const NotifyResult = union(enum) {
@@ -5861,7 +5862,7 @@ pub fn notify(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return NotifyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return NotifyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssuePropertyKeysResult = union(enum) {
@@ -5903,7 +5904,7 @@ pub fn getIssuePropertyKeys(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssuePropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssuePropertyKeysResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssuePropertyResult = union(enum) {
@@ -5952,7 +5953,7 @@ pub fn getIssueProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssuePropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssuePropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetRemoteIssueLinksResult = union(enum) {
@@ -6010,7 +6011,7 @@ pub fn getRemoteIssueLinks(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetRemoteIssueLinksResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetRemoteIssueLinksResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetRemoteIssueLinkByIdResult = union(enum) {
@@ -6069,7 +6070,7 @@ pub fn getRemoteIssueLinkById(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetRemoteIssueLinkByIdResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetRemoteIssueLinkByIdResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetTransitionsResult = union(enum) {
@@ -6121,7 +6122,7 @@ pub fn getTransitions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetTransitionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetTransitionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetVotesResult = union(enum) {
@@ -6172,7 +6173,7 @@ pub fn getVotes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetVotesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetVotesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueWatchersResult = union(enum) {
@@ -6219,7 +6220,7 @@ pub fn getIssueWatchers(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueWatchersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueWatchersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueWorklogResult = union(enum) {
@@ -6275,7 +6276,7 @@ pub fn getIssueWorklog(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueWorklogResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueWorklogResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorklogResult = union(enum) {
@@ -6331,7 +6332,7 @@ pub fn getWorklog(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorklogResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorklogResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorklogPropertyKeysResult = union(enum) {
@@ -6389,7 +6390,7 @@ pub fn getWorklogPropertyKeys(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorklogPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorklogPropertyKeysResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorklogPropertyResult = union(enum) {
@@ -6449,7 +6450,7 @@ pub fn getWorklogProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorklogPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorklogPropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const LinkIssuesResult = union(enum) {
@@ -6500,7 +6501,7 @@ pub fn linkIssues(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return LinkIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return LinkIssuesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueLinkResult = union(enum) {
@@ -6555,7 +6556,7 @@ pub fn getIssueLink(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueLinkResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueLinkResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueLinkTypesResult = union(enum) {
@@ -6599,7 +6600,7 @@ pub fn getIssueLinkTypes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueLinkTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueLinkTypesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueLinkTypeResult = union(enum) {
@@ -6654,7 +6655,7 @@ pub fn getIssueLinkType(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueLinkTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueLinkTypeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueSecuritySchemesResult = union(enum) {
@@ -6698,7 +6699,7 @@ pub fn getIssueSecuritySchemes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueSecuritySchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueSecuritySchemesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueSecuritySchemeResult = union(enum) {
@@ -6744,7 +6745,7 @@ pub fn getIssueSecurityScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueSecuritySchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueSecuritySchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueSecurityLevelMembersResult = union(enum) {
@@ -6805,7 +6806,7 @@ pub fn getIssueSecurityLevelMembers(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueSecurityLevelMembersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueSecurityLevelMembersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueAllTypesResult = union(enum) {
@@ -6840,7 +6841,7 @@ pub fn getIssueAllTypes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueAllTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueAllTypesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypesForProjectResult = union(enum) {
@@ -6890,7 +6891,7 @@ pub fn getIssueTypesForProject(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypesForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypesForProjectResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypeResult = union(enum) {
@@ -6944,7 +6945,7 @@ pub fn getIssueType(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAlternativeIssueTypesResult = union(enum) {
@@ -6990,7 +6991,7 @@ pub fn getAlternativeIssueTypes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAlternativeIssueTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAlternativeIssueTypesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const CreateIssueTypeAvatarResult = union(enum) {
@@ -7056,7 +7057,7 @@ pub fn createIssueTypeAvatar(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return CreateIssueTypeAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return CreateIssueTypeAvatarResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypePropertyKeysResult = union(enum) {
@@ -7106,7 +7107,7 @@ pub fn getIssueTypePropertyKeys(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypePropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypePropertyKeysResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypePropertyResult = union(enum) {
@@ -7160,7 +7161,7 @@ pub fn getIssueTypeProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypePropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypePropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllIssueTypeSchemesResult = union(enum) {
@@ -7215,7 +7216,7 @@ pub fn getAllIssueTypeSchemes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllIssueTypeSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllIssueTypeSchemesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypeSchemesMappingResult = union(enum) {
@@ -7267,7 +7268,7 @@ pub fn getIssueTypeSchemesMapping(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypeSchemesMappingResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypeSchemesMappingResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypeSchemeForProjectsResult = union(enum) {
@@ -7319,7 +7320,7 @@ pub fn getIssueTypeSchemeForProjects(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypeSchemeForProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypeSchemeForProjectsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateIssueTypeSchemeResult = union(enum) {
@@ -7371,7 +7372,7 @@ pub fn updateIssueTypeScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateIssueTypeSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateIssueTypeSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const AddIssueTypesToIssueTypeSchemeResult = union(enum) {
@@ -7424,7 +7425,7 @@ pub fn addIssueTypesToIssueTypeScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return AddIssueTypesToIssueTypeSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return AddIssueTypesToIssueTypeSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ReorderIssueTypesInIssueTypeSchemeResult = union(enum) {
@@ -7477,7 +7478,7 @@ pub fn reorderIssueTypesInIssueTypeScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ReorderIssueTypesInIssueTypeSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ReorderIssueTypesInIssueTypeSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RemoveIssueTypeFromIssueTypeSchemeResult = union(enum) {
@@ -7532,7 +7533,7 @@ pub fn removeIssueTypeFromIssueTypeScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RemoveIssueTypeFromIssueTypeSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RemoveIssueTypeFromIssueTypeSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypeScreenSchemesResult = union(enum) {
@@ -7587,7 +7588,7 @@ pub fn getIssueTypeScreenSchemes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypeScreenSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypeScreenSchemesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypeScreenSchemeMappingsResult = union(enum) {
@@ -7639,7 +7640,7 @@ pub fn getIssueTypeScreenSchemeMappings(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypeScreenSchemeMappingsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypeScreenSchemeMappingsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueTypeScreenSchemeProjectAssociationsResult = union(enum) {
@@ -7691,7 +7692,7 @@ pub fn getIssueTypeScreenSchemeProjectAssociations(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueTypeScreenSchemeProjectAssociationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueTypeScreenSchemeProjectAssociationsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateIssueTypeScreenSchemeResult = union(enum) {
@@ -7743,7 +7744,7 @@ pub fn updateIssueTypeScreenScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const AppendMappingsForIssueTypeScreenSchemeResult = union(enum) {
@@ -7801,7 +7802,7 @@ pub fn appendMappingsForIssueTypeScreenScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return AppendMappingsForIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return AppendMappingsForIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateDefaultScreenSchemeResult = union(enum) {
@@ -7854,7 +7855,7 @@ pub fn updateDefaultScreenScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateDefaultScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateDefaultScreenSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RemoveMappingsFromIssueTypeScreenSchemeResult = union(enum) {
@@ -7907,7 +7908,7 @@ pub fn removeMappingsFromIssueTypeScreenScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RemoveMappingsFromIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RemoveMappingsFromIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectsForIssueTypeScreenSchemeResult = union(enum) {
@@ -7962,7 +7963,7 @@ pub fn getProjectsForIssueTypeScreenScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectsForIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectsForIssueTypeScreenSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAutoCompleteResult = union(enum) {
@@ -8001,7 +8002,7 @@ pub fn getAutoComplete(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAutoCompleteResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAutoCompleteResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFieldAutoCompleteForQueryStringResult = union(enum) {
@@ -8049,7 +8050,7 @@ pub fn getFieldAutoCompleteForQueryString(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFieldAutoCompleteForQueryStringResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFieldAutoCompleteForQueryStringResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const MatchIssuesResult = union(enum) {
@@ -8088,7 +8089,7 @@ pub fn matchIssues(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return MatchIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return MatchIssuesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ParseJqlQueriesResult = union(enum) {
@@ -8137,7 +8138,7 @@ pub fn parseJqlQueries(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ParseJqlQueriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ParseJqlQueriesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const MigrateQueriesResult = union(enum) {
@@ -8181,7 +8182,7 @@ pub fn migrateQueries(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return MigrateQueriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return MigrateQueriesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const SanitiseJqlQueriesResult = union(enum) {
@@ -8242,7 +8243,7 @@ pub fn sanitiseJqlQueries(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return SanitiseJqlQueriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return SanitiseJqlQueriesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllLabelsResult = union(enum) {
@@ -8278,7 +8279,7 @@ pub fn getAllLabels(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllLabelsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllLabelsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetMyPermissionsResult = union(enum) {
@@ -8347,7 +8348,7 @@ pub fn getMyPermissions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetMyPermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetMyPermissionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetPreferenceResult = union(enum) {
@@ -8388,7 +8389,7 @@ pub fn getPreference(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetPreferenceResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetPreferenceResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetLocaleResult = union(enum) {
@@ -8427,7 +8428,7 @@ pub fn getLocale(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetLocaleResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetLocaleResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetCurrentUserResult = union(enum) {
@@ -8467,7 +8468,7 @@ pub fn getCurrentUser(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetCurrentUserResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetCurrentUserResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetNotificationSchemesResult = union(enum) {
@@ -8509,7 +8510,7 @@ pub fn getNotificationSchemes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetNotificationSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetNotificationSchemesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetNotificationSchemeResult = union(enum) {
@@ -8561,7 +8562,7 @@ pub fn getNotificationScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetNotificationSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetNotificationSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllPermissionsResult = union(enum) {
@@ -8605,7 +8606,7 @@ pub fn getAllPermissions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllPermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllPermissionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetBulkPermissionsResult = union(enum) {
@@ -8663,7 +8664,7 @@ pub fn getBulkPermissions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetBulkPermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetBulkPermissionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetPermittedProjectsResult = union(enum) {
@@ -8707,7 +8708,7 @@ pub fn getPermittedProjects(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetPermittedProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetPermittedProjectsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllPermissionSchemesResult = union(enum) {
@@ -8747,7 +8748,7 @@ pub fn getAllPermissionSchemes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllPermissionSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllPermissionSchemesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetPermissionSchemeResult = union(enum) {
@@ -8794,7 +8795,7 @@ pub fn getPermissionScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetPermissionSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetPermissionSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetPermissionSchemeGrantsResult = union(enum) {
@@ -8842,7 +8843,7 @@ pub fn getPermissionSchemeGrants(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetPermissionSchemeGrantsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetPermissionSchemeGrantsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetPermissionSchemeGrantResult = union(enum) {
@@ -8892,7 +8893,7 @@ pub fn getPermissionSchemeGrant(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetPermissionSchemeGrantResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetPermissionSchemeGrantResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetPrioritiesResult = union(enum) {
@@ -8927,7 +8928,7 @@ pub fn getPriorities(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetPrioritiesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetPrioritiesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const SetDefaultPriorityResult = union(enum) {
@@ -8993,7 +8994,7 @@ pub fn setDefaultPriority(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return SetDefaultPriorityResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return SetDefaultPriorityResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const SearchPrioritiesResult = union(enum) {
@@ -9040,7 +9041,7 @@ pub fn searchPriorities(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return SearchPrioritiesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return SearchPrioritiesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetPriorityResult = union(enum) {
@@ -9086,7 +9087,7 @@ pub fn getPriority(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetPriorityResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetPriorityResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllProjectsResult = union(enum) {
@@ -9124,7 +9125,7 @@ pub fn getAllProjects(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllProjectsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetRecentResult = union(enum) {
@@ -9166,7 +9167,7 @@ pub fn getRecent(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetRecentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetRecentResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const SearchProjectsResult = union(enum) {
@@ -9228,7 +9229,7 @@ pub fn searchProjects(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return SearchProjectsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return SearchProjectsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllProjectTypesResult = union(enum) {
@@ -9263,7 +9264,7 @@ pub fn getAllProjectTypes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllProjectTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllProjectTypesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllAccessibleProjectTypesResult = union(enum) {
@@ -9293,7 +9294,7 @@ pub fn getAllAccessibleProjectTypes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllAccessibleProjectTypesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllAccessibleProjectTypesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectTypeByKeyResult = union(enum) {
@@ -9339,7 +9340,7 @@ pub fn getProjectTypeByKey(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectTypeByKeyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectTypeByKeyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAccessibleProjectTypeByKeyResult = union(enum) {
@@ -9386,7 +9387,7 @@ pub fn getAccessibleProjectTypeByKey(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAccessibleProjectTypeByKeyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAccessibleProjectTypeByKeyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectResult = union(enum) {
@@ -9434,7 +9435,7 @@ pub fn getProject(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ArchiveProjectResult = union(enum) {
@@ -9487,7 +9488,7 @@ pub fn archiveProject(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ArchiveProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ArchiveProjectResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateProjectAvatarResult = union(enum) {
@@ -9535,7 +9536,7 @@ pub fn updateProjectAvatar(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateProjectAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateProjectAvatarResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const DeleteProjectAvatarResult = union(enum) {
@@ -9585,7 +9586,7 @@ pub fn deleteProjectAvatar(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return DeleteProjectAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return DeleteProjectAvatarResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const CreateProjectAvatarResult = union(enum) {
@@ -9649,7 +9650,7 @@ pub fn createProjectAvatar(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return CreateProjectAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return CreateProjectAvatarResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllProjectAvatarsResult = union(enum) {
@@ -9696,7 +9697,7 @@ pub fn getAllProjectAvatars(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllProjectAvatarsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllProjectAvatarsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectComponentsPaginatedResult = union(enum) {
@@ -9747,7 +9748,7 @@ pub fn getProjectComponentsPaginated(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectComponentsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectComponentsPaginatedResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectComponentsResult = union(enum) {
@@ -9790,7 +9791,7 @@ pub fn getProjectComponents(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectComponentsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectComponentsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const DeleteProjectAsynchronouslyResult = union(enum) {
@@ -9842,7 +9843,7 @@ pub fn deleteProjectAsynchronously(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return DeleteProjectAsynchronouslyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return DeleteProjectAsynchronouslyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFeaturesForProjectResult = union(enum) {
@@ -9899,7 +9900,7 @@ pub fn getFeaturesForProject(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFeaturesForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFeaturesForProjectResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ToggleFeatureForProjectResult = union(enum) {
@@ -9958,7 +9959,7 @@ pub fn toggleFeatureForProject(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ToggleFeatureForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ToggleFeatureForProjectResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectPropertyKeysResult = union(enum) {
@@ -10015,7 +10016,7 @@ pub fn getProjectPropertyKeys(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectPropertyKeysResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectPropertyResult = union(enum) {
@@ -10074,7 +10075,7 @@ pub fn getProjectProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectPropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RestoreResult = union(enum) {
@@ -10126,7 +10127,7 @@ pub fn restore(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RestoreResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RestoreResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectRolesResult = union(enum) {
@@ -10169,7 +10170,7 @@ pub fn getProjectRoles(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectRolesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectRolesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectRoleResult = union(enum) {
@@ -10227,7 +10228,7 @@ pub fn getProjectRole(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectRoleResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectRoleResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectRoleDetailsResult = union(enum) {
@@ -10272,7 +10273,7 @@ pub fn getProjectRoleDetails(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectRoleDetailsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectRoleDetailsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllStatusesResult = union(enum) {
@@ -10315,7 +10316,7 @@ pub fn getAllStatuses(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllStatusesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllStatusesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateProjectTypeResult = union(enum) {
@@ -10369,7 +10370,7 @@ pub fn updateProjectType(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateProjectTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateProjectTypeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectVersionsPaginatedResult = union(enum) {
@@ -10417,7 +10418,7 @@ pub fn getProjectVersionsPaginated(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectVersionsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectVersionsPaginatedResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectVersionsResult = union(enum) {
@@ -10456,7 +10457,7 @@ pub fn getProjectVersions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectVersionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectVersionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectEmailResult = union(enum) {
@@ -10508,7 +10509,7 @@ pub fn getProjectEmail(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectEmailResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectEmailResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetHierarchyResult = union(enum) {
@@ -10560,7 +10561,7 @@ pub fn getHierarchy(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetHierarchyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetHierarchyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectIssueSecuritySchemeResult = union(enum) {
@@ -10617,7 +10618,7 @@ pub fn getProjectIssueSecurityScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectIssueSecuritySchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectIssueSecuritySchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetNotificationSchemeForProjectResult = union(enum) {
@@ -10670,7 +10671,7 @@ pub fn getNotificationSchemeForProject(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetNotificationSchemeForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetNotificationSchemeForProjectResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAssignedPermissionSchemeResult = union(enum) {
@@ -10723,7 +10724,7 @@ pub fn getAssignedPermissionScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAssignedPermissionSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAssignedPermissionSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetSecurityLevelsForProjectResult = union(enum) {
@@ -10765,7 +10766,7 @@ pub fn getSecurityLevelsForProject(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetSecurityLevelsForProjectResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetSecurityLevelsForProjectResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllProjectCategoriesResult = union(enum) {
@@ -10800,7 +10801,7 @@ pub fn getAllProjectCategories(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllProjectCategoriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllProjectCategoriesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectCategoryByIdResult = union(enum) {
@@ -10846,7 +10847,7 @@ pub fn getProjectCategoryById(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectCategoryByIdResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectCategoryByIdResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const ValidateProjectKeyResult = union(enum) {
@@ -10886,7 +10887,7 @@ pub fn validateProjectKey(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return ValidateProjectKeyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return ValidateProjectKeyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetValidProjectKeyResult = union(enum) {
@@ -10922,7 +10923,7 @@ pub fn getValidProjectKey(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetValidProjectKeyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetValidProjectKeyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetValidProjectNameResult = union(enum) {
@@ -10968,7 +10969,7 @@ pub fn getValidProjectName(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetValidProjectNameResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetValidProjectNameResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetResolutionsResult = union(enum) {
@@ -11003,7 +11004,7 @@ pub fn getResolutions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetResolutionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetResolutionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetResolutionResult = union(enum) {
@@ -11049,7 +11050,7 @@ pub fn getResolution(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetResolutionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetResolutionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllProjectRolesResult = union(enum) {
@@ -11089,7 +11090,7 @@ pub fn getAllProjectRoles(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllProjectRolesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllProjectRolesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectRoleByIdResult = union(enum) {
@@ -11140,7 +11141,7 @@ pub fn getProjectRoleById(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectRoleByIdResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectRoleByIdResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetProjectRoleActorsForRoleResult = union(enum) {
@@ -11197,7 +11198,7 @@ pub fn getProjectRoleActorsForRole(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetProjectRoleActorsForRoleResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetProjectRoleActorsForRoleResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetScreensResult = union(enum) {
@@ -11247,7 +11248,7 @@ pub fn getScreens(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetScreensResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetScreensResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const AddFieldToDefaultScreenResult = union(enum) {
@@ -11294,7 +11295,7 @@ pub fn addFieldToDefaultScreen(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return AddFieldToDefaultScreenResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return AddFieldToDefaultScreenResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateScreenResult = union(enum) {
@@ -11350,7 +11351,7 @@ pub fn updateScreen(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateScreenResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateScreenResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAvailableScreenFieldsResult = union(enum) {
@@ -11398,7 +11399,7 @@ pub fn getAvailableScreenFields(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAvailableScreenFieldsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAvailableScreenFieldsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllScreenTabsResult = union(enum) {
@@ -11452,7 +11453,7 @@ pub fn getAllScreenTabs(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllScreenTabsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllScreenTabsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RenameScreenTabResult = union(enum) {
@@ -11511,7 +11512,7 @@ pub fn renameScreenTab(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RenameScreenTabResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RenameScreenTabResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllScreenTabFieldsResult = union(enum) {
@@ -11563,7 +11564,7 @@ pub fn getAllScreenTabFields(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllScreenTabFieldsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllScreenTabFieldsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RemoveScreenTabFieldResult = union(enum) {
@@ -11621,7 +11622,7 @@ pub fn removeScreenTabField(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RemoveScreenTabFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RemoveScreenTabFieldResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const MoveScreenTabFieldResult = union(enum) {
@@ -11680,7 +11681,7 @@ pub fn moveScreenTabField(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return MoveScreenTabFieldResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return MoveScreenTabFieldResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const MoveScreenTabResult = union(enum) {
@@ -11738,7 +11739,7 @@ pub fn moveScreenTab(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return MoveScreenTabResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return MoveScreenTabResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetScreenSchemesResult = union(enum) {
@@ -11788,7 +11789,7 @@ pub fn getScreenSchemes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetScreenSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetScreenSchemesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateScreenSchemeResult = union(enum) {
@@ -11840,7 +11841,7 @@ pub fn updateScreenScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateScreenSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateScreenSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const SearchForIssuesUsingJqlResult = union(enum) {
@@ -11892,7 +11893,7 @@ pub fn searchForIssuesUsingJql(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return SearchForIssuesUsingJqlResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return SearchForIssuesUsingJqlResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueSecurityLevelResult = union(enum) {
@@ -11938,7 +11939,7 @@ pub fn getIssueSecurityLevel(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueSecurityLevelResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueSecurityLevelResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetServerInfoResult = union(enum) {
@@ -11977,7 +11978,7 @@ pub fn getServerInfo(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetServerInfoResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetServerInfoResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIssueNavigatorDefaultColumnsResult = union(enum) {
@@ -12017,7 +12018,7 @@ pub fn getIssueNavigatorDefaultColumns(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIssueNavigatorDefaultColumnsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIssueNavigatorDefaultColumnsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetStatusesResult = union(enum) {
@@ -12052,7 +12053,7 @@ pub fn getStatuses(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetStatusesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetStatusesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetStatusResult = union(enum) {
@@ -12102,7 +12103,7 @@ pub fn getStatus(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetStatusResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetStatusResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetStatusCategoriesResult = union(enum) {
@@ -12137,7 +12138,7 @@ pub fn getStatusCategories(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetStatusCategoriesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetStatusCategoriesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetStatusCategoryResult = union(enum) {
@@ -12183,7 +12184,7 @@ pub fn getStatusCategory(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetStatusCategoryResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetStatusCategoryResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetStatusesByIdResult = union(enum) {
@@ -12225,7 +12226,7 @@ pub fn getStatusesById(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetStatusesByIdResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetStatusesByIdResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const SearchResult = union(enum) {
@@ -12275,7 +12276,7 @@ pub fn search(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return SearchResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return SearchResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetTaskResult = union(enum) {
@@ -12326,7 +12327,7 @@ pub fn getTask(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetTaskResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetTaskResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const CancelTaskResult = union(enum) {
@@ -12379,7 +12380,7 @@ pub fn cancelTask(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return CancelTaskResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return CancelTaskResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetUiModificationsResult = union(enum) {
@@ -12431,7 +12432,7 @@ pub fn getUiModifications(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetUiModificationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetUiModificationsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const UpdateUiModificationResult = union(enum) {
@@ -12483,7 +12484,7 @@ pub fn updateUiModification(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return UpdateUiModificationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return UpdateUiModificationResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAvatarsResult = union(enum) {
@@ -12532,7 +12533,7 @@ pub fn getAvatars(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAvatarsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAvatarsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const DeleteAvatarResult = union(enum) {
@@ -12585,7 +12586,7 @@ pub fn deleteAvatar(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return DeleteAvatarResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return DeleteAvatarResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAvatarImageByTypeResult = union(enum) {
@@ -12646,7 +12647,7 @@ pub fn getAvatarImageByType(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAvatarImageByTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAvatarImageByTypeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAvatarImageByIDResult = union(enum) {
@@ -12719,7 +12720,7 @@ pub fn getAvatarImageByID(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAvatarImageByIDResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAvatarImageByIDResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAvatarImageByOwnerResult = union(enum) {
@@ -12792,7 +12793,7 @@ pub fn getAvatarImageByOwner(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAvatarImageByOwnerResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAvatarImageByOwnerResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetUserResult = union(enum) {
@@ -12845,7 +12846,7 @@ pub fn getUser(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetUserResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetUserResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindBulkAssignableUsersResult = union(enum) {
@@ -12905,7 +12906,7 @@ pub fn findBulkAssignableUsers(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindBulkAssignableUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindBulkAssignableUsersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindAssignableUsersResult = union(enum) {
@@ -12969,7 +12970,7 @@ pub fn findAssignableUsers(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindAssignableUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindAssignableUsersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const BulkGetUsersResult = union(enum) {
@@ -13018,7 +13019,7 @@ pub fn bulkGetUsers(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return BulkGetUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return BulkGetUsersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const BulkGetUsersMigrationResult = union(enum) {
@@ -13062,7 +13063,7 @@ pub fn bulkGetUsersMigration(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return BulkGetUsersMigrationResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return BulkGetUsersMigrationResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetUserDefaultColumnsResult = union(enum) {
@@ -13109,7 +13110,7 @@ pub fn getUserDefaultColumns(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetUserDefaultColumnsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetUserDefaultColumnsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetUserEmailResult = union(enum) {
@@ -13164,7 +13165,7 @@ pub fn getUserEmail(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetUserEmailResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetUserEmailResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetUserEmailBulkResult = union(enum) {
@@ -13214,7 +13215,7 @@ pub fn getUserEmailBulk(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetUserEmailBulkResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetUserEmailBulkResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetUserGroupsResult = union(enum) {
@@ -13262,7 +13263,7 @@ pub fn getUserGroups(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetUserGroupsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetUserGroupsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindUsersWithAllPermissionsResult = union(enum) {
@@ -13330,7 +13331,7 @@ pub fn findUsersWithAllPermissions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindUsersWithAllPermissionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindUsersWithAllPermissionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindUsersForPickerResult = union(enum) {
@@ -13386,7 +13387,7 @@ pub fn findUsersForPicker(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindUsersForPickerResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindUsersForPickerResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetUserPropertyKeysResult = union(enum) {
@@ -13443,7 +13444,7 @@ pub fn getUserPropertyKeys(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetUserPropertyKeysResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetUserPropertyKeysResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetUserPropertyResult = union(enum) {
@@ -13502,7 +13503,7 @@ pub fn getUserProperty(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetUserPropertyResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetUserPropertyResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindUsersResult = union(enum) {
@@ -13557,7 +13558,7 @@ pub fn findUsers(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindUsersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindUsersByQueryResult = union(enum) {
@@ -13614,7 +13615,7 @@ pub fn findUsersByQuery(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindUsersByQueryResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindUsersByQueryResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindUserKeysByQueryResult = union(enum) {
@@ -13671,7 +13672,7 @@ pub fn findUserKeysByQuery(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindUserKeysByQueryResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindUserKeysByQueryResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const FindUsersWithBrowsePermissionResult = union(enum) {
@@ -13732,7 +13733,7 @@ pub fn findUsersWithBrowsePermission(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return FindUsersWithBrowsePermissionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return FindUsersWithBrowsePermissionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllUsersDefaultResult = union(enum) {
@@ -13779,7 +13780,7 @@ pub fn getAllUsersDefault(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllUsersDefaultResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllUsersDefaultResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllUsersResult = union(enum) {
@@ -13826,7 +13827,7 @@ pub fn getAllUsers(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllUsersResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllUsersResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const CreateVersionResult = union(enum) {
@@ -13878,7 +13879,7 @@ pub fn createVersion(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return CreateVersionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return CreateVersionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetVersionResult = union(enum) {
@@ -13925,7 +13926,7 @@ pub fn getVersion(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetVersionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetVersionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const MergeVersionsResult = union(enum) {
@@ -13978,7 +13979,7 @@ pub fn mergeVersions(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return MergeVersionsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return MergeVersionsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const MoveVersionResult = union(enum) {
@@ -14037,7 +14038,7 @@ pub fn moveVersion(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return MoveVersionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return MoveVersionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetVersionRelatedIssuesResult = union(enum) {
@@ -14087,7 +14088,7 @@ pub fn getVersionRelatedIssues(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetVersionRelatedIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetVersionRelatedIssuesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const DeleteAndReplaceVersionResult = union(enum) {
@@ -14138,7 +14139,7 @@ pub fn deleteAndReplaceVersion(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return DeleteAndReplaceVersionResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return DeleteAndReplaceVersionResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetVersionUnresolvedIssuesResult = union(enum) {
@@ -14188,7 +14189,7 @@ pub fn getVersionUnresolvedIssues(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetVersionUnresolvedIssuesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetVersionUnresolvedIssuesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDynamicWebhooksForAppResult = union(enum) {
@@ -14242,7 +14243,7 @@ pub fn getDynamicWebhooksForApp(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDynamicWebhooksForAppResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDynamicWebhooksForAppResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetFailedWebhooksResult = union(enum) {
@@ -14296,7 +14297,7 @@ pub fn getFailedWebhooks(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetFailedWebhooksResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetFailedWebhooksResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const RefreshWebhooksResult = union(enum) {
@@ -14348,7 +14349,7 @@ pub fn refreshWebhooks(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return RefreshWebhooksResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return RefreshWebhooksResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllWorkflowsResult = union(enum) {
@@ -14384,7 +14385,7 @@ pub fn getAllWorkflows(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllWorkflowsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllWorkflowsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorkflowTransitionRuleConfigurationsResult = union(enum) {
@@ -14449,7 +14450,7 @@ pub fn getWorkflowTransitionRuleConfigurations(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorkflowTransitionRuleConfigurationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorkflowTransitionRuleConfigurationsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const DeleteWorkflowTransitionRuleConfigurationsResult = union(enum) {
@@ -14501,7 +14502,7 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return DeleteWorkflowTransitionRuleConfigurationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return DeleteWorkflowTransitionRuleConfigurationsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorkflowsPaginatedResult = union(enum) {
@@ -14556,7 +14557,7 @@ pub fn getWorkflowsPaginated(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorkflowsPaginatedResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorkflowsPaginatedResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorkflowTransitionPropertiesResult = union(enum) {
@@ -14617,7 +14618,7 @@ pub fn getWorkflowTransitionProperties(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorkflowTransitionPropertiesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorkflowTransitionPropertiesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const DeleteInactiveWorkflowResult = union(enum) {
@@ -14669,7 +14670,7 @@ pub fn deleteInactiveWorkflow(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return DeleteInactiveWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return DeleteInactiveWorkflowResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetAllWorkflowSchemesResult = union(enum) {
@@ -14715,7 +14716,7 @@ pub fn getAllWorkflowSchemes(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetAllWorkflowSchemesResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetAllWorkflowSchemesResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeProjectAssociationsResult = union(enum) {
@@ -14765,7 +14766,7 @@ pub fn getWorkflowSchemeProjectAssociations(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorkflowSchemeProjectAssociationsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorkflowSchemeProjectAssociationsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeResult = union(enum) {
@@ -14817,7 +14818,7 @@ pub fn getWorkflowScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorkflowSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorkflowSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const CreateWorkflowSchemeDraftFromParentResult = union(enum) {
@@ -14869,7 +14870,7 @@ pub fn createWorkflowSchemeDraftFromParent(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return CreateWorkflowSchemeDraftFromParentResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return CreateWorkflowSchemeDraftFromParentResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDefaultWorkflowResult = union(enum) {
@@ -14922,7 +14923,7 @@ pub fn getDefaultWorkflow(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDefaultWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDefaultWorkflowResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeDraftResult = union(enum) {
@@ -14977,7 +14978,7 @@ pub fn getWorkflowSchemeDraft(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorkflowSchemeDraftResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorkflowSchemeDraftResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDraftDefaultWorkflowResult = union(enum) {
@@ -15032,7 +15033,7 @@ pub fn getDraftDefaultWorkflow(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDraftDefaultWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDraftDefaultWorkflowResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeDraftIssueTypeResult = union(enum) {
@@ -15086,7 +15087,7 @@ pub fn getWorkflowSchemeDraftIssueType(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorkflowSchemeDraftIssueTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorkflowSchemeDraftIssueTypeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const PublishDraftWorkflowSchemeResult = union(enum) {
@@ -15153,7 +15154,7 @@ pub fn publishDraftWorkflowScheme(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return PublishDraftWorkflowSchemeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return PublishDraftWorkflowSchemeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetDraftWorkflowResult = union(enum) {
@@ -15206,7 +15207,7 @@ pub fn getDraftWorkflow(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetDraftWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetDraftWorkflowResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorkflowSchemeIssueTypeResult = union(enum) {
@@ -15261,7 +15262,7 @@ pub fn getWorkflowSchemeIssueType(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorkflowSchemeIssueTypeResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorkflowSchemeIssueTypeResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorkflowResult = union(enum) {
@@ -15315,7 +15316,7 @@ pub fn getWorkflow(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorkflowResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorkflowResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIdsOfWorklogsDeletedSinceResult = union(enum) {
@@ -15355,7 +15356,7 @@ pub fn getIdsOfWorklogsDeletedSince(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIdsOfWorklogsDeletedSinceResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIdsOfWorklogsDeletedSinceResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetWorklogsForIdsResult = union(enum) {
@@ -15396,7 +15397,7 @@ pub fn getWorklogsForIds(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetWorklogsForIdsResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetWorklogsForIdsResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const GetIdsOfWorklogsModifiedSinceResult = union(enum) {
@@ -15437,7 +15438,7 @@ pub fn getIdsOfWorklogsModifiedSince(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return GetIdsOfWorklogsModifiedSinceResult{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return GetIdsOfWorklogsModifiedSinceResult{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const @"AddonPropertiesResource.getAddonProperties_getResult" = union(enum) {
@@ -15483,7 +15484,7 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return @"AddonPropertiesResource.getAddonProperties_getResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return @"AddonPropertiesResource.getAddonProperties_getResult"{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const @"AddonPropertiesResource.getAddonProperty_getResult" = union(enum) {
@@ -15549,7 +15550,7 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return @"AddonPropertiesResource.getAddonProperty_getResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return @"AddonPropertiesResource.getAddonProperty_getResult"{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const @"DynamicModulesResource.getModules_getResult" = union(enum) {
@@ -15592,7 +15593,7 @@ pub fn @"DynamicModulesResource.getModules_get"(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return @"DynamicModulesResource.getModules_getResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return @"DynamicModulesResource.getModules_getResult"{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult" = union(enum) {
@@ -15635,7 +15636,7 @@ pub fn @"AppIssueFieldValueUpdateResource.updateIssueFields_put"(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return @"AppIssueFieldValueUpdateResource.updateIssueFields_putResult"{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const @"MigrationResource.updateEntityPropertiesValue_putResult" = union(enum) {
@@ -15678,7 +15679,7 @@ pub fn @"MigrationResource.updateEntityPropertiesValue_put"(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return @"MigrationResource.updateEntityPropertiesValue_putResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return @"MigrationResource.updateEntityPropertiesValue_putResult"{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 pub const @"MigrationResource.workflowRuleSearch_postResult" = union(enum) {
@@ -15723,7 +15724,7 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
     }
     const body_copy = try alloc.dupe(u8, http_response.body);
     errdefer alloc.free(body_copy);
-    return @"MigrationResource.workflowRuleSearch_postResult"{ .unspecified = .{ .status_code = http_response.status_code, .body = body_copy } };
+    return @"MigrationResource.workflowRuleSearch_postResult"{ .unspecified = .{ .status_code = try fmt.parseInt(u16, http_response.status_code, 10), .body = body_copy } };
 }
 
 const std = @import("std");
