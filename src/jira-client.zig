@@ -15800,7 +15800,7 @@ fn reset(client: Client) void {
 fn url_encode_alloc(client: Client, alloc: mem.Allocator, string: []const u8) ![]u8 {
     if (string.len == 0) return try alloc.dupe(u8, string);
 
-    const converted_c = c.curl_easy_escape(client.curl, string.ptr, @intCast(c_int, string.len));
+    const converted_c = c.curl_easy_escape(client.curl, string.ptr, @intCast(string.len));
     if (converted_c == null) return error.AllocationFailed;
     defer c.curl_free(converted_c);
     const converted = mem.sliceTo(converted_c, 0);
@@ -15930,8 +15930,8 @@ fn parseHttpResponse(buffer: []u8) !HttpResponse {
 // break :blk result;
 
 fn writeToArrayListCallback(data: *anyopaque, size: c_uint, nmemb: c_uint, user_data: *anyopaque) callconv(.C) c_uint {
-    var buffer = @intToPtr(*std.ArrayList(u8), @ptrToInt(user_data));
-    var typed_data = @intToPtr([*]u8, @ptrToInt(data));
+    var buffer = @as(*std.ArrayList(u8), @ptrFromInt(@intFromPtr(user_data)));
+    var typed_data = @as([*]u8, @ptrFromInt(@intFromPtr(data)));
     buffer.appendSlice(typed_data[0 .. nmemb * size]) catch return 0;
     return nmemb * size;
 }
