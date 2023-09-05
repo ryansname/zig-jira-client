@@ -4,11 +4,11 @@ pub usingnamespace types;
 pub const GetBannerResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -102,7 +102,7 @@ pub fn updateMultipleCustomFieldValues(
 pub const GetCustomFieldConfigurationResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -298,7 +298,7 @@ pub fn getAdvancedSettings(
 pub const SetApplicationPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the data type of the `value` does not match the application property's data type. For example, a string is provided instead of an integer.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -394,7 +394,7 @@ pub fn getAllApplicationRoles(
 pub const GetApplicationRoleResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user is not an administrator.
@@ -516,7 +516,7 @@ pub fn getAttachmentContent(
 pub const GetAttachmentMetaResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -620,7 +620,7 @@ pub fn getAttachmentThumbnail(
 pub const GetAttachmentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -674,7 +674,7 @@ pub fn getAttachment(
 pub const ExpandAttachmentForHumansResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// The user does not have the necessary permission.
@@ -734,7 +734,7 @@ pub fn expandAttachmentForHumans(
 pub const ExpandAttachmentForMachinesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// The user does not have the necessary permission.
@@ -794,7 +794,7 @@ pub fn expandAttachmentForMachines(
 pub const GetAuditRecordsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -846,7 +846,7 @@ pub fn getAuditRecords(
 pub const GetAllSystemAvatarsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if an error occurs while retrieving the list of avatars.
@@ -893,7 +893,7 @@ pub fn getAllSystemAvatars(
 pub const GetCommentsByIdsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request contains more than 1000 IDs or is empty.
     _400: void,
     _400: void,
@@ -933,7 +933,7 @@ pub fn getCommentsByIds(
 pub const GetCommentPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the comment ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -990,7 +990,7 @@ pub fn getCommentPropertyKeys(
 pub const GetCommentPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1049,7 +1049,7 @@ pub fn getCommentProperty(
 pub const CreateComponentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.ValueTree,
+    _201: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  the user is not found.
@@ -1109,7 +1109,7 @@ pub fn createComponent(
 pub const GetComponentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the component is not found or the user does not have permission to browse the project containing the component.
@@ -1155,7 +1155,7 @@ pub fn getComponent(
 pub const GetComponentRelatedIssuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the component is not found.
@@ -1202,7 +1202,7 @@ pub fn getComponentRelatedIssues(
 pub const GetConfigurationResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -1241,7 +1241,7 @@ pub fn getConfiguration(
 pub const GetSelectedTimeTrackingImplementationResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful and time tracking is enabled.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is successful but time tracking is disabled.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1330,7 +1330,7 @@ pub fn getAvailableTimeTrackingImplementations(
 pub const GetSharedTimeTrackingConfigurationResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -1374,7 +1374,7 @@ pub fn getSharedTimeTrackingConfiguration(
 pub const GetCustomFieldOptionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -1423,11 +1423,11 @@ pub fn getCustomFieldOption(
 pub const GetAllDashboardsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -1478,11 +1478,11 @@ pub fn getAllDashboards(
 pub const GetAllAvailableDashboardGadgetsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// 400 response
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -1530,16 +1530,16 @@ pub fn getAllAvailableDashboardGadgets(
 pub const GetDashboardsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  `orderBy` is invalid.
     ///  *  `expand` includes an invalid value.
     ///  *  `accountId` and `owner` are provided.
     ///  *  `groupname` and `groupId` are provided.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// 401 response
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -1598,11 +1598,11 @@ pub fn getDashboardsPaginated(
 pub const GetAllGadgetsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the dashboard is not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -1654,11 +1654,11 @@ pub const UpdateGadgetResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the gadget or the dashboard is not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -1710,7 +1710,7 @@ pub fn updateGadget(
 pub const GetDashboardItemPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the dashboard or dashboard item is not found, or the dashboard is not owned by or shared with the user.
@@ -1760,7 +1760,7 @@ pub fn getDashboardItemPropertyKeys(
 pub const GetDashboardItemPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the dashboard, the dashboard item, or dashboard item property is not found, or the dashboard is not owned by or shared with the user.
@@ -1812,11 +1812,11 @@ pub fn getDashboardItemProperty(
 pub const GetDashboardResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// 400 response
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the dashboard is not found or the dashboard is not owned by or shared with the user.
     _404: void,
     _400: void,
@@ -1871,13 +1871,13 @@ pub fn getDashboard(
 pub const CopyDashboardResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the dashboard is not found or the dashboard is not owned by or shared with the user.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -1975,13 +1975,13 @@ pub fn getEvents(
 pub const AnalyseExpressionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// 400 response
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// 404 response
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -2033,7 +2033,7 @@ pub fn analyseExpression(
 pub const EvaluateJiraExpressionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the evaluation results in a value. The result is a JSON primitive value, list, or object.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  the request is invalid, that is:
@@ -2041,11 +2041,11 @@ pub const EvaluateJiraExpressionResult = union(enum) {
     ///      *  invalid data is provided, such as a request including issue ID and key.
     ///      *  the expression is invalid and can not be parsed.
     ///  *  evaluation fails at runtime. This may happen for various reasons. For example, accessing a property on a null object (such as the expression `issue.id` where `issue` is `null`). In this case an error message is provided.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if any object provided in the request context is not found or the user does not have permission to view it.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -2132,13 +2132,13 @@ pub fn getFields(
 pub const GetFieldsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -2196,13 +2196,13 @@ pub fn getFieldsPaginated(
 pub const GetTrashedFieldsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -2310,7 +2310,7 @@ pub fn updateCustomField(
 pub const GetContextsForFieldResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2367,7 +2367,7 @@ pub fn getContextsForField(
 pub const GetDefaultValuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2422,7 +2422,7 @@ pub fn getDefaultValues(
 pub const GetIssueTypeMappingsForContextsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if operation is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2472,7 +2472,7 @@ pub fn getIssueTypeMappingsForContexts(
 pub const GetCustomFieldContextsForProjectsAndIssueTypesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2531,7 +2531,7 @@ pub fn getCustomFieldContextsForProjectsAndIssueTypes(
 pub const GetProjectContextMappingResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2758,7 +2758,7 @@ pub fn removeIssueTypesFromContext(
 pub const GetOptionsForContextResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3048,7 +3048,7 @@ pub fn removeCustomFieldContextFromProjects(
 pub const GetContextsForFieldDeprecatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3097,7 +3097,7 @@ pub fn getContextsForFieldDeprecated(
 pub const GetScreensForFieldResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3147,7 +3147,7 @@ pub fn getScreensForField(
 pub const GetAllIssueFieldOptionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the field is not found or does not support options.
     _400: void,
     /// Returned if the request is not authenticated as a Jira administrator or the app that provided the field.
@@ -3196,7 +3196,7 @@ pub fn getAllIssueFieldOptions(
 pub const GetSelectableIssueFieldOptionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the field is not found or does not support options.
@@ -3246,7 +3246,7 @@ pub fn getSelectableIssueFieldOptions(
 pub const GetVisibleIssueFieldOptionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the field is not found or does not support options.
@@ -3296,7 +3296,7 @@ pub fn getVisibleIssueFieldOptions(
 pub const GetIssueFieldOptionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the requested option is returned.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the field is not found or does not support options.
     _400: void,
     /// Returned if the request is not authenticated as a Jira administrator or the app that provided the field.
@@ -3350,7 +3350,7 @@ pub fn getIssueFieldOption(
 pub const ReplaceIssueFieldOptionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the long-running task to deselect the option is started.
-    _303: json.ValueTree,
+    _303: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the user does not have the necessary permission.
@@ -3409,21 +3409,21 @@ pub fn replaceIssueFieldOption(
 pub const DeleteCustomFieldResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _303: json.ValueTree,
+    _303: json.Parsed(json.Value),
     /// Returned if any of these are true:
     ///
     ///  *  The custom field is locked.
     ///  *  The custom field is used in a issue security scheme or a permission scheme.
     ///  *  The custom field ID format is incorrect.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     /// Returned if the custom field is not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     /// Returned if a task to delete the custom field is running.
-    _409: json.ValueTree,
+    _409: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -3496,13 +3496,13 @@ pub const RestoreCustomFieldResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     /// Returned if the custom field is not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -3565,13 +3565,13 @@ pub const TrashCustomFieldResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     /// Returned if the custom field is not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -3632,7 +3632,7 @@ pub fn trashCustomField(
 pub const GetAllFieldConfigurationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3733,7 +3733,7 @@ pub fn updateFieldConfiguration(
 pub const GetFieldConfigurationItemsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3787,7 +3787,7 @@ pub fn getFieldConfigurationItems(
 pub const GetAllFieldConfigurationSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3839,7 +3839,7 @@ pub fn getAllFieldConfigurationSchemes(
 pub const GetFieldConfigurationSchemeMappingsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3896,7 +3896,7 @@ pub fn getFieldConfigurationSchemeMappings(
 pub const GetFieldConfigurationSchemeProjectMappingResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4055,13 +4055,13 @@ pub const RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult = union(enum)
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     /// Returned if the field configuration scheme or the issue types are not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -4153,7 +4153,7 @@ pub fn getFilters(
 pub const GetDefaultShareScopeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4265,13 +4265,13 @@ pub fn getMyFilters(
 pub const GetFiltersPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  `owner` and `accountId` are provided.
     ///  *  `expand` includes an invalid value.
     ///  *  `orderBy` is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4329,7 +4329,7 @@ pub fn getFiltersPaginated(
 pub const GetFilterResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the filter is not found or the user does not have permission to view it.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4425,7 +4425,7 @@ pub fn getColumns(
 pub const SetFavouriteForFilterResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  the filter is not found.
@@ -4568,7 +4568,7 @@ pub fn getSharePermissions(
 pub const GetSharePermissionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -4621,7 +4621,7 @@ pub fn getSharePermission(
 pub const GetGroupResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the group name is not specified.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4678,7 +4678,7 @@ pub fn getGroup(
 pub const BulkGetGroupsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4731,7 +4731,7 @@ pub fn bulkGetGroups(
 pub const GetUsersFromGroupResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the group name is not specified.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4790,7 +4790,7 @@ pub fn getUsersFromGroup(
 pub const AddUserToGroupResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.ValueTree,
+    _201: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  `groupname` is not provided.
@@ -4849,7 +4849,7 @@ pub fn addUserToGroup(
 pub const FindGroupsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -4889,7 +4889,7 @@ pub fn findGroups(
 pub const FindUsersAndGroupsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the query parameter is not provided.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4952,7 +4952,7 @@ pub fn findUsersAndGroups(
 pub const GetLicenseResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4991,7 +4991,7 @@ pub fn getLicense(
 pub const CreateIssueResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.ValueTree,
+    _201: json.Parsed(json.Value),
     /// Returned if the request:
     ///
     ///  *  is missing required fields.
@@ -5001,11 +5001,11 @@ pub const CreateIssueResult = union(enum) {
     ///  *  is to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  is invalid for any other reason.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -5069,7 +5069,7 @@ pub const CreateIssuesResult = union(enum) {
     ///  *  is to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  is invalid for any other reason.
-    _201: json.ValueTree,
+    _201: json.Parsed(json.Value),
     /// Returned if all requests are invalid. Requests may be unsuccessful when they:
     ///
     ///  *  are missing required fields.
@@ -5079,7 +5079,7 @@ pub const CreateIssuesResult = union(enum) {
     ///  *  are to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  are invalid for any other reason.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5125,7 +5125,7 @@ pub fn createIssues(
 pub const GetCreateIssueMetaResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5169,7 +5169,7 @@ pub fn getCreateIssueMeta(
 pub const GetIssuePickerResourceResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5216,9 +5216,9 @@ pub const BulkSetIssuesPropertiesListResult = union(enum) {
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid or the user does not have the necessary permission.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -5264,11 +5264,11 @@ pub const BulkSetIssuePropertiesByIssueResult = union(enum) {
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Return if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -5321,9 +5321,9 @@ pub const BulkSetIssuePropertyResult = union(enum) {
     /// Returned if the request is successful.
     _303: void,
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -5369,7 +5369,7 @@ pub fn bulkSetIssueProperty(
 pub const GetIsWatchingIssueBulkResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5408,7 +5408,7 @@ pub fn getIsWatchingIssueBulk(
 pub const GetIssueResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -5562,7 +5562,7 @@ pub fn addAttachment(
 pub const GetChangeLogsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the issue is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
@@ -5606,7 +5606,7 @@ pub fn getChangeLogs(
 pub const GetChangeLogsByIdsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the issue is not found or the user does not have the necessary permission.
@@ -5653,7 +5653,7 @@ pub fn getChangeLogsByIds(
 pub const GetCommentsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if `orderBy` is set to a value other than *created*.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5709,7 +5709,7 @@ pub fn getComments(
 pub const GetCommentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue or comment is not found or the user does not have permission to view the issue or comment.
@@ -5759,7 +5759,7 @@ pub fn getComment(
 pub const GetEditIssueMetaResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user uses an override parameter but doesn't have permission to do so.
@@ -5868,7 +5868,7 @@ pub fn notify(
 pub const GetIssuePropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the issue is not found or the user does not have permissions to view the issue.
     _404: void,
     _400: void,
@@ -5910,7 +5910,7 @@ pub fn getIssuePropertyKeys(
 pub const GetIssuePropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue or property is not found or the user does not have permission to see the issue.
@@ -5959,7 +5959,7 @@ pub fn getIssueProperty(
 pub const GetRemoteIssueLinksResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6017,7 +6017,7 @@ pub fn getRemoteIssueLinks(
 pub const GetRemoteIssueLinkByIdResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the link ID is invalid or the remote issue link does not belong to the issue.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6076,7 +6076,7 @@ pub fn getRemoteIssueLinkById(
 pub const GetTransitionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -6128,7 +6128,7 @@ pub fn getTransitions(
 pub const GetVotesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -6179,7 +6179,7 @@ pub fn getVotes(
 pub const GetIssueWatchersResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -6226,7 +6226,7 @@ pub fn getIssueWatchers(
 pub const GetIssueWorklogResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -6282,7 +6282,7 @@ pub fn getIssueWorklog(
 pub const GetWorklogResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if:
@@ -6338,7 +6338,7 @@ pub fn getWorklog(
 pub const GetWorklogPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the worklog ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6396,7 +6396,7 @@ pub fn getWorklogPropertyKeys(
 pub const GetWorklogPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the worklog ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6507,7 +6507,7 @@ pub fn linkIssues(
 pub const GetIssueLinkResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the issue link ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6562,7 +6562,7 @@ pub fn getIssueLink(
 pub const GetIssueLinkTypesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if issue linking is disabled.
@@ -6606,7 +6606,7 @@ pub fn getIssueLinkTypes(
 pub const GetIssueLinkTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the issue link type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6661,7 +6661,7 @@ pub fn getIssueLinkType(
 pub const GetIssueSecuritySchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the user does not have permission to administer issue security schemes.
@@ -6705,7 +6705,7 @@ pub fn getIssueSecuritySchemes(
 pub const GetIssueSecuritySchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the administrator permission and the scheme is not used in any project where the user has administrative permission.
@@ -6751,7 +6751,7 @@ pub fn getIssueSecurityScheme(
 pub const GetIssueSecurityLevelMembersResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6897,7 +6897,7 @@ pub fn getIssueTypesForProject(
 pub const GetIssueTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6997,7 +6997,7 @@ pub fn getAlternativeIssueTypes(
 pub const CreateIssueTypeAvatarResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.ValueTree,
+    _201: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  an image isn't included in the request.
@@ -7063,7 +7063,7 @@ pub fn createIssueTypeAvatar(
 pub const GetIssueTypePropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if:
@@ -7113,7 +7113,7 @@ pub fn getIssueTypePropertyKeys(
 pub const GetIssueTypePropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7167,7 +7167,7 @@ pub fn getIssueTypeProperty(
 pub const GetAllIssueTypeSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7222,7 +7222,7 @@ pub fn getAllIssueTypeSchemes(
 pub const GetIssueTypeSchemesMappingResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7274,7 +7274,7 @@ pub fn getIssueTypeSchemesMapping(
 pub const GetIssueTypeSchemeForProjectsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7539,7 +7539,7 @@ pub fn removeIssueTypeFromIssueTypeScheme(
 pub const GetIssueTypeScreenSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7594,7 +7594,7 @@ pub fn getIssueTypeScreenSchemes(
 pub const GetIssueTypeScreenSchemeMappingsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7646,7 +7646,7 @@ pub fn getIssueTypeScreenSchemeMappings(
 pub const GetIssueTypeScreenSchemeProjectAssociationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7914,7 +7914,7 @@ pub fn removeMappingsFromIssueTypeScreenScheme(
 pub const GetProjectsForIssueTypeScreenSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7969,7 +7969,7 @@ pub fn getProjectsForIssueTypeScreenScheme(
 pub const GetAutoCompleteResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -8008,7 +8008,7 @@ pub fn getAutoComplete(
 pub const GetFieldAutoCompleteForQueryStringResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if an invalid combination of parameters is passed.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -8056,7 +8056,7 @@ pub fn getFieldAutoCompleteForQueryString(
 pub const MatchIssuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if `jqls` exceeds the maximum number of JQL queries or `issueIds` exceeds the maximum number of issue IDs.
     _400: void,
     _400: void,
@@ -8095,9 +8095,9 @@ pub fn matchIssues(
 pub const ParseJqlQueriesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -8144,7 +8144,7 @@ pub fn parseJqlQueries(
 pub const MigrateQueriesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. Note that the JQL queries are returned in the same order that they were passed.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if at least one of the queries cannot be converted. For example, the JQL has invalid operators or invalid keywords, or the users in the query cannot be found.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8188,13 +8188,13 @@ pub fn migrateQueries(
 pub const SanitiseJqlQueriesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -8249,7 +8249,7 @@ pub fn sanitiseJqlQueries(
 pub const GetAllLabelsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -8285,13 +8285,13 @@ pub fn getAllLabels(
 pub const GetMyPermissionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if `permissions` is empty, contains an invalid key, or does not equal BROWSE\_PROJECTS when commentId is provided.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the project or issue is not found or the user does not have permission to view the project or issue.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -8395,7 +8395,7 @@ pub fn getPreference(
 pub const GetLocaleResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8434,7 +8434,7 @@ pub fn getLocale(
 pub const GetCurrentUserResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8474,7 +8474,7 @@ pub fn getCurrentUser(
 pub const GetNotificationSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. Only returns notification schemes that the user has permission to access. An empty list is returned if the user lacks permission to access all notification schemes.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8516,7 +8516,7 @@ pub fn getNotificationSchemes(
 pub const GetNotificationSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8568,7 +8568,7 @@ pub fn getNotificationScheme(
 pub const GetAllPermissionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -8612,7 +8612,7 @@ pub fn getAllPermissions(
 pub const GetBulkPermissionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  `projectPermissions` is provided without at least one project permission being provided.
@@ -8620,9 +8620,9 @@ pub const GetBulkPermissionsResult = union(enum) {
     ///  *  an invalid project permission is provided in the project permissions list.
     ///  *  more than 1000 valid project IDs or more than 1000 valid issue IDs are provided.
     ///  *  an invalid account ID is provided.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -8670,7 +8670,7 @@ pub fn getBulkPermissions(
 pub const GetPermittedProjectsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if a project permission is not found.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8714,7 +8714,7 @@ pub fn getPermittedProjects(
 pub const GetAllPermissionSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8754,7 +8754,7 @@ pub fn getAllPermissionSchemes(
 pub const GetPermissionSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission scheme is not found or the user does not have the necessary permission.
@@ -8801,7 +8801,7 @@ pub fn getPermissionScheme(
 pub const GetPermissionSchemeGrantsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission schemes is not found or the user does not have the necessary permission.
@@ -8849,7 +8849,7 @@ pub fn getPermissionSchemeGrants(
 pub const GetPermissionSchemeGrantResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission scheme or permission grant is not found or the user does not have the necessary permission.
@@ -8936,13 +8936,13 @@ pub const SetDefaultPriorityResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     /// Returned if the issue priority is not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -9000,9 +9000,9 @@ pub fn setDefaultPriority(
 pub const SearchPrioritiesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -9047,7 +9047,7 @@ pub fn searchPriorities(
 pub const GetPriorityResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the issue priority is not found.
@@ -9173,7 +9173,7 @@ pub fn getRecent(
 pub const SearchProjectsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9300,7 +9300,7 @@ pub fn getAllAccessibleProjectTypes(
 pub const GetProjectTypeByKeyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the project type is not found.
@@ -9346,7 +9346,7 @@ pub fn getProjectTypeByKey(
 pub const GetAccessibleProjectTypeByKeyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project type is not accessible to the user.
@@ -9393,7 +9393,7 @@ pub fn getAccessibleProjectTypeByKey(
 pub const GetProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -9592,7 +9592,7 @@ pub fn deleteProjectAvatar(
 pub const CreateProjectAvatarResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.ValueTree,
+    _201: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  an image isn't included in the request.
@@ -9656,7 +9656,7 @@ pub fn createProjectAvatar(
 pub const GetAllProjectAvatarsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view the project.
@@ -9703,7 +9703,7 @@ pub fn getAllProjectAvatars(
 pub const GetProjectComponentsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -9797,7 +9797,7 @@ pub fn getProjectComponents(
 pub const DeleteProjectAsynchronouslyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _303: json.ValueTree,
+    _303: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9849,7 +9849,7 @@ pub fn deleteProjectAsynchronously(
 pub const GetFeaturesForProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9906,7 +9906,7 @@ pub fn getFeaturesForProject(
 pub const ToggleFeatureForProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9965,7 +9965,7 @@ pub fn toggleFeatureForProject(
 pub const GetProjectPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -10022,7 +10022,7 @@ pub fn getProjectPropertyKeys(
 pub const GetProjectPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -10081,7 +10081,7 @@ pub fn getProjectProperty(
 pub const RestoreResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10176,7 +10176,7 @@ pub fn getProjectRoles(
 pub const GetProjectRoleResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10322,7 +10322,7 @@ pub fn getAllStatuses(
 pub const UpdateProjectTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the project type is updated.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10376,7 +10376,7 @@ pub fn updateProjectType(
 pub const GetProjectVersionsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the project is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
@@ -10463,7 +10463,7 @@ pub fn getProjectVersions(
 pub const GetProjectEmailResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have permission to read project.
@@ -10515,7 +10515,7 @@ pub fn getProjectEmail(
 pub const GetHierarchyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10567,7 +10567,7 @@ pub fn getHierarchy(
 pub const GetProjectIssueSecuritySchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10624,7 +10624,7 @@ pub fn getProjectIssueSecurityScheme(
 pub const GetNotificationSchemeForProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10677,7 +10677,7 @@ pub fn getNotificationSchemeForProject(
 pub const GetAssignedPermissionSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have permission to view the project's configuration.
@@ -10730,7 +10730,7 @@ pub fn getAssignedPermissionScheme(
 pub const GetSecurityLevelsForProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the project is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
@@ -10807,7 +10807,7 @@ pub fn getAllProjectCategories(
 pub const GetProjectCategoryByIdResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project category is not found.
@@ -10853,7 +10853,7 @@ pub fn getProjectCategoryById(
 pub const ValidateProjectKeyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -11010,7 +11010,7 @@ pub fn getResolutions(
 pub const GetResolutionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue resolution value is not found.
@@ -11096,7 +11096,7 @@ pub fn getAllProjectRoles(
 pub const GetProjectRoleByIdResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have administrative permissions.
@@ -11147,7 +11147,7 @@ pub fn getProjectRoleById(
 pub const GetProjectRoleActorsForRoleResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11204,7 +11204,7 @@ pub fn getProjectRoleActorsForRole(
 pub const GetScreensResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -11301,7 +11301,7 @@ pub fn addFieldToDefaultScreen(
 pub const UpdateScreenResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11459,7 +11459,7 @@ pub fn getAllScreenTabs(
 pub const RenameScreenTabResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11745,7 +11745,7 @@ pub fn moveScreenTab(
 pub const GetScreenSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -11847,7 +11847,7 @@ pub fn updateScreenScheme(
 pub const SearchForIssuesUsingJqlResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the JQL query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11899,7 +11899,7 @@ pub fn searchForIssuesUsingJql(
 pub const GetIssueSecurityLevelResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the issue security level is not found.
@@ -11945,7 +11945,7 @@ pub fn getIssueSecurityLevel(
 pub const GetServerInfoResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -12059,7 +12059,7 @@ pub fn getStatuses(
 pub const GetStatusResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -12144,7 +12144,7 @@ pub fn getStatusCategories(
 pub const GetStatusCategoryResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the status category is not found.
@@ -12232,7 +12232,7 @@ pub fn getStatusesById(
 pub const SearchResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing, or the caller doesn't have permissions to perform the operation.
@@ -12282,7 +12282,7 @@ pub fn search(
 pub const GetTaskResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -12386,7 +12386,7 @@ pub fn cancelTask(
 pub const GetUiModificationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12490,7 +12490,7 @@ pub fn updateUiModification(
 pub const GetAvatarsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the avatar type is invalid, the associated item ID is missing, or the item is not found.
@@ -12594,11 +12594,11 @@ pub const GetAvatarImageByTypeResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -12655,13 +12655,13 @@ pub const GetAvatarImageByIDResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -12728,13 +12728,13 @@ pub const GetAvatarImageByOwnerResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -12799,7 +12799,7 @@ pub fn getAvatarImageByOwner(
 pub const GetUserResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the calling user does not have the *Browse users and groups* global permission.
@@ -12976,7 +12976,7 @@ pub fn findAssignableUsers(
 pub const BulkGetUsersResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if `accountID` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13116,7 +13116,7 @@ pub fn getUserDefaultColumns(
 pub const GetUserEmailResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the calling app is not approved to use this API.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing from the request (for example if a user is trying to access this API).
@@ -13171,7 +13171,7 @@ pub fn getUserEmail(
 pub const GetUserEmailBulkResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the calling app is not approved to use this API.
     _400: void,
     /// Returned if the authentication credentials are incorrect, or missing from the request (for example if a user is trying to access this API).
@@ -13337,7 +13337,7 @@ pub fn findUsersWithAllPermissions(
 pub const FindUsersForPickerResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if `exclude` and `excludeAccountIds` are provided.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13393,7 +13393,7 @@ pub fn findUsersForPicker(
 pub const GetUserPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if `accountId` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13450,7 +13450,7 @@ pub fn getUserPropertyKeys(
 pub const GetUserPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if `accountId` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13564,7 +13564,7 @@ pub fn findUsers(
 pub const FindUsersByQueryResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13621,7 +13621,7 @@ pub fn findUsersByQuery(
 pub const FindUserKeysByQueryResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13833,7 +13833,7 @@ pub fn getAllUsers(
 pub const CreateVersionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.ValueTree,
+    _201: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13885,7 +13885,7 @@ pub fn createVersion(
 pub const GetVersionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the version is not found or the user does not have the necessary permission.
@@ -13985,7 +13985,7 @@ pub fn mergeVersions(
 pub const MoveVersionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if:
     ///
     ///  *  no body parameters are provided.
@@ -14044,7 +14044,7 @@ pub fn moveVersion(
 pub const GetVersionRelatedIssuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if:
@@ -14145,7 +14145,7 @@ pub fn deleteAndReplaceVersion(
 pub const GetVersionUnresolvedIssuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -14195,11 +14195,11 @@ pub fn getVersionUnresolvedIssues(
 pub const GetDynamicWebhooksForAppResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the caller is not an app.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -14249,11 +14249,11 @@ pub fn getDynamicWebhooksForApp(
 pub const GetFailedWebhooksResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// 400 response
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the caller is not a Connect app.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -14303,11 +14303,11 @@ pub fn getFailedWebhooks(
 pub const RefreshWebhooksResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the caller is not an app.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -14391,11 +14391,11 @@ pub fn getAllWorkflows(
 pub const GetWorkflowTransitionRuleConfigurationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the caller is not a Connect app.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     /// Returned if the any transition rule type is not supported.
     _404: void,
     _400: void,
@@ -14456,11 +14456,11 @@ pub fn getWorkflowTransitionRuleConfigurations(
 pub const DeleteWorkflowTransitionRuleConfigurationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the caller is not a Connect app.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -14508,11 +14508,11 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
 pub const GetWorkflowsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: json.ValueTree,
+    _403: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -14563,7 +14563,7 @@ pub fn getWorkflowsPaginated(
 pub const GetWorkflowTransitionPropertiesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// 200 response
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14676,7 +14676,7 @@ pub fn deleteInactiveWorkflow(
 pub const GetAllWorkflowSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14722,7 +14722,7 @@ pub fn getAllWorkflowSchemes(
 pub const GetWorkflowSchemeProjectAssociationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14772,7 +14772,7 @@ pub fn getWorkflowSchemeProjectAssociations(
 pub const GetWorkflowSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14824,7 +14824,7 @@ pub fn getWorkflowScheme(
 pub const CreateWorkflowSchemeDraftFromParentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.ValueTree,
+    _201: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14876,7 +14876,7 @@ pub fn createWorkflowSchemeDraftFromParent(
 pub const GetDefaultWorkflowResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14929,7 +14929,7 @@ pub fn getDefaultWorkflow(
 pub const GetWorkflowSchemeDraftResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14984,7 +14984,7 @@ pub fn getWorkflowSchemeDraft(
 pub const GetDraftDefaultWorkflowResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission..
@@ -15039,7 +15039,7 @@ pub fn getDraftDefaultWorkflow(
 pub const GetWorkflowSchemeDraftIssueTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15095,7 +15095,7 @@ pub const PublishDraftWorkflowSchemeResult = union(enum) {
     /// Returned if the request is only for validation and is successful.
     _204: void,
     /// Returned if the request is successful.
-    _303: json.ValueTree,
+    _303: json.Parsed(json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -15160,7 +15160,7 @@ pub fn publishDraftWorkflowScheme(
 pub const GetDraftWorkflowResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15213,7 +15213,7 @@ pub fn getDraftWorkflow(
 pub const GetWorkflowSchemeIssueTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15268,7 +15268,7 @@ pub fn getWorkflowSchemeIssueType(
 pub const GetWorkflowResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -15322,7 +15322,7 @@ pub fn getWorkflow(
 pub const GetIdsOfWorklogsDeletedSinceResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -15403,7 +15403,7 @@ pub fn getWorklogsForIds(
 pub const GetIdsOfWorklogsModifiedSinceResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -15444,9 +15444,9 @@ pub fn getIdsOfWorklogsModifiedSince(
 pub const @"AddonPropertiesResource.getAddonProperties_getResult" = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -15490,13 +15490,13 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
 pub const @"AddonPropertiesResource.getAddonProperty_getResult" = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the property key is longer than 127 characters.
-    _400: json.ValueTree,
+    _400: json.Parsed(json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     /// Returned if the property is not found or doesn't belong to the app.
-    _404: json.ValueTree,
+    _404: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -15556,9 +15556,9 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
 pub const @"DynamicModulesResource.getModules_getResult" = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the call is not from a Connect app.
-    _401: json.ValueTree,
+    _401: json.Parsed(json.Value),
     _400: void,
 };
 
@@ -15685,7 +15685,7 @@ pub fn @"MigrationResource.updateEntityPropertiesValue_put"(
 pub const @"MigrationResource.workflowRuleSearch_postResult" = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.ValueTree,
+    _200: json.Parsed(json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authorisation credentials are incorrect or missing.
