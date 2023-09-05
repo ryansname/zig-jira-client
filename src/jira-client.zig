@@ -4,11 +4,11 @@ pub usingnamespace types;
 pub const GetBannerResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -25,17 +25,17 @@ pub fn getBanner(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AnnouncementBannerConfiguration"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBannerResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBannerResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBannerResult{ ._403 = result };
     }
@@ -96,7 +96,7 @@ pub fn updateMultipleCustomFieldValues(
 pub const GetCustomFieldConfigurationResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -131,7 +131,7 @@ pub fn getCustomFieldConfiguration(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextualConfiguration"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCustomFieldConfigurationResult{ ._200 = result };
     }
@@ -290,7 +290,7 @@ pub fn getAdvancedSettings(
 pub const SetApplicationPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the data type of the `value` does not match the application property's data type. For example, a string is provided instead of an integer.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -317,7 +317,7 @@ pub fn setApplicationProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetApplicationPropertyResult{ ._200 = result };
     }
@@ -384,7 +384,7 @@ pub fn getAllApplicationRoles(
 pub const GetApplicationRoleResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user is not an administrator.
@@ -409,7 +409,7 @@ pub fn getApplicationRole(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationRole"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetApplicationRoleResult{ ._200 = result };
     }
@@ -504,7 +504,7 @@ pub fn getAttachmentContent(
 pub const GetAttachmentMetaResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -523,7 +523,7 @@ pub fn getAttachmentMeta(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentSettings"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAttachmentMetaResult{ ._200 = result };
     }
@@ -606,7 +606,7 @@ pub fn getAttachmentThumbnail(
 pub const GetAttachmentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -634,7 +634,7 @@ pub fn getAttachment(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentMetadata"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAttachmentResult{ ._200 = result };
     }
@@ -658,7 +658,7 @@ pub fn getAttachment(
 pub const ExpandAttachmentForHumansResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// The user does not have the necessary permission.
@@ -689,7 +689,7 @@ pub fn expandAttachmentForHumans(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveMetadataReadable"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ExpandAttachmentForHumansResult{ ._200 = result };
     }
@@ -716,7 +716,7 @@ pub fn expandAttachmentForHumans(
 pub const ExpandAttachmentForMachinesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. If an empty list is returned in the response, the attachment is empty, corrupt, or not an archive.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// The user does not have the necessary permission.
@@ -747,7 +747,7 @@ pub fn expandAttachmentForMachines(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveImpl"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ExpandAttachmentForMachinesResult{ ._200 = result };
     }
@@ -774,7 +774,7 @@ pub fn expandAttachmentForMachines(
 pub const GetAuditRecordsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -803,7 +803,7 @@ pub fn getAuditRecords(
     // from; location: query
     // to; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AuditRecords"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAuditRecordsResult{ ._200 = result };
     }
@@ -824,7 +824,7 @@ pub fn getAuditRecords(
 pub const GetAllSystemAvatarsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if an error occurs while retrieving the list of avatars.
@@ -848,7 +848,7 @@ pub fn getAllSystemAvatars(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SystemAvatars"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllSystemAvatarsResult{ ._200 = result };
     }
@@ -869,7 +869,7 @@ pub fn getAllSystemAvatars(
 pub const GetCommentsByIdsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request contains more than 1000 IDs or is empty.
     _400: void,
     _400: void,
@@ -889,7 +889,7 @@ pub fn getCommentsByIds(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComment"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentsByIdsResult{ ._200 = result };
     }
@@ -907,7 +907,7 @@ pub fn getCommentsByIds(
 pub const GetCommentPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the comment ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -935,7 +935,7 @@ pub fn getCommentPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentPropertyKeysResult{ ._200 = result };
     }
@@ -962,7 +962,7 @@ pub fn getCommentPropertyKeys(
 pub const GetCommentPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -992,7 +992,7 @@ pub fn getCommentProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentPropertyResult{ ._200 = result };
     }
@@ -1019,7 +1019,7 @@ pub fn getCommentProperty(
 pub const CreateComponentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.Parsed(json.Value),
+    _201: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  the user is not found.
@@ -1050,7 +1050,7 @@ pub fn createComponent(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"ProjectComponent"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateComponentResult{ ._201 = result };
     }
@@ -1077,7 +1077,7 @@ pub fn createComponent(
 pub const GetComponentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the component is not found or the user does not have permission to browse the project containing the component.
@@ -1100,7 +1100,7 @@ pub fn getComponent(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectComponent"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetComponentResult{ ._200 = result };
     }
@@ -1121,7 +1121,7 @@ pub fn getComponent(
 pub const GetComponentRelatedIssuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the component is not found.
@@ -1145,7 +1145,7 @@ pub fn getComponentRelatedIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ComponentIssuesCount"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetComponentRelatedIssuesResult{ ._200 = result };
     }
@@ -1166,7 +1166,7 @@ pub fn getComponentRelatedIssues(
 pub const GetConfigurationResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -1185,7 +1185,7 @@ pub fn getConfiguration(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Configuration"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetConfigurationResult{ ._200 = result };
     }
@@ -1203,7 +1203,7 @@ pub fn getConfiguration(
 pub const GetSelectedTimeTrackingImplementationResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful and time tracking is enabled.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is successful but time tracking is disabled.
     _204: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -1226,7 +1226,7 @@ pub fn getSelectedTimeTrackingImplementation(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingProvider"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSelectedTimeTrackingImplementationResult{ ._200 = result };
     }
@@ -1290,7 +1290,7 @@ pub fn getAvailableTimeTrackingImplementations(
 pub const GetSharedTimeTrackingConfigurationResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -1311,7 +1311,7 @@ pub fn getSharedTimeTrackingConfiguration(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingConfiguration"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSharedTimeTrackingConfigurationResult{ ._200 = result };
     }
@@ -1332,7 +1332,7 @@ pub fn getSharedTimeTrackingConfiguration(
 pub const GetCustomFieldOptionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -1358,7 +1358,7 @@ pub fn getCustomFieldOption(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"CustomFieldOption"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCustomFieldOptionResult{ ._200 = result };
     }
@@ -1379,11 +1379,11 @@ pub fn getCustomFieldOption(
 pub const GetAllDashboardsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -1403,17 +1403,17 @@ pub fn getAllDashboards(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfDashboards"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllDashboardsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllDashboardsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllDashboardsResult{ ._401 = result };
     }
@@ -1428,11 +1428,11 @@ pub fn getAllDashboards(
 pub const GetAllAvailableDashboardGadgetsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// 400 response
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -1449,17 +1449,17 @@ pub fn getAllAvailableDashboardGadgets(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AvailableDashboardGadgetsResponse"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllAvailableDashboardGadgetsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllAvailableDashboardGadgetsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllAvailableDashboardGadgetsResult{ ._401 = result };
     }
@@ -1474,16 +1474,16 @@ pub fn getAllAvailableDashboardGadgets(
 pub const GetDashboardsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  `orderBy` is invalid.
     ///  *  `expand` includes an invalid value.
     ///  *  `accountId` and `owner` are provided.
     ///  *  `groupname` and `groupId` are provided.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// 401 response
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -1511,17 +1511,17 @@ pub fn getDashboardsPaginated(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanDashboard"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardsPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardsPaginatedResult{ ._401 = result };
     }
@@ -1536,11 +1536,11 @@ pub fn getDashboardsPaginated(
 pub const GetAllGadgetsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the dashboard is not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -1563,7 +1563,7 @@ pub fn getAllGadgets(
     // uri; location: query
     // gadgetId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DashboardGadgetResponse"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllGadgetsResult{ ._200 = result };
     }
@@ -1571,7 +1571,7 @@ pub fn getAllGadgets(
         return GetAllGadgetsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllGadgetsResult{ ._404 = result };
     }
@@ -1588,11 +1588,11 @@ pub const UpdateGadgetResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the gadget or the dashboard is not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -1617,7 +1617,7 @@ pub fn updateGadget(
         return UpdateGadgetResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return UpdateGadgetResult{ ._400 = result };
     }
@@ -1625,7 +1625,7 @@ pub fn updateGadget(
         return UpdateGadgetResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return UpdateGadgetResult{ ._404 = result };
     }
@@ -1640,7 +1640,7 @@ pub fn updateGadget(
 pub const GetDashboardItemPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the dashboard or dashboard item is not found, or the dashboard is not owned by or shared with the user.
@@ -1667,7 +1667,7 @@ pub fn getDashboardItemPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardItemPropertyKeysResult{ ._200 = result };
     }
@@ -1688,7 +1688,7 @@ pub fn getDashboardItemPropertyKeys(
 pub const GetDashboardItemPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the dashboard, the dashboard item, or dashboard item property is not found, or the dashboard is not owned by or shared with the user.
@@ -1717,7 +1717,7 @@ pub fn getDashboardItemProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardItemPropertyResult{ ._200 = result };
     }
@@ -1738,11 +1738,11 @@ pub fn getDashboardItemProperty(
 pub const GetDashboardResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// 400 response
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the dashboard is not found or the dashboard is not owned by or shared with the user.
     _404: void,
     _400: void,
@@ -1763,17 +1763,17 @@ pub fn getDashboard(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardResult{ ._401 = result };
     }
@@ -1791,13 +1791,13 @@ pub fn getDashboard(
 pub const CopyDashboardResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the dashboard is not found or the dashboard is not owned by or shared with the user.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -1817,22 +1817,22 @@ pub fn copyDashboard(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CopyDashboardResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CopyDashboardResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CopyDashboardResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CopyDashboardResult{ ._404 = result };
     }
@@ -1887,13 +1887,13 @@ pub fn getEvents(
 pub const AnalyseExpressionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// 400 response
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// 404 response
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -1911,12 +1911,12 @@ pub fn analyseExpression(
 
     // check; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionsAnalysis"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return AnalyseExpressionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return AnalyseExpressionResult{ ._400 = result };
     }
@@ -1924,7 +1924,7 @@ pub fn analyseExpression(
         return AnalyseExpressionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return AnalyseExpressionResult{ ._404 = result };
     }
@@ -1939,7 +1939,7 @@ pub fn analyseExpression(
 pub const EvaluateJiraExpressionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the evaluation results in a value. The result is a JSON primitive value, list, or object.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  the request is invalid, that is:
@@ -1947,11 +1947,11 @@ pub const EvaluateJiraExpressionResult = union(enum) {
     ///      *  invalid data is provided, such as a request including issue ID and key.
     ///      *  the expression is invalid and can not be parsed.
     ///  *  evaluation fails at runtime. This may happen for various reasons. For example, accessing a property on a null object (such as the expression `issue.id` where `issue` is `null`). In this case an error message is provided.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if any object provided in the request context is not found or the user does not have permission to view it.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -1969,12 +1969,12 @@ pub fn evaluateJiraExpression(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionResult"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return EvaluateJiraExpressionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return EvaluateJiraExpressionResult{ ._400 = result };
     }
@@ -1982,7 +1982,7 @@ pub fn evaluateJiraExpression(
         return EvaluateJiraExpressionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return EvaluateJiraExpressionResult{ ._404 = result };
     }
@@ -2032,13 +2032,13 @@ pub fn getFields(
 pub const GetFieldsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -2062,12 +2062,12 @@ pub fn getFieldsPaginated(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldsPaginatedResult{ ._400 = result };
     }
@@ -2075,7 +2075,7 @@ pub fn getFieldsPaginated(
         return GetFieldsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldsPaginatedResult{ ._403 = result };
     }
@@ -2090,13 +2090,13 @@ pub fn getFieldsPaginated(
 pub const GetTrashedFieldsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -2118,12 +2118,12 @@ pub fn getTrashedFieldsPaginated(
     // query; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTrashedFieldsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTrashedFieldsPaginatedResult{ ._400 = result };
     }
@@ -2131,7 +2131,7 @@ pub fn getTrashedFieldsPaginated(
         return GetTrashedFieldsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTrashedFieldsPaginatedResult{ ._403 = result };
     }
@@ -2198,7 +2198,7 @@ pub fn updateCustomField(
 pub const GetContextsForFieldResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2229,7 +2229,7 @@ pub fn getContextsForField(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContext"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetContextsForFieldResult{ ._200 = result };
     }
@@ -2253,7 +2253,7 @@ pub fn getContextsForField(
 pub const GetDefaultValuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2282,7 +2282,7 @@ pub fn getDefaultValues(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextDefaultValue"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDefaultValuesResult{ ._200 = result };
     }
@@ -2306,7 +2306,7 @@ pub fn getDefaultValues(
 pub const GetIssueTypeMappingsForContextsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if operation is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2333,7 +2333,7 @@ pub fn getIssueTypeMappingsForContexts(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeToContextMapping"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeMappingsForContextsResult{ ._200 = result };
     }
@@ -2354,7 +2354,7 @@ pub fn getIssueTypeMappingsForContexts(
 pub const GetCustomFieldContextsForProjectsAndIssueTypesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2384,7 +2384,7 @@ pub fn getCustomFieldContextsForProjectsAndIssueTypes(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextForProjectAndIssueType"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._200 = result };
     }
@@ -2411,7 +2411,7 @@ pub fn getCustomFieldContextsForProjectsAndIssueTypes(
 pub const GetProjectContextMappingResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the required permissions.
@@ -2440,7 +2440,7 @@ pub fn getProjectContextMapping(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextProjectMapping"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectContextMappingResult{ ._200 = result };
     }
@@ -2636,7 +2636,7 @@ pub fn removeIssueTypesFromContext(
 pub const GetOptionsForContextResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -2671,7 +2671,7 @@ pub fn getOptionsForContext(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextOption"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetOptionsForContextResult{ ._200 = result };
     }
@@ -2924,7 +2924,7 @@ pub fn removeCustomFieldContextFromProjects(
 pub const GetContextsForFieldDeprecatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -2950,7 +2950,7 @@ pub fn getContextsForFieldDeprecated(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContext"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetContextsForFieldDeprecatedResult{ ._200 = result };
     }
@@ -2971,7 +2971,7 @@ pub fn getContextsForFieldDeprecated(
 pub const GetScreensForFieldResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -2998,7 +2998,7 @@ pub fn getScreensForField(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenWithTab"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetScreensForFieldResult{ ._200 = result };
     }
@@ -3019,7 +3019,7 @@ pub fn getScreensForField(
 pub const GetAllIssueFieldOptionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the field is not found or does not support options.
     _400: void,
     /// Returned if the request is not authenticated as a Jira administrator or the app that provided the field.
@@ -3045,7 +3045,7 @@ pub fn getAllIssueFieldOptions(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllIssueFieldOptionsResult{ ._200 = result };
     }
@@ -3066,7 +3066,7 @@ pub fn getAllIssueFieldOptions(
 pub const GetSelectableIssueFieldOptionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the field is not found or does not support options.
@@ -3093,7 +3093,7 @@ pub fn getSelectableIssueFieldOptions(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSelectableIssueFieldOptionsResult{ ._200 = result };
     }
@@ -3114,7 +3114,7 @@ pub fn getSelectableIssueFieldOptions(
 pub const GetVisibleIssueFieldOptionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the field is not found or does not support options.
@@ -3141,7 +3141,7 @@ pub fn getVisibleIssueFieldOptions(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVisibleIssueFieldOptionsResult{ ._200 = result };
     }
@@ -3162,7 +3162,7 @@ pub fn getVisibleIssueFieldOptions(
 pub const GetIssueFieldOptionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the requested option is returned.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the field is not found or does not support options.
     _400: void,
     /// Returned if the request is not authenticated as a Jira administrator or the app that provided the field.
@@ -3190,7 +3190,7 @@ pub fn getIssueFieldOption(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueFieldOption"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueFieldOptionResult{ ._200 = result };
     }
@@ -3214,7 +3214,7 @@ pub fn getIssueFieldOption(
 pub const ReplaceIssueFieldOptionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the long-running task to deselect the option is started.
-    _303: json.Parsed(json.Value),
+    _303: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the user does not have the necessary permission.
@@ -3247,7 +3247,7 @@ pub fn replaceIssueFieldOption(
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanRemoveOptionFromIssuesResult"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ReplaceIssueFieldOptionResult{ ._303 = result };
     }
@@ -3271,21 +3271,21 @@ pub fn replaceIssueFieldOption(
 pub const DeleteCustomFieldResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _303: json.Parsed(json.Value),
+    _303: json.Parsed(*json.Value),
     /// Returned if any of these are true:
     ///
     ///  *  The custom field is locked.
     ///  *  The custom field is used in a issue security scheme or a permission scheme.
     ///  *  The custom field ID format is incorrect.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     /// Returned if the custom field is not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     /// Returned if a task to delete the custom field is running.
-    _409: json.Parsed(json.Value),
+    _409: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -3304,32 +3304,32 @@ pub fn deleteCustomField(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._404 = result };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._409 = result };
     }
@@ -3346,13 +3346,13 @@ pub const RestoreCustomFieldResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     /// Returned if the custom field is not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -3375,22 +3375,22 @@ pub fn restoreCustomField(
         return RestoreCustomFieldResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreCustomFieldResult{ ._404 = result };
     }
@@ -3407,13 +3407,13 @@ pub const TrashCustomFieldResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     /// Returned if the custom field is not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -3436,22 +3436,22 @@ pub fn trashCustomField(
         return TrashCustomFieldResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return TrashCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return TrashCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return TrashCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return TrashCustomFieldResult{ ._404 = result };
     }
@@ -3466,7 +3466,7 @@ pub fn trashCustomField(
 pub const GetAllFieldConfigurationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3492,7 +3492,7 @@ pub fn getAllFieldConfigurations(
     // isDefault; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationDetails"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllFieldConfigurationsResult{ ._200 = result };
     }
@@ -3565,7 +3565,7 @@ pub fn updateFieldConfiguration(
 pub const GetFieldConfigurationItemsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -3593,7 +3593,7 @@ pub fn getFieldConfigurationItems(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationItem"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldConfigurationItemsResult{ ._200 = result };
     }
@@ -3617,7 +3617,7 @@ pub fn getFieldConfigurationItems(
 pub const GetAllFieldConfigurationSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3643,7 +3643,7 @@ pub fn getAllFieldConfigurationSchemes(
     // maxResults; location: query
     // id; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllFieldConfigurationSchemesResult{ ._200 = result };
     }
@@ -3667,7 +3667,7 @@ pub fn getAllFieldConfigurationSchemes(
 pub const GetFieldConfigurationSchemeMappingsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3695,7 +3695,7 @@ pub fn getFieldConfigurationSchemeMappings(
     // maxResults; location: query
     // fieldConfigurationSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationIssueTypeItem"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldConfigurationSchemeMappingsResult{ ._200 = result };
     }
@@ -3722,7 +3722,7 @@ pub fn getFieldConfigurationSchemeMappings(
 pub const GetFieldConfigurationSchemeProjectMappingResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -3748,7 +3748,7 @@ pub fn getFieldConfigurationSchemeProjectMapping(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationSchemeProjects"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldConfigurationSchemeProjectMappingResult{ ._200 = result };
     }
@@ -3879,13 +3879,13 @@ pub const RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult = union(enum)
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     /// Returned if the field configuration scheme or the issue types are not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -3908,22 +3908,22 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._404 = result };
     }
@@ -3969,7 +3969,7 @@ pub fn getFilters(
 pub const GetDefaultShareScopeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -3988,7 +3988,7 @@ pub fn getDefaultShareScope(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultShareScope"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDefaultShareScopeResult{ ._200 = result };
     }
@@ -4079,13 +4079,13 @@ pub fn getMyFilters(
 pub const GetFiltersPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  `owner` and `accountId` are provided.
     ///  *  `expand` includes an invalid value.
     ///  *  `orderBy` is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4116,12 +4116,12 @@ pub fn getFiltersPaginated(
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFilterDetails"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFiltersPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFiltersPaginatedResult{ ._400 = result };
     }
@@ -4139,7 +4139,7 @@ pub fn getFiltersPaginated(
 pub const GetFilterResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the filter is not found or the user does not have permission to view it.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4164,7 +4164,7 @@ pub fn getFilter(
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFilterResult{ ._200 = result };
     }
@@ -4233,7 +4233,7 @@ pub fn getColumns(
 pub const SetFavouriteForFilterResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  the filter is not found.
@@ -4259,7 +4259,7 @@ pub fn setFavouriteForFilter(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetFavouriteForFilterResult{ ._200 = result };
     }
@@ -4374,7 +4374,7 @@ pub fn getSharePermissions(
 pub const GetSharePermissionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -4404,7 +4404,7 @@ pub fn getSharePermission(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SharePermission"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSharePermissionResult{ ._200 = result };
     }
@@ -4425,7 +4425,7 @@ pub fn getSharePermission(
 pub const GetGroupResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the group name is not specified.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4453,7 +4453,7 @@ pub fn getGroup(
     // groupId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Group"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetGroupResult{ ._200 = result };
     }
@@ -4480,7 +4480,7 @@ pub fn getGroup(
 pub const BulkGetGroupsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4507,7 +4507,7 @@ pub fn bulkGetGroups(
     // groupId; location: query
     // groupName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanGroupDetails"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkGetGroupsResult{ ._200 = result };
     }
@@ -4531,7 +4531,7 @@ pub fn bulkGetGroups(
 pub const GetUsersFromGroupResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the group name is not specified.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4561,7 +4561,7 @@ pub fn getUsersFromGroup(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserDetails"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUsersFromGroupResult{ ._200 = result };
     }
@@ -4588,7 +4588,7 @@ pub fn getUsersFromGroup(
 pub const AddUserToGroupResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.Parsed(json.Value),
+    _201: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  `groupname` is not provided.
@@ -4618,7 +4618,7 @@ pub fn addUserToGroup(
     // groupname; location: query
     // groupId; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Group"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return AddUserToGroupResult{ ._201 = result };
     }
@@ -4645,7 +4645,7 @@ pub fn addUserToGroup(
 pub const FindGroupsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -4668,7 +4668,7 @@ pub fn findGroups(
     // maxResults; location: query
     // userName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundGroups"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindGroupsResult{ ._200 = result };
     }
@@ -4683,7 +4683,7 @@ pub fn findGroups(
 pub const FindUsersAndGroupsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the query parameter is not provided.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -4717,7 +4717,7 @@ pub fn findUsersAndGroups(
     // caseInsensitive; location: query
     // excludeConnectAddons; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsersAndGroups"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindUsersAndGroupsResult{ ._200 = result };
     }
@@ -4744,7 +4744,7 @@ pub fn findUsersAndGroups(
 pub const GetLicenseResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4763,7 +4763,7 @@ pub fn getLicense(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"License"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetLicenseResult{ ._200 = result };
     }
@@ -4781,7 +4781,7 @@ pub fn getLicense(
 pub const CreateIssueResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.Parsed(json.Value),
+    _201: json.Parsed(*json.Value),
     /// Returned if the request:
     ///
     ///  *  is missing required fields.
@@ -4791,11 +4791,11 @@ pub const CreateIssueResult = union(enum) {
     ///  *  is to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  is invalid for any other reason.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -4813,22 +4813,22 @@ pub fn createIssue(
 
     // updateHistory; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssue"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueResult{ ._403 = result };
     }
@@ -4851,7 +4851,7 @@ pub const CreateIssuesResult = union(enum) {
     ///  *  is to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  is invalid for any other reason.
-    _201: json.Parsed(json.Value),
+    _201: json.Parsed(*json.Value),
     /// Returned if all requests are invalid. Requests may be unsuccessful when they:
     ///
     ///  *  are missing required fields.
@@ -4861,7 +4861,7 @@ pub const CreateIssuesResult = union(enum) {
     ///  *  are to create a subtype in a project different that of the parent issue.
     ///  *  is for a subtask when the option to create subtasks is disabled.
     ///  *  are invalid for any other reason.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4880,12 +4880,12 @@ pub fn createIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssues"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssuesResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"CreatedIssues"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssuesResult{ ._400 = result };
     }
@@ -4903,7 +4903,7 @@ pub fn createIssues(
 pub const GetCreateIssueMetaResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4927,7 +4927,7 @@ pub fn getCreateIssueMeta(
     // issuetypeNames; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueCreateMetadata"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCreateIssueMetaResult{ ._200 = result };
     }
@@ -4945,7 +4945,7 @@ pub fn getCreateIssueMeta(
 pub const GetIssuePickerResourceResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -4970,7 +4970,7 @@ pub fn getIssuePickerResource(
     // showSubTasks; location: query
     // showSubTaskParent; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssuePickerSuggestions"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssuePickerResourceResult{ ._200 = result };
     }
@@ -4990,9 +4990,9 @@ pub const BulkSetIssuesPropertiesListResult = union(enum) {
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid or the user does not have the necessary permission.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -5012,12 +5012,12 @@ pub fn bulkSetIssuesPropertiesList(
         return BulkSetIssuesPropertiesListResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuesPropertiesListResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuesPropertiesListResult{ ._401 = result };
     }
@@ -5034,11 +5034,11 @@ pub const BulkSetIssuePropertiesByIssueResult = union(enum) {
     /// Returned if the operation is successful.
     _303: void,
     /// Return if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Return if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -5058,17 +5058,17 @@ pub fn bulkSetIssuePropertiesByIssue(
         return BulkSetIssuePropertiesByIssueResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertiesByIssueResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertiesByIssueResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertiesByIssueResult{ ._403 = result };
     }
@@ -5085,9 +5085,9 @@ pub const BulkSetIssuePropertyResult = union(enum) {
     /// Returned if the request is successful.
     _303: void,
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -5109,12 +5109,12 @@ pub fn bulkSetIssueProperty(
         return BulkSetIssuePropertyResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertyResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertyResult{ ._401 = result };
     }
@@ -5129,7 +5129,7 @@ pub fn bulkSetIssueProperty(
 pub const GetIsWatchingIssueBulkResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -5148,7 +5148,7 @@ pub fn getIsWatchingIssueBulk(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkIssueIsWatching"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIsWatchingIssueBulkResult{ ._200 = result };
     }
@@ -5166,7 +5166,7 @@ pub fn getIsWatchingIssueBulk(
 pub const GetIssueResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -5194,7 +5194,7 @@ pub fn getIssue(
     // properties; location: query
     // updateHistory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueBean"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueResult{ ._200 = result };
     }
@@ -5318,7 +5318,7 @@ pub fn addAttachment(
 pub const GetChangeLogsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the issue is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
@@ -5342,7 +5342,7 @@ pub fn getChangeLogs(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanChangelog"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetChangeLogsResult{ ._200 = result };
     }
@@ -5360,7 +5360,7 @@ pub fn getChangeLogs(
 pub const GetChangeLogsByIdsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the issue is not found or the user does not have the necessary permission.
@@ -5384,7 +5384,7 @@ pub fn getChangeLogsByIds(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfChangelogs"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetChangeLogsByIdsResult{ ._200 = result };
     }
@@ -5405,7 +5405,7 @@ pub fn getChangeLogsByIds(
 pub const GetCommentsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if `orderBy` is set to a value other than *created*.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5435,7 +5435,7 @@ pub fn getComments(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfComments"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentsResult{ ._200 = result };
     }
@@ -5459,7 +5459,7 @@ pub fn getComments(
 pub const GetCommentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue or comment is not found or the user does not have permission to view the issue or comment.
@@ -5486,7 +5486,7 @@ pub fn getComment(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Comment"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentResult{ ._200 = result };
     }
@@ -5507,7 +5507,7 @@ pub fn getComment(
 pub const GetEditIssueMetaResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user uses an override parameter but doesn't have permission to do so.
@@ -5535,7 +5535,7 @@ pub fn getEditIssueMeta(
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueUpdateMetadata"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetEditIssueMetaResult{ ._200 = result };
     }
@@ -5614,7 +5614,7 @@ pub fn notify(
 pub const GetIssuePropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the issue is not found or the user does not have permissions to view the issue.
     _404: void,
     _400: void,
@@ -5636,7 +5636,7 @@ pub fn getIssuePropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssuePropertyKeysResult{ ._200 = result };
     }
@@ -5654,7 +5654,7 @@ pub fn getIssuePropertyKeys(
 pub const GetIssuePropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue or property is not found or the user does not have permission to see the issue.
@@ -5680,7 +5680,7 @@ pub fn getIssueProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssuePropertyResult{ ._200 = result };
     }
@@ -5701,7 +5701,7 @@ pub fn getIssueProperty(
 pub const GetRemoteIssueLinksResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5730,7 +5730,7 @@ pub fn getRemoteIssueLinks(
 
     // globalId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetRemoteIssueLinksResult{ ._200 = result };
     }
@@ -5757,7 +5757,7 @@ pub fn getRemoteIssueLinks(
 pub const GetRemoteIssueLinkByIdResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the link ID is invalid or the remote issue link does not belong to the issue.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -5787,7 +5787,7 @@ pub fn getRemoteIssueLinkById(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetRemoteIssueLinkByIdResult{ ._200 = result };
     }
@@ -5814,7 +5814,7 @@ pub fn getRemoteIssueLinkById(
 pub const GetTransitionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -5843,7 +5843,7 @@ pub fn getTransitions(
     // includeUnavailableTransitions; location: query
     // sortByOpsBarAndStatus; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Transitions"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTransitionsResult{ ._200 = result };
     }
@@ -5864,7 +5864,7 @@ pub fn getTransitions(
 pub const GetVotesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -5892,7 +5892,7 @@ pub fn getVotes(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Votes"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVotesResult{ ._200 = result };
     }
@@ -5913,7 +5913,7 @@ pub fn getVotes(
 pub const GetIssueWatchersResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue is not found or the user does not have permission to view it.
@@ -5937,7 +5937,7 @@ pub fn getIssueWatchers(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Watchers"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueWatchersResult{ ._200 = result };
     }
@@ -5958,7 +5958,7 @@ pub fn getIssueWatchers(
 pub const GetIssueWorklogResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -5991,7 +5991,7 @@ pub fn getIssueWorklog(
     // startedBefore; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfWorklogs"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueWorklogResult{ ._200 = result };
     }
@@ -6012,7 +6012,7 @@ pub fn getIssueWorklog(
 pub const GetWorklogResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if:
@@ -6045,7 +6045,7 @@ pub fn getWorklog(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Worklog"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorklogResult{ ._200 = result };
     }
@@ -6066,7 +6066,7 @@ pub fn getWorklog(
 pub const GetWorklogPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the worklog ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6098,7 +6098,7 @@ pub fn getWorklogPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorklogPropertyKeysResult{ ._200 = result };
     }
@@ -6122,7 +6122,7 @@ pub fn getWorklogPropertyKeys(
 pub const GetWorklogPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the worklog ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6156,7 +6156,7 @@ pub fn getWorklogProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorklogPropertyResult{ ._200 = result };
     }
@@ -6231,7 +6231,7 @@ pub fn linkIssues(
 pub const GetIssueLinkResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the issue link ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6260,7 +6260,7 @@ pub fn getIssueLink(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLink"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueLinkResult{ ._200 = result };
     }
@@ -6284,7 +6284,7 @@ pub fn getIssueLink(
 pub const GetIssueLinkTypesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if issue linking is disabled.
@@ -6305,7 +6305,7 @@ pub fn getIssueLinkTypes(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkTypes"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueLinkTypesResult{ ._200 = result };
     }
@@ -6326,7 +6326,7 @@ pub fn getIssueLinkTypes(
 pub const GetIssueLinkTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the issue link type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6355,7 +6355,7 @@ pub fn getIssueLinkType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkType"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueLinkTypeResult{ ._200 = result };
     }
@@ -6379,7 +6379,7 @@ pub fn getIssueLinkType(
 pub const GetIssueSecuritySchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the user does not have permission to administer issue security schemes.
@@ -6400,7 +6400,7 @@ pub fn getIssueSecuritySchemes(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecuritySchemes"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueSecuritySchemesResult{ ._200 = result };
     }
@@ -6421,7 +6421,7 @@ pub fn getIssueSecuritySchemes(
 pub const GetIssueSecuritySchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the administrator permission and the scheme is not used in any project where the user has administrative permission.
@@ -6444,7 +6444,7 @@ pub fn getIssueSecurityScheme(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueSecuritySchemeResult{ ._200 = result };
     }
@@ -6465,7 +6465,7 @@ pub fn getIssueSecurityScheme(
 pub const GetIssueSecurityLevelMembersResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6497,7 +6497,7 @@ pub fn getIssueSecurityLevelMembers(
     // issueSecurityLevelId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueSecurityLevelMember"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueSecurityLevelMembersResult{ ._200 = result };
     }
@@ -6609,7 +6609,7 @@ pub fn getIssueTypesForProject(
 pub const GetIssueTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6637,7 +6637,7 @@ pub fn getIssueType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeDetails"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeResult{ ._200 = result };
     }
@@ -6707,7 +6707,7 @@ pub fn getAlternativeIssueTypes(
 pub const CreateIssueTypeAvatarResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.Parsed(json.Value),
+    _201: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  an image isn't included in the request.
@@ -6744,7 +6744,7 @@ pub fn createIssueTypeAvatar(
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueTypeAvatarResult{ ._201 = result };
     }
@@ -6771,7 +6771,7 @@ pub fn createIssueTypeAvatar(
 pub const GetIssueTypePropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if:
@@ -6798,7 +6798,7 @@ pub fn getIssueTypePropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypePropertyKeysResult{ ._200 = result };
     }
@@ -6819,7 +6819,7 @@ pub fn getIssueTypePropertyKeys(
 pub const GetIssueTypePropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the issue type ID is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6847,7 +6847,7 @@ pub fn getIssueTypeProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypePropertyResult{ ._200 = result };
     }
@@ -6871,7 +6871,7 @@ pub fn getIssueTypeProperty(
 pub const GetAllIssueTypeSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6900,7 +6900,7 @@ pub fn getAllIssueTypeSchemes(
     // expand; location: query
     // queryString; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllIssueTypeSchemesResult{ ._200 = result };
     }
@@ -6924,7 +6924,7 @@ pub fn getAllIssueTypeSchemes(
 pub const GetIssueTypeSchemesMappingResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -6950,7 +6950,7 @@ pub fn getIssueTypeSchemesMapping(
     // maxResults; location: query
     // issueTypeSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeMapping"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeSchemesMappingResult{ ._200 = result };
     }
@@ -6974,7 +6974,7 @@ pub fn getIssueTypeSchemesMapping(
 pub const GetIssueTypeSchemeForProjectsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7000,7 +7000,7 @@ pub fn getIssueTypeSchemeForProjects(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeProjects"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeSchemeForProjectsResult{ ._200 = result };
     }
@@ -7237,7 +7237,7 @@ pub fn removeIssueTypeFromIssueTypeScheme(
 pub const GetIssueTypeScreenSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7266,7 +7266,7 @@ pub fn getIssueTypeScreenSchemes(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeScreenSchemesResult{ ._200 = result };
     }
@@ -7290,7 +7290,7 @@ pub fn getIssueTypeScreenSchemes(
 pub const GetIssueTypeScreenSchemeMappingsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7316,7 +7316,7 @@ pub fn getIssueTypeScreenSchemeMappings(
     // maxResults; location: query
     // issueTypeScreenSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemeItem"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeScreenSchemeMappingsResult{ ._200 = result };
     }
@@ -7340,7 +7340,7 @@ pub fn getIssueTypeScreenSchemeMappings(
 pub const GetIssueTypeScreenSchemeProjectAssociationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7366,7 +7366,7 @@ pub fn getIssueTypeScreenSchemeProjectAssociations(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemesProjects"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._200 = result };
     }
@@ -7606,7 +7606,7 @@ pub fn removeMappingsFromIssueTypeScreenScheme(
 pub const GetProjectsForIssueTypeScreenSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7635,7 +7635,7 @@ pub fn getProjectsForIssueTypeScreenScheme(
     // maxResults; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProjectDetails"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectsForIssueTypeScreenSchemeResult{ ._200 = result };
     }
@@ -7659,7 +7659,7 @@ pub fn getProjectsForIssueTypeScreenScheme(
 pub const GetAutoCompleteResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -7678,7 +7678,7 @@ pub fn getAutoComplete(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JQLReferenceData"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAutoCompleteResult{ ._200 = result };
     }
@@ -7696,7 +7696,7 @@ pub fn getAutoComplete(
 pub const GetFieldAutoCompleteForQueryStringResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if an invalid combination of parameters is passed.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -7721,7 +7721,7 @@ pub fn getFieldAutoCompleteForQueryString(
     // predicateName; location: query
     // predicateValue; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AutoCompleteSuggestions"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldAutoCompleteForQueryStringResult{ ._200 = result };
     }
@@ -7742,7 +7742,7 @@ pub fn getFieldAutoCompleteForQueryString(
 pub const MatchIssuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if `jqls` exceeds the maximum number of JQL queries or `issueIds` exceeds the maximum number of issue IDs.
     _400: void,
     _400: void,
@@ -7761,7 +7761,7 @@ pub fn matchIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueMatches"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return MatchIssuesResult{ ._200 = result };
     }
@@ -7779,9 +7779,9 @@ pub fn matchIssues(
 pub const ParseJqlQueriesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -7801,12 +7801,12 @@ pub fn parseJqlQueries(
 
     // validation; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ParsedJqlQueries"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ParseJqlQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ParseJqlQueriesResult{ ._400 = result };
     }
@@ -7824,7 +7824,7 @@ pub fn parseJqlQueries(
 pub const MigrateQueriesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. Note that the JQL queries are returned in the same order that they were passed.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if at least one of the queries cannot be converted. For example, the JQL has invalid operators or invalid keywords, or the users in the query cannot be found.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -7845,7 +7845,7 @@ pub fn migrateQueries(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConvertedJQLQueries"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return MigrateQueriesResult{ ._200 = result };
     }
@@ -7866,13 +7866,13 @@ pub fn migrateQueries(
 pub const SanitiseJqlQueriesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -7889,22 +7889,22 @@ pub fn sanitiseJqlQueries(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SanitizedJqlQueries"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._403 = result };
     }
@@ -7919,7 +7919,7 @@ pub fn sanitiseJqlQueries(
 pub const GetAllLabelsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -7938,7 +7938,7 @@ pub fn getAllLabels(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanString"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllLabelsResult{ ._200 = result };
     }
@@ -7953,13 +7953,13 @@ pub fn getAllLabels(
 pub const GetMyPermissionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if `permissions` is empty, contains an invalid key, or does not equal BROWSE\_PROJECTS when commentId is provided.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the project or issue is not found or the user does not have permission to view the project or issue.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -7984,22 +7984,22 @@ pub fn getMyPermissions(
     // projectConfigurationUuid; location: query
     // commentId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetMyPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetMyPermissionsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetMyPermissionsResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetMyPermissionsResult{ ._404 = result };
     }
@@ -8055,7 +8055,7 @@ pub fn getPreference(
 pub const GetLocaleResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8074,7 +8074,7 @@ pub fn getLocale(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Locale"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetLocaleResult{ ._200 = result };
     }
@@ -8092,7 +8092,7 @@ pub fn getLocale(
 pub const GetCurrentUserResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8112,7 +8112,7 @@ pub fn getCurrentUser(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCurrentUserResult{ ._200 = result };
     }
@@ -8130,7 +8130,7 @@ pub fn getCurrentUser(
 pub const GetNotificationSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful. Only returns notification schemes that the user has permission to access. An empty list is returned if the user lacks permission to access all notification schemes.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8152,7 +8152,7 @@ pub fn getNotificationSchemes(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanNotificationScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetNotificationSchemesResult{ ._200 = result };
     }
@@ -8170,7 +8170,7 @@ pub fn getNotificationSchemes(
 pub const GetNotificationSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8196,7 +8196,7 @@ pub fn getNotificationScheme(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetNotificationSchemeResult{ ._200 = result };
     }
@@ -8220,7 +8220,7 @@ pub fn getNotificationScheme(
 pub const GetAllPermissionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -8241,7 +8241,7 @@ pub fn getAllPermissions(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllPermissionsResult{ ._200 = result };
     }
@@ -8262,7 +8262,7 @@ pub fn getAllPermissions(
 pub const GetBulkPermissionsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  `projectPermissions` is provided without at least one project permission being provided.
@@ -8270,9 +8270,9 @@ pub const GetBulkPermissionsResult = union(enum) {
     ///  *  an invalid project permission is provided in the project permissions list.
     ///  *  more than 1000 valid project IDs or more than 1000 valid issue IDs are provided.
     ///  *  an invalid account ID is provided.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -8289,17 +8289,17 @@ pub fn getBulkPermissions(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkPermissionGrants"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBulkPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBulkPermissionsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBulkPermissionsResult{ ._403 = result };
     }
@@ -8314,7 +8314,7 @@ pub fn getBulkPermissions(
 pub const GetPermittedProjectsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if a project permission is not found.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8335,7 +8335,7 @@ pub fn getPermittedProjects(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermittedProjects"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPermittedProjectsResult{ ._200 = result };
     }
@@ -8356,7 +8356,7 @@ pub fn getPermittedProjects(
 pub const GetAllPermissionSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -8376,7 +8376,7 @@ pub fn getAllPermissionSchemes(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionSchemes"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllPermissionSchemesResult{ ._200 = result };
     }
@@ -8394,7 +8394,7 @@ pub fn getAllPermissionSchemes(
 pub const GetPermissionSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission scheme is not found or the user does not have the necessary permission.
@@ -8418,7 +8418,7 @@ pub fn getPermissionScheme(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPermissionSchemeResult{ ._200 = result };
     }
@@ -8439,7 +8439,7 @@ pub fn getPermissionScheme(
 pub const GetPermissionSchemeGrantsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission schemes is not found or the user does not have the necessary permission.
@@ -8464,7 +8464,7 @@ pub fn getPermissionSchemeGrants(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrants"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPermissionSchemeGrantsResult{ ._200 = result };
     }
@@ -8485,7 +8485,7 @@ pub fn getPermissionSchemeGrants(
 pub const GetPermissionSchemeGrantResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the permission scheme or permission grant is not found or the user does not have the necessary permission.
@@ -8512,7 +8512,7 @@ pub fn getPermissionSchemeGrant(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrant"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPermissionSchemeGrantResult{ ._200 = result };
     }
@@ -8570,13 +8570,13 @@ pub const SetDefaultPriorityResult = union(enum) {
     /// Returned if the request is successful.
     _204: void,
     /// Returned if the request is not valid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     /// Returned if the issue priority is not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -8596,22 +8596,22 @@ pub fn setDefaultPriority(
         return SetDefaultPriorityResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetDefaultPriorityResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetDefaultPriorityResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetDefaultPriorityResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetDefaultPriorityResult{ ._404 = result };
     }
@@ -8626,9 +8626,9 @@ pub fn setDefaultPriority(
 pub const SearchPrioritiesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -8649,12 +8649,12 @@ pub fn searchPriorities(
     // id; location: query
     // onlyDefault; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanPriority"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchPrioritiesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchPrioritiesResult{ ._401 = result };
     }
@@ -8669,7 +8669,7 @@ pub fn searchPriorities(
 pub const GetPriorityResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the issue priority is not found.
@@ -8692,7 +8692,7 @@ pub fn getPriority(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Priority"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPriorityResult{ ._200 = result };
     }
@@ -8793,7 +8793,7 @@ pub fn getRecent(
 pub const SearchProjectsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -8829,7 +8829,7 @@ pub fn searchProjects(
     // properties; location: query
     // propertyQuery; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProject"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchProjectsResult{ ._200 = result };
     }
@@ -8918,7 +8918,7 @@ pub fn getAllAccessibleProjectTypes(
 pub const GetProjectTypeByKeyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the project type is not found.
@@ -8941,7 +8941,7 @@ pub fn getProjectTypeByKey(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectTypeByKeyResult{ ._200 = result };
     }
@@ -8962,7 +8962,7 @@ pub fn getProjectTypeByKey(
 pub const GetAccessibleProjectTypeByKeyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project type is not accessible to the user.
@@ -8986,7 +8986,7 @@ pub fn getAccessibleProjectTypeByKey(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAccessibleProjectTypeByKeyResult{ ._200 = result };
     }
@@ -9007,7 +9007,7 @@ pub fn getAccessibleProjectTypeByKey(
 pub const GetProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -9032,7 +9032,7 @@ pub fn getProject(
     // expand; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectResult{ ._200 = result };
     }
@@ -9204,7 +9204,7 @@ pub fn deleteProjectAvatar(
 pub const CreateProjectAvatarResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.Parsed(json.Value),
+    _201: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  an image isn't included in the request.
@@ -9239,7 +9239,7 @@ pub fn createProjectAvatar(
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateProjectAvatarResult{ ._201 = result };
     }
@@ -9266,7 +9266,7 @@ pub fn createProjectAvatar(
 pub const GetAllProjectAvatarsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view the project.
@@ -9290,7 +9290,7 @@ pub fn getAllProjectAvatars(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectAvatars"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllProjectAvatarsResult{ ._200 = result };
     }
@@ -9311,7 +9311,7 @@ pub fn getAllProjectAvatars(
 pub const GetProjectComponentsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project is not found or the user does not have permission to view it.
@@ -9339,7 +9339,7 @@ pub fn getProjectComponentsPaginated(
     // orderBy; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComponentWithIssueCount"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectComponentsPaginatedResult{ ._200 = result };
     }
@@ -9403,7 +9403,7 @@ pub fn getProjectComponents(
 pub const DeleteProjectAsynchronouslyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _303: json.Parsed(json.Value),
+    _303: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9429,7 +9429,7 @@ pub fn deleteProjectAsynchronously(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteProjectAsynchronouslyResult{ ._303 = result };
     }
@@ -9453,7 +9453,7 @@ pub fn deleteProjectAsynchronously(
 pub const GetFeaturesForProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9481,7 +9481,7 @@ pub fn getFeaturesForProject(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFeaturesForProjectResult{ ._200 = result };
     }
@@ -9508,7 +9508,7 @@ pub fn getFeaturesForProject(
 pub const ToggleFeatureForProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9538,7 +9538,7 @@ pub fn toggleFeatureForProject(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ToggleFeatureForProjectResult{ ._200 = result };
     }
@@ -9565,7 +9565,7 @@ pub fn toggleFeatureForProject(
 pub const GetProjectPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -9593,7 +9593,7 @@ pub fn getProjectPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectPropertyKeysResult{ ._200 = result };
     }
@@ -9620,7 +9620,7 @@ pub fn getProjectPropertyKeys(
 pub const GetProjectPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect.
@@ -9650,7 +9650,7 @@ pub fn getProjectProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectPropertyResult{ ._200 = result };
     }
@@ -9677,7 +9677,7 @@ pub fn getProjectProperty(
 pub const RestoreResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9703,7 +9703,7 @@ pub fn restore(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreResult{ ._200 = result };
     }
@@ -9770,7 +9770,7 @@ pub fn getProjectRoles(
 pub const GetProjectRoleResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9802,7 +9802,7 @@ pub fn getProjectRole(
 
     // excludeInactiveUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectRoleResult{ ._200 = result };
     }
@@ -9914,7 +9914,7 @@ pub fn getAllStatuses(
 pub const UpdateProjectTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the project type is updated.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -9942,7 +9942,7 @@ pub fn updateProjectType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return UpdateProjectTypeResult{ ._200 = result };
     }
@@ -9966,7 +9966,7 @@ pub fn updateProjectType(
 pub const GetProjectVersionsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the project is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
@@ -9994,7 +9994,7 @@ pub fn getProjectVersionsPaginated(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanVersion"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectVersionsPaginatedResult{ ._200 = result };
     }
@@ -10051,7 +10051,7 @@ pub fn getProjectVersions(
 pub const GetProjectEmailResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have permission to read project.
@@ -10077,7 +10077,7 @@ pub fn getProjectEmail(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectEmailAddress"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectEmailResult{ ._200 = result };
     }
@@ -10101,7 +10101,7 @@ pub fn getProjectEmail(
 pub const GetHierarchyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10127,7 +10127,7 @@ pub fn getHierarchy(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueTypeHierarchy"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetHierarchyResult{ ._200 = result };
     }
@@ -10151,7 +10151,7 @@ pub fn getHierarchy(
 pub const GetProjectIssueSecuritySchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10179,7 +10179,7 @@ pub fn getProjectIssueSecurityScheme(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectIssueSecuritySchemeResult{ ._200 = result };
     }
@@ -10206,7 +10206,7 @@ pub fn getProjectIssueSecurityScheme(
 pub const GetNotificationSchemeForProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10233,7 +10233,7 @@ pub fn getNotificationSchemeForProject(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetNotificationSchemeForProjectResult{ ._200 = result };
     }
@@ -10257,7 +10257,7 @@ pub fn getNotificationSchemeForProject(
 pub const GetAssignedPermissionSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have permission to view the project's configuration.
@@ -10284,7 +10284,7 @@ pub fn getAssignedPermissionScheme(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAssignedPermissionSchemeResult{ ._200 = result };
     }
@@ -10308,7 +10308,7 @@ pub fn getAssignedPermissionScheme(
 pub const GetSecurityLevelsForProjectResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the project is not found or the user does not have permission to view it.
     _404: void,
     _400: void,
@@ -10330,7 +10330,7 @@ pub fn getSecurityLevelsForProject(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueSecurityLevels"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSecurityLevelsForProjectResult{ ._200 = result };
     }
@@ -10383,7 +10383,7 @@ pub fn getAllProjectCategories(
 pub const GetProjectCategoryByIdResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the project category is not found.
@@ -10406,7 +10406,7 @@ pub fn getProjectCategoryById(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectCategory"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectCategoryByIdResult{ ._200 = result };
     }
@@ -10427,7 +10427,7 @@ pub fn getProjectCategoryById(
 pub const ValidateProjectKeyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -10447,7 +10447,7 @@ pub fn validateProjectKey(
 
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ValidateProjectKeyResult{ ._200 = result };
     }
@@ -10582,7 +10582,7 @@ pub fn getResolutions(
 pub const GetResolutionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the issue resolution value is not found.
@@ -10605,7 +10605,7 @@ pub fn getResolution(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Resolution"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetResolutionResult{ ._200 = result };
     }
@@ -10666,7 +10666,7 @@ pub fn getAllProjectRoles(
 pub const GetProjectRoleByIdResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have administrative permissions.
@@ -10691,7 +10691,7 @@ pub fn getProjectRoleById(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectRoleByIdResult{ ._200 = result };
     }
@@ -10715,7 +10715,7 @@ pub fn getProjectRoleById(
 pub const GetProjectRoleActorsForRoleResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10743,7 +10743,7 @@ pub fn getProjectRoleActorsForRole(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectRoleActorsForRoleResult{ ._200 = result };
     }
@@ -10770,7 +10770,7 @@ pub fn getProjectRoleActorsForRole(
 pub const GetScreensResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -10797,7 +10797,7 @@ pub fn getScreens(
     // scope; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreen"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetScreensResult{ ._200 = result };
     }
@@ -10865,7 +10865,7 @@ pub fn addFieldToDefaultScreen(
 pub const UpdateScreenResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -10892,7 +10892,7 @@ pub fn updateScreen(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Screen"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return UpdateScreenResult{ ._200 = result };
     }
@@ -11021,7 +11021,7 @@ pub fn getAllScreenTabs(
 pub const RenameScreenTabResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11051,7 +11051,7 @@ pub fn renameScreenTab(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ScreenableTab"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RenameScreenTabResult{ ._200 = result };
     }
@@ -11305,7 +11305,7 @@ pub fn moveScreenTab(
 pub const GetScreenSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -11332,7 +11332,7 @@ pub fn getScreenSchemes(
     // queryString; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetScreenSchemesResult{ ._200 = result };
     }
@@ -11405,7 +11405,7 @@ pub fn updateScreenScheme(
 pub const SearchForIssuesUsingJqlResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the JQL query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11434,7 +11434,7 @@ pub fn searchForIssuesUsingJql(
     // properties; location: query
     // fieldsByKeys; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SearchResults"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchForIssuesUsingJqlResult{ ._200 = result };
     }
@@ -11455,7 +11455,7 @@ pub fn searchForIssuesUsingJql(
 pub const GetIssueSecurityLevelResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if the issue security level is not found.
@@ -11478,7 +11478,7 @@ pub fn getIssueSecurityLevel(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityLevel"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueSecurityLevelResult{ ._200 = result };
     }
@@ -11499,7 +11499,7 @@ pub fn getIssueSecurityLevel(
 pub const GetServerInfoResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     _400: void,
@@ -11518,7 +11518,7 @@ pub fn getServerInfo(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ServerInformation"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetServerInfoResult{ ._200 = result };
     }
@@ -11611,7 +11611,7 @@ pub fn getStatuses(
 pub const GetStatusResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -11638,7 +11638,7 @@ pub fn getStatus(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusDetails"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetStatusResult{ ._200 = result };
     }
@@ -11694,7 +11694,7 @@ pub fn getStatusCategories(
 pub const GetStatusCategoryResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the status category is not found.
@@ -11717,7 +11717,7 @@ pub fn getStatusCategory(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusCategory"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetStatusCategoryResult{ ._200 = result };
     }
@@ -11780,7 +11780,7 @@ pub fn getStatusesById(
 pub const SearchResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing, or the caller doesn't have permissions to perform the operation.
@@ -11807,7 +11807,7 @@ pub fn search(
     // searchString; location: query
     // statusCategory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfStatuses"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchResult{ ._200 = result };
     }
@@ -11828,7 +11828,7 @@ pub fn search(
 pub const GetTaskResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -11853,7 +11853,7 @@ pub fn getTask(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTaskResult{ ._200 = result };
     }
@@ -11930,7 +11930,7 @@ pub fn cancelTask(
 pub const GetUiModificationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -11956,7 +11956,7 @@ pub fn getUiModifications(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUiModificationDetails"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUiModificationsResult{ ._200 = result };
     }
@@ -12032,7 +12032,7 @@ pub fn updateUiModification(
 pub const GetAvatarsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the avatar type is invalid, the associated item ID is missing, or the item is not found.
@@ -12058,7 +12058,7 @@ pub fn getAvatars(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Avatars"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarsResult{ ._200 = result };
     }
@@ -12134,11 +12134,11 @@ pub const GetAvatarImageByTypeResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the authentication credentials are incorrect.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -12162,17 +12162,17 @@ pub fn getAvatarImageByType(
         return GetAvatarImageByTypeResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByTypeResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByTypeResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByTypeResult{ ._404 = result };
     }
@@ -12189,13 +12189,13 @@ pub const GetAvatarImageByIDResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -12222,22 +12222,22 @@ pub fn getAvatarImageByID(
         return GetAvatarImageByIDResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._404 = result };
     }
@@ -12254,13 +12254,13 @@ pub const GetAvatarImageByOwnerResult = union(enum) {
     /// Returned if the request is successful.
     _200: void,
     /// Returned if the request is not valid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     /// Returned if an avatar is not found or an avatar matching the requested size is not found.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -12287,22 +12287,22 @@ pub fn getAvatarImageByOwner(
         return GetAvatarImageByOwnerResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._404 = result };
     }
@@ -12317,7 +12317,7 @@ pub fn getAvatarImageByOwner(
 pub const GetUserResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the calling user does not have the *Browse users and groups* global permission.
@@ -12344,7 +12344,7 @@ pub fn getUser(
     // key; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserResult{ ._200 = result };
     }
@@ -12492,7 +12492,7 @@ pub fn findAssignableUsers(
 pub const BulkGetUsersResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if `accountID` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12518,7 +12518,7 @@ pub fn bulkGetUsers(
     // key; location: query
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkGetUsersResult{ ._200 = result };
     }
@@ -12630,7 +12630,7 @@ pub fn getUserDefaultColumns(
 pub const GetUserEmailResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the calling app is not approved to use this API.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing from the request (for example if a user is trying to access this API).
@@ -12656,7 +12656,7 @@ pub fn getUserEmail(
 
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserEmailResult{ ._200 = result };
     }
@@ -12683,7 +12683,7 @@ pub fn getUserEmail(
 pub const GetUserEmailBulkResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the calling app is not approved to use this API.
     _400: void,
     /// Returned if the authentication credentials are incorrect, or missing from the request (for example if a user is trying to access this API).
@@ -12707,7 +12707,7 @@ pub fn getUserEmailBulk(
 
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserEmailBulkResult{ ._200 = result };
     }
@@ -12847,7 +12847,7 @@ pub fn findUsersWithAllPermissions(
 pub const FindUsersForPickerResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if `exclude` and `excludeAccountIds` are provided.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12877,7 +12877,7 @@ pub fn findUsersForPicker(
     // avatarSize; location: query
     // excludeConnectUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsers"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindUsersForPickerResult{ ._200 = result };
     }
@@ -12901,7 +12901,7 @@ pub fn findUsersForPicker(
 pub const GetUserPropertyKeysResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if `accountId` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12929,7 +12929,7 @@ pub fn getUserPropertyKeys(
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserPropertyKeysResult{ ._200 = result };
     }
@@ -12956,7 +12956,7 @@ pub fn getUserPropertyKeys(
 pub const GetUserPropertyResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if `accountId` is missing.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -12986,7 +12986,7 @@ pub fn getUserProperty(
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserPropertyResult{ ._200 = result };
     }
@@ -13068,7 +13068,7 @@ pub fn findUsers(
 pub const FindUsersByQueryResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13096,7 +13096,7 @@ pub fn findUsersByQuery(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindUsersByQueryResult{ ._200 = result };
     }
@@ -13123,7 +13123,7 @@ pub fn findUsersByQuery(
 pub const FindUserKeysByQueryResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the query is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13151,7 +13151,7 @@ pub fn findUserKeysByQuery(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserKey"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindUserKeysByQueryResult{ ._200 = result };
     }
@@ -13333,7 +13333,7 @@ pub fn getAllUsers(
 pub const CreateVersionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.Parsed(json.Value),
+    _201: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -13359,7 +13359,7 @@ pub fn createVersion(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Version"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateVersionResult{ ._201 = result };
     }
@@ -13383,7 +13383,7 @@ pub fn createVersion(
 pub const GetVersionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the version is not found or the user does not have the necessary permission.
@@ -13407,7 +13407,7 @@ pub fn getVersion(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVersionResult{ ._200 = result };
     }
@@ -13481,7 +13481,7 @@ pub fn mergeVersions(
 pub const MoveVersionResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if:
     ///
     ///  *  no body parameters are provided.
@@ -13514,7 +13514,7 @@ pub fn moveVersion(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return MoveVersionResult{ ._200 = result };
     }
@@ -13538,7 +13538,7 @@ pub fn moveVersion(
 pub const GetVersionRelatedIssuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect.
     _401: void,
     /// Returned if:
@@ -13565,7 +13565,7 @@ pub fn getVersionRelatedIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionIssueCounts"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVersionRelatedIssuesResult{ ._200 = result };
     }
@@ -13637,7 +13637,7 @@ pub fn deleteAndReplaceVersion(
 pub const GetVersionUnresolvedIssuesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if:
@@ -13664,7 +13664,7 @@ pub fn getVersionUnresolvedIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionUnresolvedIssuesCount"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVersionUnresolvedIssuesResult{ ._200 = result };
     }
@@ -13685,11 +13685,11 @@ pub fn getVersionUnresolvedIssues(
 pub const GetDynamicWebhooksForAppResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the caller is not an app.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -13708,17 +13708,17 @@ pub fn getDynamicWebhooksForApp(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWebhook"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDynamicWebhooksForAppResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDynamicWebhooksForAppResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDynamicWebhooksForAppResult{ ._403 = result };
     }
@@ -13733,11 +13733,11 @@ pub fn getDynamicWebhooksForApp(
 pub const GetFailedWebhooksResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// 400 response
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the caller is not a Connect app.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -13756,17 +13756,17 @@ pub fn getFailedWebhooks(
     // maxResults; location: query
     // after; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FailedWebhooks"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFailedWebhooksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFailedWebhooksResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFailedWebhooksResult{ ._403 = result };
     }
@@ -13781,11 +13781,11 @@ pub fn getFailedWebhooks(
 pub const RefreshWebhooksResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the caller is not an app.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -13802,17 +13802,17 @@ pub fn refreshWebhooks(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WebhooksExpirationDate"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RefreshWebhooksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RefreshWebhooksResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RefreshWebhooksResult{ ._403 = result };
     }
@@ -13863,11 +13863,11 @@ pub fn getAllWorkflows(
 pub const GetWorkflowTransitionRuleConfigurationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the caller is not a Connect app.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     /// Returned if the any transition rule type is not supported.
     _404: void,
     _400: void,
@@ -13894,17 +13894,17 @@ pub fn getWorkflowTransitionRuleConfigurations(
     // draft; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowTransitionRules"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
     }
@@ -13922,11 +13922,11 @@ pub fn getWorkflowTransitionRuleConfigurations(
 pub const DeleteWorkflowTransitionRuleConfigurationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the caller is not a Connect app.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -13943,17 +13943,17 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionRulesUpdateErrors"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
     }
@@ -13968,11 +13968,11 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
 pub const GetWorkflowsPaginatedResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
-    _403: json.Parsed(json.Value),
+    _403: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -13996,7 +13996,7 @@ pub fn getWorkflowsPaginated(
     // orderBy; location: query
     // isActive; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflow"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowsPaginatedResult{ ._200 = result };
     }
@@ -14004,7 +14004,7 @@ pub fn getWorkflowsPaginated(
         return GetWorkflowsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowsPaginatedResult{ ._403 = result };
     }
@@ -14019,7 +14019,7 @@ pub fn getWorkflowsPaginated(
 pub const GetWorkflowTransitionPropertiesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// 200 response
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14051,7 +14051,7 @@ pub fn getWorkflowTransitionProperties(
     // workflowName; location: query
     // workflowMode; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowTransitionPropertiesResult{ ._200 = result };
     }
@@ -14130,7 +14130,7 @@ pub fn deleteInactiveWorkflow(
 pub const GetAllWorkflowSchemesResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14153,7 +14153,7 @@ pub fn getAllWorkflowSchemes(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllWorkflowSchemesResult{ ._200 = result };
     }
@@ -14174,7 +14174,7 @@ pub fn getAllWorkflowSchemes(
 pub const GetWorkflowSchemeProjectAssociationsResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14198,7 +14198,7 @@ pub fn getWorkflowSchemeProjectAssociations(
 
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerOfWorkflowSchemeAssociations"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeProjectAssociationsResult{ ._200 = result };
     }
@@ -14222,7 +14222,7 @@ pub fn getWorkflowSchemeProjectAssociations(
 pub const GetWorkflowSchemeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14248,7 +14248,7 @@ pub fn getWorkflowScheme(
 
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeResult{ ._200 = result };
     }
@@ -14272,7 +14272,7 @@ pub fn getWorkflowScheme(
 pub const CreateWorkflowSchemeDraftFromParentResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _201: json.Parsed(json.Value),
+    _201: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14298,7 +14298,7 @@ pub fn createWorkflowSchemeDraftFromParent(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"WorkflowScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateWorkflowSchemeDraftFromParentResult{ ._201 = result };
     }
@@ -14322,7 +14322,7 @@ pub fn createWorkflowSchemeDraftFromParent(
 pub const GetDefaultWorkflowResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14349,7 +14349,7 @@ pub fn getDefaultWorkflow(
 
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDefaultWorkflowResult{ ._200 = result };
     }
@@ -14373,7 +14373,7 @@ pub fn getDefaultWorkflow(
 pub const GetWorkflowSchemeDraftResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14402,7 +14402,7 @@ pub fn getWorkflowSchemeDraft(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeDraftResult{ ._200 = result };
     }
@@ -14426,7 +14426,7 @@ pub fn getWorkflowSchemeDraft(
 pub const GetDraftDefaultWorkflowResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission..
@@ -14455,7 +14455,7 @@ pub fn getDraftDefaultWorkflow(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDraftDefaultWorkflowResult{ ._200 = result };
     }
@@ -14479,7 +14479,7 @@ pub fn getDraftDefaultWorkflow(
 pub const GetWorkflowSchemeDraftIssueTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14507,7 +14507,7 @@ pub fn getWorkflowSchemeDraftIssueType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeDraftIssueTypeResult{ ._200 = result };
     }
@@ -14533,7 +14533,7 @@ pub const PublishDraftWorkflowSchemeResult = union(enum) {
     /// Returned if the request is only for validation and is successful.
     _204: void,
     /// Returned if the request is successful.
-    _303: json.Parsed(json.Value),
+    _303: json.Parsed(*json.Value),
     /// Returned if the request is invalid.
     _400: void,
     /// Returned if the authentication credentials are incorrect or missing.
@@ -14569,7 +14569,7 @@ pub fn publishDraftWorkflowScheme(
         return PublishDraftWorkflowSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return PublishDraftWorkflowSchemeResult{ ._303 = result };
     }
@@ -14596,7 +14596,7 @@ pub fn publishDraftWorkflowScheme(
 pub const GetDraftWorkflowResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14623,7 +14623,7 @@ pub fn getDraftWorkflow(
 
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDraftWorkflowResult{ ._200 = result };
     }
@@ -14647,7 +14647,7 @@ pub fn getDraftWorkflow(
 pub const GetWorkflowSchemeIssueTypeResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14676,7 +14676,7 @@ pub fn getWorkflowSchemeIssueType(
 
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeIssueTypeResult{ ._200 = result };
     }
@@ -14700,7 +14700,7 @@ pub fn getWorkflowSchemeIssueType(
 pub const GetWorkflowResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     /// Returned if the user does not have the necessary permission.
@@ -14728,7 +14728,7 @@ pub fn getWorkflow(
     // workflowName; location: query
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowResult{ ._200 = result };
     }
@@ -14752,7 +14752,7 @@ pub fn getWorkflow(
 pub const GetIdsOfWorklogsDeletedSinceResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -14772,7 +14772,7 @@ pub fn getIdsOfWorklogsDeletedSince(
 
     // since; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIdsOfWorklogsDeletedSinceResult{ ._200 = result };
     }
@@ -14831,7 +14831,7 @@ pub fn getWorklogsForIds(
 pub const GetIdsOfWorklogsModifiedSinceResult = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
     _401: void,
     _400: void,
@@ -14852,7 +14852,7 @@ pub fn getIdsOfWorklogsModifiedSince(
     // since; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIdsOfWorklogsModifiedSinceResult{ ._200 = result };
     }
@@ -14870,9 +14870,9 @@ pub fn getIdsOfWorklogsModifiedSince(
 pub const @"AddonPropertiesResource.getAddonProperties_getResult" = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -14892,12 +14892,12 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._401 = result };
     }
@@ -14912,13 +14912,13 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
 pub const @"AddonPropertiesResource.getAddonProperty_getResult" = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the property key is longer than 127 characters.
-    _400: json.Parsed(json.Value),
+    _400: json.Parsed(*json.Value),
     /// Returned if the authentication credentials are incorrect or missing.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     /// Returned if the property is not found or doesn't belong to the app.
-    _404: json.Parsed(json.Value),
+    _404: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -14940,22 +14940,22 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"OperationMessage"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"OperationMessage"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._404 = result };
     }
@@ -14970,9 +14970,9 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
 pub const @"DynamicModulesResource.getModules_getResult" = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the call is not from a Connect app.
-    _401: json.Parsed(json.Value),
+    _401: json.Parsed(*json.Value),
     _400: void,
 };
 
@@ -14989,12 +14989,12 @@ pub fn @"DynamicModulesResource.getModules_get"(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConnectModules"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"DynamicModulesResource.getModules_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorMessage"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"DynamicModulesResource.getModules_getResult"{ ._401 = result };
     }
@@ -15095,7 +15095,7 @@ pub fn @"MigrationResource.updateEntityPropertiesValue_put"(
 pub const @"MigrationResource.workflowRuleSearch_postResult" = union(enum) {
     unspecified: struct { body: []const u8, status_code: u16 },
     /// Returned if the request is successful.
-    _200: json.Parsed(json.Value),
+    _200: json.Parsed(*json.Value),
     /// Returned if the request is not valid.
     _400: void,
     /// Returned if the authorisation credentials are incorrect or missing.
@@ -15117,7 +15117,7 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
 
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowRulesSearchDetails"
-        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
+        var result = try json.parseFromSlice(*json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._200 = result };
     }
