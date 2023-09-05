@@ -25,23 +25,17 @@ pub fn getBanner(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AnnouncementBannerConfiguration"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBannerResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBannerResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBannerResult{ ._403 = result };
     }
@@ -137,9 +131,7 @@ pub fn getCustomFieldConfiguration(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextualConfiguration"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCustomFieldConfigurationResult{ ._200 = result };
     }
@@ -325,9 +317,7 @@ pub fn setApplicationProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetApplicationPropertyResult{ ._200 = result };
     }
@@ -419,9 +409,7 @@ pub fn getApplicationRole(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ApplicationRole"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetApplicationRoleResult{ ._200 = result };
     }
@@ -535,9 +523,7 @@ pub fn getAttachmentMeta(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentSettings"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAttachmentMetaResult{ ._200 = result };
     }
@@ -648,9 +634,7 @@ pub fn getAttachment(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentMetadata"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAttachmentResult{ ._200 = result };
     }
@@ -705,9 +689,7 @@ pub fn expandAttachmentForHumans(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveMetadataReadable"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ExpandAttachmentForHumansResult{ ._200 = result };
     }
@@ -765,9 +747,7 @@ pub fn expandAttachmentForMachines(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AttachmentArchiveImpl"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ExpandAttachmentForMachinesResult{ ._200 = result };
     }
@@ -823,9 +803,7 @@ pub fn getAuditRecords(
     // from; location: query
     // to; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AuditRecords"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAuditRecordsResult{ ._200 = result };
     }
@@ -870,9 +848,7 @@ pub fn getAllSystemAvatars(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SystemAvatars"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllSystemAvatarsResult{ ._200 = result };
     }
@@ -913,9 +889,7 @@ pub fn getCommentsByIds(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComment"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentsByIdsResult{ ._200 = result };
     }
@@ -961,9 +935,7 @@ pub fn getCommentPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentPropertyKeysResult{ ._200 = result };
     }
@@ -1020,9 +992,7 @@ pub fn getCommentProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentPropertyResult{ ._200 = result };
     }
@@ -1080,9 +1050,7 @@ pub fn createComponent(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"ProjectComponent"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateComponentResult{ ._201 = result };
     }
@@ -1132,9 +1100,7 @@ pub fn getComponent(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectComponent"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetComponentResult{ ._200 = result };
     }
@@ -1179,9 +1145,7 @@ pub fn getComponentRelatedIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ComponentIssuesCount"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetComponentRelatedIssuesResult{ ._200 = result };
     }
@@ -1221,9 +1185,7 @@ pub fn getConfiguration(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Configuration"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetConfigurationResult{ ._200 = result };
     }
@@ -1264,9 +1226,7 @@ pub fn getSelectedTimeTrackingImplementation(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingProvider"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSelectedTimeTrackingImplementationResult{ ._200 = result };
     }
@@ -1351,9 +1311,7 @@ pub fn getSharedTimeTrackingConfiguration(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TimeTrackingConfiguration"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSharedTimeTrackingConfigurationResult{ ._200 = result };
     }
@@ -1400,9 +1358,7 @@ pub fn getCustomFieldOption(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"CustomFieldOption"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCustomFieldOptionResult{ ._200 = result };
     }
@@ -1447,23 +1403,17 @@ pub fn getAllDashboards(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfDashboards"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllDashboardsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllDashboardsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllDashboardsResult{ ._401 = result };
     }
@@ -1499,23 +1449,17 @@ pub fn getAllAvailableDashboardGadgets(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AvailableDashboardGadgetsResponse"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllAvailableDashboardGadgetsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllAvailableDashboardGadgetsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllAvailableDashboardGadgetsResult{ ._401 = result };
     }
@@ -1567,23 +1511,17 @@ pub fn getDashboardsPaginated(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanDashboard"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardsPaginatedResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardsPaginatedResult{ ._401 = result };
     }
@@ -1625,9 +1563,7 @@ pub fn getAllGadgets(
     // uri; location: query
     // gadgetId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DashboardGadgetResponse"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllGadgetsResult{ ._200 = result };
     }
@@ -1635,9 +1571,7 @@ pub fn getAllGadgets(
         return GetAllGadgetsResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllGadgetsResult{ ._404 = result };
     }
@@ -1683,9 +1617,7 @@ pub fn updateGadget(
         return UpdateGadgetResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return UpdateGadgetResult{ ._400 = result };
     }
@@ -1693,9 +1625,7 @@ pub fn updateGadget(
         return UpdateGadgetResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return UpdateGadgetResult{ ._404 = result };
     }
@@ -1737,9 +1667,7 @@ pub fn getDashboardItemPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardItemPropertyKeysResult{ ._200 = result };
     }
@@ -1789,9 +1717,7 @@ pub fn getDashboardItemProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardItemPropertyResult{ ._200 = result };
     }
@@ -1837,23 +1763,17 @@ pub fn getDashboard(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDashboardResult{ ._401 = result };
     }
@@ -1897,30 +1817,22 @@ pub fn copyDashboard(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Dashboard"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CopyDashboardResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CopyDashboardResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CopyDashboardResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CopyDashboardResult{ ._404 = result };
     }
@@ -1999,16 +1911,12 @@ pub fn analyseExpression(
 
     // check; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionsAnalysis"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return AnalyseExpressionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return AnalyseExpressionResult{ ._400 = result };
     }
@@ -2016,9 +1924,7 @@ pub fn analyseExpression(
         return AnalyseExpressionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return AnalyseExpressionResult{ ._404 = result };
     }
@@ -2063,16 +1969,12 @@ pub fn evaluateJiraExpression(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JiraExpressionResult"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return EvaluateJiraExpressionResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return EvaluateJiraExpressionResult{ ._400 = result };
     }
@@ -2080,9 +1982,7 @@ pub fn evaluateJiraExpression(
         return EvaluateJiraExpressionResult{ ._401 = {} };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return EvaluateJiraExpressionResult{ ._404 = result };
     }
@@ -2162,16 +2062,12 @@ pub fn getFieldsPaginated(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldsPaginatedResult{ ._400 = result };
     }
@@ -2179,9 +2075,7 @@ pub fn getFieldsPaginated(
         return GetFieldsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldsPaginatedResult{ ._403 = result };
     }
@@ -2224,16 +2118,12 @@ pub fn getTrashedFieldsPaginated(
     // query; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanField"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTrashedFieldsPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTrashedFieldsPaginatedResult{ ._400 = result };
     }
@@ -2241,9 +2131,7 @@ pub fn getTrashedFieldsPaginated(
         return GetTrashedFieldsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTrashedFieldsPaginatedResult{ ._403 = result };
     }
@@ -2341,9 +2229,7 @@ pub fn getContextsForField(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContext"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetContextsForFieldResult{ ._200 = result };
     }
@@ -2396,9 +2282,7 @@ pub fn getDefaultValues(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextDefaultValue"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDefaultValuesResult{ ._200 = result };
     }
@@ -2449,9 +2333,7 @@ pub fn getIssueTypeMappingsForContexts(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeToContextMapping"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeMappingsForContextsResult{ ._200 = result };
     }
@@ -2502,9 +2384,7 @@ pub fn getCustomFieldContextsForProjectsAndIssueTypes(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContextForProjectAndIssueType"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCustomFieldContextsForProjectsAndIssueTypesResult{ ._200 = result };
     }
@@ -2560,9 +2440,7 @@ pub fn getProjectContextMapping(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextProjectMapping"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectContextMappingResult{ ._200 = result };
     }
@@ -2793,9 +2671,7 @@ pub fn getOptionsForContext(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanCustomFieldContextOption"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetOptionsForContextResult{ ._200 = result };
     }
@@ -3074,9 +2950,7 @@ pub fn getContextsForFieldDeprecated(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanContext"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetContextsForFieldDeprecatedResult{ ._200 = result };
     }
@@ -3124,9 +2998,7 @@ pub fn getScreensForField(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenWithTab"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetScreensForFieldResult{ ._200 = result };
     }
@@ -3173,9 +3045,7 @@ pub fn getAllIssueFieldOptions(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllIssueFieldOptionsResult{ ._200 = result };
     }
@@ -3223,9 +3093,7 @@ pub fn getSelectableIssueFieldOptions(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSelectableIssueFieldOptionsResult{ ._200 = result };
     }
@@ -3273,9 +3141,7 @@ pub fn getVisibleIssueFieldOptions(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueFieldOption"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVisibleIssueFieldOptionsResult{ ._200 = result };
     }
@@ -3324,9 +3190,7 @@ pub fn getIssueFieldOption(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueFieldOption"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueFieldOptionResult{ ._200 = result };
     }
@@ -3383,9 +3247,7 @@ pub fn replaceIssueFieldOption(
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanRemoveOptionFromIssuesResult"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ReplaceIssueFieldOptionResult{ ._303 = result };
     }
@@ -3442,44 +3304,32 @@ pub fn deleteCustomField(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._303 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._404 = result };
     }
     if (mem.eql(u8, "409", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteCustomFieldResult{ ._409 = result };
     }
@@ -3525,30 +3375,22 @@ pub fn restoreCustomField(
         return RestoreCustomFieldResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreCustomFieldResult{ ._404 = result };
     }
@@ -3594,30 +3436,22 @@ pub fn trashCustomField(
         return TrashCustomFieldResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return TrashCustomFieldResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return TrashCustomFieldResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return TrashCustomFieldResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return TrashCustomFieldResult{ ._404 = result };
     }
@@ -3658,9 +3492,7 @@ pub fn getAllFieldConfigurations(
     // isDefault; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationDetails"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllFieldConfigurationsResult{ ._200 = result };
     }
@@ -3761,9 +3593,7 @@ pub fn getFieldConfigurationItems(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationItem"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldConfigurationItemsResult{ ._200 = result };
     }
@@ -3813,9 +3643,7 @@ pub fn getAllFieldConfigurationSchemes(
     // maxResults; location: query
     // id; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllFieldConfigurationSchemesResult{ ._200 = result };
     }
@@ -3867,9 +3695,7 @@ pub fn getFieldConfigurationSchemeMappings(
     // maxResults; location: query
     // fieldConfigurationSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationIssueTypeItem"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldConfigurationSchemeMappingsResult{ ._200 = result };
     }
@@ -3922,9 +3748,7 @@ pub fn getFieldConfigurationSchemeProjectMapping(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFieldConfigurationSchemeProjects"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldConfigurationSchemeProjectMappingResult{ ._200 = result };
     }
@@ -4084,30 +3908,22 @@ pub fn removeIssueTypesFromGlobalFieldConfigurationScheme(
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RemoveIssueTypesFromGlobalFieldConfigurationSchemeResult{ ._404 = result };
     }
@@ -4172,9 +3988,7 @@ pub fn getDefaultShareScope(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultShareScope"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDefaultShareScopeResult{ ._200 = result };
     }
@@ -4302,16 +4116,12 @@ pub fn getFiltersPaginated(
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanFilterDetails"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFiltersPaginatedResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFiltersPaginatedResult{ ._400 = result };
     }
@@ -4354,9 +4164,7 @@ pub fn getFilter(
     // expand; location: query
     // overrideSharePermissions; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFilterResult{ ._200 = result };
     }
@@ -4451,9 +4259,7 @@ pub fn setFavouriteForFilter(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Filter"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetFavouriteForFilterResult{ ._200 = result };
     }
@@ -4598,9 +4404,7 @@ pub fn getSharePermission(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SharePermission"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSharePermissionResult{ ._200 = result };
     }
@@ -4649,9 +4453,7 @@ pub fn getGroup(
     // groupId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Group"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetGroupResult{ ._200 = result };
     }
@@ -4705,9 +4507,7 @@ pub fn bulkGetGroups(
     // groupId; location: query
     // groupName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanGroupDetails"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkGetGroupsResult{ ._200 = result };
     }
@@ -4761,9 +4561,7 @@ pub fn getUsersFromGroup(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserDetails"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUsersFromGroupResult{ ._200 = result };
     }
@@ -4820,9 +4618,7 @@ pub fn addUserToGroup(
     // groupname; location: query
     // groupId; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Group"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return AddUserToGroupResult{ ._201 = result };
     }
@@ -4872,9 +4668,7 @@ pub fn findGroups(
     // maxResults; location: query
     // userName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundGroups"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindGroupsResult{ ._200 = result };
     }
@@ -4923,9 +4717,7 @@ pub fn findUsersAndGroups(
     // caseInsensitive; location: query
     // excludeConnectAddons; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsersAndGroups"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindUsersAndGroupsResult{ ._200 = result };
     }
@@ -4971,9 +4763,7 @@ pub fn getLicense(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"License"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetLicenseResult{ ._200 = result };
     }
@@ -5023,30 +4813,22 @@ pub fn createIssue(
 
     // updateHistory; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssue"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueResult{ ._403 = result };
     }
@@ -5098,16 +4880,12 @@ pub fn createIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"CreatedIssues"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssuesResult{ ._201 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"CreatedIssues"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssuesResult{ ._400 = result };
     }
@@ -5149,9 +4927,7 @@ pub fn getCreateIssueMeta(
     // issuetypeNames; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueCreateMetadata"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCreateIssueMetaResult{ ._200 = result };
     }
@@ -5194,9 +4970,7 @@ pub fn getIssuePickerResource(
     // showSubTasks; location: query
     // showSubTaskParent; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssuePickerSuggestions"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssuePickerResourceResult{ ._200 = result };
     }
@@ -5238,16 +5012,12 @@ pub fn bulkSetIssuesPropertiesList(
         return BulkSetIssuesPropertiesListResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuesPropertiesListResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuesPropertiesListResult{ ._401 = result };
     }
@@ -5288,23 +5058,17 @@ pub fn bulkSetIssuePropertiesByIssue(
         return BulkSetIssuePropertiesByIssueResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertiesByIssueResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertiesByIssueResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertiesByIssueResult{ ._403 = result };
     }
@@ -5345,16 +5109,12 @@ pub fn bulkSetIssueProperty(
         return BulkSetIssuePropertyResult{ ._303 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertyResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkSetIssuePropertyResult{ ._401 = result };
     }
@@ -5388,9 +5148,7 @@ pub fn getIsWatchingIssueBulk(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkIssueIsWatching"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIsWatchingIssueBulkResult{ ._200 = result };
     }
@@ -5436,9 +5194,7 @@ pub fn getIssue(
     // properties; location: query
     // updateHistory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueBean"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueResult{ ._200 = result };
     }
@@ -5586,9 +5342,7 @@ pub fn getChangeLogs(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanChangelog"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetChangeLogsResult{ ._200 = result };
     }
@@ -5630,9 +5384,7 @@ pub fn getChangeLogsByIds(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfChangelogs"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetChangeLogsByIdsResult{ ._200 = result };
     }
@@ -5683,9 +5435,7 @@ pub fn getComments(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfComments"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentsResult{ ._200 = result };
     }
@@ -5736,9 +5486,7 @@ pub fn getComment(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Comment"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCommentResult{ ._200 = result };
     }
@@ -5787,9 +5535,7 @@ pub fn getEditIssueMeta(
     // overrideScreenSecurity; location: query
     // overrideEditableFlag; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueUpdateMetadata"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetEditIssueMetaResult{ ._200 = result };
     }
@@ -5890,9 +5636,7 @@ pub fn getIssuePropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssuePropertyKeysResult{ ._200 = result };
     }
@@ -5936,9 +5680,7 @@ pub fn getIssueProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssuePropertyResult{ ._200 = result };
     }
@@ -5988,9 +5730,7 @@ pub fn getRemoteIssueLinks(
 
     // globalId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetRemoteIssueLinksResult{ ._200 = result };
     }
@@ -6047,9 +5787,7 @@ pub fn getRemoteIssueLinkById(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"RemoteIssueLink"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetRemoteIssueLinkByIdResult{ ._200 = result };
     }
@@ -6105,9 +5843,7 @@ pub fn getTransitions(
     // includeUnavailableTransitions; location: query
     // sortByOpsBarAndStatus; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Transitions"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTransitionsResult{ ._200 = result };
     }
@@ -6156,9 +5892,7 @@ pub fn getVotes(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Votes"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVotesResult{ ._200 = result };
     }
@@ -6203,9 +5937,7 @@ pub fn getIssueWatchers(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Watchers"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueWatchersResult{ ._200 = result };
     }
@@ -6259,9 +5991,7 @@ pub fn getIssueWorklog(
     // startedBefore; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfWorklogs"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueWorklogResult{ ._200 = result };
     }
@@ -6315,9 +6045,7 @@ pub fn getWorklog(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Worklog"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorklogResult{ ._200 = result };
     }
@@ -6370,9 +6098,7 @@ pub fn getWorklogPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorklogPropertyKeysResult{ ._200 = result };
     }
@@ -6430,9 +6156,7 @@ pub fn getWorklogProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorklogPropertyResult{ ._200 = result };
     }
@@ -6536,9 +6260,7 @@ pub fn getIssueLink(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLink"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueLinkResult{ ._200 = result };
     }
@@ -6583,9 +6305,7 @@ pub fn getIssueLinkTypes(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkTypes"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueLinkTypesResult{ ._200 = result };
     }
@@ -6635,9 +6355,7 @@ pub fn getIssueLinkType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueLinkType"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueLinkTypeResult{ ._200 = result };
     }
@@ -6682,9 +6400,7 @@ pub fn getIssueSecuritySchemes(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecuritySchemes"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueSecuritySchemesResult{ ._200 = result };
     }
@@ -6728,9 +6444,7 @@ pub fn getIssueSecurityScheme(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueSecuritySchemeResult{ ._200 = result };
     }
@@ -6783,9 +6497,7 @@ pub fn getIssueSecurityLevelMembers(
     // issueSecurityLevelId; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueSecurityLevelMember"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueSecurityLevelMembersResult{ ._200 = result };
     }
@@ -6925,9 +6637,7 @@ pub fn getIssueType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeDetails"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeResult{ ._200 = result };
     }
@@ -7034,9 +6744,7 @@ pub fn createIssueTypeAvatar(
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateIssueTypeAvatarResult{ ._201 = result };
     }
@@ -7090,9 +6798,7 @@ pub fn getIssueTypePropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypePropertyKeysResult{ ._200 = result };
     }
@@ -7141,9 +6847,7 @@ pub fn getIssueTypeProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypePropertyResult{ ._200 = result };
     }
@@ -7196,9 +6900,7 @@ pub fn getAllIssueTypeSchemes(
     // expand; location: query
     // queryString; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllIssueTypeSchemesResult{ ._200 = result };
     }
@@ -7248,9 +6950,7 @@ pub fn getIssueTypeSchemesMapping(
     // maxResults; location: query
     // issueTypeSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeMapping"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeSchemesMappingResult{ ._200 = result };
     }
@@ -7300,9 +7000,7 @@ pub fn getIssueTypeSchemeForProjects(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeSchemeProjects"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeSchemeForProjectsResult{ ._200 = result };
     }
@@ -7568,9 +7266,7 @@ pub fn getIssueTypeScreenSchemes(
     // orderBy; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeScreenSchemesResult{ ._200 = result };
     }
@@ -7620,9 +7316,7 @@ pub fn getIssueTypeScreenSchemeMappings(
     // maxResults; location: query
     // issueTypeScreenSchemeId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemeItem"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeScreenSchemeMappingsResult{ ._200 = result };
     }
@@ -7672,9 +7366,7 @@ pub fn getIssueTypeScreenSchemeProjectAssociations(
     // maxResults; location: query
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanIssueTypeScreenSchemesProjects"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueTypeScreenSchemeProjectAssociationsResult{ ._200 = result };
     }
@@ -7943,9 +7635,7 @@ pub fn getProjectsForIssueTypeScreenScheme(
     // maxResults; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProjectDetails"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectsForIssueTypeScreenSchemeResult{ ._200 = result };
     }
@@ -7988,9 +7678,7 @@ pub fn getAutoComplete(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"JQLReferenceData"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAutoCompleteResult{ ._200 = result };
     }
@@ -8033,9 +7721,7 @@ pub fn getFieldAutoCompleteForQueryString(
     // predicateName; location: query
     // predicateValue; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"AutoCompleteSuggestions"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFieldAutoCompleteForQueryStringResult{ ._200 = result };
     }
@@ -8075,9 +7761,7 @@ pub fn matchIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueMatches"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return MatchIssuesResult{ ._200 = result };
     }
@@ -8117,16 +7801,12 @@ pub fn parseJqlQueries(
 
     // validation; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ParsedJqlQueries"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ParseJqlQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ParseJqlQueriesResult{ ._400 = result };
     }
@@ -8165,9 +7845,7 @@ pub fn migrateQueries(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConvertedJQLQueries"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return MigrateQueriesResult{ ._200 = result };
     }
@@ -8211,30 +7889,22 @@ pub fn sanitiseJqlQueries(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SanitizedJqlQueries"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SanitiseJqlQueriesResult{ ._403 = result };
     }
@@ -8268,9 +7938,7 @@ pub fn getAllLabels(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanString"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllLabelsResult{ ._200 = result };
     }
@@ -8316,30 +7984,22 @@ pub fn getMyPermissions(
     // projectConfigurationUuid; location: query
     // commentId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetMyPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetMyPermissionsResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetMyPermissionsResult{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetMyPermissionsResult{ ._404 = result };
     }
@@ -8414,9 +8074,7 @@ pub fn getLocale(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Locale"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetLocaleResult{ ._200 = result };
     }
@@ -8454,9 +8112,7 @@ pub fn getCurrentUser(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetCurrentUserResult{ ._200 = result };
     }
@@ -8496,9 +8152,7 @@ pub fn getNotificationSchemes(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanNotificationScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetNotificationSchemesResult{ ._200 = result };
     }
@@ -8542,9 +8196,7 @@ pub fn getNotificationScheme(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetNotificationSchemeResult{ ._200 = result };
     }
@@ -8589,9 +8241,7 @@ pub fn getAllPermissions(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Permissions"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllPermissionsResult{ ._200 = result };
     }
@@ -8639,23 +8289,17 @@ pub fn getBulkPermissions(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"BulkPermissionGrants"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBulkPermissionsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBulkPermissionsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetBulkPermissionsResult{ ._403 = result };
     }
@@ -8691,9 +8335,7 @@ pub fn getPermittedProjects(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermittedProjects"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPermittedProjectsResult{ ._200 = result };
     }
@@ -8734,9 +8376,7 @@ pub fn getAllPermissionSchemes(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionSchemes"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllPermissionSchemesResult{ ._200 = result };
     }
@@ -8778,9 +8418,7 @@ pub fn getPermissionScheme(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPermissionSchemeResult{ ._200 = result };
     }
@@ -8826,9 +8464,7 @@ pub fn getPermissionSchemeGrants(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrants"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPermissionSchemeGrantsResult{ ._200 = result };
     }
@@ -8876,9 +8512,7 @@ pub fn getPermissionSchemeGrant(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionGrant"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPermissionSchemeGrantResult{ ._200 = result };
     }
@@ -8962,30 +8596,22 @@ pub fn setDefaultPriority(
         return SetDefaultPriorityResult{ ._204 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetDefaultPriorityResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetDefaultPriorityResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetDefaultPriorityResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SetDefaultPriorityResult{ ._404 = result };
     }
@@ -9023,16 +8649,12 @@ pub fn searchPriorities(
     // id; location: query
     // onlyDefault; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanPriority"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchPrioritiesResult{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchPrioritiesResult{ ._401 = result };
     }
@@ -9070,9 +8692,7 @@ pub fn getPriority(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Priority"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetPriorityResult{ ._200 = result };
     }
@@ -9209,9 +8829,7 @@ pub fn searchProjects(
     // properties; location: query
     // propertyQuery; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanProject"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchProjectsResult{ ._200 = result };
     }
@@ -9323,9 +8941,7 @@ pub fn getProjectTypeByKey(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectTypeByKeyResult{ ._200 = result };
     }
@@ -9370,9 +8986,7 @@ pub fn getAccessibleProjectTypeByKey(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectType"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAccessibleProjectTypeByKeyResult{ ._200 = result };
     }
@@ -9418,9 +9032,7 @@ pub fn getProject(
     // expand; location: query
     // properties; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectResult{ ._200 = result };
     }
@@ -9627,9 +9239,7 @@ pub fn createProjectAvatar(
     // y; location: query
     // size; location: query
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Avatar"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateProjectAvatarResult{ ._201 = result };
     }
@@ -9680,9 +9290,7 @@ pub fn getAllProjectAvatars(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectAvatars"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllProjectAvatarsResult{ ._200 = result };
     }
@@ -9731,9 +9339,7 @@ pub fn getProjectComponentsPaginated(
     // orderBy; location: query
     // query; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanComponentWithIssueCount"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectComponentsPaginatedResult{ ._200 = result };
     }
@@ -9823,9 +9429,7 @@ pub fn deleteProjectAsynchronously(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteProjectAsynchronouslyResult{ ._303 = result };
     }
@@ -9877,9 +9481,7 @@ pub fn getFeaturesForProject(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFeaturesForProjectResult{ ._200 = result };
     }
@@ -9936,9 +9538,7 @@ pub fn toggleFeatureForProject(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerForProjectFeatures"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ToggleFeatureForProjectResult{ ._200 = result };
     }
@@ -9993,9 +9593,7 @@ pub fn getProjectPropertyKeys(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectPropertyKeysResult{ ._200 = result };
     }
@@ -10052,9 +9650,7 @@ pub fn getProjectProperty(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectPropertyResult{ ._200 = result };
     }
@@ -10107,9 +9703,7 @@ pub fn restore(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RestoreResult{ ._200 = result };
     }
@@ -10208,9 +9802,7 @@ pub fn getProjectRole(
 
     // excludeInactiveUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectRoleResult{ ._200 = result };
     }
@@ -10350,9 +9942,7 @@ pub fn updateProjectType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Project"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return UpdateProjectTypeResult{ ._200 = result };
     }
@@ -10404,9 +9994,7 @@ pub fn getProjectVersionsPaginated(
     // status; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanVersion"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectVersionsPaginatedResult{ ._200 = result };
     }
@@ -10489,9 +10077,7 @@ pub fn getProjectEmail(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectEmailAddress"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectEmailResult{ ._200 = result };
     }
@@ -10541,9 +10127,7 @@ pub fn getHierarchy(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueTypeHierarchy"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetHierarchyResult{ ._200 = result };
     }
@@ -10595,9 +10179,7 @@ pub fn getProjectIssueSecurityScheme(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectIssueSecuritySchemeResult{ ._200 = result };
     }
@@ -10651,9 +10233,7 @@ pub fn getNotificationSchemeForProject(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"NotificationScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetNotificationSchemeForProjectResult{ ._200 = result };
     }
@@ -10704,9 +10284,7 @@ pub fn getAssignedPermissionScheme(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PermissionScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAssignedPermissionSchemeResult{ ._200 = result };
     }
@@ -10752,9 +10330,7 @@ pub fn getSecurityLevelsForProject(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectIssueSecurityLevels"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetSecurityLevelsForProjectResult{ ._200 = result };
     }
@@ -10830,9 +10406,7 @@ pub fn getProjectCategoryById(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectCategory"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectCategoryByIdResult{ ._200 = result };
     }
@@ -10873,9 +10447,7 @@ pub fn validateProjectKey(
 
     // key; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return ValidateProjectKeyResult{ ._200 = result };
     }
@@ -11033,9 +10605,7 @@ pub fn getResolution(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Resolution"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetResolutionResult{ ._200 = result };
     }
@@ -11121,9 +10691,7 @@ pub fn getProjectRoleById(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectRoleByIdResult{ ._200 = result };
     }
@@ -11175,9 +10743,7 @@ pub fn getProjectRoleActorsForRole(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ProjectRole"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetProjectRoleActorsForRoleResult{ ._200 = result };
     }
@@ -11231,9 +10797,7 @@ pub fn getScreens(
     // scope; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreen"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetScreensResult{ ._200 = result };
     }
@@ -11328,9 +10892,7 @@ pub fn updateScreen(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Screen"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return UpdateScreenResult{ ._200 = result };
     }
@@ -11489,9 +11051,7 @@ pub fn renameScreenTab(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ScreenableTab"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RenameScreenTabResult{ ._200 = result };
     }
@@ -11772,9 +11332,7 @@ pub fn getScreenSchemes(
     // queryString; location: query
     // orderBy; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanScreenScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetScreenSchemesResult{ ._200 = result };
     }
@@ -11876,9 +11434,7 @@ pub fn searchForIssuesUsingJql(
     // properties; location: query
     // fieldsByKeys; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SearchResults"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchForIssuesUsingJqlResult{ ._200 = result };
     }
@@ -11922,9 +11478,7 @@ pub fn getIssueSecurityLevel(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"SecurityLevel"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIssueSecurityLevelResult{ ._200 = result };
     }
@@ -11964,9 +11518,7 @@ pub fn getServerInfo(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ServerInformation"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetServerInfoResult{ ._200 = result };
     }
@@ -12086,9 +11638,7 @@ pub fn getStatus(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusDetails"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetStatusResult{ ._200 = result };
     }
@@ -12167,9 +11717,7 @@ pub fn getStatusCategory(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"StatusCategory"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetStatusCategoryResult{ ._200 = result };
     }
@@ -12259,9 +11807,7 @@ pub fn search(
     // searchString; location: query
     // statusCategory; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageOfStatuses"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return SearchResult{ ._200 = result };
     }
@@ -12307,9 +11853,7 @@ pub fn getTask(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetTaskResult{ ._200 = result };
     }
@@ -12412,9 +11956,7 @@ pub fn getUiModifications(
     // maxResults; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUiModificationDetails"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUiModificationsResult{ ._200 = result };
     }
@@ -12516,9 +12058,7 @@ pub fn getAvatars(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Avatars"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarsResult{ ._200 = result };
     }
@@ -12622,23 +12162,17 @@ pub fn getAvatarImageByType(
         return GetAvatarImageByTypeResult{ ._200 = {} };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByTypeResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByTypeResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByTypeResult{ ._404 = result };
     }
@@ -12688,30 +12222,22 @@ pub fn getAvatarImageByID(
         return GetAvatarImageByIDResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByIDResult{ ._404 = result };
     }
@@ -12761,30 +12287,22 @@ pub fn getAvatarImageByOwner(
         return GetAvatarImageByOwnerResult{ ._200 = {} };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._401 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._403 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAvatarImageByOwnerResult{ ._404 = result };
     }
@@ -12826,9 +12344,7 @@ pub fn getUser(
     // key; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"User"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserResult{ ._200 = result };
     }
@@ -13002,9 +12518,7 @@ pub fn bulkGetUsers(
     // key; location: query
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return BulkGetUsersResult{ ._200 = result };
     }
@@ -13142,9 +12656,7 @@ pub fn getUserEmail(
 
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserEmailResult{ ._200 = result };
     }
@@ -13195,9 +12707,7 @@ pub fn getUserEmailBulk(
 
     // accountId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"UnrestrictedUserEmail"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserEmailBulkResult{ ._200 = result };
     }
@@ -13367,9 +12877,7 @@ pub fn findUsersForPicker(
     // avatarSize; location: query
     // excludeConnectUsers; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FoundUsers"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindUsersForPickerResult{ ._200 = result };
     }
@@ -13421,9 +12929,7 @@ pub fn getUserPropertyKeys(
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserPropertyKeysResult{ ._200 = result };
     }
@@ -13480,9 +12986,7 @@ pub fn getUserProperty(
     // userKey; location: query
     // username; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetUserPropertyResult{ ._200 = result };
     }
@@ -13592,9 +13096,7 @@ pub fn findUsersByQuery(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUser"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindUsersByQueryResult{ ._200 = result };
     }
@@ -13649,9 +13151,7 @@ pub fn findUserKeysByQuery(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanUserKey"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return FindUserKeysByQueryResult{ ._200 = result };
     }
@@ -13859,9 +13359,7 @@ pub fn createVersion(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"Version"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateVersionResult{ ._201 = result };
     }
@@ -13909,9 +13407,7 @@ pub fn getVersion(
 
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVersionResult{ ._200 = result };
     }
@@ -14018,9 +13514,7 @@ pub fn moveVersion(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"Version"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return MoveVersionResult{ ._200 = result };
     }
@@ -14071,9 +13565,7 @@ pub fn getVersionRelatedIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionIssueCounts"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVersionRelatedIssuesResult{ ._200 = result };
     }
@@ -14172,9 +13664,7 @@ pub fn getVersionUnresolvedIssues(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"VersionUnresolvedIssuesCount"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetVersionUnresolvedIssuesResult{ ._200 = result };
     }
@@ -14218,23 +13708,17 @@ pub fn getDynamicWebhooksForApp(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWebhook"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDynamicWebhooksForAppResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDynamicWebhooksForAppResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDynamicWebhooksForAppResult{ ._403 = result };
     }
@@ -14272,23 +13756,17 @@ pub fn getFailedWebhooks(
     // maxResults; location: query
     // after; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"FailedWebhooks"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFailedWebhooksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFailedWebhooksResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetFailedWebhooksResult{ ._403 = result };
     }
@@ -14324,23 +13802,17 @@ pub fn refreshWebhooks(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WebhooksExpirationDate"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RefreshWebhooksResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RefreshWebhooksResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return RefreshWebhooksResult{ ._403 = result };
     }
@@ -14422,23 +13894,17 @@ pub fn getWorkflowTransitionRuleConfigurations(
     // draft; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowTransitionRules"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
     }
@@ -14477,23 +13943,17 @@ pub fn deleteWorkflowTransitionRuleConfigurations(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionRulesUpdateErrors"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._400 = result };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return DeleteWorkflowTransitionRuleConfigurationsResult{ ._403 = result };
     }
@@ -14536,9 +13996,7 @@ pub fn getWorkflowsPaginated(
     // orderBy; location: query
     // isActive; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflow"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowsPaginatedResult{ ._200 = result };
     }
@@ -14546,9 +14004,7 @@ pub fn getWorkflowsPaginated(
         return GetWorkflowsPaginatedResult{ ._401 = {} };
     }
     if (mem.eql(u8, "403", http_response.status_code)) { // Make @"ErrorCollection"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowsPaginatedResult{ ._403 = result };
     }
@@ -14595,9 +14051,7 @@ pub fn getWorkflowTransitionProperties(
     // workflowName; location: query
     // workflowMode; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowTransitionProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowTransitionPropertiesResult{ ._200 = result };
     }
@@ -14699,9 +14153,7 @@ pub fn getAllWorkflowSchemes(
     // startAt; location: query
     // maxResults; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PageBeanWorkflowScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetAllWorkflowSchemesResult{ ._200 = result };
     }
@@ -14746,9 +14198,7 @@ pub fn getWorkflowSchemeProjectAssociations(
 
     // projectId; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ContainerOfWorkflowSchemeAssociations"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeProjectAssociationsResult{ ._200 = result };
     }
@@ -14798,9 +14248,7 @@ pub fn getWorkflowScheme(
 
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeResult{ ._200 = result };
     }
@@ -14850,9 +14298,7 @@ pub fn createWorkflowSchemeDraftFromParent(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "201", http_response.status_code)) { // Make @"WorkflowScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return CreateWorkflowSchemeDraftFromParentResult{ ._201 = result };
     }
@@ -14903,9 +14349,7 @@ pub fn getDefaultWorkflow(
 
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDefaultWorkflowResult{ ._200 = result };
     }
@@ -14958,9 +14402,7 @@ pub fn getWorkflowSchemeDraft(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowScheme"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeDraftResult{ ._200 = result };
     }
@@ -15013,9 +14455,7 @@ pub fn getDraftDefaultWorkflow(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"DefaultWorkflow"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDraftDefaultWorkflowResult{ ._200 = result };
     }
@@ -15067,9 +14507,7 @@ pub fn getWorkflowSchemeDraftIssueType(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeDraftIssueTypeResult{ ._200 = result };
     }
@@ -15131,9 +14569,7 @@ pub fn publishDraftWorkflowScheme(
         return PublishDraftWorkflowSchemeResult{ ._204 = {} };
     }
     if (mem.eql(u8, "303", http_response.status_code)) { // Make @"TaskProgressBeanObject"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return PublishDraftWorkflowSchemeResult{ ._303 = result };
     }
@@ -15187,9 +14623,7 @@ pub fn getDraftWorkflow(
 
     // workflowName; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetDraftWorkflowResult{ ._200 = result };
     }
@@ -15242,9 +14676,7 @@ pub fn getWorkflowSchemeIssueType(
 
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypeWorkflowMapping"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowSchemeIssueTypeResult{ ._200 = result };
     }
@@ -15296,9 +14728,7 @@ pub fn getWorkflow(
     // workflowName; location: query
     // returnDraftIfExists; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"IssueTypesWorkflowMapping"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetWorkflowResult{ ._200 = result };
     }
@@ -15342,9 +14772,7 @@ pub fn getIdsOfWorklogsDeletedSince(
 
     // since; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIdsOfWorklogsDeletedSinceResult{ ._200 = result };
     }
@@ -15424,9 +14852,7 @@ pub fn getIdsOfWorklogsModifiedSince(
     // since; location: query
     // expand; location: query
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ChangedWorklogs"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return GetIdsOfWorklogsModifiedSinceResult{ ._200 = result };
     }
@@ -15466,16 +14892,12 @@ pub fn @"AddonPropertiesResource.getAddonProperties_get"(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"PropertyKeys"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperties_getResult"{ ._401 = result };
     }
@@ -15518,30 +14940,22 @@ pub fn @"AddonPropertiesResource.getAddonProperty_get"(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"EntityProperty"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "400", http_response.status_code)) { // Make @"OperationMessage"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._400 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"OperationMessage"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._401 = result };
     }
     if (mem.eql(u8, "404", http_response.status_code)) { // Make @"OperationMessage"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"AddonPropertiesResource.getAddonProperty_getResult"{ ._404 = result };
     }
@@ -15575,16 +14989,12 @@ pub fn @"DynamicModulesResource.getModules_get"(
     defer http_response.deinit(alloc);
 
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"ConnectModules"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"DynamicModulesResource.getModules_getResult"{ ._200 = result };
     }
     if (mem.eql(u8, "401", http_response.status_code)) { // Make @"ErrorMessage"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"DynamicModulesResource.getModules_getResult"{ ._401 = result };
     }
@@ -15707,9 +15117,7 @@ pub fn @"MigrationResource.workflowRuleSearch_post"(
 
     // Atlassian-Transfer-Id; location: header
     if (mem.eql(u8, "200", http_response.status_code)) { // Make @"WorkflowRulesSearchDetails"
-        var parser = json.Parser.init(alloc, .alloc_always);
-        defer parser.deinit();
-        const result = try parser.parse(http_response.body);
+        var result = try json.parseFromSlice(json.Value, alloc, http_response.body, .{ .allocate = .alloc_always });
         errdefer result.deinit();
         return @"MigrationResource.workflowRuleSearch_postResult"{ ._200 = result };
     }
